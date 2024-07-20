@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+  <head>
+    <title>Mock test</title>
+  </head>
+  <body>
+    <outline text="news" title="news">
+      <outline text="Toronto - CBC News" title="Toronto - CBC News" type="rss"
+               xmlUrl="http://localhost:9998/feed1.xml"
+               htmlUrl="https://www.cbc.ca/news/canada/toronto"/>
+    </outline>
+    <outline text="tech" title="tech">
+      <outline text="4G Space" title="4G Space" type="rss"
+               xmlUrl="http://localhost:9998/feed2.xml"
+               htmlUrl="https://perspectives.mvdirona.com"/>
+    </outline>
+  </body>
+</opml>

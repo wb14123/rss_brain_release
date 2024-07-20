@@ -1,0 +1,36 @@
+{
+  "rules" : [
+    {
+      "source" : "https?://news.ycombinator.com.*",
+      "target" : "https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=50",
+      "recommend" : true,
+      "recommendReason" : "Provide upvotes and comments count"
+    },
+    {
+      "source" : "https?://www.reddit.com/r/(?<subreddit>[\\w|_|\\-]+).*",
+      "target" : "https://www.reddit.com/r/$subreddit/hot.json?count=100",
+      "recommend" : true,
+      "recommendReason" : "Hot posts with upvotes and comments count"
+    },
+    {
+      "source" : "https?://www.reddit.com/r/(?<subreddit>[\\w|_|\\-]+).*",
+      "target" : "https://www.reddit.com/r/$subreddit/new.json?count=100",
+      "recommend" : true,
+      "recommendReason" : "New posts with upvotes and comments count"
+    },
+    {
+      "source": "https?://twitter.com/(?<username>[\\w|_|\\-]+).*",
+      "target": "https://rsshub.app/twitter/user/$username/readable=1"
+    },
+    {
+      "source": "https://(?<instance>[\\w|\\-|_|\\.]*lemmy[\\w|\\-|_|\\.]*)/c/(?<community>[\\w|_|\\-]+)$",
+      "target": "https://rsshub.app/lemmy/$community@$instance/Hot?format=atom",
+      "recommendReason" : "Hot posts with upvotes and comments count"
+    },
+    {
+      "source": "https://[\\w|\\-|_|.]*lemmy[\\w|\\-|_|.]*/c/(?<community>[\\w|_|\\-]+)@(?<instance>[\\w|_|\\-|.]+).*",
+      "target": "https://rsshub.app/lemmy/$community@$instance/Hot?format=atom",
+      "recommendReason" : "Hot posts with upvotes and comments count"
+    }
+  ]
+}

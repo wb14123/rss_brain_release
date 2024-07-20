@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Niccolò Ve</title>
+        <link>https://fedi.video</link>
+        <description>Hi! I'm a KDE Dev. I publish some stuff about KDE and some stuff not about KDE.</description>
+        <lastBuildDate>Sun, 15 Jan 2023 14:33:05 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>Toraifōsu</generator>
+        <image>
+            <title>Niccolò Ve</title>
+            <url>https://fedi.video/lazy-static/avatars/8d80bb57-9513-4271-9440-51b117f243f0.jpg</url>
+            <link>https://fedi.video</link>
+        </image>
+        <copyright>All rights reserved, unless otherwise specified in the terms specified at https://fedi.video/about and potential licenses granted by each content's rightholder.</copyright>
+        <atom:link href="https://fedi.video/feeds/videos.xml?videoChannelId=744" rel="self" type="application/rss+xml"/>
+        <item>
+            <title><![CDATA[What if KDE had a DICTATOR?]]></title>
+            <link>https://fedi.video/w/62UBgTVFdVqoXXugRwuTaq</link>
+            <guid>https://fedi.video/w/62UBgTVFdVqoXXugRwuTaq</guid>
+            <pubDate>Sat, 14 Jan 2023 11:08:48 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="371689113" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/28c1dba6-75d2-4e3f-af45-5236f74020ee/79ecc222-c457-4b00-925f-d577c580f829-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="17"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/28c1dba6-75d2-4e3f-af45-5236f74020ee"/>
+            <media:player url="https://fedi.video/w/62UBgTVFdVqoXXugRwuTaq"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/4efb473d-8e33-4fe7-9bf3-28e6b4921a47-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/bb11f8b8-011d-4c43-b65b-f8eee72d7560-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/97419e90-48ea-454f-8540-19b88d49c84f-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/170afd5d-0d2f-400f-8a69-9e18eea2c95a-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="371689113" url="https://tube.kockatoo.org/static/streaming-playlists/hls/28c1dba6-75d2-4e3f-af45-5236f74020ee/79ecc222-c457-4b00-925f-d577c580f829-1080-fragmented.mp4" framerate="60" duration="1728" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="187544723" url="https://tube.kockatoo.org/static/streaming-playlists/hls/28c1dba6-75d2-4e3f-af45-5236f74020ee/2838e449-fb77-4ffc-bcb1-f4c5622245ed-720-fragmented.mp4" framerate="60" duration="1728" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="113505777" url="https://tube.kockatoo.org/static/streaming-playlists/hls/28c1dba6-75d2-4e3f-af45-5236f74020ee/704b3a06-2288-4cd7-a1dc-1fcc03bd4ca5-480-fragmented.mp4" framerate="30" duration="1728" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="82704283" url="https://tube.kockatoo.org/static/streaming-playlists/hls/28c1dba6-75d2-4e3f-af45-5236f74020ee/30448a17-9302-4974-ab38-028e4a4448a3-360-fragmented.mp4" framerate="30" duration="1728" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/acbec21a-a009-4a2e-96bd-105dac98d868.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">What if KDE had a DICTATOR?</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[KDE on the Linux E-INK Tablet!]]></title>
+            <link>https://fedi.video/w/qwZek6gLuXJwbg8pMwxVTu</link>
+            <guid>https://fedi.video/w/qwZek6gLuXJwbg8pMwxVTu</guid>
+            <pubDate>Thu, 12 Jan 2023 11:03:14 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="250127960" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/c6aee8fa-072e-4aba-97de-23cd8b054836/90a8cbf6-a00f-4ad9-9422-7a7c3e91af41-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="157"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/c6aee8fa-072e-4aba-97de-23cd8b054836"/>
+            <media:player url="https://fedi.video/w/qwZek6gLuXJwbg8pMwxVTu"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/25e22306-5190-4437-ad2e-55b0bd31e760-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/388549e1-b4ae-468b-838d-5f35b2013ec9-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/70334454-fb2b-4430-a667-b63f012d5aad-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/e9074ecb-c990-487e-a842-6a69182e66c7-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="250127960" url="https://tube.kockatoo.org/static/streaming-playlists/hls/c6aee8fa-072e-4aba-97de-23cd8b054836/90a8cbf6-a00f-4ad9-9422-7a7c3e91af41-1080-fragmented.mp4" framerate="60" duration="1059" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="126713670" url="https://tube.kockatoo.org/static/streaming-playlists/hls/c6aee8fa-072e-4aba-97de-23cd8b054836/59f64c42-7e86-4d1f-bcab-29cf2ad3ac3a-720-fragmented.mp4" framerate="60" duration="1059" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="75336795" url="https://tube.kockatoo.org/static/streaming-playlists/hls/c6aee8fa-072e-4aba-97de-23cd8b054836/fe6b5948-54e2-450e-ba2d-f506b384e846-480-fragmented.mp4" framerate="30" duration="1059" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="53206022" url="https://tube.kockatoo.org/static/streaming-playlists/hls/c6aee8fa-072e-4aba-97de-23cd8b054836/d8086686-a29d-4a35-bbd6-89e206a90a5a-360-fragmented.mp4" framerate="30" duration="1059" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/812719f2-de90-4883-963c-37135c7adeed.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">KDE on the Linux E-INK Tablet!</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[New Features For Floating Panel AND New KDE Switch!]]></title>
+            <link>https://fedi.video/w/gcEeMgktvm7HZ2oBW98cMz</link>
+            <guid>https://fedi.video/w/gcEeMgktvm7HZ2oBW98cMz</guid>
+            <pubDate>Tue, 10 Jan 2023 07:04:33 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="219452140" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/7b19d37c-de1e-4c9e-8e45-139a03edaaf7/314bb2bc-5a11-4074-bd83-fe245904acbe-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="31"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/7b19d37c-de1e-4c9e-8e45-139a03edaaf7"/>
+            <media:player url="https://fedi.video/w/gcEeMgktvm7HZ2oBW98cMz"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/1ecbefb7-0bf8-4174-afe9-8ecdd15280b2-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/b594a31f-6e3f-4522-ae9f-27846604def9-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/40940ed2-37a5-4ab8-9724-38f74f3a08ae-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/a47f45bd-fdd2-4bdf-aad8-dac2077ff641-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="219452140" url="https://tube.kockatoo.org/static/streaming-playlists/hls/7b19d37c-de1e-4c9e-8e45-139a03edaaf7/314bb2bc-5a11-4074-bd83-fe245904acbe-1080-fragmented.mp4" framerate="60" duration="1330" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="122644992" url="https://tube.kockatoo.org/static/streaming-playlists/hls/7b19d37c-de1e-4c9e-8e45-139a03edaaf7/1f4fc9e3-cc5b-442c-a000-708b9b8d6204-720-fragmented.mp4" framerate="60" duration="1330" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="80688225" url="https://tube.kockatoo.org/static/streaming-playlists/hls/7b19d37c-de1e-4c9e-8e45-139a03edaaf7/c0ceb57e-279e-44bf-8b79-ab8f6f64d620-480-fragmented.mp4" framerate="30" duration="1330" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="60646260" url="https://tube.kockatoo.org/static/streaming-playlists/hls/7b19d37c-de1e-4c9e-8e45-139a03edaaf7/325ea937-15f9-44bd-8a70-123c5282e351-360-fragmented.mp4" framerate="30" duration="1330" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/f6f62b00-6b52-40e3-86ea-6afad2684500.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">New Features For Floating Panel AND New KDE Switch!</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[How Was 2022 for KDE?]]></title>
+            <link>https://fedi.video/w/fp9G4hbeaFtw4WqThA7SYD</link>
+            <guid>https://fedi.video/w/fp9G4hbeaFtw4WqThA7SYD</guid>
+            <pubDate>Sun, 08 Jan 2023 11:03:02 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Nate's 2022 blogpost: https://po...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Nate's 2022 blogpost: <a href="https://pointieststick.com/2022/12/31/highlights-from-2022/" target="_blank" rel="noopener noreferrer">https://pointieststick.com/2022/12/31/highlights-from-2022/</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="225037236" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/749b675b-8e9e-4a69-9df7-a7606dd88fad/7c2cbe38-c697-4a2f-81b7-128d96ca2e28-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="23"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/749b675b-8e9e-4a69-9df7-a7606dd88fad"/>
+            <media:player url="https://fedi.video/w/fp9G4hbeaFtw4WqThA7SYD"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/92e39eb3-02cb-434e-851e-3d77b3e6b3da-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/b05c7463-6484-41f5-9bed-ff70ed672465-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/1dceec2e-3591-4634-9730-c92f52343162-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/461123ce-ef40-4f53-9d98-23b2674f4285-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="225037236" url="https://tube.kockatoo.org/static/streaming-playlists/hls/749b675b-8e9e-4a69-9df7-a7606dd88fad/7c2cbe38-c697-4a2f-81b7-128d96ca2e28-1080-fragmented.mp4" framerate="60" duration="1127" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="114666730" url="https://tube.kockatoo.org/static/streaming-playlists/hls/749b675b-8e9e-4a69-9df7-a7606dd88fad/48be84b0-47b0-4c1e-ba72-115bb91d43e9-720-fragmented.mp4" framerate="60" duration="1127" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="71554464" url="https://tube.kockatoo.org/static/streaming-playlists/hls/749b675b-8e9e-4a69-9df7-a7606dd88fad/98b93573-c356-40d8-a523-a6e026c24cac-480-fragmented.mp4" framerate="30" duration="1127" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="52337441" url="https://tube.kockatoo.org/static/streaming-playlists/hls/749b675b-8e9e-4a69-9df7-a7606dd88fad/f818418b-93c8-4758-a5f4-3ac1a7a196e3-360-fragmented.mp4" framerate="30" duration="1127" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/0926fb08-d464-48fc-8da0-b22be6668fb3.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">How Was 2022 for KDE?</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Nate's 2022 blogpost: https://po...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[What can KDE LEARN from XFCE's LATEST RELEASE?]]></title>
+            <link>https://fedi.video/w/fjQGSTFys9uDEKY8KixNpi</link>
+            <guid>https://fedi.video/w/fjQGSTFys9uDEKY8KixNpi</guid>
+            <pubDate>Fri, 06 Jan 2023 11:00:22 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="137840902" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/74015830-6edd-42ea-889a-f62e3111ff47/0bb04ba6-9cd2-4614-889a-2b28d4e28305-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="44"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/74015830-6edd-42ea-889a-f62e3111ff47"/>
+            <media:player url="https://fedi.video/w/fjQGSTFys9uDEKY8KixNpi"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/a76859bc-b880-458b-a4a1-10fc9472b7ee-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/fcf669b4-ee0d-4dbc-bed0-4399472fd164-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/814d268b-b0e5-4fbb-91b7-cc9a4a7e8357-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/19eb80b0-6e53-49e3-998c-03010e0e276b-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="137840902" url="https://tube.kockatoo.org/static/streaming-playlists/hls/74015830-6edd-42ea-889a-f62e3111ff47/0bb04ba6-9cd2-4614-889a-2b28d4e28305-1080-fragmented.mp4" framerate="60" duration="795" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="70785039" url="https://tube.kockatoo.org/static/streaming-playlists/hls/74015830-6edd-42ea-889a-f62e3111ff47/c46ecc99-2ab7-4f02-8df2-a06fcae88aee-720-fragmented.mp4" framerate="60" duration="795" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="44564420" url="https://tube.kockatoo.org/static/streaming-playlists/hls/74015830-6edd-42ea-889a-f62e3111ff47/b5e9cbfd-c3a7-4c10-809c-2fea12cc7256-480-fragmented.mp4" framerate="30" duration="795" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="33101386" url="https://tube.kockatoo.org/static/streaming-playlists/hls/74015830-6edd-42ea-889a-f62e3111ff47/61bf4155-ed0a-40b4-b2e0-f9f6b863d917-360-fragmented.mp4" framerate="30" duration="795" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/e80768ca-5664-47cf-ab2f-820f0721b365.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">What can KDE LEARN from XFCE's LATEST RELEASE?</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[WINNING LINUX RAP BATTLE]]></title>
+            <link>https://fedi.video/w/xwkjWaTiAvLkteFqEVy9Kb</link>
+            <guid>https://fedi.video/w/xwkjWaTiAvLkteFqEVy9Kb</guid>
+            <pubDate>Wed, 21 Dec 2022 23:54:55 GMT</pubDate>
+            <description><![CDATA[Music: https://www.youtube.com/watch?v=RL3kylJz_ww 💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://k...]]></description>
+            <content:encoded><![CDATA[<p>Music: <a href="https://www.youtube.com/watch?v=RL3kylJz_ww" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=RL3kylJz_ww</a></p>
+<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="57875264" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/ff47859b-a6ca-451d-a6a6-c05cc558f878/b77b3a8e-0335-4587-8c7c-11e3f8055432-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="25"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/ff47859b-a6ca-451d-a6a6-c05cc558f878"/>
+            <media:player url="https://fedi.video/w/xwkjWaTiAvLkteFqEVy9Kb"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/15d00c40-8348-41dd-9c46-aca3ba120767-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/fb18625a-24b6-4b13-98db-19b4573d8ceb-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/20ac8cf2-1d1a-4e7c-b8b6-bcb6fecf7269-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/721571ae-3237-4128-b93a-b23178ae9e13-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="57875264" url="https://tube.kockatoo.org/static/streaming-playlists/hls/ff47859b-a6ca-451d-a6a6-c05cc558f878/b77b3a8e-0335-4587-8c7c-11e3f8055432-1080-fragmented.mp4" framerate="30" duration="180" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="30665676" url="https://tube.kockatoo.org/static/streaming-playlists/hls/ff47859b-a6ca-451d-a6a6-c05cc558f878/da3abc1f-a37b-4c57-8dae-e8f8ec9d451a-720-fragmented.mp4" framerate="30" duration="180" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="17942564" url="https://tube.kockatoo.org/static/streaming-playlists/hls/ff47859b-a6ca-451d-a6a6-c05cc558f878/b1420e30-f810-4ff0-86c6-8cf038a374cf-480-fragmented.mp4" framerate="30" duration="180" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="12884919" url="https://tube.kockatoo.org/static/streaming-playlists/hls/ff47859b-a6ca-451d-a6a6-c05cc558f878/583792e2-0c4d-4322-8886-73b6d3a440df-360-fragmented.mp4" framerate="30" duration="180" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/bf1da40d-1353-43b6-a857-ab9a999532e6.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">WINNING LINUX RAP BATTLE</media:title>
+            <media:description type="plain">Music: https://www.youtube.com/watch?v=RL3kylJz_ww 💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://k...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[KDE Dev on: "KDE is Wasting Its Power"? Feat TheLinuxExperiment!]]></title>
+            <link>https://fedi.video/w/nvSV1k7kdfB2FUtqJ5mMaD</link>
+            <guid>https://fedi.video/w/nvSV1k7kdfB2FUtqJ5mMaD</guid>
+            <pubDate>Sat, 17 Dec 2022 10:09:39 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="920112216" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/ae3bdba5-3aea-4f99-8383-565a8b7974a3/928e9cc7-f590-4100-bd2d-80252f05b336-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="67"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/ae3bdba5-3aea-4f99-8383-565a8b7974a3"/>
+            <media:player url="https://fedi.video/w/nvSV1k7kdfB2FUtqJ5mMaD"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/b4e9a77b-7cdf-48aa-8423-39afc1434a8c-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/f6ddd7e5-e52d-4c5a-afe0-9e8fb291ff01-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/a6ac754b-2c41-4096-9c46-0d8e23c7e23a-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/695ae102-c0fb-4872-9c6a-67223bc1b861-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="920112216" url="https://tube.kockatoo.org/static/streaming-playlists/hls/ae3bdba5-3aea-4f99-8383-565a8b7974a3/928e9cc7-f590-4100-bd2d-80252f05b336-1080-fragmented.mp4" framerate="30" duration="2700" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="475022040" url="https://tube.kockatoo.org/static/streaming-playlists/hls/ae3bdba5-3aea-4f99-8383-565a8b7974a3/340112c6-470d-4f68-adc0-f2d0a3354aac-720-fragmented.mp4" framerate="30" duration="2700" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="267497135" url="https://tube.kockatoo.org/static/streaming-playlists/hls/ae3bdba5-3aea-4f99-8383-565a8b7974a3/a4a06a4b-01e8-486c-9883-c77c7a70de57-480-fragmented.mp4" framerate="30" duration="2700" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="184547700" url="https://tube.kockatoo.org/static/streaming-playlists/hls/ae3bdba5-3aea-4f99-8383-565a8b7974a3/65e642e5-d650-44e6-b33c-fb62a00675c4-360-fragmented.mp4" framerate="30" duration="2700" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/6bf1833f-a252-4536-a69e-e984e9ff1a95.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">KDE Dev on: "KDE is Wasting Its Power"? Feat TheLinuxExperiment!</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[What Programming Languages Does KDE Use?]]></title>
+            <link>https://fedi.video/w/9mDVikXu1Br7V4ro8qA8LJ</link>
+            <guid>https://fedi.video/w/9mDVikXu1Br7V4ro8qA8LJ</guid>
+            <pubDate>Tue, 13 Dec 2022 10:35:16 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="137314318" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/43ab5a62-4d27-4b0b-a323-3257f8d6d54e/1ebee0a6-7b19-499f-8437-1fadb3b15507-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="20"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/43ab5a62-4d27-4b0b-a323-3257f8d6d54e"/>
+            <media:player url="https://fedi.video/w/9mDVikXu1Br7V4ro8qA8LJ"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/0c4fd44a-751e-48cd-a401-90f41c34c8a2-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/0cf9a432-c2e0-4400-9a36-976f8929be78-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/66ab087e-22ce-46a4-898a-6ec8e4bf4f44-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/b6604a4a-6394-4c10-8934-7a1c6bd2ed53-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="137314318" url="https://tube.kockatoo.org/static/streaming-playlists/hls/43ab5a62-4d27-4b0b-a323-3257f8d6d54e/1ebee0a6-7b19-499f-8437-1fadb3b15507-1080-fragmented.mp4" framerate="30" duration="756" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="86487496" url="https://tube.kockatoo.org/static/streaming-playlists/hls/43ab5a62-4d27-4b0b-a323-3257f8d6d54e/1aa94fd9-ab8d-4ca1-b805-689a4158dc56-720-fragmented.mp4" framerate="30" duration="756" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="50247440" url="https://tube.kockatoo.org/static/streaming-playlists/hls/43ab5a62-4d27-4b0b-a323-3257f8d6d54e/e68046ee-304d-44a1-abd7-66a3168472eb-480-fragmented.mp4" framerate="30" duration="756" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="35932802" url="https://tube.kockatoo.org/static/streaming-playlists/hls/43ab5a62-4d27-4b0b-a323-3257f8d6d54e/b6c9af92-fe09-4fe9-a508-5bee575253a4-360-fragmented.mp4" framerate="30" duration="756" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/8b3a6bae-2857-41bc-a419-ad3b5c096f2c.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">What Programming Languages Does KDE Use?</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[KDE Youtube Client, Updated!]]></title>
+            <link>https://fedi.video/w/uzUH6a7KQC6Qas9xLor66t</link>
+            <guid>https://fedi.video/w/uzUH6a7KQC6Qas9xLor66t</guid>
+            <pubDate>Mon, 12 Dec 2022 11:32:50 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="30303658" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/e77be8dc-6f49-4397-bb41-54009c14e979/3961b6d1-726d-48a7-8023-ac7a02e62d95-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="42"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/e77be8dc-6f49-4397-bb41-54009c14e979"/>
+            <media:player url="https://fedi.video/w/uzUH6a7KQC6Qas9xLor66t"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/f12e20a1-d143-4f04-bec7-6f0ad99d32e0-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/246f06bc-d171-4095-8389-34322b67eceb-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/492ece7b-4966-4731-bb93-e45921855d85-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/db5e96d5-4d98-49f1-b441-972164f821c0-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="30303658" url="https://tube.kockatoo.org/static/streaming-playlists/hls/e77be8dc-6f49-4397-bb41-54009c14e979/3961b6d1-726d-48a7-8023-ac7a02e62d95-1080-fragmented.mp4" framerate="30" duration="272" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="21153220" url="https://tube.kockatoo.org/static/streaming-playlists/hls/e77be8dc-6f49-4397-bb41-54009c14e979/f6ddb19c-bdab-43ca-91ac-4508b5df70ae-720-fragmented.mp4" framerate="30" duration="272" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="13491344" url="https://tube.kockatoo.org/static/streaming-playlists/hls/e77be8dc-6f49-4397-bb41-54009c14e979/31dc4864-a5d5-4da5-a235-c98822703b2e-480-fragmented.mp4" framerate="30" duration="272" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="10114598" url="https://tube.kockatoo.org/static/streaming-playlists/hls/e77be8dc-6f49-4397-bb41-54009c14e979/6b5046bd-60a5-4d83-91e3-62bc4711c52f-360-fragmented.mp4" framerate="30" duration="272" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/d31f56b9-bcbc-4b2a-a109-d95fb82fec6a.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">KDE Youtube Client, Updated!</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[KDE Screenshot App, Completely Redesigned!]]></title>
+            <link>https://fedi.video/w/aQF5VMMVQdUNDQKbdC8mu2</link>
+            <guid>https://fedi.video/w/aQF5VMMVQdUNDQKbdC8mu2</guid>
+            <pubDate>Sun, 11 Dec 2022 11:33:18 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="43909446" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/4fae092e-14f0-4447-aac8-315f35cbca01/dddf7247-0a63-417a-adbf-b47684ebef11-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="33"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/4fae092e-14f0-4447-aac8-315f35cbca01"/>
+            <media:player url="https://fedi.video/w/aQF5VMMVQdUNDQKbdC8mu2"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/c2987489-f01b-4852-9526-ba558145859c-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/d8fd729f-6350-4a59-a61c-3f4f225df8df-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/19791143-454c-4e3e-ab87-4373b4df27bc-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/00899dca-3a11-4f14-911d-315acac497c8-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="43909446" url="https://tube.kockatoo.org/static/streaming-playlists/hls/4fae092e-14f0-4447-aac8-315f35cbca01/dddf7247-0a63-417a-adbf-b47684ebef11-1080-fragmented.mp4" framerate="30" duration="388" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="30981857" url="https://tube.kockatoo.org/static/streaming-playlists/hls/4fae092e-14f0-4447-aac8-315f35cbca01/96437c54-9620-4a6b-a93d-c5c51b3da444-720-fragmented.mp4" framerate="30" duration="388" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="18752494" url="https://tube.kockatoo.org/static/streaming-playlists/hls/4fae092e-14f0-4447-aac8-315f35cbca01/327d4381-bfaa-411c-b7bb-6eaa525a50a3-480-fragmented.mp4" framerate="30" duration="388" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="13925348" url="https://tube.kockatoo.org/static/streaming-playlists/hls/4fae092e-14f0-4447-aac8-315f35cbca01/147c8a80-b3af-421a-99b0-511e7067d59c-360-fragmented.mp4" framerate="30" duration="388" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/71550325-b92d-449e-9ea1-90d2bc7f2c84.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">KDE Screenshot App, Completely Redesigned!</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[One Thing I Envy Of GNOME.]]></title>
+            <link>https://fedi.video/w/so9gbuuR32hnHd7dkHdZvH</link>
+            <guid>https://fedi.video/w/so9gbuuR32hnHd7dkHdZvH</guid>
+            <pubDate>Sat, 10 Dec 2022 10:34:27 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="89332618" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/d5a50f40-78f8-4272-96ca-0d531c55c40f/c39659d4-d5c7-4b9f-83d5-4f99bacafb3b-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="50"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/d5a50f40-78f8-4272-96ca-0d531c55c40f"/>
+            <media:player url="https://fedi.video/w/so9gbuuR32hnHd7dkHdZvH"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/cebc514e-4933-4122-aa46-45d06e9ea679-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/d0acf560-a86e-49b6-965e-8b6ad85372c3-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/e8584b1e-bd2e-4100-822e-ccfd1b48df2d-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/e1579f00-47f9-4674-b696-5d2355be16ff-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="89332618" url="https://tube.kockatoo.org/static/streaming-playlists/hls/d5a50f40-78f8-4272-96ca-0d531c55c40f/c39659d4-d5c7-4b9f-83d5-4f99bacafb3b-1080-fragmented.mp4" framerate="30" duration="600" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="68824608" url="https://tube.kockatoo.org/static/streaming-playlists/hls/d5a50f40-78f8-4272-96ca-0d531c55c40f/5f5552f9-d3fe-4279-8808-d8baf248c59b-720-fragmented.mp4" framerate="30" duration="600" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="40393201" url="https://tube.kockatoo.org/static/streaming-playlists/hls/d5a50f40-78f8-4272-96ca-0d531c55c40f/a82fb1ce-1d16-4025-8fde-7d28b9aa3a86-480-fragmented.mp4" framerate="30" duration="600" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="29200175" url="https://tube.kockatoo.org/static/streaming-playlists/hls/d5a50f40-78f8-4272-96ca-0d531c55c40f/f67aa39c-cd7d-482b-baac-dfeb47d3c84b-360-fragmented.mp4" framerate="30" duration="600" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/c1ac1270-f0cb-4d03-8406-be45ba16e673.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">One Thing I Envy Of GNOME.</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[KDE is FULL of TILING FEATURES!]]></title>
+            <link>https://fedi.video/w/aLmmibbqymyA5kxq95B6xj</link>
+            <guid>https://fedi.video/w/aLmmibbqymyA5kxq95B6xj</guid>
+            <pubDate>Fri, 09 Dec 2022 10:34:20 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="79789096" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/4f1383d1-4391-43fe-9b78-df002e8dfc04/15bd7267-0910-4a49-a7eb-6a01f587091a-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="40"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/4f1383d1-4391-43fe-9b78-df002e8dfc04"/>
+            <media:player url="https://fedi.video/w/aLmmibbqymyA5kxq95B6xj"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/63a65c60-2c1a-4272-ba11-f04c50e20c92-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/c6a95920-a3d1-4878-852b-111628a52fae-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/dd88a077-29e3-4d0d-8580-854faa92a122-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/8da65a9e-30c0-4a9c-9e2f-53d95bdfc045-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="79789096" url="https://tube.kockatoo.org/static/streaming-playlists/hls/4f1383d1-4391-43fe-9b78-df002e8dfc04/15bd7267-0910-4a49-a7eb-6a01f587091a-1080-fragmented.mp4" framerate="30" duration="558" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="64086841" url="https://tube.kockatoo.org/static/streaming-playlists/hls/4f1383d1-4391-43fe-9b78-df002e8dfc04/31e70faa-1657-451d-a0ef-4004dd76504b-720-fragmented.mp4" framerate="30" duration="558" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="37977583" url="https://tube.kockatoo.org/static/streaming-playlists/hls/4f1383d1-4391-43fe-9b78-df002e8dfc04/9b9804ce-1e6f-4d9a-963f-21e923949d99-480-fragmented.mp4" framerate="30" duration="558" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="27680730" url="https://tube.kockatoo.org/static/streaming-playlists/hls/4f1383d1-4391-43fe-9b78-df002e8dfc04/b83d0c26-e6ac-4eec-aaa3-3c30261f7850-360-fragmented.mp4" framerate="30" duration="558" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/548250a1-95ab-4c3c-9465-700513ff06df.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">KDE is FULL of TILING FEATURES!</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[What We Know of COSMIC DE, New Desktop By System76]]></title>
+            <link>https://fedi.video/w/isKpqbanNA6EXQNYKqmDCQ</link>
+            <guid>https://fedi.video/w/isKpqbanNA6EXQNYKqmDCQ</guid>
+            <pubDate>Thu, 08 Dec 2022 11:35:47 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/" target="_blank" rel="noopener noreferrer">https://t.me/</a>...</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="130599565" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/8d677199-326e-402a-9dc0-f2e525efdc0c/9d09761b-ce72-492b-8547-958f1cb1b456-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="33"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/8d677199-326e-402a-9dc0-f2e525efdc0c"/>
+            <media:player url="https://fedi.video/w/isKpqbanNA6EXQNYKqmDCQ"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/d17fcd58-2079-4f47-b835-4c2d9640dc7e-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/a6e607d2-9aa4-4359-97f7-4b8dcb9288ca-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/03e6427d-de60-48bd-8b51-c1f210ca97b5-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/26802f58-37ca-4caf-b6b8-6c2d43cc496a-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="130599565" url="https://tube.kockatoo.org/static/streaming-playlists/hls/8d677199-326e-402a-9dc0-f2e525efdc0c/9d09761b-ce72-492b-8547-958f1cb1b456-1080-fragmented.mp4" framerate="30" duration="919" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="101686767" url="https://tube.kockatoo.org/static/streaming-playlists/hls/8d677199-326e-402a-9dc0-f2e525efdc0c/b855c31c-b00d-480a-b202-5337d5fb6a5e-720-fragmented.mp4" framerate="30" duration="919" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="59654018" url="https://tube.kockatoo.org/static/streaming-playlists/hls/8d677199-326e-402a-9dc0-f2e525efdc0c/8cb80aff-909c-46e7-af7c-0744eaccba43-480-fragmented.mp4" framerate="30" duration="919" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="43278172" url="https://tube.kockatoo.org/static/streaming-playlists/hls/8d677199-326e-402a-9dc0-f2e525efdc0c/a9d8e254-0143-438a-817c-27b4f4a02e3f-360-fragmented.mp4" framerate="30" duration="919" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/01b67ed6-bb3b-4ebb-9bec-407a606c2fbf.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">What We Know of COSMIC DE, New Desktop By System76</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[I PUSHED some CODE with TYPO to KDE and broke PLASMA :D]]></title>
+            <link>https://fedi.video/w/2c5ejRt7gNiXMrzYqTs5uQ</link>
+            <guid>https://fedi.video/w/2c5ejRt7gNiXMrzYqTs5uQ</guid>
+            <pubDate>Wed, 07 Dec 2022 11:34:39 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="87449593" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/09a4ed42-d8e3-4153-9fe0-45e5d3c3cbd8/517d5309-c09a-416e-ad24-f2db67eddcb9-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="18"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/09a4ed42-d8e3-4153-9fe0-45e5d3c3cbd8"/>
+            <media:player url="https://fedi.video/w/2c5ejRt7gNiXMrzYqTs5uQ"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/92d86b54-bdfe-46ca-a0c0-1aeca5811da2-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/147eb2bf-374b-49eb-8e99-41ab9ce40071-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/d73830ab-8061-45c0-a337-3f0595c49f23-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/cc0e68a0-de95-4718-9d37-617b067bca4a-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="87449593" url="https://tube.kockatoo.org/static/streaming-playlists/hls/09a4ed42-d8e3-4153-9fe0-45e5d3c3cbd8/517d5309-c09a-416e-ad24-f2db67eddcb9-1080-fragmented.mp4" framerate="30" duration="610" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="54267429" url="https://tube.kockatoo.org/static/streaming-playlists/hls/09a4ed42-d8e3-4153-9fe0-45e5d3c3cbd8/3345980e-13fb-496b-ae27-45938e40c939-720-fragmented.mp4" framerate="30" duration="610" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="34121439" url="https://tube.kockatoo.org/static/streaming-playlists/hls/09a4ed42-d8e3-4153-9fe0-45e5d3c3cbd8/7ff63ae0-2804-4d41-8490-68e76377fae2-480-fragmented.mp4" framerate="30" duration="610" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="25605938" url="https://tube.kockatoo.org/static/streaming-playlists/hls/09a4ed42-d8e3-4153-9fe0-45e5d3c3cbd8/fb85affd-d1e2-44bb-afe1-d870a3f693da-360-fragmented.mp4" framerate="30" duration="610" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/187d3008-f5df-44d8-9b7f-0766f66fb8df.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">I PUSHED some CODE with TYPO to KDE and broke PLASMA :D</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[The VOICE ASSISTANT for KDE PLASMA!]]></title>
+            <link>https://fedi.video/w/sN1MLe7dduRLQuNGgeNb6R</link>
+            <guid>https://fedi.video/w/sN1MLe7dduRLQuNGgeNb6R</guid>
+            <pubDate>Fri, 02 Dec 2022 09:35:02 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="97024121" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/d8fa4e08-ed91-41d0-b0ba-33602766971b/1cbd91c1-cb6a-40c4-b966-e2f60fcf4601-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="31"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/d8fa4e08-ed91-41d0-b0ba-33602766971b"/>
+            <media:player url="https://fedi.video/w/sN1MLe7dduRLQuNGgeNb6R"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/5a82df09-9393-43c5-bafe-0556a78a0622-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/ad47891d-2843-4d13-a6fb-aca4ede3ea4b-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/10889126-8742-425d-bc8f-484b6b2ca633-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/aff6fd86-c802-46ed-8f48-5688ca9b7454-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="97024121" url="https://tube.kockatoo.org/static/streaming-playlists/hls/d8fa4e08-ed91-41d0-b0ba-33602766971b/1cbd91c1-cb6a-40c4-b966-e2f60fcf4601-1080-fragmented.mp4" framerate="30" duration="689" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="64581999" url="https://tube.kockatoo.org/static/streaming-playlists/hls/d8fa4e08-ed91-41d0-b0ba-33602766971b/99f8b549-d91a-4d40-b066-301f655db3fa-720-fragmented.mp4" framerate="30" duration="689" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="39628122" url="https://tube.kockatoo.org/static/streaming-playlists/hls/d8fa4e08-ed91-41d0-b0ba-33602766971b/5d0a8671-7368-4d4a-8e0b-9e9a6603b0d7-480-fragmented.mp4" framerate="30" duration="689" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="29403278" url="https://tube.kockatoo.org/static/streaming-playlists/hls/d8fa4e08-ed91-41d0-b0ba-33602766971b/745960ea-d263-45d7-a262-fe132b781327-360-fragmented.mp4" framerate="30" duration="689" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/9ba0ff70-8fd5-4491-b038-20f0416b86e6.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">The VOICE ASSISTANT for KDE PLASMA!</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[Dynamic Window Decorations: The Forbidden Dream.]]></title>
+            <link>https://fedi.video/w/dD51uqvhoMpaKifAh5BEAt</link>
+            <guid>https://fedi.video/w/dD51uqvhoMpaKifAh5BEAt</guid>
+            <pubDate>Thu, 01 Dec 2022 11:35:03 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="100690732" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/665aa759-2af4-4136-871c-73213e3f3f5f/150bb177-e60f-4869-9d27-8e3018cc8dcf-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="30"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/665aa759-2af4-4136-871c-73213e3f3f5f"/>
+            <media:player url="https://fedi.video/w/dD51uqvhoMpaKifAh5BEAt"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/155e1ab4-f33f-4d7c-afec-f0b8327dcfae-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/2c105428-180d-4444-862d-323fe7f1da3e-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/67efae04-8901-4a54-b1f7-4fdccdf5bdd8-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/1d840ffa-0fb6-4b4f-a515-bc94f902068b-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="100690732" url="https://tube.kockatoo.org/static/streaming-playlists/hls/665aa759-2af4-4136-871c-73213e3f3f5f/150bb177-e60f-4869-9d27-8e3018cc8dcf-1080-fragmented.mp4" framerate="30" duration="703" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="70494129" url="https://tube.kockatoo.org/static/streaming-playlists/hls/665aa759-2af4-4136-871c-73213e3f3f5f/6635a1ff-52e7-4892-9010-b120b990beb0-720-fragmented.mp4" framerate="30" duration="703" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="46102000" url="https://tube.kockatoo.org/static/streaming-playlists/hls/665aa759-2af4-4136-871c-73213e3f3f5f/e7cd95f9-6c3d-4dbc-a330-a70be43069cb-480-fragmented.mp4" framerate="30" duration="703" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="34193768" url="https://tube.kockatoo.org/static/streaming-playlists/hls/665aa759-2af4-4136-871c-73213e3f3f5f/b7cc222a-d6b1-4f74-88a7-220a936079c2-360-fragmented.mp4" framerate="30" duration="703" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/1e4ba807-b576-4778-a345-6debf3d1f036.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">Dynamic Window Decorations: The Forbidden Dream.</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[What to EXPECT from KDE Plasma 6?]]></title>
+            <link>https://fedi.video/w/6XnKPSUnX4fsSTCTAGgtE8</link>
+            <guid>https://fedi.video/w/6XnKPSUnX4fsSTCTAGgtE8</guid>
+            <pubDate>Wed, 30 Nov 2022 08:37:22 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="91809340" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/3039020d-bac6-48b0-bd01-71e163f06547/34beb189-adb0-45ba-9edc-1239bc53a840-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="63"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/3039020d-bac6-48b0-bd01-71e163f06547"/>
+            <media:player url="https://fedi.video/w/6XnKPSUnX4fsSTCTAGgtE8"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/38d96cdf-1ae4-4831-8da7-9f50ee65120e-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/15d910bb-0864-4850-90ff-804460a50a66-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/fb4c94a4-3293-4403-988d-175b1a6d6a22-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/c1385b59-3230-431e-870e-6e433d7a85f8-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="91809340" url="https://tube.kockatoo.org/static/streaming-playlists/hls/3039020d-bac6-48b0-bd01-71e163f06547/34beb189-adb0-45ba-9edc-1239bc53a840-1080-fragmented.mp4" framerate="60" duration="806" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="55200244" url="https://tube.kockatoo.org/static/streaming-playlists/hls/3039020d-bac6-48b0-bd01-71e163f06547/2d2498ca-0a6e-4359-98f9-9cd2329b23e0-720-fragmented.mp4" framerate="60" duration="806" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="37630414" url="https://tube.kockatoo.org/static/streaming-playlists/hls/3039020d-bac6-48b0-bd01-71e163f06547/9f1815f5-5661-4ab8-bc93-f5beb060e99a-480-fragmented.mp4" framerate="30" duration="806" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="29245052" url="https://tube.kockatoo.org/static/streaming-playlists/hls/3039020d-bac6-48b0-bd01-71e163f06547/6b9bee0a-1663-4532-ab5f-17d2d7649a34-360-fragmented.mp4" framerate="30" duration="806" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/9b6f000a-10ce-4902-bfad-9c62cb0d7e85.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">What to EXPECT from KDE Plasma 6?</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[FRACTIONAL SCALING in WAYLAND... What Now?]]></title>
+            <link>https://fedi.video/w/4nx3WgDP1dPiX99ebnQ7cn</link>
+            <guid>https://fedi.video/w/4nx3WgDP1dPiX99ebnQ7cn</guid>
+            <pubDate>Tue, 29 Nov 2022 10:36:49 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/" target="_blank" rel="noopener noreferrer">https://t.me/</a>...</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="216320792" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/1b4d2bb7-af0c-40c6-8c35-e40aba6e42bb/d9565009-aa88-44d1-a926-d7480b0cbf54-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="25"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/1b4d2bb7-af0c-40c6-8c35-e40aba6e42bb"/>
+            <media:player url="https://fedi.video/w/4nx3WgDP1dPiX99ebnQ7cn"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/5b88a04b-f2a3-44a1-b7fa-e3267dbb6997-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/b0c23a78-f844-44db-8927-2749ebeb327d-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/683d3649-6788-4981-8c1d-6b0977ff783e-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/d758bc59-0a16-4b7b-8864-0f2047d1a494-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="216320792" url="https://tube.kockatoo.org/static/streaming-playlists/hls/1b4d2bb7-af0c-40c6-8c35-e40aba6e42bb/d9565009-aa88-44d1-a926-d7480b0cbf54-1080-fragmented.mp4" framerate="30" duration="840" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="121094916" url="https://tube.kockatoo.org/static/streaming-playlists/hls/1b4d2bb7-af0c-40c6-8c35-e40aba6e42bb/413f1bba-dadb-4678-9248-39c096411bcf-720-fragmented.mp4" framerate="30" duration="840" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="66312481" url="https://tube.kockatoo.org/static/streaming-playlists/hls/1b4d2bb7-af0c-40c6-8c35-e40aba6e42bb/387a5815-2a19-4da4-b461-257b65c3ca6c-480-fragmented.mp4" framerate="30" duration="840" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="46209674" url="https://tube.kockatoo.org/static/streaming-playlists/hls/1b4d2bb7-af0c-40c6-8c35-e40aba6e42bb/1ef7e9ba-44a9-4403-a5c0-f566a647205c-360-fragmented.mp4" framerate="30" duration="840" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/e1625c18-d599-47b2-a911-5066e880bce1.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">FRACTIONAL SCALING in WAYLAND... What Now?</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[I'm MAKING a NEW KDE APP!]]></title>
+            <link>https://fedi.video/w/dU53Bx8pYNiJiFspB8t5Ug</link>
+            <guid>https://fedi.video/w/dU53Bx8pYNiJiFspB8t5Ug</guid>
+            <pubDate>Mon, 28 Nov 2022 11:37:02 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/veggeroblog" target="_blank" rel="noopener noreferrer">https://t.me/veggeroblog</a></p>
+<p>My website is <a href="https://nicco.love" target="_blank" rel="noopener noreferrer">https://nicco.love</a> and if you want to contact me, my telegram handle is [at] veggero.</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="103075696" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/6872d532-ee31-4e70-b300-dc2a0c2fc4af/c6d4a50e-36a5-4737-8dab-89433902126e-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="41"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/6872d532-ee31-4e70-b300-dc2a0c2fc4af"/>
+            <media:player url="https://fedi.video/w/dU53Bx8pYNiJiFspB8t5Ug"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/57f5ebbf-5896-4ccc-a1f5-f97319505888-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/7a0d2db9-b999-4b6e-883d-4c9815b77297-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/d2c6a2e6-58f7-4ea7-81ee-0478699e3868-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/ddbd17af-b6e0-40d4-8e1d-09fbda90f1a5-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="103075696" url="https://tube.kockatoo.org/static/streaming-playlists/hls/6872d532-ee31-4e70-b300-dc2a0c2fc4af/c6d4a50e-36a5-4737-8dab-89433902126e-1080-fragmented.mp4" framerate="60" duration="755" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="62434024" url="https://tube.kockatoo.org/static/streaming-playlists/hls/6872d532-ee31-4e70-b300-dc2a0c2fc4af/cd7e7864-93c1-4002-ba59-11897eed7711-720-fragmented.mp4" framerate="60" duration="755" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="42936889" url="https://tube.kockatoo.org/static/streaming-playlists/hls/6872d532-ee31-4e70-b300-dc2a0c2fc4af/a2fa60f1-5ec3-4ff0-9e72-69ad45c0a427-480-fragmented.mp4" framerate="30" duration="755" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="32712598" url="https://tube.kockatoo.org/static/streaming-playlists/hls/6872d532-ee31-4e70-b300-dc2a0c2fc4af/b95280a6-d8d1-4a00-9593-e06d86831c82-360-fragmented.mp4" framerate="30" duration="755" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/6db8e17d-8843-4d0d-95ca-eac65bcdf77d.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">I'm MAKING a NEW KDE APP!</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+        <item>
+            <title><![CDATA[Should you use KDE Plasma instead of GNOME?]]></title>
+            <link>https://fedi.video/w/he2ESuA3x3zDi2VduHXkb9</link>
+            <guid>https://fedi.video/w/he2ESuA3x3zDi2VduHXkb9</guid>
+            <pubDate>Sun, 27 Nov 2022 11:37:59 GMT</pubDate>
+            <description><![CDATA[💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...]]></description>
+            <content:encoded><![CDATA[<p>💸💸 Help me contribute to KDE and do these videos: 💸💸<br />
+Paypal: <a href="https://paypal.me/niccolove" target="_blank" rel="noopener noreferrer">https://paypal.me/niccolove</a><br />
+Patreon: <a href="https://www.patreon.com/niccolove" target="_blank" rel="noopener noreferrer">https://www.patreon.com/niccolove</a><br />
+Liberapay: <a href="https://liberapay.com/niccolove" target="_blank" rel="noopener noreferrer">https://liberapay.com/niccolove</a><br />
+Ko-Fi: <a href="https://ko-fi.com/niccolove" target="_blank" rel="noopener noreferrer">https://ko-fi.com/niccolove</a></p>
+<p>Stay in the loop: <a href="https://t.me/" target="_blank" rel="noopener noreferrer">https://t.me/</a>...</p>
+]]></content:encoded>
+            <dc:creator>veggero</dc:creator>
+            <enclosure length="310089732" type="video/mp4" url="https://tube.kockatoo.org/static/streaming-playlists/hls/8363eab7-15fe-4642-a9c8-4a48f446fe20/121b5201-31b8-42a0-9621-c609a62c26ca-1080-fragmented.mp4"/>
+            <media:category scheme="http://search.yahoo.com/mrss/category_schema" label="Science &amp; Technology">15</media:category>
+            <media:community>
+                <media:statistics views="32"/>
+            </media:community>
+            <media:embed url="https://fedi.video/videos/embed/8363eab7-15fe-4642-a9c8-4a48f446fe20"/>
+            <media:player url="https://fedi.video/w/he2ESuA3x3zDi2VduHXkb9"/>
+            <media:group>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/95cdcecc-0ea2-4bcd-aee3-176db77877ee-1080-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/4f6db12d-e46b-4ca0-aa53-372513bb2b20-720-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/b5cd5858-7b53-4809-bf42-112a462c34db-480-hls.torrent" isDefault="false"/>
+                <media:peerLink type="application/x-bittorrent" href="https://fedi.video/lazy-static/torrents/778e1f8c-96d1-48c9-bf00-b989b4549a41-360-hls.torrent" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="1080" fileSize="310089732" url="https://tube.kockatoo.org/static/streaming-playlists/hls/8363eab7-15fe-4642-a9c8-4a48f446fe20/121b5201-31b8-42a0-9621-c609a62c26ca-1080-fragmented.mp4" framerate="30" duration="958" isDefault="true"/>
+                <media:content type="video/mp4" medium="video" height="720" fileSize="149710956" url="https://tube.kockatoo.org/static/streaming-playlists/hls/8363eab7-15fe-4642-a9c8-4a48f446fe20/8025e917-ac55-4aef-ae7c-4792e10326c5-720-fragmented.mp4" framerate="30" duration="958" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="480" fileSize="81547625" url="https://tube.kockatoo.org/static/streaming-playlists/hls/8363eab7-15fe-4642-a9c8-4a48f446fe20/7b84395c-6961-49a1-ad44-45621228bd80-480-fragmented.mp4" framerate="30" duration="958" isDefault="false"/>
+                <media:content type="video/mp4" medium="video" height="360" fileSize="56296954" url="https://tube.kockatoo.org/static/streaming-playlists/hls/8363eab7-15fe-4642-a9c8-4a48f446fe20/a780d2c2-b50b-474b-8062-d84934e44ece-360-fragmented.mp4" framerate="30" duration="958" isDefault="false"/>
+            </media:group>
+            <media:thumbnail url="https://fedi.video/lazy-static/previews/e024bff5-b86b-4b62-9460-ef81ea787621.jpg" height="480" width="850"/>
+            <media:rating>nonadult</media:rating>
+            <media:title type="plain">Should you use KDE Plasma instead of GNOME?</media:title>
+            <media:description type="plain">💸💸 Help me contribute to KDE and do these videos: 💸💸 Paypal: https://paypal.me/niccolove Patreon: https://www.patreon.com/niccolove Liberapay: https://liberapay.com/niccolove Ko-Fi: https://ko-fi.com/niccolove Stay in the loop: https://t.me/...</media:description>
+        </item>
+    </channel>
+</rss>

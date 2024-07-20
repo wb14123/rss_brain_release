@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+  <head>
+    <title>Subscriptions of bin.wang2 from Inoreader [https://www.inoreader.com]</title>
+  </head>
+  <body>
+    <outline text="The New Stack » Blog" title="The New Stack » Blog" type="rss" xmlUrl="http://thenewstack.io/blog/feed/" htmlUrl="http://thenewstack.io/"/>
+    <outline text="news" title="news">
+      <outline text="bad-folder" title="bad-folder">
+          <outline text="Toronto - CBC News" title="Toronto - CBC News" type="rss" xmlUrl="https://rsshub.binwang.me/cbc/topics/canada-toronto" htmlUrl="https://www.cbc.ca/news/canada/toronto"/>
+      </outline>
+      <outline text="Toronto - CBC News" title="Toronto - CBC News" type="rss" xmlUrl="https://rsshub.binwang.me/cbc/topics/canada-toronto" htmlUrl="https://www.cbc.ca/news/canada/toronto"/>
+      <outline text="Canada - CBC News" title="Canada - CBC News" type="rss" xmlUrl="https://rsshub.binwang.me/cbc/topics/canada" htmlUrl="https://www.cbc.ca/news/canada"/>
+      <outline text="路透社 深度分析" title="路透社 深度分析" type="rss" xmlUrl="https://rsshub.app/reuters/channel/cn/analyses" htmlUrl="https://cn.reuters.com/news/analyses"/>
+      <outline text="South China Morning Post - China" title="South China Morning Post - China" type="rss" xmlUrl="https://rsshub.app/scmp/4" htmlUrl="https://www.scmp.com/rss/4/feed"/>
+      <outline text="AP News - AP Top News" title="AP News - AP Top News" type="rss" xmlUrl="https://rsshub.app/apnews/topics/apf-topnews" htmlUrl="https://www.apnews.com/apf-topnews"/>
+    </outline>
+    <outline text="tech" title="tech">
+      <outline text="Perspectives" title="Perspectives" type="rss" xmlUrl="https://perspectives.mvdirona.com/feed/" htmlUrl="https://perspectives.mvdirona.com"/>
+      <outline text="Lu's blog" title="Lu's blog" type="rss" xmlUrl="https://blog.the-pans.com/rss/" htmlUrl="https://blog.the-pans.com/"/>
+      <outline text="Freedom to Tinker" title="Freedom to Tinker" type="rss" xmlUrl="https://freedom-to-tinker.com/feed/rss/" htmlUrl="https://freedom-to-tinker.com/"/>
+      <outline text="酷 壳 - CoolShell.cn" title="酷 壳 - CoolShell.cn" type="rss" xmlUrl="http://coolshell.cn/feed" htmlUrl="http://coolshell.cn/"/>
+      <outline text="The Latest from Luke" title="The Latest from Luke" type="rss" xmlUrl="https://lukesmith.xyz/rss.xml" htmlUrl="https://lukesmith.xyz/rss.xml"/>
+      <outline text="Bin Wang - My Personal Blog" title="Bin Wang - My Personal Blog" type="rss" xmlUrl="https://www.binwang.me/feed.xml" htmlUrl="https://www.binwang.me/"/>
+      <outline text="编程随想的博客" title="编程随想的博客" type="rss" xmlUrl="https://feeds2.feedburner.com/programthink" htmlUrl="http://program-think.blogspot.com/"/>
+      <outline text="依云's Blog" title="依云's Blog" type="rss" xmlUrl="https://blog.lilydjwg.me/feed" htmlUrl="https://blog.lilydjwg.me/"/>
+      <outline text="manateelazycat.github.io" title="manateelazycat.github.io" type="rss" xmlUrl="https://manateelazycat.github.io/feed.xml" htmlUrl="https://manateelazycat.github.io/"/>
+      <outline text="4G Spaces" title="4G Spaces" type="rss" xmlUrl="https://blog.youxu.info/feed.xml" htmlUrl="http://blog.youxu.info/"/>
+      <outline text="DBMS Musings" title="DBMS Musings" type="rss" xmlUrl="https://dbmsmusings.blogspot.com/feeds/posts/default" htmlUrl="https://dbmsmusings.blogspot.com/"/>
+      <outline text="Brendan Gregg's Blog" title="Brendan Gregg's Blog" type="rss" xmlUrl="http://www.brendangregg.com/blog/rss.xml" htmlUrl="http://www.brendangregg.com/blog"/>
+      <outline text="Andy Pavlo - Carnegie Mellon University" title="Andy Pavlo - Carnegie Mellon University" type="rss" xmlUrl="http://www.cs.cmu.edu/~pavlo//blog/feed.xml" htmlUrl="http://www.cs.cmu.edu/~pavlo/"/>
+      <outline text="Shtetl-Optimized" title="Shtetl-Optimized" type="rss" xmlUrl="https://www.scottaaronson.com/blog/?feed=rss2" htmlUrl="https://www.scottaaronson.com/blog"/>
+      <outline text="PINE64" title="PINE64" type="rss" xmlUrl="https://www.pine64.org/feed/" htmlUrl="https://www.pine64.org/"/>
+      <outline text="Martin Kleppmann's blog" title="Martin Kleppmann's blog" type="rss" xmlUrl="http://feeds.feedburner.com/martinkl?format=xml" htmlUrl="http://martin.kleppmann.com/"/>
+      <outline text="DTrace | The Observation Deck" title="DTrace | The Observation Deck" type="rss" xmlUrl="http://dtrace.org/blogs/bmc/feed/" htmlUrl="http://dtrace.org/blogs/bmc"/>
+      <outline text="Marc Brooker's Blog" title="Marc Brooker's Blog" type="rss" xmlUrl="http://brooker.co.za/blog/rss.xml" htmlUrl="http://brooker.co.za/blog/"/>
+      <outline text="Database Architects" title="Database Architects" type="rss" xmlUrl="http://databasearchitects.blogspot.com/feeds/posts/default" htmlUrl="http://databasearchitects.blogspot.com/"/>
+      <outline text="BACK7.CO" title="BACK7.CO" type="rss" xmlUrl="https://back7.co/home?format=rss" htmlUrl="https://back7.co/"/>
+    </outline>
+    <outline text="friends" title="friends">
+      <outline text="琴和他的朋友们 （刘佳阳）" title="琴和他的朋友们 （刘佳阳）" type="rss" xmlUrl="https://www.pv97.com/feed/" htmlUrl="https://www.pv97.com/"/>
+      <outline text="豆浆鸟（李雪岩）" title="豆浆鸟（李雪岩）" type="rss" xmlUrl="http://soyabird.com/atom.xml" htmlUrl="http://soyabird.com/"/>
+    </outline>
+    <outline text="tech-news" title="tech-news">
+      <outline text="The Verge -  All Posts" title="The Verge -  All Posts" type="rss" xmlUrl="https://rsshub.app/verge" htmlUrl="https://www.theverge.com/"/>
+      <outline text="It's F.O.S.S." title="It's F.O.S.S." type="rss" xmlUrl="https://itsfoss.com/feed/" htmlUrl="https://itsfoss.com/"/>
+      <outline text="the morning paper" title="the morning paper" type="rss" xmlUrl="http://blog.acolyer.org/feed/" htmlUrl="http://blog.acolyer.org/"/>
+      <outline text="Slashdot" title="Slashdot" type="rss" xmlUrl="http://rss.slashdot.org/Slashdot/slashdot" htmlUrl="http://slashdot.org/"/>
+      <outline text="Schneier on Security" title="Schneier on Security" type="rss" xmlUrl="http://www.schneier.com/blog/index.rdf" htmlUrl="https://www.schneier.com/blog/"/>
+      <outline text="FreeBuf互联网安全新媒体平台 | 关注黑客与极客" title="FreeBuf互联网安全新媒体平台 | 关注黑客与极客" type="rss" xmlUrl="http://www.freebuf.com/feed" htmlUrl="http://www.freebuf.com/"/>
+    </outline>
+    <outline text="tech-org" title="tech-org">
+      <outline text="Cockroach Labs" title="Cockroach Labs" type="rss" xmlUrl="https://www.cockroachlabs.com/blog/index.xml" htmlUrl="https://www.cockroachlabs.com/blog/index.xml"/>
+      <outline text="Planet PostgreSQL" title="Planet PostgreSQL" type="rss" xmlUrl="https://planet.postgresql.org/rss20.xml" htmlUrl="http://planet.postgresql.org/"/>
+      <outline text="Facebook Research" title="Facebook Research" type="rss" xmlUrl="https://research.fb.com/feed/" htmlUrl="https://research.facebook.com/blog/ai/"/>
+      <outline text="Google AI Blog" title="Google AI Blog" type="rss" xmlUrl="http://feeds.feedburner.com/blogspot/gJZg" htmlUrl="http://googleresearch.blogspot.com/"/>
+      <outline text="Arch Linux: Recent news updates" title="Arch Linux: Recent news updates" type="rss" xmlUrl="https://www.archlinux.org/feeds/news/" htmlUrl="https://www.archlinux.org/news/"/>
+      <outline text="DeepMind Blog" title="DeepMind Blog" type="rss" xmlUrl="https://deepmind.com/blog/feed/basic/" htmlUrl="https://deepmind.com/blog/"/>
+      <outline text="Redis Labs" title="Redis Labs" type="rss" xmlUrl="http://redislabs.com/feed" htmlUrl="https://redislabs.com/"/>
+      <outline text="Microsoft Research" title="Microsoft Research" type="rss" xmlUrl="https://www.microsoft.com/en-us/research/feed/" htmlUrl="https://www.microsoft.com/en-us/research"/>
+    </outline>
+    <outline text="culture" title="culture">
+      <outline text="六神磊磊读金庸" title="六神磊磊读金庸" type="rss" xmlUrl="http://feedmaker.kindle4rss.com/feeds/dujinyong6.weixin.xml" htmlUrl="http://chuansong.me/account/dujinyong6"/>
+      <outline text="三联生活周刊" title="三联生活周刊" type="rss" xmlUrl="http://feedmaker.kindle4rss.com/feeds/lifeweek.weixin.xml" htmlUrl="http://www.iwgc.cn/list/99"/>
+      <outline text="国家地理中文" title="国家地理中文" type="rss" xmlUrl="https://feedx.net/rss/nationalgeocn.xml" htmlUrl="https://feedx.net/rss/nationalgeocn.xml"/>
+    </outline>
+    <outline text="food" title="food">
+      <outline text="老饭骨 的 bilibili 空间" title="老饭骨 的 bilibili 空间" type="rss" xmlUrl="https://rsshub.binwang.me/bilibili/user/video/419872064" htmlUrl="https://space.bilibili.com/419872064"/>
+      <outline text="美食作家王刚R 的 bilibili 空间" title="美食作家王刚R 的 bilibili 空间" type="rss" xmlUrl="https://rsshub.binwang.me/bilibili/user/video/290526283" htmlUrl="https://space.bilibili.com/290526283"/>
+    </outline>
+    <outline text="game" title="game">
+      <outline text="逆风笑 的 bilibili 空间" title="逆风笑 的 bilibili 空间" type="rss" xmlUrl="https://rsshub.binwang.me/bilibili/user/video/2019740" htmlUrl="https://space.bilibili.com/2019740"/>
+      <outline text="怕上火暴王老菊 的 bilibili 空间" title="怕上火暴王老菊 的 bilibili 空间" type="rss" xmlUrl="https://rsshub.binwang.me/bilibili/user/video/423895" htmlUrl="https://space.bilibili.com/423895"/>
+      <outline text="逍遥散人 的 bilibili 空间" title="逍遥散人 的 bilibili 空间" type="rss" xmlUrl="https://rsshub.binwang.me/bilibili/user/video/168598" htmlUrl="https://space.bilibili.com/168598"/>
+    </outline>
+    <outline text="kindle" title="kindle">
+      <outline text="Toronto - CBC News" title="Toronto - CBC News" type="rss" xmlUrl="https://rsshub.binwang.me/cbc/topics/canada-toronto" htmlUrl="https://www.cbc.ca/news/canada/toronto"/>
+      <outline text="Canada - CBC News" title="Canada - CBC News" type="rss" xmlUrl="https://rsshub.binwang.me/cbc/topics/canada" htmlUrl="https://www.cbc.ca/news/canada"/>
+      <outline text="古诗文推荐" title="古诗文推荐" type="rss" xmlUrl="https://rsshub.binwang.me/gushiwen/recommend/zhushang" htmlUrl="https://www.gushiwen.org/"/>
+      <outline text="South China Morning Post - China" title="South China Morning Post - China" type="rss" xmlUrl="https://rsshub.app/scmp/4" htmlUrl="https://www.scmp.com/rss/4/feed"/>
+      <outline text="the morning paper" title="the morning paper" type="rss" xmlUrl="http://blog.acolyer.org/feed/" htmlUrl="http://blog.acolyer.org/"/>
+      <outline text="Schneier on Security" title="Schneier on Security" type="rss" xmlUrl="http://www.schneier.com/blog/index.rdf" htmlUrl="https://www.schneier.com/blog/"/>
+      <outline text="AP News - AP Top News" title="AP News - AP Top News" type="rss" xmlUrl="https://rsshub.app/apnews/topics/apf-topnews" htmlUrl="https://www.apnews.com/apf-topnews"/>
+    </outline>
+  </body>
+</opml>

@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:admin="http://webns.net/mvcb/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:syn="http://purl.org/rss/1.0/modules/syndication/" xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/">
+
+<channel rdf:about="https://slashdot.org/">
+<title>Slashdot</title>
+<link>https://slashdot.org/</link>
+<description>News for nerds, stuff that matters</description>
+<dc:language>en-us</dc:language>
+<dc:rights>Copyright 1997-2016, SlashdotMedia. All Rights Reserved.</dc:rights>
+<dc:date>2022-04-14T04:31:15+00:00</dc:date>
+<dc:publisher>Dice</dc:publisher>
+<dc:creator>help@slashdot.org</dc:creator>
+<dc:subject>Technology</dc:subject>
+<syn:updateBase>1970-01-01T00:00+00:00</syn:updateBase>
+<syn:updateFrequency>1</syn:updateFrequency>
+<syn:updatePeriod>hourly</syn:updatePeriod>
+<items>
+ <rdf:Seq>
+  <rdf:li rdf:resource="https://science.slashdot.org/story/22/04/13/2326242/putin-says-russia-will-resume-lunar-program?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://games.slashdot.org/story/22/04/13/2236252/club-penguin-rewritten-allegedly-shut-down-by-disney-website-seized-by-london-police?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://news.slashdot.org/story/22/04/13/2210254/california-weighs-shift-to-32-hour-work-week-for-larger-companies?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://tech.slashdot.org/story/22/04/13/226201/russian-tech-industry-faces-brain-drain-as-workers-flee?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://games.slashdot.org/story/22/04/13/2149216/dungeons-dragons-owner-hasbro-is-buying-dd-beyond?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://it.slashdot.org/story/22/04/13/2140258/git-for-windows-issues-update-to-fix-running-someone-elses-code-vulnerability?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://news.slashdot.org/story/22/04/13/2116253/amazon-slaps-us-sellers-with-5-fuel-inflation-surcharge?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://slashdot.org/story/22/04/13/217228/jack-dorseys-first-tweet-nft-listed-for-48-million-ends-with-best-offer-of-280?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://news.slashdot.org/story/22/04/13/2019254/us-warns-new-sophisticated-malware-can-target-icsscada-devices?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://news.slashdot.org/story/22/04/13/2015213/wikipedia-community-votes-to-stop-accepting-cryptocurrency-donations?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://apple.slashdot.org/story/22/04/13/206208/how-apples-monster-m1-ultra-chip-keeps-moores-law-alive?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://news.slashdot.org/story/22/04/13/1919222/global-climate-plans-can-now-keep-heating-below-2c-study-shows?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://it.slashdot.org/story/22/04/13/1842243/inside-the-longest-atlassian-outage-of-all-time?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://entertainment.slashdot.org/story/22/04/13/181229/the-streaming-service-formerly-known-as-imdb-tv-is-rebranding-to-amazon-freevee?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://tech.slashdot.org/story/22/04/13/1742214/google-quietly-launches-its-awaited-switch-to-android-app-on-ios?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+ </rdf:Seq>
+</items>
+<image rdf:resource="https://a.fsdn.com/sd/topics/topicslashdot.gif" />
+<textinput rdf:resource="https://slashdot.org/search.pl" />
+<atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/rdf+xml" href="http://rss.slashdot.org/Slashdot/slashdot" /><feedburner:info xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0" uri="slashdot/slashdot" /><atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="hub" href="http://pubsubhubbub.appspot.com/" /></channel>
+<image rdf:about="https://a.fsdn.com/sd/topics/topicslashdot.gif">
+<title>Slashdot</title>
+<url>https://a.fsdn.com/sd/topics/topicslashdot.gif</url>
+<link>https://slashdot.org/</link>
+</image>
+<item rdf:about="https://science.slashdot.org/story/22/04/13/2326242/putin-says-russia-will-resume-lunar-program?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Putin Says Russia Will Resume Lunar Program</title>
+<link>https://science.slashdot.org/story/22/04/13/2326242/putin-says-russia-will-resume-lunar-program?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>An anonymous reader quotes a report from Ars Technica: Putin said Russia is working on a "next-generation transport ship," as well as a nuclear-powered space tug. And, according to Russian media reports, Putin added, "We will resume the lunar program." The next-generation ship presumably refers to the "Orel," or Eagle, spacecraft that would be capable of launching cosmonauts into low Earth orbit as well as to the Moon. The problem with this is that Orel, under various guises and names, has been in development for nearly two decades and is likely years away from flying -- if it ever does. And the nuclear-powered space tug is a concept that is years or more likely decades-to-never away from launching.
+ 
+That leaves the lunar program Putin mentioned. He is referring to a series of three robotic missions planned for launch to the Moon, Luna 25, Luna 26, and Luna 27. These missions, too, have been in the planning stages for a long, long time. Luna 25 was originally scheduled to launch on a Soyuz rocket a decade ago, and its current launch date is now August 2022. There is reason to be skeptical about all of the above happening, because even before the war in Ukraine, Putin significantly slashed Roscosmos' budget. Now, more resources than ever will likely be devoted to the war effort. Hours after Putin made his announcements, the European Space Agency (ESA) Council agreed to discontinue cooperative activities with Russia on the three Luna missions. "The Russian aggression against Ukraine and the resulting sanctions put in place represent a fundamental change of circumstances and make it impossible for ESA to implement the planned lunar cooperation," the space agency said in a statement.
+ 
+Instead, the council said it would now work with NASA and its commercial partners.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Putin+Says+Russia+Will+Resume+Lunar+Program%3A+https%3A%2F%2Fbit.ly%2F3KG0ciV"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fscience.slashdot.org%2Fstory%2F22%2F04%2F13%2F2326242%2Fputin-says-russia-will-resume-lunar-program%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://science.slashdot.org/story/22/04/13/2326242/putin-says-russia-will-resume-lunar-program?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21151244&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>BeauHD</dc:creator>
+<dc:date>2022-04-14T03:30:00+00:00</dc:date>
+<dc:subject>moon</dc:subject>
+<slash:department>trying-to-sound-impressive</slash:department>
+<slash:section>science</slash:section>
+<slash:comments>14</slash:comments>
+<slash:hit_parade>14,13,13,11,2,0,0</slash:hit_parade>
+</item>
+<item rdf:about="https://games.slashdot.org/story/22/04/13/2236252/club-penguin-rewritten-allegedly-shut-down-by-disney-website-seized-by-london-police?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>'Club Penguin Rewritten' Allegedly Shut Down By Disney, Website Seized By London Police</title>
+<link>https://games.slashdot.org/story/22/04/13/2236252/club-penguin-rewritten-allegedly-shut-down-by-disney-website-seized-by-london-police?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>"Club Penguin Rewritten," a popular remake of Club Penguin enjoyed by thousands of gamers, has been seized by the City of London Police, with three people in connection with the site's shuttering reportedly arrested for allegedly distributing copyrighted material. "Over 140,000 users were members of a Discord server for the game until today, when every message on the Discord disappeared," reports TechCrunch. From the report: In 2007, Disney purchased Club Penguin -- the children's RPG that served as my first introduction to online fandom -- for a whopping $700 million. Even then, as a child with little context about tech industry acquisitions, the purchase seemed foreboding (at least my friends thought so on the Miniclip forums, where I fraudulently claimed to be 13). But eventually, those of us who were dedicated fans of virtual sledding games and dance parties grew out of it, and after once boasting 200 million users, the game was shut down due to lack of interest in 2017. Disney tried to shuttle remaining players to a new mobile game called Club Penguin Island, but it only lasted for a year. But ever since the end of Club Penguin -- when the iceberg finally tipped in a strangely emotional moment -- there have always been remakes out there for nostalgic adults to relive their days of collecting puffles, dancing in the pizza shop and speed-running bans.
+ 
+Only one message on the Discord remains, posted early this morning by an admin: "CPRewritten is shutting down effective immediately due to a full request by Disney," the admin said. "We have voluntarily given control over the website to the police for them to continue their copyright investigation." TechCrunch reached out to the City of London Police and Disney to verify these claims but did not hear back before publication. In 2020, Disney shut down "Club Penguin Online," another copy of the game that acquired over a million new players during the pandemic.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status='Club+Penguin+Rewritten'+Allegedly+Shut+Down+By+Disney%2C+Website+Seized+By+London+Police%3A+https%3A%2F%2Fbit.ly%2F3uFlo35"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fgames.slashdot.org%2Fstory%2F22%2F04%2F13%2F2236252%2Fclub-penguin-rewritten-allegedly-shut-down-by-disney-website-seized-by-london-police%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://games.slashdot.org/story/22/04/13/2236252/club-penguin-rewritten-allegedly-shut-down-by-disney-website-seized-by-london-police?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21151042&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>BeauHD</dc:creator>
+<dc:date>2022-04-14T02:02:00+00:00</dc:date>
+<dc:subject>court</dc:subject>
+<slash:department>Disney-doing-what-Disney-does-best</slash:department>
+<slash:section>games</slash:section>
+<slash:comments>12</slash:comments>
+<slash:hit_parade>12,12,11,7,0,0,0</slash:hit_parade>
+</item>
+<item rdf:about="https://news.slashdot.org/story/22/04/13/2210254/california-weighs-shift-to-32-hour-work-week-for-larger-companies?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>California Weighs Shift To 32-Hour Work Week For Larger Companies</title>
+<link>https://news.slashdot.org/story/22/04/13/2210254/california-weighs-shift-to-32-hour-work-week-for-larger-companies?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>Assembly member Cristina Garcia has cosponsored a bill to make the state's official workweek 32 hours for companies with 500 or more employees. CBS News reports: Any work done past that cutoff would come with a hefty raise: Employers would be required to pay time-and-a-half to workers whose hours run over 32 a week. And work stretching past 12 hours a day or into seven days a week would be paid at double the normal wage. Employers subject to the law, which would apply to 20% of California's workforce, also would be barred from reducing people's pay if they work less than their standard workweek, Garcia told CBS News. The bill would not apply to workers who are represented by a union and covered by a collective bargaining agreement.
+ 
+The proposed law would cover about 2,600 companies in California, according to the Employment Development Department (PDF). The California Chamber of Commerce called it a "job killer," saying it would make hiring more expensive and lead to a drop in jobs in California. "Labor costs are often one of the highest costs a business faces," Ashley Hoffman, policy advocate with the Chamber, wrote to bill cosponsor Evan Low last week. "[B]usinesses often operate on thin profit margins and... the number of employees you have does not dictate financial success," she wrote.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=California+Weighs+Shift+To+32-Hour+Work+Week+For+Larger+Companies%3A+https%3A%2F%2Fbit.ly%2F3jESn18"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fnews.slashdot.org%2Fstory%2F22%2F04%2F13%2F2210254%2Fcalifornia-weighs-shift-to-32-hour-work-week-for-larger-companies%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://news.slashdot.org/story/22/04/13/2210254/california-weighs-shift-to-32-hour-work-week-for-larger-companies?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150892&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>BeauHD</dc:creator>
+<dc:date>2022-04-14T01:25:00+00:00</dc:date>
+<dc:subject>usa</dc:subject>
+<slash:department>work-life-balance</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>43</slash:comments>
+<slash:hit_parade>43,42,37,33,7,0,0</slash:hit_parade>
+</item>
+<item rdf:about="https://tech.slashdot.org/story/22/04/13/226201/russian-tech-industry-faces-brain-drain-as-workers-flee?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Russian Tech Industry Faces 'Brain Drain' As Workers Flee</title>
+<link>https://tech.slashdot.org/story/22/04/13/226201/russian-tech-industry-faces-brain-drain-as-workers-flee?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>mspohr shares a report from the New York Times: In early March, days after Russia invaded Ukraine and began cracking down on dissent at home, Konstantin Siniushin, a venture capitalist in Riga, Latvia, helped charter two planes out of Russia to help people flee. Both planes departed from Moscow, carrying tech workers from the Russian capital as well as St. Petersburg, Perm, Ekaterinburg and other cities. Together, the planes moved about 300 software developers, entrepreneurs and other technology specialists out of the country, including 30 Russian workers from start-ups backed by Mr. Siniushin. The planes flew south past the Black Sea to Yerevan, the capital of Armenia, where thousands of other Russian tech workers fled in the weeks after the invasion. Thousands more flew to Georgia, Turkey, the United Arab Emirates and other countries that accept Russian citizens without visas.
+ 
+By March 22, a Russian tech industry trade group estimated that between 50,000 and 70,000 tech workers had left the country and that an additional 70,000 to 100,000 would soon follow. They are part of a much larger exodus of workers from Russia, but their departure could have an even more lasting impact on the country's economy. The long-run impact may be more significant than the short-run impact," said Barry Ickes, head of the economics department at Pennsylvania State University, who specializes in the Russian economy. "Eventually, Russia has to diversify its economy away from oil and gas, and it has to accelerate productivity growth. Tech was a natural way of doing that." Before all this started, Russia had such a strong technology base," [Artem Taganov, founder and chief executive of a Russian start-up called HintEd] said. "Now, we have a brain drain that will continue for the next five to 10 years."&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Russian+Tech+Industry+Faces+'Brain+Drain'+As+Workers+Flee%3A+https%3A%2F%2Fbit.ly%2F3jUg1XT"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Ftech.slashdot.org%2Fstory%2F22%2F04%2F13%2F226201%2Frussian-tech-industry-faces-brain-drain-as-workers-flee%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://tech.slashdot.org/story/22/04/13/226201/russian-tech-industry-faces-brain-drain-as-workers-flee?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150876&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>BeauHD</dc:creator>
+<dc:date>2022-04-14T00:45:00+00:00</dc:date>
+<dc:subject>business</dc:subject>
+<slash:department>long-run-impacts-of-war</slash:department>
+<slash:section>technology</slash:section>
+<slash:comments>20</slash:comments>
+<slash:hit_parade>20,20,20,18,4,3,0</slash:hit_parade>
+</item>
+<item rdf:about="https://games.slashdot.org/story/22/04/13/2149216/dungeons-dragons-owner-hasbro-is-buying-dd-beyond?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Dungeons &amp;amp; Dragons Owner Hasbro Is Buying D&amp;amp;D Beyond</title>
+<link>https://games.slashdot.org/story/22/04/13/2149216/dungeons-dragons-owner-hasbro-is-buying-dd-beyond?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>An anonymous reader quotes a report from Polygon: The parent company of Dungeons &amp;amp; Dragons developer Wizards of the Coast, Hasbro, announced Wednesday it is acquiring D&amp;amp;D Beyond, one of the franchise's most popular officially licensed digital toolsets and online storefronts. Wizards said on its official website it has "no plans to stop supporting D&amp;amp;D Beyond," and all purchases made by consumers will be honored going forward.
+ 
+D&amp;amp;D Beyond is the creation of Curse, and launched in 2017. The platform is, at its core, a web application and mobile app that provides players and Dungeon Masters (DMs) with the tools they need to play D&amp;amp;D in person or online. Features include a character builder, a character sheet, and a digital dice-rolling function. For DMs, it allows users to purchase official campaign books and other materials digitally for use inside the app. Prices for D&amp;amp;D books are traditionally more or less the same on D&amp;amp;D Beyond as they are on Amazon, Barnes &amp;amp; Noble, and at your local game store. D&amp;amp;D Beyond was purchased by Fandom in 2018 and, according to Hasbro, the relationship has been very lucrative since that time.
+ 
+"Over the last three years, the royalty paid to Hasbro by D&amp;amp;D Beyond has represented a significant contribution to the fastest growing source of revenue for Dungeons &amp;amp; Dragons," Hasbro said. That is undoubtedly true, as financial disclosures show that Wizards -- and its attached digital properties, including Magic: The Gathering Arena -- earned more than $1 billion for the first time in 2021. [...] Wizards' new president, Cynthia Williams, has bigger goals in mind. "The strategic acquisition of D&amp;amp;D Beyond will deliver a direct relationship with fans, providing valuable, data-driven insights to unlock opportunities for growth in new product development, live services and tools, and regional expansions," Williams said in a news release. "As part of Wizards, the brand's leadership will soon be able to drive a unified, player-centric vision of the world's greatest role-playing game on all platforms."&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Dungeons+%26amp%3B+Dragons+Owner+Hasbro+Is+Buying+D%26amp%3BD+Beyond%3A+https%3A%2F%2Fbit.ly%2F3roMPMq"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fgames.slashdot.org%2Fstory%2F22%2F04%2F13%2F2149216%2Fdungeons-dragons-owner-hasbro-is-buying-dd-beyond%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://games.slashdot.org/story/22/04/13/2149216/dungeons-dragons-owner-hasbro-is-buying-dd-beyond?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150828&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>BeauHD</dc:creator>
+<dc:date>2022-04-14T00:02:00+00:00</dc:date>
+<dc:subject>rpg</dc:subject>
+<slash:department>lucrative-deals</slash:department>
+<slash:section>games</slash:section>
+<slash:comments>10</slash:comments>
+<slash:hit_parade>10,10,7,5,2,0,0</slash:hit_parade>
+</item>
+<item rdf:about="https://it.slashdot.org/story/22/04/13/2140258/git-for-windows-issues-update-to-fix-running-someone-elses-code-vulnerability?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Git For Windows Issues Update To Fix Running-Someone-Else's-Code Vulnerability</title>
+<link>https://it.slashdot.org/story/22/04/13/2140258/git-for-windows-issues-update-to-fix-running-someone-elses-code-vulnerability?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>The Git team has issued an update to fix a bug in Git for Windows that "affects multi-user hardware where untrusted parties have write access to the same hard disk," reports The Register. Specifically, the update is concerned with CVE-2022-24765. From the report: Arguably, if an "untrusted party" has write access to a hard disk, then all bets are off when it comes to the nooks and crannies of a PC anyway. In this case, the miscreants would only need to create the folder c:\.git, "which would be picked up by Git operations run supposedly outside a repository while searching for a Git directory," according to NIST. The result is that Git would use the config in the directory.
+ 
+NIST went on to list potentially vulnerable products, which included Visual Studio. "Users of the Microsoft fork of Git are vulnerable simply by starting a Git Bash." The Git team was little blunter about the vulnerability, and warned that "Merely having a Git-aware prompt that runs 'git status' (or 'git diff') and navigating to a directory which is supposedly not a Git worktree, or opening such a directory in an editor or IDE such as VS Code or Atom, will potentially run commands defined by that other user." [...] To deal with the issue, the Git team recommends an update. Alternatively, a user could create that .git folder themselves and remove read/write access as workaround or "define or extend 'GIT_CEILING_DIRECTORIES' to cover the parent directory of the user profile," according to NIST.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Git+For+Windows+Issues+Update+To+Fix+Running-Someone-Else's-Code+Vulnerability%3A+https%3A%2F%2Fbit.ly%2F3KJK0xd"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fit.slashdot.org%2Fstory%2F22%2F04%2F13%2F2140258%2Fgit-for-windows-issues-update-to-fix-running-someone-elses-code-vulnerability%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://it.slashdot.org/story/22/04/13/2140258/git-for-windows-issues-update-to-fix-running-someone-elses-code-vulnerability?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150792&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>BeauHD</dc:creator>
+<dc:date>2022-04-13T23:20:00+00:00</dc:date>
+<dc:subject>security</dc:subject>
+<slash:department>time-to-patch</slash:department>
+<slash:section>it</slash:section>
+<slash:comments>9</slash:comments>
+<slash:hit_parade>9,8,3,1,0,0,0</slash:hit_parade>
+</item>
+<item rdf:about="https://news.slashdot.org/story/22/04/13/2116253/amazon-slaps-us-sellers-with-5-fuel-inflation-surcharge?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Amazon Slaps US Sellers With 5% Fuel, Inflation Surcharge</title>
+<link>https://news.slashdot.org/story/22/04/13/2116253/amazon-slaps-us-sellers-with-5-fuel-inflation-surcharge?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>Amazon said Wednesday it plans to add a fuel and inflation surcharge of roughly 5% to existing fees it collects from U.S. third-party sellers who use the company's fulfillment services. CNBC reports: The fee will go into effect in about two weeks, and is "subject to change," the company said in a notice to sellers that was viewed by CNBC. "The surcharge will apply to all product types, such as non-apparel, apparel, dangerous goods, and Small and Light items," the notice stated. "The surcharge will apply to all units shipped from fulfillment centers starting April 28."
+ 
+Some 89% of Amazon's 2 million-plus sellers used FBA in 2021, according to a report from Jungle Scout, which creates product research software for Amazon sellers. "In 2022, we expected a return to normalcy as COVID-19 restrictions around the world eased, but fuel and inflation have presented further challenges," an Amazon spokesperson said in an email to CNBC. "It is still unclear if these inflationary costs will go up or down, or for how long they will persist, so rather than a permanent fee change, we will be employing a fuel and inflation surcharge for the first time -- a mechanism broadly used across supply chain providers." Yesterday, the Labor Department said that its consumer price index jumped 8.5% in March from 12 months earlier, the sharpest year-over-year increase since 1981.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Amazon+Slaps+US+Sellers+With+5%25+Fuel%2C+Inflation+Surcharge%3A+https%3A%2F%2Fbit.ly%2F36bXJOv"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fnews.slashdot.org%2Fstory%2F22%2F04%2F13%2F2116253%2Famazon-slaps-us-sellers-with-5-fuel-inflation-surcharge%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://news.slashdot.org/story/22/04/13/2116253/amazon-slaps-us-sellers-with-5-fuel-inflation-surcharge?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150666&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>BeauHD</dc:creator>
+<dc:date>2022-04-13T22:40:00+00:00</dc:date>
+<dc:subject>business</dc:subject>
+<slash:department>higher-prices-incoming</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>28</slash:comments>
+<slash:hit_parade>28,25,21,16,3,0,0</slash:hit_parade>
+</item>
+<item rdf:about="https://slashdot.org/story/22/04/13/217228/jack-dorseys-first-tweet-nft-listed-for-48-million-ends-with-best-offer-of-280?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>'Jack Dorsey's First Tweet' NFT Listed For $48 Million, Ends With Best Offer of $280</title>
+<link>https://slashdot.org/story/22/04/13/217228/jack-dorseys-first-tweet-nft-listed-for-48-million-ends-with-best-offer-of-280?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>An anonymous reader quotes a report from CoinDesk: A non-fungible token (NFT) of Twitter founder Jack Dorsey's first ever tweet could sell for just under $280. The current owner of the NFT listed it for $48 million last week. Iranian-born crypto entrepreneur Sina Estavi purchased the NFT for $2.9 million in March 2021. Last Thursday, he announced on Twitter that he wished to sell the NFT, and pledged 50% of its proceeds (which he thought would exceed $25 million) to charity. The auction closed Wednesday, with just seven total offers ranging from 0.09 ETH ($277 at current prices) to 0.0019 ETH (almost $6). "The deadline I set was over, but if I get a good offer, I might accept it, I might never sell it," Estavi told CoinDesk via a WhatsApp message on Wednesday. Estavi has two days to accept the bid, or it will expire.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status='Jack+Dorsey's+First+Tweet'+NFT+Listed+For+%2448+Million%2C+Ends+With+Best+Offer+of+%24280%3A+https%3A%2F%2Fbit.ly%2F3KG4KpR"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fslashdot.org%2Fstory%2F22%2F04%2F13%2F217228%2Fjack-dorseys-first-tweet-nft-listed-for-48-million-ends-with-best-offer-of-280%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://slashdot.org/story/22/04/13/217228/jack-dorseys-first-tweet-nft-listed-for-48-million-ends-with-best-offer-of-280?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150612&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>BeauHD</dc:creator>
+<dc:date>2022-04-13T22:02:00+00:00</dc:date>
+<dc:subject>twitter</dc:subject>
+<slash:department>still-overpriced</slash:department>
+<slash:section>slashdot</slash:section>
+<slash:comments>41</slash:comments>
+<slash:hit_parade>41,41,36,29,11,5,3</slash:hit_parade>
+</item>
+<item rdf:about="https://news.slashdot.org/story/22/04/13/2019254/us-warns-new-sophisticated-malware-can-target-icsscada-devices?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>US Warns New Sophisticated Malware Can Target ICS/SCADA Devices</title>
+<link>https://news.slashdot.org/story/22/04/13/2019254/us-warns-new-sophisticated-malware-can-target-icsscada-devices?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>wiredmikey writes: The U.S government is sounding a loud alarm after discovering new custom tools capable of full system compromise and disruption of ICS/SCADA devices and servers. A joint advisory from the Department of Energy, CISA, NSA and the FBI warned that unidentified APT actors have created specialized tools capable of causing major damage to PLCs from Schneider Electric and OMRON Corp. and servers from open-source OPC Foundation. Privately owned ICS security firm Dragos issued a separate notice documenting what is now the seventh known industrial control system (ICS)-specific malware. "[This] is a modular ICS attack framework that an adversary could leverage to cause disruption, degradation, and possibly even destruction depending on targets and the environment," the company said.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=US+Warns+New+Sophisticated+Malware+Can+Target+ICS%2FSCADA+Devices%3A+https%3A%2F%2Fbit.ly%2F37iwmCH"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fnews.slashdot.org%2Fstory%2F22%2F04%2F13%2F2019254%2Fus-warns-new-sophisticated-malware-can-target-icsscada-devices%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://news.slashdot.org/story/22/04/13/2019254/us-warns-new-sophisticated-malware-can-target-icsscada-devices?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150534&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2022-04-13T21:25:00+00:00</dc:date>
+<dc:subject>usa</dc:subject>
+<slash:department>issued-in-public-interest</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>4</slash:comments>
+<slash:hit_parade>4,4,4,4,0,0,0</slash:hit_parade>
+</item>
+<item rdf:about="https://news.slashdot.org/story/22/04/13/2015213/wikipedia-community-votes-to-stop-accepting-cryptocurrency-donations?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Wikipedia Community Votes To Stop Accepting Cryptocurrency Donations</title>
+<link>https://news.slashdot.org/story/22/04/13/2015213/wikipedia-community-votes-to-stop-accepting-cryptocurrency-donations?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>waspleg writes: More than 200 long-time Wikipedia editors have requested that the Wikimedia Foundation stop accepting cryptocurrency donations. The foundation received crypto donations worth about $130,000 in the most recent fiscal year -- less than 0.1 percent of the foundation's revenue, which topped $150 million last year. In her proposal for the Wikimedia Foundation, GorillaWarfare added that 'Bitcoin and Ethereum are the two most highly used cryptocurrencies, and are both proof-of-work, using an enormous amount of energy.' According to one widely cited estimate, the bitcoin network consumes around 200 TWh of energy per year. That's about as much energy as is consumed by 70 million people in Thailand. And it works out to around 2,000 kWh per bitcoin transaction. 
+
+Bitcoin defenders countered that bitcoin's energy usage is driven by its mining process, which consumes about the same amount of energy regardless of the number of transactions. So accepting any given bitcoin donation won't necessarily lead to more carbon emissions. But cryptocurrency critics argued that Wikimedia's de facto endorsement of cryptocurrencies may help to push up their price. And the more expensive bitcoin is, the more energy miners will devote to creating new ones. If the foundation complies with the community's request, it wouldn't be the first organization to stop using cryptocurrencies due to environmental concerns. Earlier this month, the Mozilla Foundation announced it would stop accepting cryptocurrencies that use the energy-intensive proof-of-work consensus process. These include bitcoin and ether -- though the latter is expected to convert to a proof-of-stake model in the future.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Wikipedia+Community+Votes+To+Stop+Accepting+Cryptocurrency+Donations%3A+https%3A%2F%2Fbit.ly%2F3KINb8i"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fnews.slashdot.org%2Fstory%2F22%2F04%2F13%2F2015213%2Fwikipedia-community-votes-to-stop-accepting-cryptocurrency-donations%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://news.slashdot.org/story/22/04/13/2015213/wikipedia-community-votes-to-stop-accepting-cryptocurrency-donations?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150528&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2022-04-13T20:45:00+00:00</dc:date>
+<dc:subject>wikipedia</dc:subject>
+<slash:department>tussle-continues</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>31</slash:comments>
+<slash:hit_parade>31,28,22,22,7,3,2</slash:hit_parade>
+</item>
+<item rdf:about="https://apple.slashdot.org/story/22/04/13/206208/how-apples-monster-m1-ultra-chip-keeps-moores-law-alive?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>How Apple's Monster M1 Ultra Chip Keeps Moore's Law Alive</title>
+<link>https://apple.slashdot.org/story/22/04/13/206208/how-apples-monster-m1-ultra-chip-keeps-moores-law-alive?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>By combining two processors into one, the company has squeezed a surprising amount of performance out of silicon. From a report: "UltraFusion gave us the tools we needed to be able to fill up that box with as much compute as we could," Tim Millet, vice president of hardware technologies at Apple, says of the Mac Studio. Benchmarking of the M1 Ultra has shown it to be competitive with the fastest high-end computer chips and graphics processor on the market. Millet says some of the chip's capabilities, such as its potential for running AI applications, will become apparent over time, as developers port over the necessary software libraries. The M1 Ultra is part of a broader industry shift toward more modular chips. Intel is developing a technology that allows different pieces of silicon, dubbed "chiplets," to be stacked on top of one another to create custom designs that do not need to be redesigned from scratch. The company's CEO, Pat Gelsinger, has identified this "advanced packaging" as one pillar of a grand turnaround plan. Intel's competitor AMD is already using a 3D stacking technology from TSMC to build some server and high-end PC chips. This month, Intel, AMD, Samsung, TSMC, and ARM announced a consortium to work on a new standard for chiplet designs. In a more radical approach, the M1 Ultra uses the chiplet concept to connect entire chips together. 
+
+Apple's new chip is all about increasing overall processing power. "Depending on how you define Moore's law, this approach allows you to create systems that engage many more transistors than what fits on one chip," says Jesus del Alamo, a professor at MIT who researches new chip components. He adds that it is significant that TSMC, at the cutting edge of chipmaking, is looking for new ways to keep performance rising. "Clearly, the chip industry sees that progress in the future is going to come not only from Moore's law but also from creating systems that could be fabricated by different technologies yet to be brought together," he says. "Others are doing similar things, and we certainly see a trend towards more of these chiplet designs," adds Linley Gwennap, author of the Microprocessor Report, an industry newsletter. The rise of modular chipmaking might help boost the performance of future devices, but it could also change the economics of chipmaking. Without Moore's law, a chip with twice the transistors may cost twice as much. "With chiplets, I can still sell you the base chip for, say, $300, the double chip for $600, and the uber-double chip for $1,200," says Todd Austin, an electrical engineer at the University of Michigan.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=How+Apple's+Monster+M1+Ultra+Chip+Keeps+Moore's+Law+Alive%3A+https%3A%2F%2Fbit.ly%2F3KF15IE"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fapple.slashdot.org%2Fstory%2F22%2F04%2F13%2F206208%2Fhow-apples-monster-m1-ultra-chip-keeps-moores-law-alive%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://apple.slashdot.org/story/22/04/13/206208/how-apples-monster-m1-ultra-chip-keeps-moores-law-alive?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150500&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2022-04-13T20:06:00+00:00</dc:date>
+<dc:subject>apple</dc:subject>
+<slash:department>closer-look</slash:department>
+<slash:section>apple</slash:section>
+<slash:comments>44</slash:comments>
+<slash:hit_parade>44,42,34,31,7,3,3</slash:hit_parade>
+</item>
+<item rdf:about="https://news.slashdot.org/story/22/04/13/1919222/global-climate-plans-can-now-keep-heating-below-2c-study-shows?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Global Climate Plans Can Now Keep Heating Below 2C, Study Shows</title>
+<link>https://news.slashdot.org/story/22/04/13/1919222/global-climate-plans-can-now-keep-heating-below-2c-study-shows?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>For the first time the world is in a position to limit global heating to under 2C, according to the first in-depth analysis of the net zero pledges made by nations at the UN Cop26 climate summit in December. From a report: Before these pledges it was more than likely that at the peak of the climate crisis there would be a temperature rise above 2C, bringing more severe impacts for billions of people. Now it is more likely that the peak temperature rise will be about 1.9C. However, the researchers said this depended on all nations implementing their pledges on time and in full, and warned that the policies to do so were not in place. The pledges also include those that developing countries have said will not happen without more financial and technical support. Achieving the pledges needed for the 2C limit was a "historic milestone," and good news, the scientists said. However, they said the bad news was that the cuts in global emissions currently planned by 2030 were way off track to keep the peak below 1.5C. That is the global goal, but currently there is less than a 10% chance of hitting that target.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Global+Climate+Plans+Can+Now+Keep+Heating+Below+2C%2C+Study+Shows%3A+https%3A%2F%2Fbit.ly%2F3rpyf7r"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fnews.slashdot.org%2Fstory%2F22%2F04%2F13%2F1919222%2Fglobal-climate-plans-can-now-keep-heating-below-2c-study-shows%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://news.slashdot.org/story/22/04/13/1919222/global-climate-plans-can-now-keep-heating-below-2c-study-shows?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150414&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2022-04-13T19:25:00+00:00</dc:date>
+<dc:subject>earth</dc:subject>
+<slash:department>good-news</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>39</slash:comments>
+<slash:hit_parade>39,39,38,37,13,5,2</slash:hit_parade>
+</item>
+<item rdf:about="https://it.slashdot.org/story/22/04/13/1842243/inside-the-longest-atlassian-outage-of-all-time?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Inside the Longest Atlassian Outage of All Time</title>
+<link>https://it.slashdot.org/story/22/04/13/1842243/inside-the-longest-atlassian-outage-of-all-time?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>Gergely Orosz: We are in the middle of the longest outage Atlassian has had. Close to 400 companies and anywhere from 50,000 to 400,000 users had no access to JIRA, Confluence, OpsGenie, JIRA Status page, and other Atlassian Cloud services. The outage is its 9th day, having started on Monday, 4th of April. Atlassian estimates many impacted customers will be unable to access their services for another two weeks. At the time of writing, 45% of companies have seen their access restored. For most of this outage, Atlassian has gone silent in communications across their main channels such as Twitter or the community forums. It took until Day 9 for executives at the company to acknowledge the outage. 
+
+While the company stayed silent, outage news started trending in niche communities. In these forums, people tried to guess causes of the outage, wonder why there is full radio silence, and many took to mocking the company for how it is handling the situation. Atlassian did no better with communicating with customers during this time. Impacted companies received templated emails and no answers to their questions. After I tweeted about this outage, several Atlassian customers turned to me to vent about the situation, and hope I can offer more details. Customers claimed how the company's statements made it seem they received support, which they, in fact, did not. Several customers hoped I could help get the attention of the company which had not given them any details, beyond telling them to wait weeks until their data is restored.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Inside+the+Longest+Atlassian+Outage+of+All+Time%3A+https%3A%2F%2Fbit.ly%2F3vdcadD"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fit.slashdot.org%2Fstory%2F22%2F04%2F13%2F1842243%2Finside-the-longest-atlassian-outage-of-all-time%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://it.slashdot.org/story/22/04/13/1842243/inside-the-longest-atlassian-outage-of-all-time?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150338&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2022-04-13T18:42:00+00:00</dc:date>
+<dc:subject>it</dc:subject>
+<slash:department>closer-look</slash:department>
+<slash:section>it</slash:section>
+<slash:comments>70</slash:comments>
+<slash:hit_parade>70,68,53,50,30,21,17</slash:hit_parade>
+</item>
+<item rdf:about="https://entertainment.slashdot.org/story/22/04/13/181229/the-streaming-service-formerly-known-as-imdb-tv-is-rebranding-to-amazon-freevee?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>The Streaming Service Formerly Known as IMDb TV is Rebranding To 'Amazon Freevee'</title>
+<link>https://entertainment.slashdot.org/story/22/04/13/181229/the-streaming-service-formerly-known-as-imdb-tv-is-rebranding-to-amazon-freevee?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>After launching as "IMDb Freedive" back in 2019, IMDb TV quickly faded into the background of the ongoing streaming wars that parent company Amazon had already established a respectable foothold in. While that initial rebrand never quite managed to put the fledgling platform and its content on the map, Amazon's just announced its plan to reintroduce the streamer yet again under new branding ahead of a massive content push. From a report: Going forward, IMDb TV will be known as "Amazon Freevee," a name meant to emphasize that the ad-supported platform is free to viewers. In a press release detailing its vision for Freevee's future, director Ashraf Alkarmi framed the service as a supplemental platform meant to appeal to consumers interested in watching "premium" series and films with significantly fewer commercial interruptions.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=The+Streaming+Service+Formerly+Known+as+IMDb+TV+is+Rebranding+To+'Amazon+Freevee'%3A+https%3A%2F%2Fbit.ly%2F3vgeVL7"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fentertainment.slashdot.org%2Fstory%2F22%2F04%2F13%2F181229%2Fthe-streaming-service-formerly-known-as-imdb-tv-is-rebranding-to-amazon-freevee%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://entertainment.slashdot.org/story/22/04/13/181229/the-streaming-service-formerly-known-as-imdb-tv-is-rebranding-to-amazon-freevee?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150238&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2022-04-13T18:02:00+00:00</dc:date>
+<dc:subject>tv</dc:subject>
+<slash:department>for-what-it-is-worth</slash:department>
+<slash:section>entertainment</slash:section>
+<slash:comments>35</slash:comments>
+<slash:hit_parade>35,34,32,27,4,1,1</slash:hit_parade>
+</item>
+<item rdf:about="https://tech.slashdot.org/story/22/04/13/1742214/google-quietly-launches-its-awaited-switch-to-android-app-on-ios?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Google Quietly Launches Its Awaited 'Switch To Android' App on iOS</title>
+<link>https://tech.slashdot.org/story/22/04/13/1742214/google-quietly-launches-its-awaited-switch-to-android-app-on-ios?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>On Monday, Google quietly launched the Switch to Android app on the App Store in a number of global markets, including the U.S. From a report: As expected, the app promises to make the transition between mobile platforms easier to manage by helping users import their contacts, calendar, photos, and videos to their new Android phone. The app also instructs users how to turn off Apple's iMessage in order to get text messages on their new device and has them connect with iCloud to migrate their photo and video library to Android.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Google+Quietly+Launches+Its+Awaited+'Switch+To+Android'+App+on+iOS%3A+https%3A%2F%2Fbit.ly%2F3JGlQ5A"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Ftech.slashdot.org%2Fstory%2F22%2F04%2F13%2F1742214%2Fgoogle-quietly-launches-its-awaited-switch-to-android-app-on-ios%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://tech.slashdot.org/story/22/04/13/1742214/google-quietly-launches-its-awaited-switch-to-android-app-on-ios?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=21150190&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2022-04-13T17:22:00+00:00</dc:date>
+<dc:subject>google</dc:subject>
+<slash:department>reverse-uno</slash:department>
+<slash:section>technology</slash:section>
+<slash:comments>27</slash:comments>
+<slash:hit_parade>27,27,22,18,4,3,2</slash:hit_parade>
+</item>
+<textinput rdf:about="https://slashdot.org/search.pl">
+<title>Search Slashdot</title>
+<description>Search Slashdot stories</description>
+<name>query</name>
+<link>https://slashdot.org/search.pl</link>
+</textinput>
+</rdf:RDF>

@@ -1,0 +1,1345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://www.binwang.me/feed.xml" rel="self" type="application/atom+xml"/><link href="https://www.binwang.me/" rel="alternate" type="text/html"/><updated>2021-11-04T10:00:28-04:00</updated><id>https://www.binwang.me/feed.xml</id><title type="html">Bin Wang - My Personal Blog</title><subtitle>This is my personal blog about computer science, technology and my life.</subtitle><entry><title type="html">Add Index to My Blog</title><link href="https://www.binwang.me/2021-10-31-Add-Index-to-My-Blog.html" rel="alternate" type="text/html" title="Add Index to My Blog"/><published>2021-10-31T00:00:00-04:00</published><updated>2021-10-31T00:00:00-04:00</updated><id>https://www.binwang.me/Add-Index-to-My-Blog</id><content type="html" xml:base="https://www.binwang.me/2021-10-31-Add-Index-to-My-Blog.html">&lt;p&gt;I added an &lt;a href="/index_page.html"&gt;index page&lt;/a&gt; to my blog yesterday, which can also be accessed from the “Index” entry at the top of every page. When I moved this blog to Jekyll, I &lt;a href="/2012-12-10-Remove-Categories.html"&gt;removed categories&lt;/a&gt; since I thought tag should be enough. But after a few years, I feel something is missing. One of the reason maybe I never implemented find posts by tags, which makes tags useless. Even if I had that, I feel it’s still not enough. But I don’t want categories , since “category” in Jekyll is normally means a flat level structure. What I want is a nested category structure. It should let me create as many levels as I want, like the index in a book. In this way, I will have a better idea about which field I have covered, and what I should focus on based on my future plan. It can also benefit the readers: they can find the posts they are interested much easier. Not every blog post has the same quality or depth based on the nature of the topic, so in this way the posts under most interesting topics can be grouped together instead of being buried in the timeline.&lt;/p&gt;
+
+&lt;p&gt;To implement this feature, I wrote my own little plugin. I only knew some Ruby knowledge from one of Ruby’s author’s books (I read the Chinese version of the book and cannot find the name of the English version, I believe the original book is published in Japanese with the name まつもとゆきひろ コードの世界~スーパー・プログラマになる14の思考法). I never worked on any project with Ruby. But I always wanted to write some plugins for Jekyll so I know I can customize my blog in a better way. Luckily this task is simple enough. The result source code is on my Github of this blog repo. It has a &lt;a href="https://github.com/wb14123/blog/blob/master/jekyll/_plugins/Index.rb"&gt;ruby script&lt;/a&gt; to generate the index page from post property, with a &lt;a href="https://github.com/wb14123/blog/blob/master/jekyll/index_page.html"&gt;template&lt;/a&gt; that uses another &lt;a href="https://github.com/wb14123/blog/blob/master/jekyll/_includes/index_page.html"&gt;recursive template&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So here is how this plugin works: the only thing I need to do while writing a post is to add a new property called &lt;code&gt;index&lt;/code&gt; at the starting of the Markdown file, like this:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt; &lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;---
+&lt;span class="line-numbers"&gt; &lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;# these three properties are needed before this feature:
+&lt;span class="line-numbers"&gt; &lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;layout: post
+&lt;span class="line-numbers"&gt; &lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;title: Add Index to My Blog
+&lt;span class="line-numbers"&gt; &lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;tags: [blog, index]
+&lt;span class="line-numbers"&gt; &lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt; &lt;a href="#n7" name="n7"&gt;7&lt;/a&gt;&lt;/span&gt;# this is the newly added property:
+&lt;span class="line-numbers"&gt; &lt;a href="#n8" name="n8"&gt;8&lt;/a&gt;&lt;/span&gt;index: ['/Projects/Blog']
+&lt;span class="line-numbers"&gt; &lt;a href="#n9" name="n9"&gt;9&lt;/a&gt;&lt;/span&gt;---
+&lt;span class="line-numbers"&gt;&lt;strong&gt;&lt;a href="#n10" name="n10"&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then the plugin will parse &lt;code&gt;index&lt;/code&gt; field, break it down into multiple levels based on &lt;code&gt;/&lt;/code&gt; in it, and group all the posts in the same field together. The categories are sorted based on alphabet order, while the posts in each category is sorted from old to new. &lt;code&gt;index&lt;/code&gt; is an array, so in theory I can add a blog post into multiple categories if I want to, but I try not to do it if it’s not necessary, since it gives a false feeling about how many posts I’ve written. For example, at the beginning, I tried to have both &lt;code&gt;/Computer Science/Database&lt;/code&gt; and &lt;code&gt;/Computer Science/Distributed System&lt;/code&gt;, and almost every posts under &lt;code&gt;database&lt;/code&gt; is also in &lt;code&gt;distributed system&lt;/code&gt;. Then I decided it doesn’t make sense: they are more about distributed system because what I care most in those articles is about database transactions. So I remove the category &lt;code&gt;database&lt;/code&gt; and put all of them just under &lt;code&gt;distributed system&lt;/code&gt;. If I wrote anything like query optimization in the future, I may created another &lt;code&gt;database&lt;/code&gt; category, but it’s not needed for now.&lt;/p&gt;
+
+&lt;p&gt;I’m very happy with the result. I want it to be simple enough as a static page without the need of Javascript. Javascript can certainly improve some UI like expand/collapse the levels. I may implement both version in the future so people can view it with and without Javascript, but the current UI is good enough for me.&lt;/p&gt;
+
+&lt;p&gt;UI aside, I’m much happier about the content. The index has a good structure. It shows the fields I’ve explored. It even shows a correlation between the focus and the timeline, which I never thought about before. For example, the only two posts about algorithm are published when I was in the University, when I joined some programming contest. The posts about Linux are most published at the last year of my college life, when I was in the first few years of using Linx and had an internship at Redhat. It doesn’t mean I’m not interested in Linux anymore. It’s just after so many years of using Linux, it becomes a tool that so fundamental to my work and digital life, and I don’t feel the necessary to actively learn the basic things and tune it. Data processing related topic happened most when I worked in an A/B testing company. And machine learning related topic also happened around that time, when I was most interested in neural networks, which resulted the most popular side project I’ve built. I started to post distributed system related topic after I joined a database company, and still find it’s an interesting topic thus many posts in last year. Which also remains me if I want to learn more about it I should continue to write articles about it in this and following years. But not everything is perfect, mainly because I didn’t write everything I’ve worked on my blog. One of the reason is a lot of things I’ve explored are already somewhere else and I don’t want to just copy something to my blog. The projects I’ve worked on are also not covered. I’m still thinking what’s the best way to put it into the index: either add a link to the project page, or write a blog post about each of the projects. Other than those, there is still something missing. It’s mostly because of lazy, which I should change in the future.&lt;/p&gt;
+
+&lt;p&gt;So as a result, the index page achieved some of goal: covering some of my past works and thoughts, and remanding me what I should focus in the future. About the goal of benefiting the readers, you as a reader decide if it’s good or not.&lt;/p&gt;</content><author><name/></author><category term="blog"/><category term="index"/><summary type="html">I added an index page to my blog yesterday, which can also be accessed from the “Index” entry at the top of every page. When I moved this blog to Jekyll, I removed categories since I thought tag should be enough. But after a few years, I feel something is missing. One of the reason maybe I never implemented find posts by tags, which makes tags useless. Even if I had that, I feel it’s still not enough. But I don’t want categories , since “category” in Jekyll is normally means a flat level structure. What I want is a nested category structure. It should let me create as many levels as I want, like the index in a book. In this way, I will have a better idea about which field I have covered, and what I should focus on based on my future plan. It can also benefit the readers: they can find the posts they are interested much easier. Not every blog post has the same quality or depth based on the nature of the topic, so in this way the posts under most interesting topics can be grouped together instead of being buried in the timeline.</summary></entry><entry><title type="html">Personal ZFS Offsite Backup Solution</title><link href="https://www.binwang.me/2021-09-19-Personal-ZFS-Offsite-Online-Backup-Solution.html" rel="alternate" type="text/html" title="Personal ZFS Offsite Backup Solution"/><published>2021-09-19T00:00:00-04:00</published><updated>2021-09-19T00:00:00-04:00</updated><id>https://www.binwang.me/Personal-ZFS-Offsite-Online-Backup-Solution</id><content type="html" xml:base="https://www.binwang.me/2021-09-19-Personal-ZFS-Offsite-Online-Backup-Solution.html">&lt;p&gt;Digital data was never as important as nowadays. Not only for business, but also for every individual. And it’s challenging to make data safe. For example, we see the news about ransomware encrypted all the data of big companies, made their business suspended. We also see a lot of extreme weathers recently: fires, flood and so on, which threats the hardware that stores the data. So it’s necessary to have backups. There should be at least two kinds of backups to keep data safe: offline backup and offsite backup.&lt;/p&gt;
+
+&lt;p&gt;Offline backup means once the data is backed up, it will be isolated from the system. So it can prevent bugs and security risks of the system. How isolated the backup should be depends on the use case and threaten model. For personal usage, a removable disk that is disconnected from any machine should be good enough. It’s easy to implement, so we will not focus on it in this article.&lt;/p&gt;
+
+&lt;p&gt;Offsite backup means the backup data is in a different location. So that in the case of nature disaster, fire, flood, hardware stolen and so on, you can still recover it from a different location. Again, depends on the threaten model, this different location can be a different location in the same city, in a different city, or even in a different country or land. (By the way, I’m always confused when the characters in movies can just destroy a data center, or even a single machine in order to destroy some big plan or very important data. If the people dealing with such important data know nothing about backup, we are in bigger troubles.)&lt;/p&gt;
+
+&lt;p&gt;Offline and offsite backup are not mutually exclusive. Some kinds of backup can be both offline and offsite. For example, you can burn all the data onto CDs and mail them away every week. The CDs are both offline and offsite backup. But because of the cost and efficiency, the offsite backup is usually online so it can make backups very frequently and quickly.&lt;/p&gt;
+
+&lt;p&gt;In this article, I’ll introduce how to setup a machine used for personal offsite backup. ZFS is needed since it enables incremental encrypted backup. As we can see later, it makes our setup much easier.&lt;/p&gt;
+
+&lt;h2 id="1-goals"&gt;1. Goals&lt;/h2&gt;
+
+&lt;p&gt;Let’s consider what’s the requirements of this setup solution. Data security is obviously the No. 1 requirement: nobody other than ourselves should be able to obtain the data.&lt;/p&gt;
+
+&lt;p&gt;User friendly is another big factor. Most likely we will put this backup machine to a family or friend’s place. So we want it to have very low setup and maintenance effort. Actually, with my setup bellow, the only thing needed for this machine to operate is to plugin the power and Ethernet cable, then press the power button. No monitor, keyboard, mouse, or NAT port forwarding is needed.&lt;/p&gt;
+
+&lt;h2 id="2-threaten-mode"&gt;2. Threaten Mode&lt;/h2&gt;
+
+&lt;p&gt;Since data security is our No. 1 goal, let’s analysis the threaten mode in the backup system. First, think about what is trusted and what is untrusted. I divide it into three levels: fully trusted, partially trusted and untrusted.&lt;/p&gt;
+
+&lt;p&gt;Fully trusted: the environment is theoretically fully controlled by ourselves and no one else can see the data in it. I know it’s hard to be 100% safe for an environment, but how to achieve that is totally another topic. Let’s assume in this setup, the machine that holds the source data can be seen as fully trusted.&lt;/p&gt;
+
+&lt;p&gt;Partially trusted: we can trust the environment on some level but it’s still possible to be unsafe. For example, for the machine located at a different location, which can be physically accessed by other people, it’s not fully trusted. Though we can usually have high trust level for the people that manages the place, which is usually our family or friend, it’s still possible that the data on the machine can be obtained.&lt;/p&gt;
+
+&lt;p&gt;Not trusted: the parts that cannot be trusted at all. Anyone with some security background can obtain data from this part. For example, the public network is not trusted.&lt;/p&gt;
+
+&lt;p&gt;Here is a diagram about the trust levels in our system: fully trusted part is in green, partially trusted is in yellow and not trusted is in red.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/static/images/2021-09-19-Personal-ZFS-Offsite-Online-Backup-Solution/2021-09-19-zfs-backup-trust-level.png" alt="trust-level" style="max-width: 400px;" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then let’s also analysis the parts of the system we want to keep secure. In the diagram bellow, the red part means we want 100% security. Yellow part means we want it as secure as possible, but it’s also okay if it’s not 100% secure.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/static/images/2021-09-19-Personal-ZFS-Offsite-Online-Backup-Solution/2021-09-19-zfs-backup-security-level.png" alt="security-level" style="max-width: 400px;" /&gt;&lt;/p&gt;
+
+&lt;p&gt;So with these two graphs combined, we identified some parts we need to consider:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Network and backup data. These parts are either not trusted or partially trusted, but we want fully security for the data goes through there. So we need fully encryption on these components. Luckily it’s easy to do with ZFS: ZFS can send encrypted snapshots and receive it on another machine without ever decrypt it.&lt;/li&gt;
+  &lt;li&gt;Backup machine. It’s under partially trusted environment. We shouldn’t put any sensitive data into its system. If it’s compromised, the backup data can still be safe: no one can see the content of the backup data, but the backup process may no longer work as expected.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;With this in mind, let’s start to setup our backup machine.&lt;/p&gt;
+
+&lt;h2 id="3-backup-machine-setup"&gt;3. Backup Machine Setup&lt;/h2&gt;
+
+&lt;h3 id="31-choose-the-hardware"&gt;3.1 Choose the Hardware&lt;/h3&gt;
+
+&lt;p&gt;Since we need to have ZFS on this machine, we’d better to choose a x86 machine instead of an ARM one. I know ZFS has ARM builds but I’ve never tried that, and don’t know how good it is. Data safe is very important so I’d rather to use a tested solution.&lt;/p&gt;
+
+&lt;p&gt;The machine doesn’t need to be too powerful but larger than 4G memory is recommended because of ZFS. It should be able to handle two disks since it makes data recovery easier as we can see later. Considering we will place this machine to someone else’s home, it’s better to have a small form factor.&lt;/p&gt;
+
+&lt;p&gt;It’s better to have TPM as well. Otherwise we cannot setup disk encryption (other than our backup data) in a user friendly way, which means anyone with physical access to the machine can get access of system data (which is also okay since we don’t have sensitive data on system). Old machines usually has TPM 1.2 chip, which is not as secure as TPM 2.0. But it’s good enough considering our use case and the cost.&lt;/p&gt;
+
+&lt;p&gt;There are a lot of cheap choices for used machines like this. Like ThinkCentre tiny desktops, or HP EliteDesktop. The Youtube channel &lt;a href="https://www.youtube.com/c/ETAPRIME"&gt;ETA Prime&lt;/a&gt; has a lot of reviews for such machines. A potential risk of buying used hardware is it may contains security backdoor, but it’s very rare if you are not targeted and you buy it from sellers with good reputation. Even it happens, as we’ve analysed above, the backup machine is not treated as fully trusted environment, so it’s fine.&lt;/p&gt;
+
+&lt;h3 id="32-secure-bios"&gt;3.2 Secure BIOS&lt;/h3&gt;
+
+&lt;p&gt;The first thing we need to do is securing the BIOS, so no one else can change any configurations. If we don’t protect it, anything we do in the later steps is meaningless.&lt;/p&gt;
+
+&lt;p&gt;How to secure the BIOS depends on the manufacturer. Most likely there will be a “security” section in the BIOS, which has “password protection” option. So that you can protect the BIOS with a password.&lt;/p&gt;
+
+&lt;p&gt;Keep in mind most of the machines can reset BIOS with some hardware button or wire, thus reset the password as well. But it will also reset the TPM, which means it doesn’t expose the encryption key of our system disk, which we will setup in the next step.&lt;/p&gt;
+
+&lt;h3 id="33-setup-system-disk-encryption-with-tpm"&gt;3.3 Setup System Disk Encryption with TPM&lt;/h3&gt;
+
+&lt;p&gt;I choose Arch Linux as the operating system for the backup machine. I know it’s controversial as Arch Linux is not considered as the most stable Linux distribution. But this is a personal setup and I’m using Arch Linux for all my own machines. I’m very familiar with it. It’s very stable in my experience, and I can keep the ZFS versions the same. So I’ll mainly focus on the setup for Arch Linux from here, but any main stream Linux distribution should be able to do these setups with minimal adjustment.&lt;/p&gt;
+
+&lt;p&gt;The first thing we want to do is to have disk encryption for the system. (We use another disk for ZFS and it’s already encrypted, so we don’t need worry about that one.) While installing the OS, you can choose encrypt the disks and use either a password or a key file stored at another place like a USB drive. In this way, you can input the password or plugin the key file during boot. But it needs human interactive, and we don’t want other people to have the password or key in order to boot the machine. So we will setup another key that stores in TPM and can be decrypted automatically during start up.&lt;/p&gt;
+
+&lt;p&gt;It’s very easy to setup disk encryption with TPM 2.0. Systemd has very good support for that. The steps are in the &lt;a href="https://wiki.archlinux.org/title/Trusted_Platform_Module#Using_TPM_2.0"&gt;Arch wiki&lt;/a&gt;. I’ve never tried this since my backup machine only has TPM 1.2 chip, but the steps looks very straightforward.&lt;/p&gt;
+
+&lt;p&gt;With TPM 1.2, it’s much harder and took me a lot of time to figure that out. At last I found a &lt;a href="https://github.com/danielfomin96/arch-linux-luks-tpm-boot"&gt;repo on Github&lt;/a&gt; and forked it with some modifications in order to support busybox initramfs, which is the default setup for Arch Linux. Here is &lt;a href="https://github.com/wb14123/arch-linux-luks-tpm-boot"&gt;my updated repo&lt;/a&gt;. It’s not easy but I believe the security it adds worth the effort.&lt;/p&gt;
+
+&lt;h3 id="34-setup-secure-boot"&gt;3.4 Setup Secure Boot&lt;/h3&gt;
+
+&lt;p&gt;The disk encryption above doesn’t include boot loader. In order to make the boot loader safe, we can setup secure boot, which will prevent the system from booting if the boot loader is not signed by trusted party. There is an &lt;a href="https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Using_your_own_keys"&gt;Arch wiki&lt;/a&gt; described the steps as well. I used the option of “Using your own keys” and use &lt;a href="https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot#Fully_automated_unified_kernel_generation_and_signing_with_sbupdate"&gt;sbupdate&lt;/a&gt; to automatic sign new kernels after update. Make sure to add kernel parameters, especially the parameters related to disk encryption into &lt;code&gt;CMDLINE_DEAFULT&lt;/code&gt; in &lt;code&gt;/etc/sbupdate.conf&lt;/code&gt; as mentioned in the &lt;a href="https://github.com/andreyv/sbupdate"&gt;sbupdate document&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id="35-setup-vpn-and-ssh"&gt;3.5 Setup VPN and SSH&lt;/h3&gt;
+
+&lt;p&gt;In order to make ZFS remote backup work, we need to establish a SSH connection between the source machine which holds the data we want to backup, and the backup machine. Obviously it’s not safe to let the source machine act as the SSH server, since the backup machine is not fully trusted. But we cannot make the backup machine as a SSH server on public network either, since it needs port forwarding setup if it’s placed in a home network, which is very user unfriendly. So we need a VPN network to let the backup machine connect as a client, then it can act as a SSH server in the VPN network.&lt;/p&gt;
+
+&lt;p&gt;There are many VPN solutions out there. OpenVPN is the most popular one with lots of features. But WireGuard is newer, more efficient and easier to setup. So I choose WireGuard as my VPN solution. I setup the VPN server on my source machine and use NAT port forwarding to make it accessible from public network, so the backup machine is able to connect as a client. The setup guide can also be found in an &lt;a href="https://wiki.archlinux.org/title/WireGuard#Specific_use-case:_VPN_server"&gt;Arch Wiki&lt;/a&gt;, with some additional notes:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Use DNS name for the source machine address, so that in the case of IP changes, the backup machine can still connect to the VPN automatically.&lt;/li&gt;
+  &lt;li&gt;Add &lt;code&gt;PersistentKeepalive = 1&lt;/code&gt; in the client configuration, so that the client will send a package every 1 second to keep the connection alive.&lt;/li&gt;
+  &lt;li&gt;Enable the VPN and SSH service so that the backup machine will be able to connect after reboot.&lt;/li&gt;
+  &lt;li&gt;Setup the firewall properly, since the backup machine is not trusted.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="36-install-zfs"&gt;3.6 Install ZFS&lt;/h3&gt;
+
+&lt;p&gt;Finally we can install ZFS on the backup machine so it can receive ZFS datasets. Since we don’t need ZFS on the root file system, it’s very easy to do. Just follow the &lt;a href="https://wiki.archlinux.org/title/ZFS"&gt;Arch Wiki for ZFS&lt;/a&gt;. I also wrote a &lt;a href="/2020-01-28-Migrate-Arch-Linux-to-Zfs.html"&gt;blog post&lt;/a&gt; about it but I don’t think it’s needed for this simple setup.&lt;/p&gt;
+
+&lt;h3 id="37-conclusion"&gt;3.7 Conclusion&lt;/h3&gt;
+
+&lt;p&gt;After all the setup, let’s look at what we have achieved for this backup machine.&lt;/p&gt;
+
+&lt;p&gt;From the security point of view, we make it reasonable secure: the disk is encrypted and the encryption key is stored in TPM safely. The boot loader is also prevented from modification because of secure boot. It’s not 100% secure though, for example, when the machine is powered on there are ways to freeze the memory and read the disk encryption key from it; TPM 1.2 has security risks as well. But even though there are some security risks, it’s very hard to actually compromise the system for average people. And as I’ve mentioned multiple times above, the security risks doesn’t effect the security of our backup data since the transfer and storage are all encrypted without ever exposed the encryption key.&lt;/p&gt;
+
+&lt;p&gt;From user friendly point of view, as I mentioned at the starting, the machine can be put anywhere that has a good network connection. And with just power and Ethernet cable plugged in, it would be ready to operate.&lt;/p&gt;
+
+&lt;h2 id="4-zfs-send-and-recv"&gt;4. ZFS Send and Recv&lt;/h2&gt;
+
+&lt;p&gt;After the backup machine setup, we can finally backup the ZFS datasets to it. It’s very easy for ZFS to do remote backup, just make sure to use the flag &lt;code&gt;-w&lt;/code&gt; when send so it will send the encrypted ZFS dataset (given the source dataset is already encrypted). For example:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;zfs send -R -v -w zroot/root@snapshot-name | ssh &amp;lt;backup-machine-ip-in-vpn&amp;gt; sudo zfs recv -Fu zoffsite-backup/root
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It’s also easy to send incremental back using command like this:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;zfs send -R -v -w -i zroot/root@from-snapshot zroot/root@to-snapshot | ssh &amp;lt;backup-machine-ip-in-vpn&amp;gt; sudo zfs recv -Fu zoffsite-backup/root
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In my case, I don’t want to backup all the datasets since I can download some of them like Steam games from somewhere else. So I wrote a script to get all the dataset I want to backup and send them one by one without suing &lt;code&gt;-R&lt;/code&gt; flag. Anyway, with the power of ZFS you can basically backup in whatever way you want. You can put the script in cronjob or systemd timer to run it everyday for instance.&lt;/p&gt;
+
+&lt;p&gt;At last, &lt;strong&gt;there is an important note about data recovery&lt;/strong&gt;. If you ever need to recover the data, make sure don’t mount it in the backup system directly since the backup system is not trusted. Instead, get the physical backup disk, mount it on a trusted system, and recover from there.&lt;/p&gt;</content><author><name/></author><category term="zfs"/><category term="backup"/><category term="secure boot"/><category term="linux"/><category term="tech"/><category term="vpn"/><summary type="html">Digital data was never as important as nowadays. Not only for business, but also for every individual. And it’s challenging to make data safe. For example, we see the news about ransomware encrypted all the data of big companies, made their business suspended. We also see a lot of extreme weathers recently: fires, flood and so on, which threats the hardware that stores the data. So it’s necessary to have backups. There should be at least two kinds of backups to keep data safe: offline backup and offsite backup.</summary></entry><entry><title type="html">Why Big Companies Need to Adopt Open Source</title><link href="https://www.binwang.me/2021-06-30-Why-Big-Companies-Need-to-Adopt-Open-Source.html" rel="alternate" type="text/html" title="Why Big Companies Need to Adopt Open Source"/><published>2021-06-30T00:00:00-04:00</published><updated>2021-06-30T00:00:00-04:00</updated><id>https://www.binwang.me/Why-Big-Companies-Need-to-Adopt-Open-Source</id><content type="html" xml:base="https://www.binwang.me/2021-06-30-Why-Big-Companies-Need-to-Adopt-Open-Source.html">&lt;p&gt;Recently I’m really frustrated by some internal tools in the company. Lots of people think the internal tools in big company should be much better than open source ones. Maybe that’s true in the past or in some other companies. But that’s not true in my experience. While we are seeing more and more companies adopting open source, I think it would be helpful to list some of its advantages. I know there are already lots of articles and people talking about this, but while I’m not in the position to make open source decisions for the internal tools I use, writing this article is at least what I can do.&lt;/p&gt;
+
+&lt;p&gt;Basically open source brings better developers and more users. All the benefits come from these. We will talk about these first and then the benefits they make.&lt;/p&gt;
+
+&lt;h2 id="attract-more-and-better-software-engineers"&gt;Attract More and Better Software Engineers&lt;/h2&gt;
+
+&lt;p&gt;An open source project is a perfect tool to show the engineers’ skills and experience. It’s human nature that wants to be acknowledged for something they’ve done. This is especially true for the ones who love and are good at programming. Open source project provides this excellent opportunity. Other than this psychic satisfaction, it also provides real world benefits: the ability to show the skills and experience enables better career opportunities. So it’s no wonder given the same circumstances, open source projects can attract better software engineers.&lt;/p&gt;
+
+&lt;p&gt;Even more, if an open source project is done right, it not only attracts people apply for the job to work on the project, it may also attract people or even other companies to work on this project for free.&lt;/p&gt;
+
+&lt;h2 id="make-participants-to-be-better-software-engineers"&gt;Make Participants to be Better Software Engineers&lt;/h2&gt;
+
+&lt;p&gt;Open source project not only attract better software engineers, it can also make the participants to be better software engineers. Since open source shows the code and commit history to everyone, code quality is associated to programmers’ reputation. The programmers have more motivations to write better code, instead of just make things work for now, which happens a lot while the project is under a tight timeline.&lt;/p&gt;
+
+&lt;h2 id="attract-more-users"&gt;Attract More Users&lt;/h2&gt;
+
+&lt;p&gt;Open source provides more features than closed source software: the user can see and modify the source if they want. Most open source licenses also allow the users to re-distribute the software with certain requirements. This is a big deal for lots of the users. Because it makes the worst case better: when the software is not maintained or going to the wrong direction, the user can continue to find some way to support it since they have the source code. It also makes the system more secure because they can better audit the source code to find security risks instead of treating it as a black box.&lt;/p&gt;
+
+&lt;p&gt;However, having more users can be a double edge sword sometimes. For some tools and infrastructure software, the company doesn’t get direct benefits from having more users. In contrast, the users can be competitors, and they can get benefits by not spending their own resource to write the software. But the company can actually get indirect benefits, which can overweight the short term hurts at most of the time. We will discuss this in details later.&lt;/p&gt;
+
+&lt;h2 id="better-software-quality"&gt;Better Software Quality&lt;/h2&gt;
+
+&lt;p&gt;I think this is the most important reason to adopt open source software. We always want better software if the cost is reasonable. Some people associate open source project with bad quality, but that’s obviously not true for widely adopted ones. For example, the most famous open source project Linux is the core infrastructure of modern Internet. Not to mention so many open source language compilers, interpreters and build tools. These tools needs complex skills to be developed, and most of them is well written and maintained.&lt;/p&gt;
+
+&lt;p&gt;The reason open source software can have better quality is because of the advantages listed above: obviously better software engineer will write better quality software. And with more users, more bugs can be found. And they may also able to provide some insightful ideas about how to improve the software from the user’s point of view. This doesn’t add a burden to the company: whether user reports the bug or not, the bug is there. If it’s important, better to fix it before it really break things. And for the feature requests, the company can decide how to implement them based on the priority. A user request doesn’t mean the company should always accept the request and spend time to implement it.&lt;/p&gt;
+
+&lt;p&gt;The software quality doesn’t only include the software itself, it also include the document and ecosystem. While there are more users, there will be more supports from the community and more software will be developed to work with it.&lt;/p&gt;
+
+&lt;h2 id="less-time-needed-for-onboarding-new-hires"&gt;Less Time Needed for Onboarding New Hires&lt;/h2&gt;
+
+&lt;p&gt;This is an indirect benefits from having more users. If the software is popular, lots of new hires already know how to use it before they come to the company. This can save lots of time depends on the complexity of the software. If we take account into the software quality and ecosystem improvement discussed above, the time saved can be much more.&lt;/p&gt;
+
+&lt;h2 id="become-the-industry-standard"&gt;Become the Industry Standard&lt;/h2&gt;
+
+&lt;p&gt;This is another big benefits from having more users. Become the industry standard can combine the software with the companies’ strategy and get lots of reputation for the company. One example is Kubernetes. Google open sourced this technology to make it a final winner in the container orchestration area. Even its competitors like AWS need to support it in their product. I don’t think Google can get this kind of success without make it open source.&lt;/p&gt;
+
+&lt;h2 id="more-cost-efficient"&gt;More Cost Efficient&lt;/h2&gt;
+
+&lt;p&gt;As I said above, if an open source project is done right, it can attract lots of software engineers even other companies to contribute. This is basically free resource.&lt;/p&gt;
+
+&lt;h2 id="feedback-to-the-community"&gt;Feedback to the Community&lt;/h2&gt;
+
+&lt;p&gt;While I listed all the real benefits above, sometimes we may need to think in a more idealism way. Open source started with the idea of openness, to make the code and technology available to everyone. While companies’ main focus is making money, why not have some effort to really make the world a better place on the way?&lt;/p&gt;</content><author><name/></author><category term="thoughts"/><category term="tech"/><category term="open source"/><summary type="html">Recently I’m really frustrated by some internal tools in the company. Lots of people think the internal tools in big company should be much better than open source ones. Maybe that’s true in the past or in some other companies. But that’s not true in my experience. While we are seeing more and more companies adopting open source, I think it would be helpful to list some of its advantages. I know there are already lots of articles and people talking about this, but while I’m not in the position to make open source decisions for the internal tools I use, writing this article is at least what I can do.</summary></entry><entry><title type="html">In Defence of Disabling Swap</title><link href="https://www.binwang.me/2021-03-08-In-Defence-of-Disabling-Swap.html" rel="alternate" type="text/html" title="In Defence of Disabling Swap"/><published>2021-03-08T00:00:00-05:00</published><updated>2021-03-08T00:00:00-05:00</updated><id>https://www.binwang.me/In-Defence-of-Disabling-Swap</id><content type="html" xml:base="https://www.binwang.me/2021-03-08-In-Defence-of-Disabling-Swap.html">&lt;p&gt;Recently, I read an article &lt;a href="https://chrisdown.name/2018/01/02/in-defence-of-swap.html"&gt;&lt;em&gt;In Defence of Swap&lt;/em&gt;&lt;/a&gt; that talks about memory swap in Linux. I happened to see some problems at work related to it as well. So in this article, I’ll talk about swap and why we want to disable it.&lt;/p&gt;
+
+&lt;p&gt;In the article above, the author recommends to use swap because it makes the memory reclamation more efficient. Which means the OS can swap out the memory that allocated by the program, so that more physical memory can be used for file page to improve cache hit. The author thinks a lot of people don’t like swap because they don’t understand how swap works. But I think it’s quite the opposite: most people with experience understand that, and that’s exactly one of the reasons that they want to disable swap.&lt;/p&gt;
+
+&lt;p&gt;The first and biggest reason of disabling swap is transparency. Programmers have some expectations about data access latency while writing the program: if they access it from memory, it will be faster; if access from file, it will be slower. When the program put something into memory, it maybe rarely used. But when it needs to be used, it is expected to be accessed fast. When the program access data from file with swap disabled, it maybe slower because there are less memory for file cache, but it’s okay because it’s expected. So yes, swap can sometimes make memory usage more efficient, but that’s in exchange of the stability. It’s probably okay for desktop users, but not for servers. If you really need efficiency, you need to manage cache by yourself. For example, if some data is really barely used and the latency doesn’t matter, the program can optimize it by putting the data into file or database instead of hand over the control to OS, because the OS doesn’t really know which part of memory is important – less often used memory doesn’t mean less important memory. It’s much harder to optimize the program while the memory management is complex and a black box. Another advantage to manage the memory by itself is, we can add metrics about cache misses and so on, so when there is a performance problem it’s easier to trace down what’s happening.&lt;/p&gt;
+
+&lt;p&gt;The second reason is OOM killer. This reason applies when the system is running in high load. Swap get its bad reputation mostly because of the very slow response when memory is not enough, and it’s fair in my opinion. Even for a desktop, it’s better to kill the program instead of letting the whole system to be slow. For an online service, you may think it’s better to handle requests slow rather than completely down. It’s true if your service only has one node, but it’s barely the case for web services. It’s better to let the node down, so you know something is wrong. If there is memory leak, kill the service and restart it can normally solve the problem and you can resolve the root cause later. If there are more requests than the service can handle, it’s better to detect that and scale up or limit requests accordingly. Both cases are better than running the node in an unknown state.&lt;/p&gt;
+
+&lt;p&gt;So in conclusion, whether a feature is good depends on real world use cases rather than how the designer imagine it will be used. There is a reason when disabling a feature becomes normal practice for some use cases. Maybe it’s out of topic, but as developers, we must always keep the real world use cases in mind instead of resolving hypothetical problems.&lt;/p&gt;</content><author><name/></author><category term="Linux"/><category term="swap"/><category term="memory"/><category term="technology"/><summary type="html">Recently, I read an article In Defence of Swap that talks about memory swap in Linux. I happened to see some problems at work related to it as well. So in this article, I’ll talk about swap and why we want to disable it.</summary></entry><entry><title type="html">Define Infrastructure as Code</title><link href="https://www.binwang.me/2021-02-21-Define-Infrastructure-as-Code.html" rel="alternate" type="text/html" title="Define Infrastructure as Code"/><published>2021-02-21T00:00:00-05:00</published><updated>2021-02-21T00:00:00-05:00</updated><id>https://www.binwang.me/Define-Infrastructure-as-Code</id><content type="html" xml:base="https://www.binwang.me/2021-02-21-Define-Infrastructure-as-Code.html">&lt;p&gt;I’m using a lot of &lt;a href="https://aws.amazon.com/cdk/"&gt;CDK&lt;/a&gt; at work recently. So in this article, I want to talk about defining infrastructure as code.&lt;/p&gt;
+
+&lt;h2 id="why-define-infrastructure-as-code"&gt;Why Define Infrastructure as Code?&lt;/h2&gt;
+
+&lt;p&gt;Why do we want to define infrastructure as code? The most important reason is we can make the progress automatic. After all, that’s the purpose of programming. Normally, there are many manual steps to setup the infrastructure, like buying the machine, installing OS, setting up the network and so on. Luckily, with the cloud providers to provide the hardware, and with technologies like Docker and Kubernetes, it’s possible to make more and more steps automatic.&lt;/p&gt;
+
+&lt;p&gt;But it’s not always easier to automatically do things than manually do it. Another useful feature of code is it can be the source of truth and make the process reproducible. It’s like the document, but more precise and complete. If you have the code, you can build all the systems from scratch without rely on other people’s undocumented knowledge. It can make sure what you have is a clean system, without random things that people did and forgot. And since it’s reproducible, you can improve the process and know whether it’s better or worse.&lt;/p&gt;
+
+&lt;p&gt;The third advantage is you can use version control to manage the infrastructures. You can rollback to a good state. You can also see what has been changed from beginning, which is like an even better document.&lt;/p&gt;
+
+&lt;h2 id="define-operating-system"&gt;Define Operating System&lt;/h2&gt;
+
+&lt;p&gt;For a software, the most related infrastructure is the operating system and the dependencies it needs on the operating system. Traditionally, while using physical machine, the operating system can be automatically installed by PXE through network booting. But it’s hard to setup and test: you need a physical machine to do that.&lt;/p&gt;
+
+&lt;p&gt;After virtualization and cloud is popular, it’s easier to build operating system images and test them. Since it’s virtual machine, you can test it at your own development desktop and things will be the same while it’s running on production. There are some tools like &lt;a href="https://www.vagrantup.com/"&gt;Vagrant&lt;/a&gt; to do it. But it also has it’s own disadvantage: it’s hard to track what you really did in the image. It’s true there are some tools to build the image with code, but I don’t find it to be a normal practise.&lt;/p&gt;
+
+&lt;p&gt;Then there comes Docker and it makes defining operation system as code much easier. There are multiple reasons: it’s command line by default so it’s easier to write script. And it’s normal practise to build image with Dockerfile instead of manually doing things in the image and save it. It’s even easier to test it since it’s more lightweight. It also has version number in it’s image format, which makes people have version control in mind.&lt;/p&gt;
+
+&lt;h2 id="define-hardware-resource-and-cluster-structure"&gt;Define Hardware Resource and Cluster Structure&lt;/h2&gt;
+
+&lt;p&gt;On some level, Docker can define the hardware resource, like how much CPU and memory to use, file volumes and local network. But it can only define these at local machine level. When you want to run the service on a cluster and talk to other services, you need more powerful tool. There are many container orchestration tools but after these years it seems Kubernetes has become the standard. With Kubernetes, the things beyond operating system, like network structure, service structure and so on, can also be defined within yaml files.&lt;/p&gt;
+
+&lt;p&gt;The feature is not only available in container world. Even before containers are popular, lots of cloud providers have the ability to use code define the resources. It can not only define the hardware resource and network structure, but also for basically every service the cloud provides, like hosted database, logging management and so on.&lt;/p&gt;
+
+&lt;h2 id="use-code-instead-of-configuration-files"&gt;Use Code Instead of Configuration Files&lt;/h2&gt;
+
+&lt;p&gt;For tools like Kubernetes which can use yaml configuration files to define infrastructures, it’s trivial to use code generate the configuration files. Why we want to use code instead of using configuration files directly? Because sometimes there are something can be reused, or some logic depends on different situations.&lt;/p&gt;
+
+&lt;p&gt;Of course most tools include Kubernetes also provide API that you can call with code. But I think the better way is to generate configuration file about what you want, and let the tool to do all the actual work. It’s like declarative programming and functional programming. Infrastructure creation is very complex and error-phone: the things can go wrong include how to safely change from one state to another one, failure handling, resource cleanup, rollback, rolling upgrade and so on. It’s better to just describe what’s the desired state and let the tools to do the actual work. It also makes it easier to optimize the workflow to make it faster.&lt;/p&gt;
+
+&lt;p&gt;CDK is such a tool that supports lots of programming languages. After run the code it can generate AWS Cloud Formation and run it. Unfortunately it’s from AWS which means you are basically locked into AWS if you choose to use it. Though there is a project &lt;a href="https://cdk8s.io/"&gt;cdk8s&lt;/a&gt; tries to support Kubernetes for CDK, I’m not sure if it gets the first level support. I really hope there would be an open source project like CDK that supports major cloud solutions.&lt;/p&gt;</content><author><name/></author><category term="cloud"/><category term="docker"/><category term="aws"/><category term="cdk"/><category term="technology"/><category term="programming"/><summary type="html">I’m using a lot of CDK at work recently. So in this article, I want to talk about defining infrastructure as code.</summary></entry><entry><title type="html">Setup SSH Authentication with YubiKey</title><link href="https://www.binwang.me/2021-02-12-Setup-SSH-Authentication-with-YubiKey.html" rel="alternate" type="text/html" title="Setup SSH Authentication with YubiKey"/><published>2021-02-12T00:00:00-05:00</published><updated>2021-02-12T00:00:00-05:00</updated><id>https://www.binwang.me/Setup-SSH-Authentication-with-YubiKey</id><content type="html" xml:base="https://www.binwang.me/2021-02-12-Setup-SSH-Authentication-with-YubiKey.html">&lt;p&gt;&lt;a href="https://www.yubico.com/"&gt;YubiKey&lt;/a&gt; is a kind of hardware security token. The idea is to authenticate a person not only based on something he knows (password), but also on something he owns. It can be a digital file, but a more secure option would be a hardware token like Yubikey since no one can steal it without physical access. I use it for a lot of services. Not surprisingly, it can also be used in ssh authentication. But the official Yubikey tutorials are not very straightforward and the &lt;del&gt;Archlinux wiki pages are more generic instead of Yubikey specific&lt;/del&gt;. So in this article, I’ll introduce how to setup ssh to include Yubikey in the authentication process. The operating system I’m using is Arch Linux, but the process for other Linux systems should be very similar.&lt;/p&gt;
+
+&lt;h2 id="generate-openssh-hardware-token"&gt;Generate OpenSSH Hardware Token&lt;/h2&gt;
+
+&lt;p&gt;The most easy way is to generate a ssh key file based on Yubikey. OpenSSH supports this since 8.2.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Run &lt;code&gt;ssh-keygen -t ecdsa-sk&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Touch the Yubikey for a few seconds.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Then you can use the generated ssh key like other key files with &lt;code&gt;-i&lt;/code&gt; option. After type in the login command, you need to touch Yubikey for a few seconds, then you should be able to login.&lt;/p&gt;
+
+&lt;h2 id="use-pam"&gt;&lt;del&gt;Use PAM&lt;/del&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Update: this way only works while the key is plugged into the ssh host, which makes it useless for SSH. However, it’s still useful for things like local login.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A more generic way is to use &lt;a href="https://en.wikipedia.org/wiki/Linux_PAM"&gt;PAM&lt;/a&gt; with Yubikey. It’s a modular authentication mechanism not only for SSH, but also for lots of other things like local login.&lt;/p&gt;
+
+&lt;h3 id="1-install-packages"&gt;1. Install packages&lt;/h3&gt;
+
+&lt;p&gt;PAM should be installed by default for Archlinux. So the only package we need to install is the PAM module for Yubikey &lt;code&gt;pam-u2f&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;sudo pacman -S pam-u2f
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h3 id="2-generate-u2f-mapping-file"&gt;2. Generate u2f mapping file&lt;/h3&gt;
+
+&lt;p&gt;Run this command first:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;pamu2fcfg -u&amp;lt;username&amp;gt; # Replace &amp;lt;username&amp;gt; by your username
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Touch your Yubikey for a few seconds and save the command result to a configuration file, for example, &lt;code&gt;/etc/u2f_mappings&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id="3-config-pam-for-ssh"&gt;3. Config PAM for SSH&lt;/h3&gt;
+
+&lt;p&gt;The PAM config file for ssh is located at &lt;code&gt;/etc/pam.d/sshd&lt;/code&gt;. In order to add Yubikey as part of the authentication, add this line to the file:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;auth required pam_u2f.so authfile=/etc/u2f_mappings
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;required&lt;/code&gt; means Yubikey authentication is necessary. The other options are &lt;code&gt;requisite&lt;/code&gt;, &lt;code&gt;sufficient&lt;/code&gt; and &lt;code&gt;optional&lt;/code&gt;. Refer to &lt;a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system-level_authentication_guide/pam_configuration_files"&gt;Redhat document&lt;/a&gt; for more details.&lt;/p&gt;
+
+&lt;p&gt;The parts after &lt;code&gt;pam_u2f.so&lt;/code&gt; are the parameters. &lt;code&gt;authfile&lt;/code&gt; is one of them. For all the supported parameters, refer to &lt;a href="https://developers.yubico.com/pam-u2f/"&gt;Yubico pam-u2f document&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id="4-config-ssh-to-include-password-authentication"&gt;4. Config SSH to include password authentication&lt;/h3&gt;
+
+&lt;p&gt;In order to actually use PAM in ssh, ssh server needs to include password as part of authorization methods. The configuration is &lt;code&gt;AuthenticationMethods&lt;/code&gt; in &lt;code&gt;sshd_config&lt;/code&gt;. For example, if you want to use password + Yubikey + ssh key file, you can config it like this:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;AuthenticationMethods &amp;quot;publickey,password&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And make sure &lt;code&gt;PasswordAuthentication&lt;/code&gt; and &lt;code&gt;ChallengeResponseAuthentication&lt;/code&gt; are both &lt;code&gt;yes&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;PasswordAuthentication Yes
+&lt;span class="line-numbers"&gt;&lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;ChallengeResponseAuthentication Yes
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After this, restart sshd then you can login with Yubikey authentication: type in ssh login command, input user password and press enter, touch the Yubikey for a few seconds, then you should be able to login!&lt;/p&gt;</content><author><name/></author><category term="linux"/><category term="ssh"/><category term="security"/><category term="yubikey"/><category term="yubico"/><category term="pam"/><category term="pam-u2f"/><summary type="html">YubiKey is a kind of hardware security token. The idea is to authenticate a person not only based on something he knows (password), but also on something he owns. It can be a digital file, but a more secure option would be a hardware token like Yubikey since no one can steal it without physical access. I use it for a lot of services. Not surprisingly, it can also be used in ssh authentication. But the official Yubikey tutorials are not very straightforward and the Archlinux wiki pages are more generic instead of Yubikey specific. So in this article, I’ll introduce how to setup ssh to include Yubikey in the authentication process. The operating system I’m using is Arch Linux, but the process for other Linux systems should be very similar.</summary></entry><entry><title type="html">My 2020 in Review</title><link href="https://www.binwang.me/2021-01-26-My-2020-in-Review.html" rel="alternate" type="text/html" title="My 2020 in Review"/><published>2021-01-26T00:00:00-05:00</published><updated>2021-01-26T00:00:00-05:00</updated><id>https://www.binwang.me/My-2020-in-Review</id><content type="html" xml:base="https://www.binwang.me/2021-01-26-My-2020-in-Review.html">&lt;p&gt;2020 is a special year to everyone because of Covid-19. It’s special to me not only because of it, but also because of a big change in my life. I moved from China to Canada at November 2019. I cannot review my life in 2020 without mention that part, so this article is more like 2019 and 2020 in review.&lt;/p&gt;
+
+&lt;p&gt;In retrospect, the immigration progress didn’t spend much of my time and energy: find a job and submit documents for visa, that’s all. But it’s a mental challenge because of all the unknowns during the progress: the unknowns about whether I can pass the interview, whether I can get the visa, whether the work in new position is good, whether the life in Canada would be better, and so on. The progress started at early April, so most of the time in 2019 I was waiting and nervous. It seems unnecessary, since the interview went very well, and it’s rare to be rejected for visa in cases like mine. But still, it’s such a big decision in my life, and the political climate seems to be changing everyday. As things rolling out at the beginning of 2020, it proves my worries didn’t come from no where. If my visa was delayed by 2 months, I may not be able to come here until now. It’s because of Covid-19, which is not something one can predict, but the predictable political reasons made it worse.&lt;/p&gt;
+
+&lt;p&gt;Toronto is better than I thought. I arrived here at a weekend night. The temporary apartment I booked was at downtown. During the way from airport to the apartment, along Queen Street, I saw the side walk was packed with people. The day after, when I went outside for subway, I found lots of people at subway stations and food court. That surprised me. I expected Toronto would be better than Beijing in many aspects, but I didn’t expect the population density is higher (and after I looked up on Wikipedia, it’s true: 4,334.4/\(km^2\) for Toronto compared to 1,300/\(km^2\) for Beijing). Maybe it depends on the person, but I like to live in a place with more people as long as it’s not too crowded. The city feels more alive and has more energy in this way. During last few years, Beijing made lots of policies to drive people outside. A lot of markets and restaurants were forced close and teared down. Even for the still open ones, there were more restrictions like cannot have outdoor dining spaces or even cannot light a candle. From where I was living, closed to Second Ring Road, which is core downtown area in Beijing, the city seems to be dying for average people. Any Chinese city I traveled around that time was more alive than Beijing. I figured if I couldn’t make it to Canada, I would still move to another city. So when I came to Toronto and found out there are people and even constructions everywhere, I was very happy about it.&lt;/p&gt;
+
+&lt;p&gt;The most challenging part after I moved here is the language barrier. Most Chinese in my generation started to study English from fifth grade. I’m not an exception. I constantly read professional English materials since the University. I’ve been worked in international companies for my internship and my last job. Both of them require lots of communications in English. I’ve been to English speaking countries include the US, which has identical culture as Canada. But still, it can be challenging sometimes especially during informal communications. True or not, in China, I believe I’m good at writing articles, have good sense of humor, know more words and historical stories than average person. I could speak with strangers all the way in a 20+ train journey, or in a youth hotel. I’ve started to live in a new city along and dealt with all the things and all kinds of people. I can feel the power of language, words and the way I use them. I know how they can make me to be better understood, make people feel different, and make something to live forever. Suddenly, after moved to a different country with a different language, the advantage became disadvantage. It’s frustrating when I cannot find the right word to express myself during speaking. But that’s also one of the reasons I decided to move here – I want to be better at such an important language. Luckily, I see improvements during the last year even most of the time I was working from home. After all, with all the things happened in 2020, there were always enough topics to talk about.&lt;/p&gt;
+
+&lt;p&gt;Another stressful part I started to feel last year is not all because of relocation, but also because of the age. I’m still young, but not as young as before. During the years in University and a few years after, I skipped lots of classes even exams, I spoke out whatever I think, I resigned without ever found next job first. I did whatever I thought was right, and rejected whatever I didn’t want, without care about the risk, because I had few things to lose, and even I lost all of them, I could always start over because I was so young. But from last year, I don’t think like that anymore. Maybe it’s because of the marriage, maybe it’s because of the immigration, maybe it’s because of working in a big company. I suppose that means I’m more mature. I cannot say it’s good or bad. I think it’s just a stage of life.&lt;/p&gt;
+
+&lt;p&gt;Other than the challenges, the life here is very good even under pandemic. I’m living in a condo at downtown, which makes everything very convenience. I can go to most places I need by walk or public transport. This is another good surprise – I thought car is a must have in a North American city. The Chinese community is big here. I can find all kinds of Chinese food I used to have in China. Some of them, especially Cantonese ones, are even better than I had in Beijing. I’ve made new friends from work. The nature environment is beautiful and there are lots of outdoor activities available. The political system is more stable and transparent. Last not least, even though the house price is also very high in Toronto, it’s more feasible to make here as home because of the less percentage of down payment. (In theory, down payment percentage 30% in Beijing is not much higher than Toronto. But in practice, the prices for average apartments are so high that they are categorized as luxury ones, which requires much higher percentage of down payment. It usually ends up to almost 50%).&lt;/p&gt;
+
+&lt;p&gt;The work here is not bad. Especially the work hours are much better than most companies in China. I get good projects in the team. The good part of working in a big company is the things I developed here have a big impact because so many people are using it. But on the other hand, because it has so many old services, and because of the specific organization I’m in, there are less technical challenges. The nature of our business makes databases able to be easily partitioned, so there is basically no bottleneck for the services. And it involves physical hardware which makes debug harder. Lots of work are around business logic and meetings. Depends on the time of the year, operation works and oncall can be heavy.&lt;/p&gt;
+
+&lt;p&gt;So in order to not be rusty, I started to write a side project for fun during part time. I had lots of side projects before. Though one of them gained some popularity, most of them are not finished. Unlike others, I started this project to use all my preferred technicals, best practices and open source tools that I don’t have opportunity to use at work. There is no deadline, no debate in order to restructure the code or choose some tech stacks. I feel very good about it. Maybe it will not be finished at last either, but I find the joys I had when I first started programming.&lt;/p&gt;
+
+&lt;p&gt;I also started to write articles on my blog in a higher frequency. I posted 2 to 3 articles per month in average at the second half of 2020. The quality of articles also improved. It helps me to practice English, forces me to learn and have a deeper understand by writing things down. Most importantly, as I said above about the power of words, it makes moments in my life not just slip away. I hope I can continue this in the new year. I feel on some level, it makes part of me eternal.&lt;/p&gt;</content><author><name/></author><category term="life"/><summary type="html">2020 is a special year to everyone because of Covid-19. It’s special to me not only because of it, but also because of a big change in my life. I moved from China to Canada at November 2019. I cannot review my life in 2020 without mention that part, so this article is more like 2019 and 2020 in review.</summary></entry><entry><title type="html">Redis Implementation for Cache and Database Consistency</title><link href="https://www.binwang.me/2020-12-14-Redis-Implementation-for-Cache-and-Database-Consistency.html" rel="alternate" type="text/html" title="Redis Implementation for Cache and Database Consistency"/><published>2020-12-14T00:00:00-05:00</published><updated>2020-12-14T00:00:00-05:00</updated><id>https://www.binwang.me/Redis-Implementation-for-Cache-and-Database-Consistency</id><content type="html" xml:base="https://www.binwang.me/2020-12-14-Redis-Implementation-for-Cache-and-Database-Consistency.html">&lt;p&gt;&lt;em&gt;This article belongs to a series of articles about caching. The code in this article can be found at &lt;a href="https://github.com/wb14123/redis_lease"&gt;my Github repo&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;em&gt;&lt;a href="/2020-11-02-Use-TLA+-to-Verify-Cache-Consistency.html"&gt;Use TLA+ to Verify Cache Consistency&lt;/a&gt;.&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Redis Implementation for Cache and Database Consistency. (This one)&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In the &lt;a href="/2020-11-02-Use-TLA+-to-Verify-Cache-Consistency.html"&gt;last article&lt;/a&gt;, we introduced an algorithm (described in paper &lt;a href="https://pdos.csail.mit.edu/6.824/papers/memcache-fb.pdf"&gt;Scaling Memcache at Facebook&lt;/a&gt;) that can do a better job to maintain the data consistency between cache and database. We also used TLA+ to model the algorithm and verified it. In this article, we are going to implement the algorithm in real world for Redis. The implementation is very simple and doesn’t need to change Redis itself. It’s implemented it by using Redis script. However, it’s much harder to verify the correctness. In order to do it, I used &lt;a href="https://jepsen.io/"&gt;Jepsen&lt;/a&gt; to test it. If you look at the language analysis for the Github repo, you can see most of them are tests. The Redis script implementation, which is written in Lua, is only 5.1% of the project.&lt;/p&gt;
+
+&lt;h2 id="algorithm-description"&gt;Algorithm Description&lt;/h2&gt;
+
+&lt;p&gt;We’ve described the algorithm in the previous article and even write a TLA+ model for it. But just make it easier for the readers, I’ll briefly describe the algorithm here again. Basically, whenever the client get a value from cache, it will be assigned a unique ID (lease) for the key. When the client writes back a new value, it needs to provide the  key’s newest lease ID. And delete the key will also invalidate all its leases.&lt;/p&gt;
+
+&lt;h2 id="implementation"&gt;Implementation&lt;/h2&gt;
+
+&lt;p&gt;The implementation uses &lt;a href="https://redis.io/commands/eval"&gt;Redis script&lt;/a&gt;, which is written in Lua. It can implement multiple operations and make them atomic. In theory, this can also be done by client, but Redis script provides a consistent implementation across different clients and makes it easier to use. The algorithm is easy, so the implementation is also straight forward. The implementations are under &lt;a href="https://github.com/wb14123/redis_lease/tree/master/scripts"&gt;scripts directory of the repo&lt;/a&gt;. These scripts also works for Redis cluster (but I didn’t use Jepsen to test it under cluster mode). Here is an example implementation for get:&lt;/p&gt;
+
+&lt;div class="language-lua highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt; &lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;&lt;span style="color:#080;font-weight:bold"&gt;local&lt;/span&gt; &lt;span style="color:#950"&gt;key&lt;/span&gt; = &lt;span style="background-color:hsla(0,100%,50%,0.05)"&gt;&lt;span style="color:#710"&gt;'&lt;/span&gt;&lt;span style="color:#D20"&gt;{&lt;/span&gt;&lt;span style="color:#710"&gt;'&lt;/span&gt;&lt;/span&gt;..KEYS[&lt;span style="color:#00D"&gt;1&lt;/span&gt;]..&lt;span style="background-color:hsla(0,100%,50%,0.05)"&gt;&lt;span style="color:#710"&gt;'&lt;/span&gt;&lt;span style="color:#D20"&gt;}&lt;/span&gt;&lt;span style="color:#710"&gt;'&lt;/span&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt; &lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;&lt;span style="color:#080;font-weight:bold"&gt;local&lt;/span&gt; &lt;span style="color:#950"&gt;token&lt;/span&gt; = ARGV[&lt;span style="color:#00D"&gt;1&lt;/span&gt;]
+&lt;span class="line-numbers"&gt; &lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;&lt;span style="color:#080;font-weight:bold"&gt;local&lt;/span&gt; &lt;span style="color:#950"&gt;value&lt;/span&gt; = redis.call(&lt;span style="background-color:hsla(0,100%,50%,0.05)"&gt;&lt;span style="color:#710"&gt;'&lt;/span&gt;&lt;span style="color:#D20"&gt;get&lt;/span&gt;&lt;span style="color:#710"&gt;'&lt;/span&gt;&lt;/span&gt;, key)
+&lt;span class="line-numbers"&gt; &lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;&lt;span style="color:#080;font-weight:bold"&gt;if&lt;/span&gt; &lt;span style="color:#080;font-weight:bold"&gt;not&lt;/span&gt; value &lt;span style="color:#080;font-weight:bold"&gt;then&lt;/span&gt;
+&lt;span class="line-numbers"&gt; &lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;    redis.replicate_commands()
+&lt;span class="line-numbers"&gt; &lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt;    &lt;span style="color:#080;font-weight:bold"&gt;local&lt;/span&gt; &lt;span style="color:#950"&gt;lease_key&lt;/span&gt; = &lt;span style="background-color:hsla(0,100%,50%,0.05)"&gt;&lt;span style="color:#710"&gt;'&lt;/span&gt;&lt;span style="color:#D20"&gt;lease:&lt;/span&gt;&lt;span style="color:#710"&gt;'&lt;/span&gt;&lt;/span&gt;..key
+&lt;span class="line-numbers"&gt; &lt;a href="#n7" name="n7"&gt;7&lt;/a&gt;&lt;/span&gt;    redis.call(&lt;span style="background-color:hsla(0,100%,50%,0.05)"&gt;&lt;span style="color:#710"&gt;'&lt;/span&gt;&lt;span style="color:#D20"&gt;set&lt;/span&gt;&lt;span style="color:#710"&gt;'&lt;/span&gt;&lt;/span&gt;, lease_key, token)
+&lt;span class="line-numbers"&gt; &lt;a href="#n8" name="n8"&gt;8&lt;/a&gt;&lt;/span&gt;    &lt;span style="color:#080;font-weight:bold"&gt;return&lt;/span&gt; &lt;span style="background-color:hsla(200,100%,50%,0.06)"&gt;&lt;span style="color:#40A"&gt;{&lt;/span&gt;&lt;span style="color:#069"&gt;false&lt;/span&gt;, token&lt;span style="color:#40A"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt; &lt;a href="#n9" name="n9"&gt;9&lt;/a&gt;&lt;/span&gt;&lt;span style="color:#080;font-weight:bold"&gt;else&lt;/span&gt;
+&lt;span class="line-numbers"&gt;&lt;strong&gt;&lt;a href="#n10" name="n10"&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;    &lt;span style="color:#080;font-weight:bold"&gt;return&lt;/span&gt; &lt;span style="background-color:hsla(200,100%,50%,0.06)"&gt;&lt;span style="color:#40A"&gt;{&lt;/span&gt;value, &lt;span style="color:#069"&gt;false&lt;/span&gt;&lt;span style="color:#40A"&gt;}&lt;/span&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt;&lt;a href="#n11" name="n11"&gt;11&lt;/a&gt;&lt;/span&gt;&lt;span style="color:#080;font-weight:bold"&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After load the script, you can use it like this:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;redis-cli evalsha &amp;lt;script_sha1&amp;gt; 1 &amp;lt;key&amp;gt; &amp;lt;uniq_id&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It will return &lt;code&gt;value, nil&lt;/code&gt; if there is value for the key, or &lt;code&gt;nil, lease&lt;/code&gt; if there is no value.&lt;/p&gt;
+
+&lt;p&gt;One optimization here is, if we have value for the key, we will not store the lease. That’s because in our use case, if we can get the value, we will not get it from database and write back to the cache. This avoids a lot of memory overhead.&lt;/p&gt;
+
+&lt;p&gt;Another important decision I made is, when get the value, the client needs to provide a unique ID instead of let Redis provide one. This is because I cannot find a good way to generate unique ID in Redis cluster. In a single instance, it’s easy: just use a key and inc the value each time. You can still generate unique IDs for different keys on a cluster, but it adds a lot of memory overhead. So I decided to let clients provide it. Luckily, it’s not hard, basically every language has UUID implementation and that’s good enough.&lt;/p&gt;
+
+&lt;h2 id="testing"&gt;Testing&lt;/h2&gt;
+
+&lt;p&gt;It’s easy to implement something, but very hard to make sure it’s correct. We can use TLA+ to model the algorithm and explore the state space, or use mathematical method to proof the correctness in theory. But once we implement the algorithm, it’s something different. We cannot make sure it’s exactly the same as what we’ve proofed. That’s why I find using Coq to implement, proof and generate real code is fantastic. But in this case, it’s not implemented in Coq, so we must find some other way to test it. By testing, we still cannot make sure it’s 100% correct, we can just explore as many situations as we can and make sure the system doesn’t behaves in a way we don’t expect.&lt;/p&gt;
+
+&lt;p&gt;The tool we use here is &lt;a href="https://jepsen.io/"&gt;Jepsen&lt;/a&gt;. It provides lots of tools to make it easy to test distributed systems. It can generate many concurrent requests, import different kinds of failures (host down, network partition, clock drift, and so on) to the system, record all the requests and responses, and check the history at the end.&lt;/p&gt;
+
+&lt;p&gt;Here is the test case I write: for each client, generate random read and write operations. For read operation, read from cache first, if the value is not found, read from database and write back to the data. For write operations, write to the database and delete the key from cache. Then after all the read and write operations, check whether the data in cache and database are the same. The test case is very simple, it implemented the way we would use the cache.&lt;/p&gt;
+
+&lt;p&gt;By providing different arguments to the test command, you can run the test case with raw Redis get/set/del operations, or use get/set/del operation implemented by the scripts. You can also import cache failure during the test.&lt;/p&gt;
+
+&lt;p&gt;If we run the test with raw Redis operations, we can find the test is failed. In the last article, we discussed that using plain get/set/del cache operations cannot guarantee cache consistency, so this is expected. If we run the test with our scripts, we can find the test passed. If we run the test with cache system failure, we can see the test failed, which is also expected from last article. The inconsistent because of cache failure can be resolved by clean up cache data after restart. But if the client is failed, it will have the same problem (I didn’t write the test case for this because it’s hard to test client failure in Jepsen), but it’s not a very good idea to cleanup cache in this case. Because client fails all the time, cleanup cache will make operations slow. The best way might be to setup an expire time so the data can be consistent after the key is expired.&lt;/p&gt;
+
+&lt;p&gt;Even though all the test result is expected, it doesn’t make sure the implementation is correct, since there are still many situation I didn’t test, like Redis cluster, network partition, database failure and so on. So welcome to add new test cases and break the system!&lt;/p&gt;</content><author><name/></author><category term="Redis"/><category term="database"/><category term="consistency"/><category term="Jepsen"/><category term="distributed system"/><summary type="html">This article belongs to a series of articles about caching. The code in this article can be found at my Github repo.</summary></entry><entry><title type="html">Keep Data Consistency During Database Migration</title><link href="https://www.binwang.me/2020-11-29-Keep-Data-Consistency-During-Database-Migration.html" rel="alternate" type="text/html" title="Keep Data Consistency During Database Migration"/><published>2020-11-29T00:00:00-05:00</published><updated>2020-11-29T00:00:00-05:00</updated><id>https://www.binwang.me/Keep-Data-Consistency-During-Database-Migration</id><content type="html" xml:base="https://www.binwang.me/2020-11-29-Keep-Data-Consistency-During-Database-Migration.html">&lt;p&gt;When a system has been live for a long time, it’s not rare to use newer technologies to improve performance, maintainability, or add new features. One of such changes can be which database to use. This can be the most difficult kind of change. During the migration, there are two data sources, which makes it a distributed system. Make data consistent under a distributed system is very hard and can easily go wrong. In this article, we will explore a way to keep the data consistent during the migration, and maintain a low downtime at the same time.&lt;/p&gt;
+
+&lt;h2 id="requirements"&gt;Requirements&lt;/h2&gt;
+
+&lt;p&gt;There are some requirements in order to use the way described in this article:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The source database support capture data change (CDC) method like MySQL bin log.&lt;/li&gt;
+  &lt;li&gt;The source database can be dumped with a consistent view and mark the position in data change logs.&lt;/li&gt;
+  &lt;li&gt;The target database support ACID transactions.&lt;/li&gt;
+  &lt;li&gt;Both source and target database support read and write permission control.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id="steps"&gt;Steps&lt;/h2&gt;
+
+&lt;p&gt;There are two basic ideas behind the steps:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The clients only write to one of the databases at a given time. So we can avoid distributed transaction which is error prone and slow.&lt;/li&gt;
+  &lt;li&gt;We make the switch of database by setup the database permissions. It’s faster than switch from client code and easier to make sure to switch all the clients.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Here are the detailed steps:&lt;/p&gt;
+
+&lt;h3 id="1-dump-the-source-database-to-target-database"&gt;1. Dump the source database to target database&lt;/h3&gt;
+
+&lt;p&gt;First, we need to dump the source database with a consistent view. And mark the position we’ve dumped. For example, in MySQL, you can use &lt;code&gt;mysqldump&lt;/code&gt; with &lt;code&gt;--master-data&lt;/code&gt; to dump the database with a bin log position. (&lt;a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_master-data"&gt;Document about the usage&lt;/a&gt;). After we get all the data from source database, we can insert them into the target database.&lt;/p&gt;
+
+&lt;p&gt;Since this is the first step, it’s very easy to handle failure: just start again from beginning. So it’s very important to capture any error while import the dumped data.&lt;/p&gt;
+
+&lt;h3 id="2-capture-changes-from-source-to-target"&gt;2. Capture changes from source to target&lt;/h3&gt;
+
+&lt;p&gt;The next step is to use the capture data changes from the source database. For example, in MySQL, you can use &lt;a href="https://dev.mysql.com/doc/refman/8.0/en/binary-log.html"&gt;bin log&lt;/a&gt; to capture the changes and insert them to the target database. Since we have the start position from last step, we know where to start parse and import the changes.&lt;/p&gt;
+
+&lt;p&gt;It’s very important to keep order of the changes while importing. So it’s better to use only one process to parse and import the changes. This part is challenging: the performance matters here. &lt;strong&gt;The time to sync all the changes is the downtime we need for migration&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;We also need to make sure we don’t miss any changes or import any changes multiple times even there are system failures. So it’s very important to record the change log position. It’s convenience to write the position into the target database with the same transaction that imports the data. So the position will be synced with the data we imported.&lt;/p&gt;
+
+&lt;h3 id="3-deny-writes-to-the-target-database-from-clients"&gt;3. Deny writes to the target database from clients&lt;/h3&gt;
+
+&lt;p&gt;The easy way to keep data consistency is to have a single source of truth. Until now, we are using the source database as the source of truth and sync changes to the target database. We don’t want to mess up the target database with other writes. So we need to setup the target database permission to deny all the writes from clients. For example, in MySQL, you can grant only &lt;code&gt;select&lt;/code&gt; permission to the table for the clients and deny other operations. We allow the read permission so that we can compare the read results at the next step.&lt;/p&gt;
+
+&lt;h3 id="4-modify-the-clients-to-read-and-write-both-databases"&gt;4. Modify the clients to read and write both databases&lt;/h3&gt;
+
+&lt;p&gt;The next step is to make the clients to read and write both source and target databases.&lt;/p&gt;
+
+&lt;p&gt;We want to read/write source database first. Use this result if there is no permission error, use the read/write result from target database otherwise.&lt;/p&gt;
+
+&lt;p&gt;The read/write to target database has two purposes:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Before switch to the target database, we can verify the target database works as expected by compare read results and write operations. Note that the target database may have lag to sync up, so the results may not always the same. But we can have an understanding of the correctness based on the percentage of same results.&lt;/li&gt;
+  &lt;li&gt;After we switch to the target database, the read/write results will be used as the real results.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;If you want to make sure the target database can handle the load, it’s a good idea to allow read/write to the target database for a while .But it’s just as a verification, the data in the target database will not be consistent after that. So after we verify the target database can handle the traffic, we need to cleanup the target database and start from step 1 again.&lt;/strong&gt; (We don’t need to modify the client code during the steps).&lt;/p&gt;
+
+&lt;p&gt;For the error handling, there are two key points:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Only use target database result if there is permission error from source database. Throw other errors from source database.&lt;/li&gt;
+  &lt;li&gt;Ignore errors for the target database if the result is not used but make sure to log them, so that it will not affect the current operation while also make sure we don’t have errors before the switch.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The client code would be like this:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt; &lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;db_operation() {
+&lt;span class="line-numbers"&gt; &lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;  try {
+&lt;span class="line-numbers"&gt; &lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;    source_result = source_db_operation()
+&lt;span class="line-numbers"&gt; &lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;  } catch (PermissionException e) {
+&lt;span class="line-numbers"&gt; &lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;    return target_db_operation()
+&lt;span class="line-numbers"&gt; &lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt;  }
+&lt;span class="line-numbers"&gt; &lt;a href="#n7" name="n7"&gt;7&lt;/a&gt;&lt;/span&gt;  async {
+&lt;span class="line-numbers"&gt; &lt;a href="#n8" name="n8"&gt;8&lt;/a&gt;&lt;/span&gt;    // do the following things async so it will not impact the performance
+&lt;span class="line-numbers"&gt; &lt;a href="#n9" name="n9"&gt;9&lt;/a&gt;&lt;/span&gt;    try {
+&lt;span class="line-numbers"&gt;&lt;strong&gt;&lt;a href="#n10" name="n10"&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;      target_result = target_db_operation()
+&lt;span class="line-numbers"&gt;&lt;a href="#n11" name="n11"&gt;11&lt;/a&gt;&lt;/span&gt;      compare_result(source_result, target_result)
+&lt;span class="line-numbers"&gt;&lt;a href="#n12" name="n12"&gt;12&lt;/a&gt;&lt;/span&gt;    } catch (Exception e) {
+&lt;span class="line-numbers"&gt;&lt;a href="#n13" name="n13"&gt;13&lt;/a&gt;&lt;/span&gt;      log_error(e)
+&lt;span class="line-numbers"&gt;&lt;a href="#n14" name="n14"&gt;14&lt;/a&gt;&lt;/span&gt;    }
+&lt;span class="line-numbers"&gt;&lt;a href="#n15" name="n15"&gt;15&lt;/a&gt;&lt;/span&gt;  }
+&lt;span class="line-numbers"&gt;&lt;a href="#n16" name="n16"&gt;16&lt;/a&gt;&lt;/span&gt;  return source_result
+&lt;span class="line-numbers"&gt;&lt;a href="#n17" name="n17"&gt;17&lt;/a&gt;&lt;/span&gt;}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h3 id="5-deny-access-to-the-source-database-from-clients-and-wait-for-changes-to-by-synced"&gt;5. Deny access to the source database from clients and wait for changes to by synced&lt;/h3&gt;
+
+&lt;p&gt;After we are confident with the read and write to the target database, we can make the switch. We switch the database by change the database permissions. First, we deny all the access to the source database from clients. Then we wait for the changes to be full synced to the target database. During this time, the system is down. So how fast the changes are synced from source database to target database determines how much down time it will be.&lt;/p&gt;
+
+&lt;h3 id="6-allow-write-to-target-database"&gt;6. Allow write to target database&lt;/h3&gt;
+
+&lt;p&gt;After the target database is fully synced, we can enable the target database permission for all the clients. After this, the system should be online again and the database is fully switched over.&lt;/p&gt;
+
+&lt;h3 id="7-optional-fallback-to-source-database-if-anything-goes-wrong"&gt;7. Optional: Fallback to source database if anything goes wrong&lt;/h3&gt;
+
+&lt;p&gt;It’s good if everything works well so far. But that may not always the case. Maybe the target database cannot handle the new traffic (that’s why it’s important to test it in step 4). In this case, we need fallback to the source database.&lt;/p&gt;
+
+&lt;p&gt;If it’s fine to lost committed data during the migration time, it would be relatively easy to fallback:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Allow access to the source database. After this, the clients should be using the source database again.&lt;/li&gt;
+  &lt;li&gt;Cleanup the target database and start from the beginning.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;If it’s critical to save the committed data and make sure they are consistent, then before step 5, we should setup a mechanism to capture changes from target database to source database, and mark the change position after step 6. Then the fallback steps would be:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Deny all the writes to target database.&lt;/li&gt;
+  &lt;li&gt;Sync from target database to source database (make sure to stop it after fully synced).&lt;/li&gt;
+  &lt;li&gt;Allow access to the source database.&lt;/li&gt;
+  &lt;li&gt;Cleanup the target database and start from the beginning again.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The sync from target database to source database is very dangerous and hard to test, so it’s really important to test the target database can handle the operations in step 4.&lt;/p&gt;
+
+&lt;h3 id="8-cleanup-client-code"&gt;8. Cleanup client code&lt;/h3&gt;
+
+&lt;p&gt;Once the database is switched to the target database, we can cleanup the code that access the source database. Then the database is fully migrated and you can enjoin it!&lt;/p&gt;</content><author><name/></author><category term="database"/><category term="distributed system"/><category term="consistency"/><summary type="html">When a system has been live for a long time, it’s not rare to use newer technologies to improve performance, maintainability, or add new features. One of such changes can be which database to use. This can be the most difficult kind of change. During the migration, there are two data sources, which makes it a distributed system. Make data consistent under a distributed system is very hard and can easily go wrong. In this article, we will explore a way to keep the data consistent during the migration, and maintain a low downtime at the same time.</summary></entry><entry><title type="html">DNS Resolving Bug in iOS 14</title><link href="https://www.binwang.me/2020-11-08-DNS-Resolving-Bug-in-iOS-14.html" rel="alternate" type="text/html" title="DNS Resolving Bug in iOS 14"/><published>2020-11-08T00:00:00-05:00</published><updated>2020-11-08T00:00:00-05:00</updated><id>https://www.binwang.me/DNS-Resolving-Bug-in-iOS-14</id><content type="html" xml:base="https://www.binwang.me/2020-11-08-DNS-Resolving-Bug-in-iOS-14.html">&lt;h2 id="the-bug-description"&gt;The Bug Description&lt;/h2&gt;
+
+&lt;p&gt;iOS 14 has a bug for DNS resolving under this circumstances:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Manually specify a custom DNS server for a WiFi network.&lt;/li&gt;
+  &lt;li&gt;For a domain, this custom DNS server has different DNS record than the default public DNS server.&lt;/li&gt;
+  &lt;li&gt;The DNS record type of this domain is CNAME on public DNS server.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Under this setup, after connecting to WiFi with custom DNS, iOS 14 should get the IP for this domain according the record on custom DNS server. However, it still gets the IP that’s on public DNS server.&lt;/p&gt;
+
+&lt;p&gt;Here is an example. The table below shows the DNS records on public DNS servers:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style="text-align: left"&gt;Domain&lt;/th&gt;
+      &lt;th style="text-align: left"&gt;DNS Record Type&lt;/th&gt;
+      &lt;th style="text-align: left"&gt;Value&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style="text-align: left"&gt;domain-1&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;CNAME&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;domain-2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style="text-align: left"&gt;domain-2&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;A&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;1.1.1.1&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;So &lt;code&gt;domain-1&lt;/code&gt; will be resolved to &lt;code&gt;1.1.1.1&lt;/code&gt; by using the default public DNS server.&lt;/p&gt;
+
+&lt;p&gt;Then we have a custom DNS server, which modifies record for &lt;code&gt;domain-1&lt;/code&gt;. For other records, it uses the upstream ones:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style="text-align: left"&gt;Domain&lt;/th&gt;
+      &lt;th style="text-align: left"&gt;DNS Record Type&lt;/th&gt;
+      &lt;th style="text-align: left"&gt;Value&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style="text-align: left"&gt;domain-1&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;A&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;2.2.2.2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style="text-align: left"&gt;domain-2&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;A&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;1.1.1.1&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;So if you use the custom DNS server, &lt;code&gt;domain-1&lt;/code&gt; should be resolved to &lt;code&gt;2.2.2.2&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;However in iOS 14, even if you manually specify the custom DNS server for the WiFi network, &lt;code&gt;domain-1&lt;/code&gt; is still resolved to &lt;code&gt;1.1.1.1&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;I guess this is because of DNS cache problem. I tried to clean up the DNS cache by changing my device to airplane mode, reboot the device, or stay in the WiFi with custom DNS for days. Despite all the attempts, the problem still exists.&lt;/p&gt;
+
+&lt;p&gt;I filled a bug report to Apple but didn’t get any response after almost one month. So I think I can share it here so it may help someone else with the same problem.&lt;/p&gt;
+
+&lt;h2 id="how-do-i-know-its-not-the-problem-of-my-dns-setup"&gt;How Do I know It’s not the Problem of My DNS Setup&lt;/h2&gt;
+
+&lt;p&gt;The setup above works on every other devices I have (Linux devices, MacOS devices). It also works on the same iOS device before I upgraded it to iOS 14. I also installed the app &lt;a href="https://apps.apple.com/us/app/network-analyzer-pro/id557405467"&gt;Network Analyzer Pro&lt;/a&gt; to debug the setup. In Network Analyzer Pro, if I use the DNS resolving tool with the custom DNS server, it can resolve the right IP address. But if I ping the domain directly, it resolved to the wrong IP. So there is something wrong at the system level of iOS 14.&lt;/p&gt;
+
+&lt;h2 id="workaround"&gt;Workaround&lt;/h2&gt;
+
+&lt;p&gt;This bug is very frustrating. I spent lots of time to identify what’s the issue: for the application, to the permission setup (iOS 14 has a new local network permission), to the system. And finally found it’s iOS system DNS resolving problem and found a workaround.&lt;/p&gt;
+
+&lt;p&gt;The workaround is to add a DNS record for the domain behind CNAME (in this case &lt;code&gt;domain-2&lt;/code&gt;) into the custom DNS server:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style="text-align: left"&gt;Domain&lt;/th&gt;
+      &lt;th style="text-align: left"&gt;DNS Record Type&lt;/th&gt;
+      &lt;th style="text-align: left"&gt;Value&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style="text-align: left"&gt;domain-1&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;A&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;2.2.2.2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style="text-align: left"&gt;domain-2&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;A&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;2.2.2.2&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;However, if you have multiple domains point to &lt;code&gt;domain-2&lt;/code&gt; and don’t want to change IP addresses for those domains, this workaround may not be able to support that use case.&lt;/p&gt;
+
+&lt;h2 id="a-little-more-story"&gt;A Little More Story&lt;/h2&gt;
+
+&lt;p&gt;It may looks weird that I have a DNS setup like this. I host some services on my desktop machine. Because of my home router provided by ISP disabled NAT loopback (which means the router denies all the traffic that comes from itself), I must use the IP address in local network to access the services if my devices are in the same network. So I setup a custom DNS server that resolves the service domains to my desktop’s internal IP address, and use this DNS server when I’m using home WiFi.&lt;/p&gt;
+
+&lt;p&gt;I depend on this workflow heavily. Everything worked smoothly until I upgraded to iOS 14. For more than 1 month, under the home WiFi connection (which is most of the time because of CoVID-19), I cannot sync my calendar or notes, or fetch an E-Book from my collections to iPad, or upload my photos automatically, or chat with my friends on phone, and so on. It’s very frustrating and is still not fixed after two version upgrades of iOS 14.&lt;/p&gt;
+
+&lt;p&gt;After my previous Android phone broken, I decided to buy an old generation iPhone. One big reason is it’s really cheap with the carrier contract. I’m trying to reduce my time on phones so an old generate is more than enough. In many ways it’s much better than an Android phone: for an Android phone, I need so many tweaks to make sure it respects my privacy and apps not running at background all the time. And after that, many apps are not usable or don’t have proper notifications. On contrast, Apple controls the ecosystem strongly to make sure the developers don’t abuse the system. But on the other hand, Apple also controls the users strongly. It’s hard to downgrade the system. It’s hard to debug the system. It’s even hard to submit a bug report: you need to enroll Beta profile and use an app to submit it. (I’m not sure if there are other ways but it’s the suggested way on Apple’s website). With an Apple mobile device, I feel more like renting it instead of owning it. I really hope one day there is a device that’s both open to users and have a strong permission management to limit the app behaviors (including the apps owned by device provider). It must be hard based on the user base, but doesn’t hurt to have some hopes.&lt;/p&gt;</content><author><name/></author><category term="DNS"/><category term="iOS"/><category term="technology"/><category term="self hosted"/><summary type="html">The Bug Description</summary></entry><entry><title type="html">Use TLA+ to Verify Cache Consistency</title><link href="https://www.binwang.me/2020-11-02-Use-TLA+-to-Verify-Cache-Consistency.html" rel="alternate" type="text/html" title="Use TLA+ to Verify Cache Consistency"/><published>2020-11-02T00:00:00-05:00</published><updated>2020-11-02T00:00:00-05:00</updated><id>https://www.binwang.me/Use-TLA+-to-Verify-Cache-Consistency</id><content type="html" xml:base="https://www.binwang.me/2020-11-02-Use-TLA+-to-Verify-Cache-Consistency.html">&lt;blockquote&gt;
+  &lt;p&gt;There are only two hard things in Computer Science: cache invalidation and naming things.&lt;/p&gt;
+
+  &lt;p&gt;– Phil Karlton&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;em&gt;This article belongs to a series of articles about caching.&lt;/em&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;em&gt;Use TLA+ to Verify Cache Consistency (This one)&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;&lt;a href="2020-12-14-Redis-Implementation-for-Cache-and-Database-Consistency.html"&gt;Redis Implementation for Cache and Database Consistency&lt;/a&gt;&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;During web service development, it’s very usual to use a cache before the database. It’s so common that almost becomes the default solution whenever there is a performance issue. But a lot of people don’t really think about the consistency between database and cache. A main reason is it’s so hard to reason about the consistency under a distributed system. So in this article, I will explore how to use TLA+ to specify different cache algorithms and use TLC to check whether it will keep the data consistency between cache and database. All the code in this article is available at &lt;a href="https://github.com/wb14123/tla-cache"&gt;my Github repo&lt;/a&gt;. The code may be updated after this article is published.&lt;/p&gt;
+
+&lt;h2 id="system-architecture"&gt;System Architecture&lt;/h2&gt;
+
+&lt;p&gt;Let’s first describe the normal architecture of the cache and database system. Normally, a web service query data from a database and save data to it. The service itself usually doesn’t store any stateful data. This makes it’s very easy to scale up: just start a bunch of servers and put them behind a load balancer. But for the database, it’s not so easy. It’s usually very hard to scale up a database. So when the performance of the database is an issue, we usually put a cache before it. The cache stores everything in memory so it would be much faster and can handle much more requests than a traditional database that needs to persistent everything. When we read data, we read cache first and only load it from database if there is no data in cache. When save data, we must persistent the data to database. Here is a graph about what this architecture looks like:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;web_server_1
+&lt;span class="line-numbers"&gt;&lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;web_server_2
+&lt;span class="line-numbers"&gt;&lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;web_server_3  &amp;lt;--&amp;gt; cache &amp;lt;--&amp;gt; database
+&lt;span class="line-numbers"&gt;&lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;...
+&lt;span class="line-numbers"&gt;&lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;web_server_n
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We need to notice this is a different architecture than the cache of CPU. In multi-core CPUs, each core has it’s own cache instead of having a shared cache, which looks like this:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;core_1 &amp;lt;--&amp;gt; cache_1
+&lt;span class="line-numbers"&gt;&lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;core_2 &amp;lt;--&amp;gt; cache_2
+&lt;span class="line-numbers"&gt;&lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;core_3 &amp;lt;--&amp;gt; cache_3  &amp;lt;---&amp;gt; main memory
+&lt;span class="line-numbers"&gt;&lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;...
+&lt;span class="line-numbers"&gt;&lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;core_n &amp;lt;--&amp;gt; cache_n
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Because of the differences of architectures, consistency and latency requirements, they usually needs different solutions. In this article, we only talk about the cache algorithms for web services.&lt;/p&gt;
+
+&lt;h2 id="cache-algorithms"&gt;Cache Algorithms&lt;/h2&gt;
+
+&lt;p&gt;The cache algorithms are very simple. When read data, read data from cache first. If there is no data in cache, read from database and write it back to cache. When write data, because normally database has stronger consistency model and can persistent data better, we usually write to database first, then write to cache or invalidate cache. In our example, we invalidate data after write since it’s the most widely used one and has less consistency issues.&lt;/p&gt;
+
+&lt;p&gt;This is the pseudocode for this algorithm:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt; &lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;read(key) {
+&lt;span class="line-numbers"&gt; &lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;    cache = readCache(key)
+&lt;span class="line-numbers"&gt; &lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;    if (cache != null) {
+&lt;span class="line-numbers"&gt; &lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;        return cache
+&lt;span class="line-numbers"&gt; &lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;    }
+&lt;span class="line-numbers"&gt; &lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt;    data = readDB(key)
+&lt;span class="line-numbers"&gt; &lt;a href="#n7" name="n7"&gt;7&lt;/a&gt;&lt;/span&gt;    writeCache(key, data)
+&lt;span class="line-numbers"&gt; &lt;a href="#n8" name="n8"&gt;8&lt;/a&gt;&lt;/span&gt;    return data
+&lt;span class="line-numbers"&gt; &lt;a href="#n9" name="n9"&gt;9&lt;/a&gt;&lt;/span&gt;}
+&lt;span class="line-numbers"&gt;&lt;strong&gt;&lt;a href="#n10" name="n10"&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt;&lt;a href="#n11" name="n11"&gt;11&lt;/a&gt;&lt;/span&gt;write(key, value) {
+&lt;span class="line-numbers"&gt;&lt;a href="#n12" name="n12"&gt;12&lt;/a&gt;&lt;/span&gt;    writeDB(key, value)
+&lt;span class="line-numbers"&gt;&lt;a href="#n13" name="n13"&gt;13&lt;/a&gt;&lt;/span&gt;    invalidateCache(key)
+&lt;span class="line-numbers"&gt;&lt;a href="#n14" name="n14"&gt;14&lt;/a&gt;&lt;/span&gt;}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2 id="tla-specification"&gt;TLA+ Specification&lt;/h2&gt;
+
+&lt;p&gt;Once we have the algorithm in mind, we can write a TLA+ specification and let TLC to check whether it has the properties we want. A TLA+ specification is not a 100% map from the system, it’s an abstraction that omits irrelevant details. In our specification, we make two key abstractions:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Data is inconsistent between cache and database if one row is inconsistent. So in the specification, we only care about one row. Which means we don’t need the parameter for &lt;code&gt;key&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;In the specification, we don’t care about what’s the actual value as long as each client writes different values. So we let the client write it’s own ID as the value. Thus we can also omit &lt;code&gt;value&lt;/code&gt; from write behavior.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We need also to notice that if we write multiple state changes in one TLA+ statement, it means those state changes are atomic. In the code, we assume read/write cache/database is atomic while others are not, which means each line is an atomic operation but the lines between them are not. So for each of the lines, we should write separate statements.&lt;/p&gt;
+
+&lt;p&gt;So keeping this in mind, we have these variables for our specification:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;CONSTANT CLIENTS
+&lt;span class="line-numbers"&gt;&lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;VARIABLE cache, db, cacheResults, dbResults, cacheWritten, states
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;CLIENTS: all the clients&lt;/li&gt;
+  &lt;li&gt;cache: the value in cache&lt;/li&gt;
+  &lt;li&gt;db: the value in database&lt;/li&gt;
+  &lt;li&gt;cacheResults: read cache results for each client&lt;/li&gt;
+  &lt;li&gt;dbResults: read DB results for each client&lt;/li&gt;
+  &lt;li&gt;cacheWritten: whether the cache has been written.&lt;/li&gt;
+  &lt;li&gt;states: the state of clients&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The reason we want to have a variable &lt;code&gt;cacheWritten&lt;/code&gt; is, we want to make sure the algorithm really wrote to the cache. Otherwise it would be simple to keep data consistent by not using the cache at all. (We don’t check this property in this article, but it’s not hard to add that).&lt;/p&gt;
+
+&lt;p&gt;For &lt;code&gt;states&lt;/code&gt;, we want all client start with &lt;code&gt;free&lt;/code&gt; and ends with &lt;code&gt;done&lt;/code&gt; when read/write is done. It can go from &lt;code&gt;done&lt;/code&gt; to &lt;code&gt;free&lt;/code&gt; again to start another read/write.&lt;/p&gt;
+
+&lt;p&gt;Then we have &lt;code&gt;Null&lt;/code&gt; value for no data in cache or database, &lt;code&gt;InitValue&lt;/code&gt; for any value that exists before the system is running, and all the data that could be put into cache and database;&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;Null == &amp;quot;null&amp;quot;
+&lt;span class="line-numbers"&gt;&lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;InitValue == &amp;quot;init&amp;quot;
+&lt;span class="line-numbers"&gt;&lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;Data == CLIENTS \union {Null, InitValue}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Once these basic values are ready, it’s not hard to write the specification for cache and database interface. The specification of it is in &lt;a href="https://github.com/wb14123/tla-cache/blob/master/CacheInterface.tla"&gt;CacheInterface.tla&lt;/a&gt;. Then we can use the interface to specify the algorithm described above: &lt;a href="https://github.com/wb14123/tla-cache/blob/master/WriteInvalidateCache.tla"&gt;WriteInvalidateCache.tla&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Finally, we want to also specify what property we want for our system. We want the data in cache and database to be consistent. It would be very hard to make them to be the same all the time. So we make a reasonable weaker statement: we want to make sure once all the clients are done, either the cache doesn’t have any data, or it has the same data as in database:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;AllDone == \A c \in CLIENTS: states[c] = &amp;quot;done&amp;quot;
+&lt;span class="line-numbers"&gt;&lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;Consistency == IF AllDone THEN (cache = db \/ cache = Null) ELSE TRUE
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We can put the specification and all the properties we want to check into a TLC model config file &lt;a href="https://github.com/wb14123/tla-cache/blob/master/WriteInvalidateCache.cfg"&gt;WriteInvalidateCache.cfg&lt;/a&gt; and let TLC to check it:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;tlc WriteInvalidateCache
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After running this, it will show it violates &lt;code&gt;Consistency&lt;/code&gt;, and also show all the sequences to reach the violation. In this way, we know this algorithm cannot guarantee consistency between cache and database.&lt;/p&gt;
+
+&lt;h2 id="a-better-algorithm"&gt;A Better Algorithm&lt;/h2&gt;
+
+&lt;p&gt;An algorithm that makes data possible to be inconsistent doesn’t necessary makes it a bad algorithm. It maybe faster than stronger consistent algorithms and some application is fine with stale data. It all depends on the use case. What makes it a bad algorithm is people use it without truly understand it.&lt;/p&gt;
+
+&lt;p&gt;In this section, I’ll introduce an algorithm with better consistency. It’s introduced by the paper &lt;a href="https://pdos.csail.mit.edu/6.824/papers/memcache-fb.pdf"&gt;Scaling Memcache at Facebook&lt;/a&gt;. In this algorithm, if there is a cache miss during read, the cache server will return a lease token to client. A newer token or the invalidate of the cache will make previous token invalidate. The client can only write cache if it has a valid token.&lt;/p&gt;
+
+&lt;p&gt;I implemented the specification of this algorithm in &lt;a href="https://github.com/wb14123/tla-cache/blob/master/WriteInvalidateLease.tla"&gt;WriteInvalidateLease.tla&lt;/a&gt; and the model config &lt;a href="https://github.com/wb14123/tla-cache/blob/master/WriteInvalidateLease.cfg"&gt;WriteInvalidateLease.cfg&lt;/a&gt;. If you run the TLC checker on it:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;tlc WriteInvalidateLease
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You will find it passed the check. Because we specify two clients in &lt;code&gt;WriteInvalidateLease.cfg&lt;/code&gt;, so it means it meets the &lt;code&gt;Consistency&lt;/code&gt; requirement with two concurrent clients:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;CLIENTS = {&amp;quot;c1&amp;quot;, &amp;quot;c2&amp;quot;}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You can make it as many clients as you want. But increase one client will increase the checking time a lot. Usually 3 clients is enough. It will not guarantee it meets the property under unlimited clients (we need formal proof to do that), but it will give us much higher confidence on the algorithm.&lt;/p&gt;
+
+&lt;h2 id="what-else-can-go-wrong"&gt;What Else Can Go Wrong&lt;/h2&gt;
+
+&lt;p&gt;In the algorithm above, we can see the data in cache and database can be consistent once the client has done the work. But it doesn’t say any thing about client failure. Because the client write to database then invalid the cache, if the client is down during these two operations, it will not invalid the cache so it will have stale data. To specify this in TLA+, we can add two behaviors into Next:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;Failure(c) == /\ states' = [states EXCEPT ![c] = &amp;quot;fail&amp;quot;]
+&lt;span class="line-numbers"&gt;&lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;              /\ UNCHANGED &amp;lt;&amp;lt;cache, db, cacheResults, dbResults, cacheWritten, lease&amp;gt;&amp;gt;
+&lt;span class="line-numbers"&gt;&lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt;&lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;Recover(c) == /\ states[c] = &amp;quot;fail&amp;quot;
+&lt;span class="line-numbers"&gt;&lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;              /\ states' = [states EXCEPT ![c] = &amp;quot;start&amp;quot;]
+&lt;span class="line-numbers"&gt;&lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt;              /\ UNCHANGED &amp;lt;&amp;lt;cache, db, cacheResults, dbResults, cacheWritten, lease&amp;gt;&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Since it’s much less likely for the server to not graceful shutdown, this problem is much smaller than the previous one. And the effect can be limited by having a TTL for cache. However, you need to understand that to know if the algorithm really meets your need.&lt;/p&gt;
+
+&lt;p&gt;Another thing need to notice is the consistency property we defined above is a really weak one. It doesn’t guarantee you always read the newest data.&lt;/p&gt;
+
+&lt;h2 id="conclusion"&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;In this article, we can see how easy a cache algorithm can go wrong and how to use TLA+ to specify and verify it. Based on the specification examples above, you can verify any cache algorithm you like: for example, instead of invalidate the cache after write to database, update the cache and see how it works.&lt;/p&gt;
+
+&lt;p&gt;In next articles, I will write an implementation for Redis to use the lease token algorithm. And compare the performance between database and cache to see if we really need to use cache in some use cases.&lt;/p&gt;</content><author><name/></author><category term="TLA+"/><category term="cache"/><category term="database"/><category term="consistency"/><category term="algorithm"/><category term="distributed system"/><summary type="html">There are only two hard things in Computer Science: cache invalidation and naming things. – Phil Karlton</summary></entry><entry><title type="html">How to Estimate Max TPS from TPM</title><link href="https://www.binwang.me/2020-10-18-How-to-Estimate-Max-TPS-from-TPM.html" rel="alternate" type="text/html" title="How to Estimate Max TPS from TPM"/><published>2020-10-18T00:00:00-04:00</published><updated>2020-10-18T00:00:00-04:00</updated><id>https://www.binwang.me/How-to-Estimate-Max-TPS-from-TPM</id><content type="html" xml:base="https://www.binwang.me/2020-10-18-How-to-Estimate-Max-TPS-from-TPM.html">&lt;p&gt;It’s good to understand the TPS (transaction per second) of a service. But sometimes we only have TPM (transaction per minute) metrics. It may because we don’t have TPS metric at all since it needs resources to compute, or it has been deleted because storing all the historical per second metrics needs a lot of storage space. So we need to estimate TPS from TPM (or even longer time period, which the method below also applies). It’s not hard to get an average TPS from TPM: just divide TPM by 60. However, because the database and the dependency services have a limit on how many concurrent requests it can handle, we also need to understand what’s the max TPS. In this article, we will explore how to do that.&lt;/p&gt;
+
+&lt;p&gt;We have an assumption before we go to the solution: we assume that in the time period of one minute, the requests to the service has the same probability to happen at any time. In another word, the requests are independently of the time since last request. This means the time of the requests is a uniform distribution. This is a reasonable assumption: though most services has peak requests during a day, it tends to be distributed evenly in a short period like one minute,. We need to notice that the equal of probability doesn’t mean all the requests &lt;strong&gt;will&lt;/strong&gt; arrive evenly in the minute, otherwise max TPS will be the same as average TPS.&lt;/p&gt;
+
+&lt;p&gt;With this assumption in mind, we can use &lt;a href="https://en.wikipedia.org/wiki/Poisson_distribution"&gt;Poisson distribution&lt;/a&gt; to solve this problem. The probability of how many times the event occurs in the interval of time can be solved by this:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\(P(TPS=k) =  \frac{\lambda^k e^{-k}}{k!}\)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\(k\)&lt;/span&gt; means how many times the event happens in the interval of time. &lt;span&gt;\(\lambda\)&lt;/span&gt; means the average of times that the event will occur in the interval.&lt;/p&gt;
+
+&lt;p&gt;In our case, the interval of time is 1 second. So &lt;span&gt;\(\lambda\)&lt;span&gt; is the average TPS: &lt;span&gt;\(TPM / 60\)&lt;/span&gt;. And &lt;span&gt;\(P(k)\)&lt;/span&gt; means the probability of the TPS during this minute.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;So we have the probability of the TPS. But what we want is the max TPS. If we want to know what’s the probability of max TPS equals n, we can add all the probabilities of TPS under n:&lt;/p&gt;
+
+&lt;p&gt;&lt;span&gt;\(P(max TPS = n) = \sum_{k=0}^{n} P(TPS=k) = \sum_{k=0}^{n} \frac{\lambda^k e^{-k}}{k!}\)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;Then we can draw a graph of this function and select n that makes the probability almost to 1. I recommend &lt;a href="https://www.wolframalpha.com"&gt;Wolfram Alpha&lt;/a&gt; to draw the graph. Though it needs paid version to show a more clear graph, the free version is enough for our use case.&lt;/p&gt;
+
+&lt;p&gt;Let’s give an example. Suppose we find our max TPM during peak time is 1200, then the average TPS during that minute is 200, which means &lt;span&gt;\(\lambda = 200\)&lt;/span&gt;. Then we can draw a graph of &lt;span&gt;\(P(max TPS=n)\)&lt;/span&gt; with &lt;span&gt;\(\lambda = 200\)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/static/images/2020-10-18-How-to-Estimate-max-TPS-from-TPM/p-lambda-200.png" alt="p-lambda-200" /&gt;&lt;/p&gt;
+
+&lt;p&gt;From the graph, we can see a max TPS of 260 is a safety choice. And in this minute, about 50% of the chance that the TPS will above the average TPS 200.&lt;/p&gt;
+
+&lt;p&gt;Sometimes the dependency has a throttling mechanism. It may has a target throttling configuration as TPS, but actually count the throttling number by sub-second metrics like transactions per 100ms. (Ideally this shouldn’t be the case but sometimes that happens and we don’t always have control over dependency services). In this case, we need to count max transactions per 100ms. Which &lt;span&gt;\(\lambda = 20\)&lt;/span&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/static/images/2020-10-18-How-to-Estimate-max-TPS-from-TPM/p-lambda-20.png" alt="p-lambda-20" /&gt;&lt;/p&gt;
+
+&lt;p&gt;From the graph, we can see max transactions per 100ms would be more like 36. And when we provide a target throttling TPS, we should multiply this by 10 which is 360, a lot higher than 260.&lt;/p&gt;
+
+&lt;p&gt;The calculation above also applies when it count throttling number independently on multiple hosts. (Again, it should have a better throttling counting mechanism). For example, if the dependency service has 10 hosts and it chooses random host to handle the request, then we should count max TPS per host. Which &lt;span&gt;\(\lambda\)&lt;/span&gt; is also 20 and target TPS configuration should be 360 instead of 260.&lt;/p&gt;</content><author><name/></author><category term="probability theory"/><category term="math"/><category term="technology"/><summary type="html">It’s good to understand the TPS (transaction per second) of a service. But sometimes we only have TPM (transaction per minute) metrics. It may because we don’t have TPS metric at all since it needs resources to compute, or it has been deleted because storing all the historical per second metrics needs a lot of storage space. So we need to estimate TPS from TPM (or even longer time period, which the method below also applies). It’s not hard to get an average TPS from TPM: just divide TPM by 60. However, because the database and the dependency services have a limit on how many concurrent requests it can handle, we also need to understand what’s the max TPS. In this article, we will explore how to do that.</summary></entry><entry><title type="html">Understand Liveness and Fairness in TLA+</title><link href="https://www.binwang.me/2020-10-06-Understand-Liveness-and-Fairness-in-TLA.html" rel="alternate" type="text/html" title="Understand Liveness and Fairness in TLA+"/><published>2020-10-06T00:00:00-04:00</published><updated>2020-10-06T00:00:00-04:00</updated><id>https://www.binwang.me/Understand-Liveness-and-Fairness-in-TLA</id><content type="html" xml:base="https://www.binwang.me/2020-10-06-Understand-Liveness-and-Fairness-in-TLA.html">&lt;p&gt;Recently I’m learning &lt;a href="https://lamport.azurewebsites.net/tla/tla.html"&gt;TLA+&lt;/a&gt;: A language that can specify distributed and concurrent systems. Though it’s very different from most programming languages, the idea behind it is very simple: basically what it does is specifying a state machine. The &lt;a href="https://lamport.azurewebsites.net/tla/toolbox.html"&gt;TLA+ tool box&lt;/a&gt; has a model checker called TLC that can explore all the states of the state machine and check properties of the system. If the state space is too big or infinite, we can define a reasonable subset of it to check. So it will not always guarantee the correctness. However, the tool box also has a more advanced tool called TLA+ Proof System (TLAPS) to write formal proof like Coq. I highly recommend the &lt;a href="http://lamport.azurewebsites.net/video/videos.html"&gt;video course&lt;/a&gt; to learn TLA+. It’s short and includes TLC. I first started with The TLA+ Book &lt;em&gt;Specifying Systems&lt;/em&gt; which doesn’t include TLC, and I was wondering how specify a system can check properties of it.&lt;/p&gt;
+
+&lt;p&gt;Even though many programmers may not be very comfortable with the concept of TLA+ at first, it shouldn’t take a lot effort to write a specification. However, I did have some hard time to understand liveness and fairness in the last two videos. The video does a great job to define and explain it. But the example it uses is not very simple which adds a barrier to understand the concepts. In this article, I want to introduce a much simpler example, which makes it much easier to do experiment with it and see if your understanding is right.&lt;/p&gt;
+
+&lt;p&gt;This example is a very simple state machine, which state can go from &lt;code&gt;a&lt;/code&gt; to &lt;code&gt;b&lt;/code&gt; to &lt;code&gt;c&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;a -&amp;gt; b -&amp;gt; c
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The TLA+ code to specify it is also very simple:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt; &lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;VARIABLE state
+&lt;span class="line-numbers"&gt; &lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt; &lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;Init == state = &amp;quot;a&amp;quot;
+&lt;span class="line-numbers"&gt; &lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt; &lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;AToB == state = &amp;quot;a&amp;quot; /\ state' = &amp;quot;b&amp;quot;
+&lt;span class="line-numbers"&gt; &lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt;BToC == state = &amp;quot;b&amp;quot; /\ state' = &amp;quot;c&amp;quot;
+&lt;span class="line-numbers"&gt; &lt;a href="#n7" name="n7"&gt;7&lt;/a&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt; &lt;a href="#n8" name="n8"&gt;8&lt;/a&gt;&lt;/span&gt;Next == AToB \/ BToC
+&lt;span class="line-numbers"&gt; &lt;a href="#n9" name="n9"&gt;9&lt;/a&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt;&lt;strong&gt;&lt;a href="#n10" name="n10"&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;Spec == Init /\ [][Next]_state
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The specification defines what’s the possible states and steps of the system. This is &lt;strong&gt;safety property&lt;/strong&gt; which defines what a system can do. If we want to use TLC to check anything about this system, we need to select “Temporal formula” under “What is the behavior spec” and put “Spec” in it. For example, if we want to check &lt;code&gt;state&lt;/code&gt; is always be one of &lt;code&gt;a&lt;/code&gt;, &lt;code&gt;b&lt;/code&gt; or &lt;code&gt;c&lt;/code&gt;. We can check this formula in TLC as an invariance:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;state \in {&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The property we want to check in the system may not always be this simple. For example, we may want to check &lt;code&gt;state&lt;/code&gt; can be &lt;code&gt;c&lt;/code&gt; at some point. The property that defines what a system must satisfy is called &lt;strong&gt;liveness&lt;/strong&gt;. I found this name confusing at first. I think the reason it’s called liveness is because it usually defines what property a system can eventually reach, which means the system is making progress thus “liveness”.&lt;/p&gt;
+
+&lt;p&gt;So let’s define the liveness property that says the system can eventually reach the state &lt;code&gt;c&lt;/code&gt;. TLA+ uses &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt; to define the meaning of eventually, so the property can be written like this:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;&amp;lt;&amp;gt;(state = &amp;quot;c&amp;quot;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We can add this to TLC model’s properties field and run it to check if the system satisfies the property.&lt;/p&gt;
+
+&lt;p&gt;So far, if we run this against &lt;code&gt;Spec&lt;/code&gt;, TLC will report error. What happened? It turns out the specification not only specifies how the state can be changed in next state, but also specifies the state can be unchanged during steps. This makes it possible to interact with other systems. So the states of the system can stuck in one state forever and may never reaches &lt;code&gt;c&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;a -&amp;gt; b -&amp;gt; b -&amp;gt; b -&amp;gt; ....
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This doesn’t seem right. We don’t want the system stuck in one state forever. This is where fairness comes in. We can see in the situation above, the state is always in &lt;code&gt;b&lt;/code&gt;, which &lt;code&gt;BToC&lt;/code&gt; is enabled and we want it to be executed at some point:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;a -&amp;gt; b -&amp;gt; b -&amp;gt; b -&amp;gt; ... -&amp;gt; c
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;More specifically, we want the behavior to be executed at some point if it’s enabled continuously. This is called &lt;strong&gt;weak fairness&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;So let’s add weak fairness to all the next steps of our specification. Then &lt;code&gt;Spec&lt;/code&gt; changed in to this:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;Spec == Init /\ [][Next]_state /\ WF_state(Next)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;If we run TLC again, we can see &lt;code&gt;&amp;lt;&amp;gt;(state = "c")&lt;/code&gt; will pass the check.&lt;/p&gt;
+
+&lt;p&gt;So far so good. But let’s make our state machine a little more complex by adding a step from &lt;code&gt;b&lt;/code&gt; to &lt;code&gt;a&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;a &amp;lt;---&amp;gt; b --&amp;gt; c
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The corresponding TLA+ specification is like this:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt; &lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;VARIABLE state
+&lt;span class="line-numbers"&gt; &lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt; &lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;Init == state = &amp;quot;a&amp;quot;
+&lt;span class="line-numbers"&gt; &lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;AToB == state = &amp;quot;a&amp;quot; /\ state' = &amp;quot;b&amp;quot;
+&lt;span class="line-numbers"&gt; &lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;BToA == state = &amp;quot;b&amp;quot; /\ state' = &amp;quot;a&amp;quot;
+&lt;span class="line-numbers"&gt; &lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt;BToC == state = &amp;quot;b&amp;quot; /\ state' = &amp;quot;c&amp;quot;
+&lt;span class="line-numbers"&gt; &lt;a href="#n7" name="n7"&gt;7&lt;/a&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt; &lt;a href="#n8" name="n8"&gt;8&lt;/a&gt;&lt;/span&gt;Next == AToB \/ BToA \/ BToC
+&lt;span class="line-numbers"&gt; &lt;a href="#n9" name="n9"&gt;9&lt;/a&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt;&lt;strong&gt;&lt;a href="#n10" name="n10"&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;Spec == Init /\ [][Next]_state /\ WF_state(Next)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Let’s check &lt;code&gt;&amp;lt;&amp;gt;(state = "c")&lt;/code&gt; in TLC again, and we can find it failed. What’s happening now? It turns out even though the system will not stuck in one state forever, it can stuck in some of the states, in this case, &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;a -&amp;gt; b -&amp;gt; a -&amp;gt; b -&amp;gt; a -&amp;gt; b -&amp;gt; ....
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Sometimes this is the expected behaviour, but sometimes we want other steps have a chance to happen. In this case, we want to &lt;code&gt;BToC&lt;/code&gt; have a chance to happen if &lt;code&gt;state&lt;/code&gt; reached &lt;code&gt;b&lt;/code&gt; repeatedly:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;a -&amp;gt; b -&amp;gt; a -&amp;gt; b -&amp;gt; a -&amp;gt; b -&amp;gt; .... -&amp;gt; c
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We call this kind of property &lt;strong&gt;strong fairness&lt;/strong&gt;: if a behavior is enabled repeatedly, it should be executed at some point. So let’s add strong fairness to &lt;code&gt;BToC&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt;&lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;Spec == Init /\ [][Next]_state /\ WF_state(Next) /\ SF_state(BToC)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After this, the check of &lt;code&gt;&amp;lt;&amp;gt;(state = "c")&lt;/code&gt; can pass again.&lt;/p&gt;
+
+&lt;p&gt;Let’s sum it up. Liveness is a property that the system must satisfies and can be checked with TLC. It usually defines that the system can eventually reach a state. In this case, it’s &lt;code&gt;&amp;lt;&amp;gt;(state = "c")&lt;/code&gt;. Weak fairness is a part of the specification that says a behavior will eventually happen if it’s enabled continuously, which means &lt;code&gt;a -&amp;gt; b -&amp;gt; b -&amp;gt; b -&amp;gt; ... -&amp;gt; c&lt;/code&gt; in this example. Strong fairness is also a part of the specification, which says a behavior will eventually happen if it’s enabled repeatedly, which means &lt;code&gt;a -&amp;gt; b -&amp;gt; a -&amp;gt; b -&amp;gt; ... -&amp;gt; c&lt;/code&gt; in this case.&lt;/p&gt;</content><author><name/></author><category term="TLA+"/><category term="Formal Proof"/><category term="Distributed System"/><category term="liveness"/><category term="fairness"/><summary type="html">Recently I’m learning TLA+: A language that can specify distributed and concurrent systems. Though it’s very different from most programming languages, the idea behind it is very simple: basically what it does is specifying a state machine. The TLA+ tool box has a model checker called TLC that can explore all the states of the state machine and check properties of the system. If the state space is too big or infinite, we can define a reasonable subset of it to check. So it will not always guarantee the correctness. However, the tool box also has a more advanced tool called TLA+ Proof System (TLAPS) to write formal proof like Coq. I highly recommend the video course to learn TLA+. It’s short and includes TLC. I first started with The TLA+ Book Specifying Systems which doesn’t include TLC, and I was wondering how specify a system can check properties of it.</summary></entry><entry><title type="html">Aurora Database</title><link href="https://www.binwang.me/2020-09-16-Aurora-Database.html" rel="alternate" type="text/html" title="Aurora Database"/><published>2020-09-16T00:00:00-04:00</published><updated>2020-09-16T00:00:00-04:00</updated><id>https://www.binwang.me/Aurora-Database</id><content type="html" xml:base="https://www.binwang.me/2020-09-16-Aurora-Database.html">&lt;p&gt;I’m very interested in databases and distributed systems. It’s shocking that how less in depth articles about databases are on the Internet. I wrote an &lt;a href="/2018-07-29-A-Review-on-Spanner-and-Open-Source-Implementations.html"&gt;article about Spanner&lt;/a&gt; before and I’m very satisfied with that. So recently, I’m looking at another interesting database &lt;a href="https://aws.amazon.com/rds/aurora/"&gt;Aurora&lt;/a&gt;. This article is about it.&lt;/p&gt;
+
+&lt;p&gt;Aurora is a cloud based database from Amazon. It’s not as fancy as Spanner, which provides serializable and linearizable in a globally distributed system. Aurora is much more practice. In really life, most business don’t need global distributed database. They only need a database that can survive from a data center failure. In this case, Aurora can provide much higher throughput and much lower latency.&lt;/p&gt;
+
+&lt;p&gt;In this article, we will have a look at how Aurora implements transaction in a distributed system. And then we talk about how it gets a better performance than setups like MySQL replication.&lt;/p&gt;
+
+&lt;p&gt;The discussion of this article is based on the &lt;a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"&gt;AWS Aurora user manual&lt;/a&gt; and 2 papers that describes Aurora architecture:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://media.amazonwebservices.com/blog/2017/aurora-design-considerations-paper.pdf"&gt;Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://dl.acm.org/doi/abs/10.1145/3183713.3196937"&gt;Amazon Aurora: On Avoiding Distributed Consensus for I/Os, Commits, and Membership Changes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id="basic-properties-of-aurora"&gt;Basic Properties of Aurora&lt;/h2&gt;
+
+&lt;p&gt;Aurora has both single master and multi-master setup. Multi-master setup provides weaker isolation levels, and there are less papers and resources about it. So we will focus on single master setup in this article. With this single master setup, Aurora can provide serializable isolation.&lt;/p&gt;
+
+&lt;p&gt;By master node, I mean the database node in Aurora. Aurora has a database node and multiple storage nodes. The database node receives client requests and sends WAL logs to each storage node. Storage nodes process WAL logs and write buffers/pages independently.&lt;/p&gt;
+
+&lt;h2 id="how-transaction-is-implemented"&gt;How Transaction Is Implemented&lt;/h2&gt;
+
+&lt;p&gt;The most interesting part of a distributed system is how it keeps data consistent. This is the most difficult and error-prone part:  if the performance is bad, it’s obvious. But if the transaction is implemented in the wrong way, the data looks good at most of the time. Once the race condition is triggered, the data is corrupt and it’s very hard to debug and find the reason.&lt;/p&gt;
+
+&lt;p&gt;Because Aurora a single master system, the transaction implementation is relatively easy.&lt;/p&gt;
+
+&lt;p&gt;In the case of writes, the database instance generated monotone increasing IDs for WAL log entries and send them to storage instances. Storage instance process the logs in the order of IDs. Once the storage instance parsed a log entry, it will send response to database instance. After database instance receives the responses for all the log entries in a transaction, it will mark this transaction as committed and response to client.&lt;/p&gt;
+
+&lt;p&gt;In the case of read, because database instance keeps track of all the log IDs and transactions. It knows the most recent log ID for a committed transaction. The database instance also tracks which storage instances has parsed which log entries. So it can use this log ID to query a snapshot on storage instance.&lt;/p&gt;
+
+&lt;h2 id="how-quorum-is-used"&gt;How Quorum Is Used&lt;/h2&gt;
+
+&lt;p&gt;When the database instance send WAL logs to storage instances, it doesn’t wait for all of them to response to consider the write as successful. Instead, it only needs the confirmation from some of them. This is called a write quorum. In Aurora, each data segment has 6 nodes distributed among 3 availability zones. The write quorum for Aurora is 4. Which means the writes are persistent on at least 2 availability zones.&lt;/p&gt;
+
+&lt;p&gt;Why a write quorum is enough instead of all the nodes? Let’s introduce the read quorum. Read quorum means how many nodes you need to read when query the data. As long as &lt;code&gt;read quorum + write quorum &amp;gt; number of nodes&lt;/code&gt;, there will be overlap node between the read quorum and write quorum, which ensure we will always read the newest data. In Aurora, read quorum is set to 3.&lt;/p&gt;
+
+&lt;p&gt;However, since Aurora tracks all the log IDs and storage nodes status, it knows which storage node has the newest data, so it doesn’t really need read quorum for very read request. Instead, the read quorum is used in failure recovery.&lt;/p&gt;
+
+&lt;h2 id="how-failure-is-handled"&gt;How Failure is Handled&lt;/h2&gt;
+
+&lt;h3 id="storage-node-failure"&gt;Storage Node Failure&lt;/h3&gt;
+
+&lt;p&gt;Since Aurora has multiple storage nodes and use write quorum to ensure the data is written to most of them, it’s trivial for storage node failure handling: as long as there is no more than 2 storage nodes failed, the database can still working. As long as no more than 3 storage nodes failed, the database can still handle read requests. Because it has 2 nodes in each availability zone, it means it can survive from failure of 1 availability zone. Once a storage node is failed, a new storage instance will start and copy data from other storage nodes.&lt;/p&gt;
+
+&lt;p&gt;In addition, Aurora also backup data to S3. So even if the database is totally destroyed, it can still recover a snapshot.&lt;/p&gt;
+
+&lt;h3 id="database-node-failure"&gt;Database Node Failure&lt;/h3&gt;
+
+&lt;p&gt;Since there is only one database node, it’s very important to handle its failure. The database node maintains the log ID for the latest completed transaction, which is critical to maintain transaction correctness. In case of database node failure, Aurora recovers this ID from storage nodes: each storage node knows the log ID for its latest transaction, so with a read quorum, it can get the latest transaction ID across the cluster.&lt;/p&gt;
+
+&lt;p&gt;There is a tricky part here: this may recovery the transaction that has written successfully to a write quorum, but never responded to the database node and client. This is Okay since if client lost connection to database and doesn’t get response, the commit can either be successful or failed. This is true for all database system because there is just no way to deal with that. A deeper discussion is out of topic and involves &lt;a href="https://en.wikipedia.org/wiki/Two_Generals%27_Problem"&gt;two general’s problem&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id="why-aurora-can-avoid-the-usage-of-two-phase-commit"&gt;Why Aurora Can Avoid the Usage of Two Phase Commit&lt;/h2&gt;
+
+&lt;p&gt;Usually, in a distributed system, in order to maintain data consistency, we need to use some protocols like two phase commit (2PC) or Paxos. In 2PC, there is a coordinate node that receive all client requests. Then it asks all the storage nodes whether they can handle the request (phase 1). If all the nodes processed the request to a commit point (but not commit) and response they can handle it, the coordinate will send commit request to all the nodes (phase 2), and mark it as complete once storage nodes complete the commit. If there is any storage node response it cannot handle the request in phase 1, the coordinate node will send rollback request to each node. And mark the transaction as failed once all storage nodes rolled back the changes.&lt;/p&gt;
+
+&lt;p&gt;2PC is slow because it needs 2 rounds of requests for all nodes. Once a node response they can write the data in phase 1, it must do that. Even the node is failed, it must recover and write it. Otherwise the system cannot continue to handle further requests.&lt;/p&gt;
+
+&lt;p&gt;I’m always skeptical when people claim they don’t need data consistency protocols like Paxos and 2PC. It’s also not clear in the first paper how Aurora is able to avoid it. However, in the second paper, there is a key sentence explains that:&lt;/p&gt;
+
+&lt;p&gt;“This is possible because storage nodes do not have a vote in determining whether to accept a write, they must do so. Locking, transaction management, deadlocks, constraints, and other con-ditions that influence whether an operation may proceed are all resolved at the database tier.”&lt;/p&gt;
+
+&lt;p&gt;This means database node already knows whether storage nodes can handle the write or not. So phase 1 in 2PC is not needed. It’s not clear whether it needs to request storage node to resolve these things, but even it’s needed, it only needs to request one storage node instead of all of them. In short, Aurora can avoid 2PC because database node knows and does much more things than coordinate node in 2PC, and storage nodes stores same data so it doesn’t need to request all of them.&lt;/p&gt;
+
+&lt;h2 id="how-performance-is-improved"&gt;How Performance Is Improved&lt;/h2&gt;
+
+&lt;p&gt;We’ve talked lots of transaction management of Aurora. But the true contribution of Aurora is the performance improvement. It is accomplished in multiple ways:&lt;/p&gt;
+
+&lt;p&gt;First of all, it only replicates WAL logs. This saves lots of network bandwidth even it means each node needs to do more computation. Apparently, network bandwidth is more important in AWS while it’s not necessary true in other systems. So it’s very important to know the bottle neck and optimize with purpose.&lt;/p&gt;
+
+&lt;p&gt;Second, as we said before, Aurora avoids slow protocols like 2PC.&lt;/p&gt;
+
+&lt;p&gt;At last, Aurora make the system async when possible. You can find examples everywhere:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;When database node handling client requests, it doesn’t block and wait response from storage nodes. It puts works in a queue and responds to client after enough storage nodes have responded.&lt;/li&gt;
+  &lt;li&gt;When storage node receiving logs, it doesn’t receive them one by one. Instead, it receives them without specific order but order them while parsing.&lt;/li&gt;
+  &lt;li&gt;When storage node writing data, the write is considered successful as long as the WAL log is persistent. It can process the logs and write buffers and pages in the background.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;System designs are trade-offs. I’m not a fan of sacrificing data consistency for performance: people don’t always make right assumption about consistency requirement. Aurora doesn’t do that. Instead, it builds a single master system with multiple slave nodes that connected by low latency network. I think Aurora did a great job to get the sweet spot between availability and performance.&lt;/p&gt;</content><author><name/></author><category term="Aurora"/><category term="distributed system"/><category term="database"/><category term="2PC"/><summary type="html">I’m very interested in databases and distributed systems. It’s shocking that how less in depth articles about databases are on the Internet. I wrote an article about Spanner before and I’m very satisfied with that. So recently, I’m looking at another interesting database Aurora. This article is about it.</summary></entry><entry><title type="html">Deploy Matrix for Users in China</title><link href="https://www.binwang.me/2020-09-08-Build-An-Instant-Messaging-System-without-Censorship-Deployment-Options.html" rel="alternate" type="text/html" title="Deploy Matrix for Users in China"/><published>2020-09-08T00:00:00-04:00</published><updated>2020-09-08T00:00:00-04:00</updated><id>https://www.binwang.me/Build-An-Instant-Messaging-System-without-Censorship-Deployment-Options</id><content type="html" xml:base="https://www.binwang.me/2020-09-08-Build-An-Instant-Messaging-System-without-Censorship-Deployment-Options.html">&lt;p&gt;&lt;em&gt;This article belongs of a series of articles that talk about how to build an instant messaging system without censorship:&lt;/em&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;em&gt;&lt;a href="/2020-08-23-Build-An-Instant_Messaging-System-without-Censorship-Choose-the-right-technology.html"&gt;Matrix: A Self Hosted Instant Messaging Solution with End to End Encryption&lt;/a&gt;&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;&lt;a href="/2020-08-29-Build-An-Instant_Messaging-System-without-Censorship-Choose-An-Overview-of-Chinese-Internet-Censorship-Strategy.html"&gt;Overview of China’s Internet censorship strategy&lt;/a&gt;&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;&lt;a href="/2020-09-08-Build-An-Instant-Messaging-System-without-Censorship-Deployment-Options.html"&gt;Deploy Matrix for Users in China&lt;/a&gt;&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In the previous articles, we chose Matrix as our IM service solution. We also discussed how the Internet is censored in China. In this article, we will discuss multiple ways to deploy Matrix service. The goals are providing the best user experience while avoiding the censorship. Specifically, we want to meet these requirements:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Avoid the government censorship.&lt;/li&gt;
+  &lt;li&gt;Make the latency between users and server as low as possible.&lt;/li&gt;
+  &lt;li&gt;Make it easy for end users to setup.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We will explore the deployment options. And compare them at the end.&lt;/p&gt;
+
+&lt;h2 id="1-deploy-a-single-im-server-outside-china"&gt;1. Deploy A Single IM Server Outside China&lt;/h2&gt;
+
+&lt;p&gt;The easiest solution would be deploying a single Matrix server. There are a lot of requirements to deploy a server in China, so it would be better to deploy a server outside China:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt; &lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;   Users in China
+&lt;span class="line-numbers"&gt; &lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;           ^
+&lt;span class="line-numbers"&gt; &lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;           |
+&lt;span class="line-numbers"&gt; &lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;           V
+&lt;span class="line-numbers"&gt; &lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;        Server
+&lt;span class="line-numbers"&gt; &lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt;           ^
+&lt;span class="line-numbers"&gt; &lt;a href="#n7" name="n7"&gt;7&lt;/a&gt;&lt;/span&gt;           |
+&lt;span class="line-numbers"&gt; &lt;a href="#n8" name="n8"&gt;8&lt;/a&gt;&lt;/span&gt;           V
+&lt;span class="line-numbers"&gt; &lt;a href="#n9" name="n9"&gt;9&lt;/a&gt;&lt;/span&gt; Users outside China
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But as we discussed in the previous article, the latency for users in China will be high. Sometimes, GFW may completely block the server so that the users cannot connect at all.&lt;/p&gt;
+
+&lt;p&gt;Matrix is a distributed protocol, so we can deploy multiple servers to give the best experience for all users. From here, we will explore the options with multiple servers: a server outside China and at least one server in China.&lt;/p&gt;
+
+&lt;h2 id="2-deploy-a-server-in-china-with-license"&gt;2. Deploy A Server in China with License&lt;/h2&gt;
+
+&lt;p&gt;The most regular way to deploy a service in China is to get all the required licenses. Then the users in China can connect to this server:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt; &lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;   Users in China
+&lt;span class="line-numbers"&gt; &lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;           ^
+&lt;span class="line-numbers"&gt; &lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;           |
+&lt;span class="line-numbers"&gt; &lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;           V
+&lt;span class="line-numbers"&gt; &lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;   Server in China  &amp;lt;----- Public DNS Record
+&lt;span class="line-numbers"&gt; &lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt;           ^
+&lt;span class="line-numbers"&gt; &lt;a href="#n7" name="n7"&gt;7&lt;/a&gt;&lt;/span&gt;           |
+&lt;span class="line-numbers"&gt; &lt;a href="#n8" name="n8"&gt;8&lt;/a&gt;&lt;/span&gt;           V
+&lt;span class="line-numbers"&gt; &lt;a href="#n9" name="n9"&gt;9&lt;/a&gt;&lt;/span&gt; Server outside China
+&lt;span class="line-numbers"&gt;&lt;strong&gt;&lt;a href="#n10" name="n10"&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;           ^
+&lt;span class="line-numbers"&gt;&lt;a href="#n11" name="n11"&gt;11&lt;/a&gt;&lt;/span&gt;           |
+&lt;span class="line-numbers"&gt;&lt;a href="#n12" name="n12"&gt;12&lt;/a&gt;&lt;/span&gt;           V
+&lt;span class="line-numbers"&gt;&lt;a href="#n13" name="n13"&gt;13&lt;/a&gt;&lt;/span&gt; Users outside China
+&lt;span class="line-numbers"&gt;&lt;a href="#n14" name="n14"&gt;14&lt;/a&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The shortcomings are also obvious:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;It needs some work to get a license. Especially it would be hard for an individual to get a license for IM service. It’s possible to hide the business purpose while applying, but there are risks.&lt;/li&gt;
+  &lt;li&gt;Once the service is on government’s record, government can track it and require information from the server. Even the messages are end to end encrypted, some information on the server can still be sensitive.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id="3-deploy-a-server-in-china-without-dns-resolving"&gt;3. Deploy A Server in China without DNS Resolving&lt;/h2&gt;
+
+&lt;p&gt;The main reason we need a license to deploy a server in China is because the IDC and cloud providers may block the server if a domain without license is resolving to it. So one way to avoid the blocking is, don’t bind a domain name to the server. But we cannot use IP address directly either: we need HTTPS to encrypt the traffic. And the communications between servers also depends on domain names.&lt;/p&gt;
+
+&lt;p&gt;So we need to find a way to resolve domain name without public DNS server. Though it’s hard, it’s not impossible. For example, you can change the DNS record on the computer by modifying the hosts file. Or you can create a DNS server on the home router. For the mobile phones, it’s much harder. But I believe there are apps can do that.&lt;/p&gt;
+
+&lt;p&gt;So this solution is don’t register the domain name in public DNS servers. Instead, add the records on end user devices:&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt; &lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;   Users in China
+&lt;span class="line-numbers"&gt; &lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;   (Add DNS record)
+&lt;span class="line-numbers"&gt; &lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;           ^
+&lt;span class="line-numbers"&gt; &lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;           |
+&lt;span class="line-numbers"&gt; &lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;           V
+&lt;span class="line-numbers"&gt; &lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt;   Server in China
+&lt;span class="line-numbers"&gt; &lt;a href="#n7" name="n7"&gt;7&lt;/a&gt;&lt;/span&gt;           ^
+&lt;span class="line-numbers"&gt; &lt;a href="#n8" name="n8"&gt;8&lt;/a&gt;&lt;/span&gt;           |
+&lt;span class="line-numbers"&gt; &lt;a href="#n9" name="n9"&gt;9&lt;/a&gt;&lt;/span&gt;           V
+&lt;span class="line-numbers"&gt;&lt;strong&gt;&lt;a href="#n10" name="n10"&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt; Server outside China
+&lt;span class="line-numbers"&gt;&lt;a href="#n11" name="n11"&gt;11&lt;/a&gt;&lt;/span&gt;   (Add DNS record)
+&lt;span class="line-numbers"&gt;&lt;a href="#n12" name="n12"&gt;12&lt;/a&gt;&lt;/span&gt;           ^
+&lt;span class="line-numbers"&gt;&lt;a href="#n13" name="n13"&gt;13&lt;/a&gt;&lt;/span&gt;           |
+&lt;span class="line-numbers"&gt;&lt;a href="#n14" name="n14"&gt;14&lt;/a&gt;&lt;/span&gt;           V
+&lt;span class="line-numbers"&gt;&lt;a href="#n15" name="n15"&gt;15&lt;/a&gt;&lt;/span&gt; Users outside China
+&lt;span class="line-numbers"&gt;&lt;a href="#n16" name="n16"&gt;16&lt;/a&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2 id="4-deploy-another-server-in-china-with-personal-internet"&gt;4. Deploy Another Server in China with Personal Internet&lt;/h2&gt;
+
+&lt;p&gt;As we mentioned in the last article, while cloud providers and IDC block servers, ISP doesn’t block high number ports. So if we can deploy another server at home and point the domain name to this server, the end user doesn’t need to setup custom DNS records. We will still keep the other server in cloud/IDC for the stable connection between servers.&lt;/p&gt;
+
+&lt;p&gt;For the two servers in China, only one of them needs to host the IM service. The other one can just be a proxy.&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt; &lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;        Users in China
+&lt;span class="line-numbers"&gt; &lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt;              ^
+&lt;span class="line-numbers"&gt; &lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;              |
+&lt;span class="line-numbers"&gt; &lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;              V
+&lt;span class="line-numbers"&gt; &lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;      Proxy server in China    &amp;lt;----- Public DNS Record
+&lt;span class="line-numbers"&gt; &lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt;        (Home Internet)
+&lt;span class="line-numbers"&gt; &lt;a href="#n7" name="n7"&gt;7&lt;/a&gt;&lt;/span&gt;              ^
+&lt;span class="line-numbers"&gt; &lt;a href="#n8" name="n8"&gt;8&lt;/a&gt;&lt;/span&gt;              |
+&lt;span class="line-numbers"&gt; &lt;a href="#n9" name="n9"&gt;9&lt;/a&gt;&lt;/span&gt;              V
+&lt;span class="line-numbers"&gt;&lt;strong&gt;&lt;a href="#n10" name="n10"&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;      IM Server in China
+&lt;span class="line-numbers"&gt;&lt;a href="#n11" name="n11"&gt;11&lt;/a&gt;&lt;/span&gt;         (Cloud/IDC)
+&lt;span class="line-numbers"&gt;&lt;a href="#n12" name="n12"&gt;12&lt;/a&gt;&lt;/span&gt;              ^
+&lt;span class="line-numbers"&gt;&lt;a href="#n13" name="n13"&gt;13&lt;/a&gt;&lt;/span&gt;              |
+&lt;span class="line-numbers"&gt;&lt;a href="#n14" name="n14"&gt;14&lt;/a&gt;&lt;/span&gt;              V
+&lt;span class="line-numbers"&gt;&lt;a href="#n15" name="n15"&gt;15&lt;/a&gt;&lt;/span&gt;     Server outside China
+&lt;span class="line-numbers"&gt;&lt;a href="#n16" name="n16"&gt;16&lt;/a&gt;&lt;/span&gt;(Add DNS record that resolves domain
+&lt;span class="line-numbers"&gt;&lt;a href="#n17" name="n17"&gt;17&lt;/a&gt;&lt;/span&gt;  name to server on Cloud/IDC)
+&lt;span class="line-numbers"&gt;&lt;a href="#n18" name="n18"&gt;18&lt;/a&gt;&lt;/span&gt;              ^
+&lt;span class="line-numbers"&gt;&lt;a href="#n19" name="n19"&gt;19&lt;/a&gt;&lt;/span&gt;              |
+&lt;span class="line-numbers"&gt;&lt;strong&gt;&lt;a href="#n20" name="n20"&gt;20&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;              V
+&lt;span class="line-numbers"&gt;&lt;a href="#n21" name="n21"&gt;21&lt;/a&gt;&lt;/span&gt;    Users outside China
+&lt;span class="line-numbers"&gt;&lt;a href="#n22" name="n22"&gt;22&lt;/a&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;There are also disadvantages for this solution: other than we need another server, the home Internet may not be able to provide the best speed for users in China.&lt;/p&gt;
+
+&lt;h2 id="conclusion"&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;In the table below, we can compare them by the censorship circumvention, service speed and end user setup easiness:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style="text-align: left"&gt;Deployment Option&lt;/th&gt;
+      &lt;th style="text-align: left"&gt;Censorship Circumvention&lt;/th&gt;
+      &lt;th style="text-align: left"&gt;Service Speed&lt;/th&gt;
+      &lt;th style="text-align: left"&gt;End User Setup Easiness&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style="text-align: left"&gt;1&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;3 stars&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;1 star&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;3 stars&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style="text-align: left"&gt;2&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;1 star&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;3 stars&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;3 stars&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style="text-align: left"&gt;3&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;2 stars&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;3 stars&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;1 star&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style="text-align: left"&gt;4&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;2 stars&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;2 stars&lt;/td&gt;
+      &lt;td style="text-align: left"&gt;3 stars&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;I believe the world will be a better place if everyone can communicate with each other freely. But it’s never easy. Even though we can deploy the services and make it accessible from China, the most popular Matrix client Element (Riot) is banned in China. There is a long way to go. I hope I can help even a little bit by sharing some technical information here.&lt;/p&gt;</content><author><name/></author><category term="technology"/><category term="Matrix"/><category term="instant messaging"/><summary type="html">This article belongs of a series of articles that talk about how to build an instant messaging system without censorship:</summary></entry><entry><title type="html">An Overview of China’s Internet Censorship Strategy</title><link href="https://www.binwang.me/2020-08-29-Build-An-Instant_Messaging-System-without-Censorship-Choose-An-Overview-of-Chinese-Internet-Censorship-Strategy.html" rel="alternate" type="text/html" title="An Overview of China’s Internet Censorship Strategy"/><published>2020-08-29T00:00:00-04:00</published><updated>2020-08-29T00:00:00-04:00</updated><id>https://www.binwang.me/Build-An-Instant_Messaging-System-without-Censorship-Choose-An-Overview-of-Chinese-Internet-Censorship-Strategy</id><content type="html" xml:base="https://www.binwang.me/2020-08-29-Build-An-Instant_Messaging-System-without-Censorship-Choose-An-Overview-of-Chinese-Internet-Censorship-Strategy.html">&lt;p&gt;&lt;em&gt;Updated at sep 6, 2020: change the title and add other articles in this series.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;This article belongs of a series of articles that talk about how to build an instant messaging system without censorship:&lt;/em&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;em&gt;&lt;a href="/2020-08-23-Build-An-Instant_Messaging-System-without-Censorship-Choose-the-right-technology.html"&gt;Matrix: A Self Hosted Instant Messaging Solution with End to End Encryption&lt;/a&gt;&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;&lt;a href="/2020-08-29-Build-An-Instant_Messaging-System-without-Censorship-Choose-An-Overview-of-Chinese-Internet-Censorship-Strategy.html"&gt;Overview of China’s Internet censorship strategy&lt;/a&gt;&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;&lt;a href="/2020-09-08-Build-An-Instant-Messaging-System-without-Censorship-Deployment-Options.html"&gt;Deploy Matrix for Users in China&lt;/a&gt;&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;There are two parts of Internet censorship in China:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Intra country network traffic: the sender and the receiver are all located in China.&lt;/li&gt;
+  &lt;li&gt;Inter country network traffic: sender or receiver is in China, and another one is outside China.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The difference is because Chinese government has more control if all the devices within the network traffic are in China. It can make rules, and force ISP, IDC, cloud providers and service providers to follow. Otherwise, it can only uses some technical methods to block traffic.&lt;/p&gt;
+
+&lt;h2 id="intra-country-traffic"&gt;Intra Country Traffic&lt;/h2&gt;
+
+&lt;p&gt;Let’s first talk about the censorship strategy for the network traffic inside China. It’s done by mapping the instances on Internet to real persons and organizations.&lt;/p&gt;
+
+&lt;p&gt;For the online service consumers, which are usually individuals, it’s done by mapping the personal ID to Internet instances like IP addresses and service accounts. An ID is required when apply for Internet access from ISP and when apply for a phone number. When register an account for any online service, a phone number is needed. So it can map network information in these ways:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;If you are using a home Internet, it can map from IP address to ID.&lt;/li&gt;
+  &lt;li&gt;If you are using a mobile network, it can map from IP address to phone number to ID.&lt;/li&gt;
+  &lt;li&gt;If you are using any online account, it can map from account to phone number to ID.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;For the online service providers, it’s done by licensing. For anyone who wants to provide Internet service, they must apply for a license from government. In order to get a license, you need to provide the hosts IP addresses, domain names, ID, personal photo and the business purpose. The government will store all the information and may request the provider to hand over information as needed.&lt;/p&gt;
+
+&lt;p&gt;In China, without a license, the network ports like 53 (DNS), 80 (HTTP) and 443 (HTTPS) are blocked by ISP for all devices. Cloud providers and IDC will also block hosts if they find any DNS without license is resolved to them. Home internet providers will not check DNS resolving, but it’s impractical to host any serious business on home Internet: it would be too slow for people using other ISP.&lt;/p&gt;
+
+&lt;h2 id="inter-country-traffic"&gt;Inter Country Traffic&lt;/h2&gt;
+
+&lt;p&gt;The censorship of inter country traffic is mainly done by &lt;a href="https://en.wikipedia.org/wiki/Great_Firewall#Blocking_methods"&gt;Great Fire Wall&lt;/a&gt; (GFW). It’s built by Chinese government that filters and blocks the network traffics between China and other countries. It uses a lot of university resources, and is widely known even there is no official acknowledgement of its existence. As a victim of it for many years, I know it just too well. It has mainly these technologies to block traffics:&lt;/p&gt;
+
+&lt;p&gt;First of all, DNS records pollution. DNS server is used to resolve domain name to IP address. ISP usually provide DNS server. The devices will use that by default to have the best speed. So if the government wants to block some service, it will change DNS records on DNS servers in China. Usually it’s the first method to use. It’s also the easiest to fix: just change to another DNS server. Usually a good DNS server outside China is blocked by IP (another blocking method we will talk below). Even it’s illegal to host custom DNS server, you can still change the DNS records on home router or on the personal computer. However, it can be tricky for mobile phones.&lt;/p&gt;
+
+&lt;p&gt;Another straightforward blocking method is to block the IP addresses. It’s not the most reliable method because the IP addresses can change. So normally it will block a range of IP addresses. But it’s also dangerous because of the popularity of cloud services. The range of IP may belongs to the cloud provider instead of the service provider. So it may block more IP addresses than needed. It can accidentally block other important foreign services. So the government used to use this method carefully, but I feel it doesn’t care to block innocent IPs recently. For example, a lot of CDN and small websites are not useable because of this. If the IP is blocked, the only way to access it is using a proxy.&lt;/p&gt;
+
+&lt;p&gt;After people start using proxy to access the blocked hosts, GFW develops new methods to block proxies. At first it’s easy, because the proxy methods like VPN is very easy to identify. (Because VPN also has legit usages, the government also starts to require license for VPN). After people start developing proxy software specific to bypass GFW, GFW starts to detect patterns to identify and block these proxies. It’s very hard to detect patterns with 100% accuracy, so it needs to choose either to miss some of the proxies or block some of the legit usages. And recently it tends to choose the later one more and more.&lt;/p&gt;
+
+&lt;p&gt;However, in the latest case, it has an exception. For the hosts provided by IDC or cloud services, it tends to have a looser restriction. For example, if I ssh to a personal computer in China from Canada, the connection will usually be disconnected after some time. But if I ssh to a server in China, it’s usually very stable. It probably considers these hosts have more serious business purpose.&lt;/p&gt;
+
+&lt;h2 id="conclusion"&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;We had an overview of the Internet censorship methods in China. I believe it will get back fired once the restrictions are more and more strict and ridiculous. In the next article, we will explore how to deploy an IM server in such environment and make it as convenience as possible for end users.&lt;/p&gt;</content><author><name/></author><category term="technology"/><category term="GFW"/><category term="China"/><category term="Internet"/><summary type="html">Updated at sep 6, 2020: change the title and add other articles in this series.</summary></entry><entry><title type="html">Matrix: A Self Hosted Instant Messaging Solution with End to End Encryption</title><link href="https://www.binwang.me/2020-08-23-Build-An-Instant_Messaging-System-without-Censorship-Choose-the-right-technology.html" rel="alternate" type="text/html" title="Matrix: A Self Hosted Instant Messaging Solution with End to End Encryption"/><published>2020-08-23T00:00:00-04:00</published><updated>2020-08-23T00:00:00-04:00</updated><id>https://www.binwang.me/Build-An-Instant_Messaging-System-without-Censorship-Choose-the-right-technology</id><content type="html" xml:base="https://www.binwang.me/2020-08-23-Build-An-Instant_Messaging-System-without-Censorship-Choose-the-right-technology.html">&lt;p&gt;&lt;em&gt;Updated at sep 6, 2020: change the title and add other articles in this series.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;This article belongs of a series of articles that talk about how to build an instant messaging system without censorship:&lt;/em&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;em&gt;&lt;a href="/2020-08-23-Build-An-Instant_Messaging-System-without-Censorship-Choose-the-right-technology.html"&gt;Matrix: A Self Hosted Instant Messaging Solution with End to End Encryption&lt;/a&gt;&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;&lt;a href="/2020-08-29-Build-An-Instant_Messaging-System-without-Censorship-Choose-An-Overview-of-Chinese-Internet-Censorship-Strategy.html"&gt;Overview of China’s Internet censorship strategy&lt;/a&gt;&lt;/em&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;&lt;a href="/2020-09-08-Build-An-Instant-Messaging-System-without-Censorship-Deployment-Options.html"&gt;Deploy Matrix for Users in China&lt;/a&gt;&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Instant messaging (IM) software maybe the most commonly used type of software. Privacy is especially important for instant messaging apps. No one wants to be eavesdropped when talking with friends and family. However, most of the instant messaging applications don’t have end to end encryption, which means the service provider can see all the messages. This information is much more sensitive than financial information, yet we have regulations for banks but have basically zero regulation for instant messaging providers. Sometimes it’s even worse while having regulations: Chinese government can require the provider to hand over server data &lt;a href="http://www.cac.gov.cn/2016-11/07/c_1119867116_2.htm"&gt;by law&lt;/a&gt; (Ironically, the offical website of Cyberspace Administration of China doesn’t even have https). That’s why TikTok is such a hot topic recently. And while Tencent saying they never look at the messages in WeChat, I never trust them. There are even &lt;a href="https://news.qq.com/a/20151012/010241.htm#p=4"&gt;news&lt;/a&gt; that showing QQ (another IM software provided by Tencent that is very similar with WeChat) messages helped the police to find criminals. Even if the providers don’t look at the data as they declared, as long as they store the data, it becomes permanent record. You don’t know who will use that data on what purpose in the future.&lt;/p&gt;
+
+&lt;p&gt;There are a few IM software that have end to end encryption built in. However, each of them has some shortcomings which prevent them to be truly secure. For example, &lt;a href="https://www.signal.org/"&gt;Signal&lt;/a&gt; is considered as the most secure one, but it needs a phone number and use it as verification sometimes. As we all know, text message is very easy to be hacked. While the hacker cannot view the message history in Signal, it may makes the account disappear. (The technology details behind this is complex, I may write another article to explain this in the future). WhatsApp is another popular one. But it’s not open sourced so it’s hard to tell if it’s doing something secretly or really implementing the end to end algorithm correctly. Most important of all, end to end encryption doesn’t mean decentralize. They all have centralized servers. And unfortunately, the servers are all blocked by China.&lt;/p&gt;
+
+&lt;p&gt;There are also some P2P IM software. I tried a lot of them. Most of them don’t have end to end encryption. And they are all too slow to have a good user experience.&lt;/p&gt;
+
+&lt;p&gt;So the ideal solution would be deploying an instance messaging system with end to end encryption by myself. Signal is open sourced. The server code is clean and easy to deploy. But as I said before, I don’t like the use of phone number. And because it’s not designed for decentralized deployment, the iOS and Android client needs to be modified to bind push keys from Apple and Google in order to have notifications. Downloading a customized version of client is not very user friendly.&lt;/p&gt;
+
+&lt;p&gt;Then I found &lt;a href="https://matrix.org/"&gt;Matrix&lt;/a&gt;, an open standard for instant messaging. It’s decentralized by design. People can have different service providers like Email. People can speak with other persons on other server. The servers talk with each other to deliver messages. The username of Matrix contains the server name, so the servers can tell where to deliver messages. The diagram below shows how user1 on &lt;code&gt;server1.com&lt;/code&gt; talks with user2 on &lt;code&gt;server2.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class="language-plaintext highlighter-coderay"&gt;&lt;div class="CodeRay"&gt;
+  &lt;div class="code"&gt;&lt;pre&gt;&lt;span class="line-numbers"&gt; &lt;a href="#n1" name="n1"&gt;1&lt;/a&gt;&lt;/span&gt;
+&lt;span class="line-numbers"&gt; &lt;a href="#n2" name="n2"&gt;2&lt;/a&gt;&lt;/span&gt; User: @user1:server1.com
+&lt;span class="line-numbers"&gt; &lt;a href="#n3" name="n3"&gt;3&lt;/a&gt;&lt;/span&gt;          |    ^
+&lt;span class="line-numbers"&gt; &lt;a href="#n4" name="n4"&gt;4&lt;/a&gt;&lt;/span&gt;          |    |
+&lt;span class="line-numbers"&gt; &lt;a href="#n5" name="n5"&gt;5&lt;/a&gt;&lt;/span&gt;          V    |
+&lt;span class="line-numbers"&gt; &lt;a href="#n6" name="n6"&gt;6&lt;/a&gt;&lt;/span&gt; Server: server1.com
+&lt;span class="line-numbers"&gt; &lt;a href="#n7" name="n7"&gt;7&lt;/a&gt;&lt;/span&gt;          |    ^
+&lt;span class="line-numbers"&gt; &lt;a href="#n8" name="n8"&gt;8&lt;/a&gt;&lt;/span&gt;          |    |
+&lt;span class="line-numbers"&gt; &lt;a href="#n9" name="n9"&gt;9&lt;/a&gt;&lt;/span&gt;          V    |
+&lt;span class="line-numbers"&gt;&lt;strong&gt;&lt;a href="#n10" name="n10"&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt; Server: server2.com
+&lt;span class="line-numbers"&gt;&lt;a href="#n11" name="n11"&gt;11&lt;/a&gt;&lt;/span&gt;          |    ^
+&lt;span class="line-numbers"&gt;&lt;a href="#n12" name="n12"&gt;12&lt;/a&gt;&lt;/span&gt;          |    |
+&lt;span class="line-numbers"&gt;&lt;a href="#n13" name="n13"&gt;13&lt;/a&gt;&lt;/span&gt;          V    |
+&lt;span class="line-numbers"&gt;&lt;a href="#n14" name="n14"&gt;14&lt;/a&gt;&lt;/span&gt; User: @user2:server2.com
+&lt;span class="line-numbers"&gt;&lt;a href="#n15" name="n15"&gt;15&lt;/a&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;While it has a lot of &lt;a href="https://matrix.org/clients-matrix/"&gt;clients&lt;/a&gt;, the most popular one is &lt;a href="https://element.io/"&gt;Element&lt;/a&gt;(used to be named Riot). The most popular server is &lt;a href="https://github.com/matrix-org/synapse"&gt;Synapse&lt;/a&gt;. The authentication server is separated from the messaging server. &lt;a href="https://github.com/matrix-org/sydent"&gt;Sydent&lt;/a&gt; is a one of the implementations. Synapse and Sydent are both written in Python. While it takes some efforts to deploy it, they are both well documented and shouldn’t be too hard for someone with server admin experience.&lt;/p&gt;
+
+&lt;p&gt;It would be much easier if we live in a world without Internet censorship. However, Chinese government built powerful tools and strict policies around it. In the future articles of this series, I will give a brief overview of Chinese goverment Internet censorship strategies, and some options to deploy Matrix servers with such restrictions.&lt;/p&gt;</content><author><name/></author><category term="technology"/><category term="Matrix"/><category term="instant messaging"/><category term="censorship"/><summary type="html">Updated at sep 6, 2020: change the title and add other articles in this series.</summary></entry><entry><title type="html">Use RSS and Kindle to Read News</title><link href="https://www.binwang.me/2020-08-15-Use-RSS-and-Kindle-to-Read-News.html" rel="alternate" type="text/html" title="Use RSS and Kindle to Read News"/><published>2020-08-15T00:00:00-04:00</published><updated>2020-08-15T00:00:00-04:00</updated><id>https://www.binwang.me/Use-RSS-and-Kindle-to-Read-News</id><content type="html" xml:base="https://www.binwang.me/2020-08-15-Use-RSS-and-Kindle-to-Read-News.html">&lt;p&gt;In a &lt;a href="/2020-08-02-What-Is-Wrong-abount-Recommendation-System.html"&gt;previous blog post&lt;/a&gt;, I talked about one of the reasons I want to use mobile phone and social network less often. In this article, I will talk about one of the strategies of doing that: don’t read news on mobile phone or computer. Use Kindle or other E-Readers instead. Here is how I do it:&lt;/p&gt;
+
+&lt;h2 id="use-rss-to-get-news"&gt;Use RSS to Get News&lt;/h2&gt;
+
+&lt;p&gt;RSS was so popular before Google Reader was killed. You can choose the sources by yourself instead of some black box recommendation algorithms. I talked about what’s wrong about the recommendation system in &lt;a href="/2020-08-02-What-Is-Wrong-abount-Recommendation-System.html"&gt;a previous post&lt;/a&gt;. RSS is also an open protocol, so you can choose whatever software you want without vendor lock-in.&lt;/p&gt;
+
+&lt;p&gt;RSS is open and flexible, so people have various ways of using it. As a person who only wants to know important news and doesn’t want to lost in the overwhelming information, I subscribe to a few high quality sources. Basically 1 or 2 sources for local news, global news, tech news and culture. That’s enough for 1~2 hour’s daily reading. For the news sources, they should be focus on facts instead of its own opinion, and should cover the whole story instead of partial fact. With limited sources, I can focus more on the whole article instead of a lot titles.&lt;/p&gt;
+
+&lt;p&gt;Many websites doesn’t provide full article RSS output. Some doesn’t even provide RSS at all. But as long as the content is available online, we can use tools to crawl and convert it to an RSS feed. There is a tool called &lt;a href="https://github.com/DIYgod/RSSHub"&gt;RSSHub&lt;/a&gt; does exactly this. I also contributed some code to it.&lt;/p&gt;
+
+&lt;h2 id="use-calibre-to-send-rss-feeds-to-kindle"&gt;Use Calibre to Send RSS Feeds to Kindle&lt;/h2&gt;
+
+&lt;p&gt;Kindle doesn’t have any RSS reader. So once we have the RSS sources ready, we need to import them. There were a lot of platforms to do that, but most of them are not reliable anymore. Luckily, we have an even better option now: &lt;a href="https://calibre-ebook.com/"&gt;Calibre&lt;/a&gt;. It’s a very powerful e-book management software. Most importantly, it’s free and open source. So you don’t need to give any information to anyone else.&lt;/p&gt;
+
+&lt;p&gt;The feature is available at “Fetch News” in Calibre’s menu. It turns the RSS sources into an e-book and send it to an Email address (Most E-readers, including Kindle, allow you to transfer books by sending an Email). It has many pre-defined sources but you can also add custom RSS sources. You can do it manually or import an OPML file. It can be configured to send the e-book daily or on specific days in a week. The only downside is you need to leave it running in the background. But since it doesn’t collect your data secretly, it barely uses any resource in the background.&lt;/p&gt;
+
+&lt;h2 id="use-kindle-or-other-e-readers-instead-of-phone-or-computer"&gt;Use Kindle (Or Other E-Readers) Instead of Phone or Computer&lt;/h2&gt;
+
+&lt;p&gt;I got a Kindle after I graduated from university. I find it’s the most useful thing I’ve bought in that price range. I read much more books because of it. It’s so easy to take so I usually read it during commute. (My readings dropped a lot after I started working from home). And the screen likes paper so it doesn’t hurt my eyes. Some people may find low fresh rate E-Ink display is hard too use, but it’s perfect for book reading. And just because of that, I can focus on reading instead of watching videos or play games.&lt;/p&gt;
+
+&lt;p&gt;After I started reading news on Kindle, I find I can read more carefully and completely. Though I spent much less time on reading news, I don’t feel I missed anything. Maybe the only things I missed are the rumors without fact check and click-bias content. I feel I’m still connected to the world, but with a much more peaceful mind.&lt;/p&gt;</content><author><name/></author><category term="technology"/><category term="RSS"/><summary type="html">In a previous blog post, I talked about one of the reasons I want to use mobile phone and social network less often. In this article, I will talk about one of the strategies of doing that: don’t read news on mobile phone or computer. Use Kindle or other E-Readers instead. Here is how I do it:</summary></entry><entry xml:lang="zh"><title type="html">盛唐诗人和远游</title><link href="https://www.binwang.me/2020-08-09-%E7%9B%9B%E5%94%90%E8%AF%97%E4%BA%BA%E5%92%8C%E8%BF%9C%E6%B8%B8.html" rel="alternate" type="text/html" title="盛唐诗人和远游"/><published>2020-08-09T00:00:00-04:00</published><updated>2020-08-09T00:00:00-04:00</updated><id>https://www.binwang.me/%E7%9B%9B%E5%94%90%E8%AF%97%E4%BA%BA%E5%92%8C%E8%BF%9C%E6%B8%B8</id><content type="html" xml:base="https://www.binwang.me/2020-08-09-%E7%9B%9B%E5%94%90%E8%AF%97%E4%BA%BA%E5%92%8C%E8%BF%9C%E6%B8%B8.html">&lt;blockquote&gt;
+  &lt;p&gt;少时壮且厉，抚剑独行游。&lt;/p&gt;
+
+  &lt;p&gt;谁言行游近？张掖至幽州。&lt;/p&gt;
+
+  &lt;p&gt;– 陶渊明&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;最近看了两个系列的视频，一个是戴建业老师讲盛唐诗人和风貌，另一个是况露的骑行纪录片《行疆》。这两个系列的视频主题碰巧还挺有关联，看的时候也颇有感触，所以在这里随便写些感想。&lt;/p&gt;
+
+&lt;p&gt;唐朝是中国历史上最强盛的时代。不仅国力强盛，文化更加强盛。科举制度使官场不再被贵族垄断。大批的文人有机会参与到国家决策当中。所以唐朝的人们都透漏着强烈的自信，以天下为己任。在这一方面，唐朝比如今的中国还要强上不少。如今虽然也有高考，但是想通过高考进入仕途，参与政治，“愿上大臣书”，恐怕并不容易。初唐的积累，到了开元年间达到了顶峰。文人们在青年时仗剑壮游，踏遍名山大川，真是何其浪漫！&lt;/p&gt;
+
+&lt;p&gt;反观现在，虽然科技更加发达，交通也更加方便，但是生活不易，能真的在年轻时远游一段时间的，还是不多。所以当我发现《行疆》这个纪录片的时候，看片中的骑行者一人从武汉出发，经西安入甘肃、青海、新疆和西藏，很是羡慕。拍这个纪录片的设备就算放在当时也并不先进，镜头大多数时候也是摇摇晃晃，但是反而因此而显得真实。尤其是其中一些细节让人感触良多。如在山青水秀的月牙湾中种药捕鱼的程老哥，怀揣摩托旅行梦想的西安交警，从河南移民到新疆四十多年未回家乡的大爷的一声长叹。&lt;/p&gt;
+
+&lt;p&gt;远游对我来说一直是一个向往。因此我选了远在哈尔滨的大学。大学时候，因为经济原因，只是跟着程序竞赛去过东北的一些大城市以及福州。自从工作之后，经济不是太大问题，但是时间成了问题。虽然如此，也会挤时间去一些之前一直想去的城市，而且所幸前两年在上家公司可以在家工作，所以几年下来，也去了不少地方：去过中国东部大部分的省份，去过日韩东南亚，也曾经沿着美国的太平洋海岸自驾过。但遗憾的是一直未曾去过中国的西部。估计以后如果安定下来了，有房贷要还，再去远游的机会就更加少了。&lt;/p&gt;
+
+&lt;p&gt;李白的诗歌之所以吸引人，是因为建功立业和追求自由之间的矛盾。而我辈虽没有建功立业那么远大的志向，但是无论如何还是想有一番作为的：不管是在专业上有一些成就，还是在生活上有一定的保障。而要实现这些，就不免和自由有一定的冲突。所以有时读古人诗，真是感同身受，彻夜长叹。虽有此苦恼，然而时隔千载，有天才的诗篇写出我们的感情，也真是幸事了！&lt;/p&gt;</content><author><name/></author><category term="life"/><category term="poem"/><summary type="html">少时壮且厉，抚剑独行游。 谁言行游近？张掖至幽州。 – 陶渊明</summary></entry><entry><title type="html">What Is Wrong about Recommendation System</title><link href="https://www.binwang.me/2020-08-02-What-Is-Wrong-abount-Recommendation-System.html" rel="alternate" type="text/html" title="What Is Wrong about Recommendation System"/><published>2020-08-02T00:00:00-04:00</published><updated>2020-08-02T00:00:00-04:00</updated><id>https://www.binwang.me/What-Is-Wrong-abount-Recommendation-System</id><content type="html" xml:base="https://www.binwang.me/2020-08-02-What-Is-Wrong-abount-Recommendation-System.html">&lt;p&gt;I remember when I was in high school, the courses were so boring that I was always trying to find some other things to read on class. It was very hard because smart phones were very expensive. And we don’t even have a good library in our city. But just more than 10 years later, it’s a totally different world. The information is so easy to get and so overwhelming that people can easily get lost. So I’m trying to use mobile phone and social network platforms less often since 2 years ago. Recently, I feel I’ve made some progress. I want to share some of my experience by writing a series of articles (hopefully :)). This time, I want to talk about one of the reasons that I want to involve less with the digital world: the recommendation system.&lt;/p&gt;
+
+&lt;p&gt;When I started my software engineer job as an intern, I worked on a recommendation system. At first, I was so fascinated that the computer can learn people’s interest and recommend things for them. It’s a kind of machine learning system. The way it works is you define a goal and let the program to reach it. That’s also how you evaluate whether the recommendation system is good enough. Usually the goal is to find the content that user will click. There are good reasons to choose such a goal: For ads platform, a click on an ads means money from advertisers. For social network platform, a click means user is spending more time on the platform. For retailer website, a click means the user is more likely to buy one more item. Basically, for a commercial company, the goal is how it can earn more money from you.&lt;/p&gt;
+
+&lt;p&gt;In my case, I was also training the system to filter out content that users most likely to click. But after I trained the system, I found it recommended lots of erotic contents. That’s when I realized something is wrong. Logically, the program is right: users are likely to click on the erotic content. That’s when I felt something bad may happen if we rely purely on algorithms.&lt;/p&gt;
+
+&lt;p&gt;Not long after that, my worry became true. Recommendation systems became more popular and more powerful. Companies are founded based on the idea of recommendation algorithms. The most successful one is ByteDance, the company behind Tiktok. It created an app called &lt;em&gt;Jin Ri Tou Tiao&lt;/em&gt; (which means &lt;em&gt;Today’s Headlines&lt;/em&gt; in English) to recommend news based on algorithm. The news are usually low quality, often has erotic content, exaggerated title and partial fact. It’s not good news, but combined with its aggressive notification system, people just cannot stop reading them.&lt;/p&gt;
+
+&lt;p&gt;The reason behind this is a simple fact: what the brain wants may not be what the body really needs. Human beings have evolved for a long time to fit the environment, but the environment has changed so much and so fast in recent years because of the technology, and our brain just cannot catch up. That’s why overweight is so normal in developed countries: it makes sense to eat food that has high calorie at old days when food was not guaranteed. The brain never had a chance to evolve in an environment that calorie is more than needed. Another extreme example is the drug: it’s very bad for healthy but it’s so hard to get rid of it once you are addicted.&lt;/p&gt;
+
+&lt;p&gt;Maybe recommendation system is better than drug, but it’s definitely worse than high-calorie food. It uses power of computer and the information collected from you. It’s brain hacking with modern technology. Not only our body hasn’t evolved to fit it, our society is also falling behind. There is no regulation about that. It’s basically wild west. The companies are doing whatever they want in this field to meet their interests.&lt;/p&gt;
+
+&lt;p&gt;Indeed, as human beings, the brain has higher function that can sometimes recognize what’s bad even it looks temping at first. But that function needs lots of energy and focus, it’s nearly impossible to recognize all of them if you get the information all day. And the energy and focus has limit. Once you spent too much energy to resist the temping recommended content, the less energy you have for real important tasks.&lt;/p&gt;
+
+&lt;p&gt;After you addicted to the recommended contents, the best case is you will waste a lot of time. You may also feel anxiety because watching the contents doesn’t really fulfill your needs. The more anxiety you are, the harder to stop. And worst case, you may get manipulated by other people. Cambridge Analytica is a very good example.&lt;/p&gt;
+
+&lt;p&gt;That’s why I’m very alert to black-box recommendation systems. And that’s why I was very disappointed when Twitter order the timeline based on recommendation. I also had bad time when watching recommended videos and news endlessly that even lost sleep. The solution is simple: just leave them. It’s easy to say but very hard to do. I’ll share some of my tactics in the future.&lt;/p&gt;</content><author><name/></author><category term="technology"/><category term="RSS"/><summary type="html">I remember when I was in high school, the courses were so boring that I was always trying to find some other things to read on class. It was very hard because smart phones were very expensive. And we don’t even have a good library in our city. But just more than 10 years later, it’s a totally different world. The information is so easy to get and so overwhelming that people can easily get lost. So I’m trying to use mobile phone and social network platforms less often since 2 years ago. Recently, I feel I’ve made some progress. I want to share some of my experience by writing a series of articles (hopefully :)). This time, I want to talk about one of the reasons that I want to involve less with the digital world: the recommendation system.</summary></entry></feed>

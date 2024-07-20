@@ -1,0 +1,37 @@
+<configuration>
+
+    <property scope="context" name="HOST" value="${HOST:-unknown}" />
+    <property scope="context" name="HOSTNAME" value="${HOSTNAME:-${HOST}}" />
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>%date{"yyyy-MM-dd'T'HH:mm:ss,SSS"} %-5level [%thread] %logger - %msg%n</pattern>
+        </encoder>
+        <file>/vols/rss-brain/logs/rss-brain.${HOSTNAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>/vols/rss-brain/logs/%d{yyyy-MM-dd,aux}/rss-brain.${HOSTNAME}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 80MB -->
+                <maxFileSize>80MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <append>false</append>
+    </appender>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{"yyyy-MM-dd'T'HH:mm:ss,SSS"} %-5level [%thread] %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="FILE"/>
+    </root>
+
+
+    <!-- <logger name="sttp.client3.logging.slf4j.Slf4jLoggingBackend" level="DEBUG"/> -->
+</configuration>

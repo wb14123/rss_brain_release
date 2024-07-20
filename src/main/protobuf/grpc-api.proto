@@ -1,0 +1,1445 @@
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "me.binwang.rss.grpc";
+
+package rss;
+
+
+// Define TestInner
+
+message TestInner {
+    string str = 1;
+}
+
+// Define Test
+
+message Test {
+    message ListFieldList {
+        message ListFieldListList {
+            repeated TestInner listFieldListList = 1;
+        }
+        repeated ListFieldListList listFieldList = 1;
+    }
+    repeated ListFieldList listField = 1;
+
+    message OptionFieldOption {
+        message OptionFieldOptionOption {
+            optional TestInner optionFieldOptionOption = 1;
+        }
+        optional OptionFieldOptionOption optionFieldOption = 1;
+    }
+    optional OptionFieldOption optionField = 2;
+
+    message MixField1List {
+        message MixField1ListOption {
+            optional TestInner mixField1ListOption = 1;
+        }
+        repeated MixField1ListOption mixField1List = 1;
+    }
+    optional MixField1List mixField1 = 3;
+
+    message MixField2Option {
+        message MixField2OptionList {
+            repeated TestInner mixField2OptionList = 1;
+        }
+        optional MixField2OptionList mixField2Option = 1;
+    }
+    repeated MixField2Option mixField2 = 4;
+}
+
+// Define Article
+
+message Article {
+    string id = 1;
+    string title = 2;
+    string sourceID = 3;
+    optional string sourceTitle = 4;
+    string guid = 5;
+    string link = 6;
+    int64 createdAt = 7;
+    int64 postedAt = 8;
+    string description = 9;
+    optional string author = 10;
+    optional int32 comments = 11;
+    optional int32 upVotes = 12;
+    optional int32 downVotes = 13;
+    double score = 14;
+    optional MediaGroups mediaGroups = 15;
+    bool nsfw = 16;
+    bool postedAtIsMissing = 17;
+}
+
+// Define ArticleIDs
+
+message ArticleIDs {
+    repeated string ids = 1;
+}
+
+// Define ArticleContent
+
+message ArticleContent {
+    string id = 1;
+    string content = 2;
+}
+
+// Define ArticleOrder
+
+enum ArticleOrder {
+    TIME = 0;
+    SCORE = 1;
+}
+
+// Define ArticleListLayout
+
+enum ArticleListLayout {
+    LIST = 0;
+    GRID = 1;
+}
+
+// Define Folder
+
+message Folder {
+    string id = 1;
+    string userID = 2;
+    string name = 3;
+    optional string description = 4;
+    int64 position = 5;
+    int32 count = 6;
+    bool isUserDefault = 7;
+    bool searchEnabled = 8;
+    optional string searchTerm = 9;
+    bool expanded = 10;
+    ArticleOrder articleOrder = 11;
+    bool recommend = 12;
+    optional string language = 13;
+    ArticleListLayout articleListLayout = 14;
+}
+
+// Define FolderCreator
+
+message FolderCreator {
+    string name = 1;
+    optional string description = 2;
+    int64 position = 3;
+}
+
+// Define FolderUpdater
+
+message FolderUpdater {
+    optional string name = 1;
+
+    message DescriptionOption {
+        optional string descriptionOption = 1;
+    }
+    optional DescriptionOption description = 2;
+    optional int64 position = 3;
+    optional bool searchEnabled = 4;
+
+    message SearchTermOption {
+        optional string searchTermOption = 1;
+    }
+    optional SearchTermOption searchTerm = 5;
+    optional bool expanded = 6;
+    optional ArticleOrder articleOrder = 7;
+    optional bool recommend = 8;
+
+    message LanguageOption {
+        optional string languageOption = 1;
+    }
+    optional LanguageOption language = 9;
+    optional ArticleListLayout articleListLayout = 10;
+}
+
+// Define FolderSource
+
+message FolderSource {
+    FolderSourceMapping folderMapping = 1;
+    Source source = 2;
+}
+
+// Define FolderSourceMapping
+
+message FolderSourceMapping {
+    string folderID = 1;
+    string sourceID = 2;
+    string userID = 3;
+    int64 position = 4;
+    optional string customSourceName = 5;
+    bool showTitle = 6;
+    bool showFullArticle = 7;
+    bool showMedia = 8;
+    ArticleOrder articleOrder = 9;
+    ArticleListLayout articleListLayout = 10;
+}
+
+// Define FolderSourceMappingUpdater
+
+message FolderSourceMappingUpdater {
+    message CustomSourceNameOption {
+        optional string customSourceNameOption = 1;
+    }
+    optional CustomSourceNameOption customSourceName = 1;
+    optional bool showTitle = 2;
+    optional bool showFullArticle = 3;
+    optional bool showMedia = 4;
+    optional ArticleOrder articleOrder = 5;
+    optional ArticleListLayout articleListLayout = 6;
+}
+
+// Define FullArticle
+
+message FullArticle {
+    Article article = 1;
+    string content = 2;
+}
+
+// Define FetchStatus
+
+enum FetchStatus {
+    SCHEDULED = 0;
+    PENDING = 1;
+    FETCHING = 2;
+    PAUSED = 3;
+}
+
+// Define Source
+
+message Source {
+    string id = 1;
+    string xmlUrl = 2;
+    int64 importedAt = 3;
+    int64 updatedAt = 4;
+    optional string title = 5;
+    optional string htmlUrl = 6;
+    optional string iconUrl = 7;
+    bool showTitle = 8;
+    bool showFullArticle = 9;
+    bool showMedia = 10;
+    optional string description = 11;
+    ArticleOrder articleOrder = 12;
+    int64 fetchScheduledAt = 13;
+    optional int64 fetchStartedAt = 14;
+    optional int64 fetchCompletedAt = 15;
+    FetchStatus fetchStatus = 16;
+    optional string fetchFailedMsg = 17;
+    int64 fetchDelayMillis = 18;
+    int32 fetchErrorCount = 19;
+}
+
+// Define SourceUpdater
+
+message SourceUpdater {
+    message TitleOption {
+        optional string titleOption = 1;
+    }
+    optional TitleOption title = 1;
+
+    message HtmlUrlOption {
+        optional string htmlUrlOption = 1;
+    }
+    optional HtmlUrlOption htmlUrl = 2;
+
+    message DescriptionOption {
+        optional string descriptionOption = 1;
+    }
+    optional DescriptionOption description = 3;
+    optional int64 fetchScheduledAt = 4;
+
+    message FetchStartedAtOption {
+        optional int64 fetchStartedAtOption = 1;
+    }
+    optional FetchStartedAtOption fetchStartedAt = 5;
+
+    message FetchCompletedAtOption {
+        optional int64 fetchCompletedAtOption = 1;
+    }
+    optional FetchCompletedAtOption fetchCompletedAt = 6;
+    optional FetchStatus fetchStatus = 7;
+
+    message FetchFailedMsgOption {
+        optional string fetchFailedMsgOption = 1;
+    }
+    optional FetchFailedMsgOption fetchFailedMsg = 8;
+    optional int64 fetchDelayMillis = 9;
+    optional int32 fetchErrorCount = 10;
+    optional bool showTitle = 11;
+    optional bool showFullArticle = 12;
+    optional bool showMedia = 13;
+    optional ArticleOrder articleOrder = 14;
+
+    message IconUrlOption {
+        optional string iconUrlOption = 1;
+    }
+    optional IconUrlOption iconUrl = 15;
+}
+
+// Define User
+
+message User {
+    string id = 1;
+    string username = 2;
+    string password = 3;
+    string salt = 4;
+    string email = 5;
+    string defaultFolderID = 6;
+    optional int64 lastLoginTime = 7;
+    optional string lastLoginIP = 8;
+    bool isActive = 9;
+    bool isAdmin = 10;
+    int64 createdAt = 11;
+    optional string currentFolderID = 12;
+    optional string currentSourceID = 13;
+    optional string activeCode = 14;
+    int64 subscribeEndAt = 15;
+    bool subscribed = 16;
+}
+
+// Define UserInfo
+
+message UserInfo {
+    string id = 1;
+    string username = 2;
+    string email = 3;
+    int64 createdAt = 4;
+    string defaultFolderID = 5;
+    bool isAdmin = 6;
+    int64 subscribeEndAt = 7;
+    optional string currentFolderID = 8;
+    optional string currentSourceID = 9;
+    bool subscribed = 10;
+}
+
+// Define UserUpdater
+
+message UserUpdater {
+    optional string password = 1;
+    optional string salt = 2;
+    optional string email = 3;
+
+    message LastLoginTimeOption {
+        optional int64 lastLoginTimeOption = 1;
+    }
+    optional LastLoginTimeOption lastLoginTime = 4;
+
+    message LastLoginIPOption {
+        optional string lastLoginIPOption = 1;
+    }
+    optional LastLoginIPOption lastLoginIP = 5;
+    optional bool isActive = 6;
+    optional bool isAdmin = 7;
+
+    message CurrentFolderIDOption {
+        optional string currentFolderIDOption = 1;
+    }
+    optional CurrentFolderIDOption currentFolderID = 8;
+
+    message CurrentSourceIDOption {
+        optional string currentSourceIDOption = 1;
+    }
+    optional CurrentSourceIDOption currentSourceID = 9;
+
+    message ActiveCodeOption {
+        optional string activeCodeOption = 1;
+    }
+    optional ActiveCodeOption activeCode = 10;
+    optional int64 subscribeEndAt = 11;
+    optional bool subscribed = 12;
+    optional string username = 13;
+}
+
+// Define UserSession
+
+message UserSession {
+    string token = 1;
+    string userID = 2;
+    int64 expireTime = 3;
+    bool isAdmin = 4;
+    int64 subscribeEndTime = 5;
+}
+
+// Define ArticleUserMarking
+
+message ArticleUserMarking {
+    string articleID = 1;
+    string userID = 2;
+    bool bookmarked = 3;
+    bool read = 4;
+    bool deleted = 5;
+}
+
+// Define ArticleWithUserMarking
+
+message ArticleWithUserMarking {
+    Article article = 1;
+    ArticleUserMarking userMarking = 2;
+}
+
+// Define FullArticleWithUserMarking
+
+message FullArticleWithUserMarking {
+    FullArticle article = 1;
+    ArticleUserMarking userMarking = 2;
+}
+
+// Define RedditSession
+
+message RedditSession {
+    string userID = 1;
+    string redditUserID = 2;
+    optional string redditUserName = 3;
+    string state = 4;
+    int64 createdAt = 5;
+    optional int64 accessAcceptedAt = 6;
+    optional string token = 7;
+    optional string refreshToken = 8;
+    optional string scope = 9;
+    optional int32 expiresInSeconds = 10;
+}
+
+// Define SourceResult
+
+message SourceResult {
+    string url = 1;
+    bool recommend = 2;
+    optional string recommendReason = 3;
+}
+
+// Define SearchOptions
+
+message SearchOptions {
+    string query = 1;
+    int32 start = 2;
+    int32 limit = 3;
+    bool sortByTime = 4;
+    bool highlight = 5;
+    optional int64 postedAfter = 6;
+    optional int64 postedBefore = 7;
+}
+
+// Define MediaGroups
+
+message MediaGroups {
+    repeated MediaGroup groups = 1;
+}
+
+// Define MediaGroup
+
+message MediaGroup {
+    MediaContent content = 1;
+    optional string title = 2;
+    optional string keyword = 3;
+    optional string description = 4;
+    optional string hash = 5;
+    optional MediaRating rating = 6;
+    repeated MediaThumbnail thumbnails = 7;
+    repeated MediaText text = 8;
+    repeated string comments = 9;
+}
+
+// Define MediaContent
+
+message MediaContent {
+    string url = 1;
+    optional int64 fileSize = 2;
+    optional string typ = 3;
+    optional string medium = 4;
+    bool isDefault = 5;
+    string expression = 6;
+    optional int32 height = 7;
+    optional int32 width = 8;
+    optional string lang = 9;
+    optional bool fromArticle = 10;
+}
+
+// Define MediaRating
+
+message MediaRating {
+    string value = 1;
+    optional string scheme = 2;
+}
+
+// Define MediaThumbnail
+
+message MediaThumbnail {
+    string url = 1;
+    optional int32 width = 2;
+    optional int32 height = 3;
+    optional string time = 4;
+}
+
+// Define MediaPlayer
+
+message MediaPlayer {
+    string url = 1;
+    optional int32 height = 2;
+    optional int32 width = 3;
+}
+
+// Define MediaText
+
+message MediaText {
+    optional string lang = 1;
+    optional string start = 2;
+    optional string end = 3;
+}
+
+// Define PaymentCustomer
+
+message PaymentCustomer {
+    string userID = 1;
+    string thirdParty = 2;
+    string customerID = 3;
+    int64 createdAt = 4;
+}
+
+// Define MoreLikeThisMapping
+
+message MoreLikeThisMapping {
+    string fromID = 1;
+    MoreLikeThisType fromType = 2;
+    string moreLikeThisID = 3;
+    MoreLikeThisType moreLikeThisType = 4;
+    string userID = 5;
+    int64 position = 6;
+}
+
+// Define MoreLikeThisType
+
+enum MoreLikeThisType {
+    FOLDER = 0;
+    SOURCE = 1;
+    ALL = 2;
+}
+
+// Define TermWeight
+
+message TermWeight {
+    string term = 1;
+    double weight = 2;
+}
+
+// Define TermWeights
+
+message TermWeights {
+    repeated TermWeight terms = 1;
+}
+
+// Define SearchTerms
+
+message SearchTerms {
+    repeated string terms = 1;
+}
+
+// Define me.binwang.rss.service.ArticleService
+
+message GetArticlesBySourceRequest {
+    string token = 1;
+    string sourceID = 2;
+    int32 size = 3;
+    int64 postedAt = 4;
+    string articleID = 5;
+}
+
+message SearchArticlesBySourceWithUserMarkingRequest {
+    string token = 1;
+    string sourceID = 2;
+    SearchOptions searchOptions = 3;
+}
+
+message MoreLikeThisInSourceWithUserMarkingRequest {
+    string token = 1;
+    string articleID = 2;
+    string sourceID = 3;
+    int32 start = 4;
+    int32 limit = 5;
+    optional int64 postedBefore = 6;
+    optional int64 postedAfter = 7;
+}
+
+message SearchArticlesByFolderWithUserMarkingRequest {
+    string token = 1;
+    string folderID = 2;
+    SearchOptions searchOptions = 3;
+}
+
+message MoreLikeThisInFolderWithUserMarkingRequest {
+    string token = 1;
+    string articleID = 2;
+    string folderID = 3;
+    int32 start = 4;
+    int32 limit = 5;
+    optional int64 postedBefore = 6;
+    optional int64 postedAfter = 7;
+}
+
+message SearchAllArticlesWithUserMarkingRequest {
+    string token = 1;
+    SearchOptions searchOptions = 2;
+}
+
+message MoreLikeThisForUserWithUserMarkingRequest {
+    string token = 1;
+    string articleID = 2;
+    int32 start = 3;
+    int32 limit = 4;
+    optional int64 postedBefore = 5;
+    optional int64 postedAfter = 6;
+}
+
+message GetArticlesBySourceWithUserMarkingRequest {
+    string token = 1;
+    string sourceID = 2;
+    int32 size = 3;
+    int64 postedAt = 4;
+    string articleID = 5;
+    optional bool read = 6;
+    optional bool bookmarked = 7;
+    optional bool deleted = 8;
+}
+
+message GetArticlesBySourceOrderByScoreWithUserMarkingRequest {
+    string token = 1;
+    string sourceID = 2;
+    int32 size = 3;
+    optional double maxScore = 4;
+    string articleID = 5;
+    optional bool read = 6;
+    optional bool bookmarked = 7;
+    optional bool deleted = 8;
+}
+
+message GetArticlesByFolderRequest {
+    string token = 1;
+    string folderID = 2;
+    int32 size = 3;
+    int64 postedBefore = 4;
+    string articleID = 5;
+}
+
+message GetArticlesByFolderWithUserMarkingRequest {
+    string token = 1;
+    string folderID = 2;
+    int32 size = 3;
+    int64 postedBefore = 4;
+    string articleID = 5;
+    optional bool read = 6;
+    optional bool bookmarked = 7;
+    optional bool deleted = 8;
+}
+
+message GetArticlesByFolderOrderByScoreWithUserMarkingRequest {
+    string token = 1;
+    string folderID = 2;
+    int32 size = 3;
+    optional double maxScore = 4;
+    string articleID = 5;
+    optional bool read = 6;
+    optional bool bookmarked = 7;
+    optional bool deleted = 8;
+}
+
+message GetMyArticlesRequest {
+    string token = 1;
+    int32 size = 2;
+    int64 postedAt = 3;
+    string articleID = 4;
+}
+
+message GetMyArticlesWithUserMarkingRequest {
+    string token = 1;
+    int32 size = 2;
+    int64 postedAt = 3;
+    string articleID = 4;
+    optional bool read = 5;
+    optional bool bookmarked = 6;
+    optional bool deleted = 7;
+}
+
+message GetFullArticleRequest {
+    string token = 1;
+    string articleID = 2;
+}
+
+message BatchGetArticleContentRequest {
+    string token = 1;
+    ArticleIDs articleIDs = 2;
+}
+
+message GetFullArticleWithUserMarkingRequest {
+    string token = 1;
+    string articleID = 2;
+}
+
+message GetFolderRecommendSearchTermsRequest {
+    string token = 1;
+    string folderID = 2;
+    int32 articleSize = 3;
+    int64 likedArticlesPostedAfter = 4;
+    int32 resultSize = 5;
+}
+
+message ReadArticleRequest {
+    string token = 1;
+    string articleID = 2;
+}
+
+message UnreadArticleRequest {
+    string token = 1;
+    string articleID = 2;
+}
+
+message BookmarkArticleRequest {
+    string token = 1;
+    string articleID = 2;
+}
+
+message UnBookmarkArticleRequest {
+    string token = 1;
+    string articleID = 2;
+}
+
+message MarkArticleAsDeletedRequest {
+    string token = 1;
+    string articleID = 2;
+}
+
+message MarkArticleAsNotDeletedRequest {
+    string token = 1;
+    string articleID = 2;
+}
+
+message GetArticleTermVectorRequest {
+    string token = 1;
+    string articleID = 2;
+    int32 size = 3;
+}
+message GetArticlesBySourceResponse {
+    Article result = 1;
+}
+
+message SearchArticlesBySourceWithUserMarkingResponse {
+    ArticleWithUserMarking result = 1;
+}
+
+message MoreLikeThisInSourceWithUserMarkingResponse {
+    ArticleWithUserMarking result = 1;
+}
+
+message SearchArticlesByFolderWithUserMarkingResponse {
+    ArticleWithUserMarking result = 1;
+}
+
+message MoreLikeThisInFolderWithUserMarkingResponse {
+    ArticleWithUserMarking result = 1;
+}
+
+message SearchAllArticlesWithUserMarkingResponse {
+    ArticleWithUserMarking result = 1;
+}
+
+message MoreLikeThisForUserWithUserMarkingResponse {
+    ArticleWithUserMarking result = 1;
+}
+
+message GetArticlesBySourceWithUserMarkingResponse {
+    ArticleWithUserMarking result = 1;
+}
+
+message GetArticlesBySourceOrderByScoreWithUserMarkingResponse {
+    ArticleWithUserMarking result = 1;
+}
+
+message GetArticlesByFolderResponse {
+    Article result = 1;
+}
+
+message GetArticlesByFolderWithUserMarkingResponse {
+    ArticleWithUserMarking result = 1;
+}
+
+message GetArticlesByFolderOrderByScoreWithUserMarkingResponse {
+    ArticleWithUserMarking result = 1;
+}
+
+message GetMyArticlesResponse {
+    Article result = 1;
+}
+
+message GetMyArticlesWithUserMarkingResponse {
+    ArticleWithUserMarking result = 1;
+}
+
+message GetFullArticleResponse {
+    FullArticle result = 1;
+}
+
+message BatchGetArticleContentResponse {
+    ArticleContent result = 1;
+}
+
+message GetFullArticleWithUserMarkingResponse {
+    FullArticleWithUserMarking result = 1;
+}
+
+message GetFolderRecommendSearchTermsResponse {
+    SearchTerms result = 1;
+}
+
+message ReadArticleResponse {
+    bool result = 1;
+}
+
+message UnreadArticleResponse {
+    bool result = 1;
+}
+
+message BookmarkArticleResponse {
+    bool result = 1;
+}
+
+message UnBookmarkArticleResponse {
+    bool result = 1;
+}
+
+message MarkArticleAsDeletedResponse {
+    bool result = 1;
+}
+
+message MarkArticleAsNotDeletedResponse {
+    bool result = 1;
+}
+
+message GetArticleTermVectorResponse {
+    TermWeights result = 1;
+}
+
+service ArticleAPI {
+    rpc GetArticlesBySource (GetArticlesBySourceRequest) returns (stream GetArticlesBySourceResponse);
+    rpc SearchArticlesBySourceWithUserMarking (SearchArticlesBySourceWithUserMarkingRequest) returns (stream SearchArticlesBySourceWithUserMarkingResponse);
+    rpc MoreLikeThisInSourceWithUserMarking (MoreLikeThisInSourceWithUserMarkingRequest) returns (stream MoreLikeThisInSourceWithUserMarkingResponse);
+    rpc SearchArticlesByFolderWithUserMarking (SearchArticlesByFolderWithUserMarkingRequest) returns (stream SearchArticlesByFolderWithUserMarkingResponse);
+    rpc MoreLikeThisInFolderWithUserMarking (MoreLikeThisInFolderWithUserMarkingRequest) returns (stream MoreLikeThisInFolderWithUserMarkingResponse);
+    rpc SearchAllArticlesWithUserMarking (SearchAllArticlesWithUserMarkingRequest) returns (stream SearchAllArticlesWithUserMarkingResponse);
+    rpc MoreLikeThisForUserWithUserMarking (MoreLikeThisForUserWithUserMarkingRequest) returns (stream MoreLikeThisForUserWithUserMarkingResponse);
+    rpc GetArticlesBySourceWithUserMarking (GetArticlesBySourceWithUserMarkingRequest) returns (stream GetArticlesBySourceWithUserMarkingResponse);
+    rpc GetArticlesBySourceOrderByScoreWithUserMarking (GetArticlesBySourceOrderByScoreWithUserMarkingRequest) returns (stream GetArticlesBySourceOrderByScoreWithUserMarkingResponse);
+    rpc GetArticlesByFolder (GetArticlesByFolderRequest) returns (stream GetArticlesByFolderResponse);
+    rpc GetArticlesByFolderWithUserMarking (GetArticlesByFolderWithUserMarkingRequest) returns (stream GetArticlesByFolderWithUserMarkingResponse);
+    rpc GetArticlesByFolderOrderByScoreWithUserMarking (GetArticlesByFolderOrderByScoreWithUserMarkingRequest) returns (stream GetArticlesByFolderOrderByScoreWithUserMarkingResponse);
+    rpc GetMyArticles (GetMyArticlesRequest) returns (stream GetMyArticlesResponse);
+    rpc GetMyArticlesWithUserMarking (GetMyArticlesWithUserMarkingRequest) returns (stream GetMyArticlesWithUserMarkingResponse);
+    rpc GetFullArticle (GetFullArticleRequest) returns (GetFullArticleResponse);
+    rpc BatchGetArticleContent (BatchGetArticleContentRequest) returns (stream BatchGetArticleContentResponse);
+    rpc GetFullArticleWithUserMarking (GetFullArticleWithUserMarkingRequest) returns (GetFullArticleWithUserMarkingResponse);
+    rpc GetFolderRecommendSearchTerms (GetFolderRecommendSearchTermsRequest) returns (GetFolderRecommendSearchTermsResponse);
+    rpc ReadArticle (ReadArticleRequest) returns (ReadArticleResponse);
+    rpc UnreadArticle (UnreadArticleRequest) returns (UnreadArticleResponse);
+    rpc BookmarkArticle (BookmarkArticleRequest) returns (BookmarkArticleResponse);
+    rpc UnBookmarkArticle (UnBookmarkArticleRequest) returns (UnBookmarkArticleResponse);
+    rpc MarkArticleAsDeleted (MarkArticleAsDeletedRequest) returns (MarkArticleAsDeletedResponse);
+    rpc MarkArticleAsNotDeleted (MarkArticleAsNotDeletedRequest) returns (MarkArticleAsNotDeletedResponse);
+    rpc GetArticleTermVector (GetArticleTermVectorRequest) returns (GetArticleTermVectorResponse);
+}
+
+// Define me.binwang.rss.service.FolderService
+
+message ImportFromOPMLRequest {
+    string token = 1;
+    string inputStream = 2;
+}
+
+message ExportOPMLRequest {
+    string token = 1;
+}
+
+message GetMyFoldersRequest {
+    string token = 1;
+    int32 size = 2;
+    int64 startPosition = 3;
+}
+
+message GetFolderByIDRequest {
+    string token = 1;
+    string folderID = 2;
+}
+
+message CleanupPositionRequest {
+    string token = 1;
+}
+
+message AddFolderRequest {
+    string token = 1;
+    FolderCreator folder = 2;
+}
+
+message UpdateFolderRequest {
+    string token = 1;
+    string folderID = 2;
+    FolderUpdater folderUpdater = 3;
+}
+
+message GetRecommendFoldersRequest {
+    string token = 1;
+    string lang = 2;
+    int32 size = 3;
+    int32 startPosition = 4;
+}
+
+message DeleteFolderRequest {
+    string token = 1;
+    string folderID = 2;
+}
+message ImportFromOPMLResponse {
+    int32 result = 1;
+}
+
+message ExportOPMLResponse {
+    string result = 1;
+}
+
+message GetMyFoldersResponse {
+    Folder result = 1;
+}
+
+message GetFolderByIDResponse {
+    Folder result = 1;
+}
+
+message CleanupPositionResponse {
+    int32 result = 1;
+}
+
+message AddFolderResponse {
+    Folder result = 1;
+}
+
+message UpdateFolderResponse {
+    Folder result = 1;
+}
+
+message GetRecommendFoldersResponse {
+    Folder result = 1;
+}
+
+message DeleteFolderResponse {}
+
+service FolderAPI {
+    rpc ImportFromOPML (ImportFromOPMLRequest) returns (ImportFromOPMLResponse);
+    rpc ExportOPML (ExportOPMLRequest) returns (ExportOPMLResponse);
+    rpc GetMyFolders (GetMyFoldersRequest) returns (stream GetMyFoldersResponse);
+    rpc GetFolderByID (GetFolderByIDRequest) returns (GetFolderByIDResponse);
+    rpc CleanupPosition (CleanupPositionRequest) returns (CleanupPositionResponse);
+    rpc AddFolder (AddFolderRequest) returns (AddFolderResponse);
+    rpc UpdateFolder (UpdateFolderRequest) returns (UpdateFolderResponse);
+    rpc GetRecommendFolders (GetRecommendFoldersRequest) returns (stream GetRecommendFoldersResponse);
+    rpc DeleteFolder (DeleteFolderRequest) returns (DeleteFolderResponse);
+}
+
+// Define me.binwang.rss.service.SourceService
+
+message GetMySourcesWithFoldersRequest {
+    string token = 1;
+    int32 size = 2;
+    int64 startPosition = 3;
+}
+
+message GetSourceInFolderRequest {
+    string token = 1;
+    string folderID = 2;
+    string sourceID = 3;
+}
+
+message GetSourceInUserRequest {
+    string token = 1;
+    string sourceID = 2;
+}
+
+message GetSourcesInFolderRequest {
+    string token = 1;
+    string folderID = 2;
+    int32 size = 3;
+    int64 startPosition = 4;
+}
+
+message GetSourcesInFoldersRequest {
+    string token = 1;
+    repeated string folderIDs = 2;
+    int32 sizeInEachFolder = 3;
+}
+
+message AddSourceToFolderRequest {
+    string token = 1;
+    string folderID = 2;
+    string sourceID = 3;
+    int64 position = 4;
+}
+
+message MoveSourceAfterRequest {
+    string token = 1;
+    string folderID = 2;
+    string sourceID = 3;
+    string targetSourceID = 4;
+}
+
+message MoveSourceBeforeRequest {
+    string token = 1;
+    string folderID = 2;
+    string sourceID = 3;
+    string targetSourceID = 4;
+}
+
+message CleanupPositionInFolderRequest {
+    string token = 1;
+    string folderID = 2;
+}
+
+message DelSourceFromFolderRequest {
+    string token = 1;
+    string folderID = 2;
+    string sourceID = 3;
+}
+
+message UpdateSourceOrderInFolderRequest {
+    string token = 1;
+    string folderID = 2;
+    string sourceID = 3;
+    int64 position = 4;
+}
+
+message DelSourceForUserRequest {
+    string token = 1;
+    string sourceID = 2;
+}
+
+message GetSourceRequest {
+    string token = 1;
+    string sourceID = 2;
+}
+
+message GetOrImportSourceRequest {
+    string token = 1;
+    string url = 2;
+}
+
+message ImportSourceRequest {
+    string token = 1;
+    string url = 2;
+}
+
+message UpdateSourceMappingRequest {
+    string token = 1;
+    string sourceID = 2;
+    FolderSourceMappingUpdater folderSourceMappingUpdater = 3;
+}
+
+message FindSourceRequest {
+    string token = 1;
+    string url = 2;
+}
+
+message ReplaceSourceInstanceRequest {
+    string token = 1;
+    string oldInstance = 2;
+    string newInstance = 3;
+    int32 size = 4;
+}
+message GetMySourcesWithFoldersResponse {
+    FolderSource result = 1;
+}
+
+message GetSourceInFolderResponse {
+    FolderSource result = 1;
+}
+
+message GetSourceInUserResponse {
+    FolderSource result = 1;
+}
+
+message GetSourcesInFolderResponse {
+    FolderSource result = 1;
+}
+
+message GetSourcesInFoldersResponse {
+    FolderSource result = 1;
+}
+
+message AddSourceToFolderResponse {
+    FolderSource result = 1;
+}
+
+message MoveSourceAfterResponse {
+    bool result = 1;
+}
+
+message MoveSourceBeforeResponse {
+    bool result = 1;
+}
+
+message CleanupPositionInFolderResponse {
+    int32 result = 1;
+}
+
+message DelSourceFromFolderResponse {
+    bool result = 1;
+}
+
+message UpdateSourceOrderInFolderResponse {
+    bool result = 1;
+}
+
+message DelSourceForUserResponse {}
+
+message GetSourceResponse {
+    Source result = 1;
+}
+
+message GetOrImportSourceResponse {
+    Source result = 1;
+}
+
+message ImportSourceResponse {
+    string result = 1;
+}
+
+message UpdateSourceMappingResponse {
+    int32 result = 1;
+}
+
+message FindSourceResponse {
+    SourceResult result = 1;
+}
+
+message ReplaceSourceInstanceResponse {
+    int32 result = 1;
+}
+
+service SourceAPI {
+    rpc GetMySourcesWithFolders (GetMySourcesWithFoldersRequest) returns (stream GetMySourcesWithFoldersResponse);
+    rpc GetSourceInFolder (GetSourceInFolderRequest) returns (GetSourceInFolderResponse);
+    rpc GetSourceInUser (GetSourceInUserRequest) returns (GetSourceInUserResponse);
+    rpc GetSourcesInFolder (GetSourcesInFolderRequest) returns (stream GetSourcesInFolderResponse);
+    rpc GetSourcesInFolders (GetSourcesInFoldersRequest) returns (stream GetSourcesInFoldersResponse);
+    rpc AddSourceToFolder (AddSourceToFolderRequest) returns (AddSourceToFolderResponse);
+    rpc MoveSourceAfter (MoveSourceAfterRequest) returns (MoveSourceAfterResponse);
+    rpc MoveSourceBefore (MoveSourceBeforeRequest) returns (MoveSourceBeforeResponse);
+    rpc CleanupPositionInFolder (CleanupPositionInFolderRequest) returns (CleanupPositionInFolderResponse);
+    rpc DelSourceFromFolder (DelSourceFromFolderRequest) returns (DelSourceFromFolderResponse);
+    rpc UpdateSourceOrderInFolder (UpdateSourceOrderInFolderRequest) returns (UpdateSourceOrderInFolderResponse);
+    rpc DelSourceForUser (DelSourceForUserRequest) returns (DelSourceForUserResponse);
+    rpc GetSource (GetSourceRequest) returns (GetSourceResponse);
+    rpc GetOrImportSource (GetOrImportSourceRequest) returns (GetOrImportSourceResponse);
+    rpc ImportSource (ImportSourceRequest) returns (ImportSourceResponse);
+    rpc UpdateSourceMapping (UpdateSourceMappingRequest) returns (UpdateSourceMappingResponse);
+    rpc FindSource (FindSourceRequest) returns (stream FindSourceResponse);
+    rpc ReplaceSourceInstance (ReplaceSourceInstanceRequest) returns (ReplaceSourceInstanceResponse);
+}
+
+// Define me.binwang.rss.service.UserService
+
+message SignUpRequest {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+}
+
+message ResendActiveCodeRequest {
+    string email = 1;
+}
+
+message ActiveAccountRequest {
+    string activeCode = 1;
+}
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message RequestResetPasswordRequest {
+    string email = 1;
+}
+
+message ResetPasswordRequest {
+    string resetToken = 1;
+    string newPassword = 2;
+}
+
+message SignOutRequest {
+    string token = 1;
+}
+
+message SignOutAllDevicesRequest {
+    string token = 1;
+}
+
+message GetMyUserInfoRequest {
+    string token = 1;
+}
+
+message DeactivateUserRequest {
+    string token = 1;
+    string userID = 2;
+}
+
+message RemoveAdminRequest {
+    string token = 1;
+    string userID = 2;
+}
+
+message CreateRedditSessionRequest {
+    string token = 1;
+}
+
+message GetRedditSessionsRequest {
+    string token = 1;
+}
+
+message SetCurrentFolderRequest {
+    string token = 1;
+    string currentFolderID = 2;
+}
+
+message SetCurrentSourceRequest {
+    string token = 1;
+    string currentSourceID = 2;
+}
+
+message RemoveCurrentFolderAndSourceRequest {
+    string token = 1;
+}
+
+message GetPaymentCustomersRequest {
+    string token = 1;
+}
+
+message SendDeleteUserCodeRequest {
+    string token = 1;
+}
+
+message DeleteUserDataRequest {
+    string email = 1;
+    string password = 2;
+    string verificationCode = 3;
+}
+message SignUpResponse {
+    UserInfo result = 1;
+}
+
+message ResendActiveCodeResponse {}
+
+message ActiveAccountResponse {}
+
+message LoginResponse {
+    UserSession result = 1;
+}
+
+message RequestResetPasswordResponse {}
+
+message ResetPasswordResponse {}
+
+message SignOutResponse {
+    bool result = 1;
+}
+
+message SignOutAllDevicesResponse {
+    int64 result = 1;
+}
+
+message GetMyUserInfoResponse {
+    UserInfo result = 1;
+}
+
+message DeactivateUserResponse {}
+
+message RemoveAdminResponse {}
+
+message CreateRedditSessionResponse {
+    string result = 1;
+}
+
+message GetRedditSessionsResponse {
+    RedditSession result = 1;
+}
+
+message SetCurrentFolderResponse {}
+
+message SetCurrentSourceResponse {}
+
+message RemoveCurrentFolderAndSourceResponse {}
+
+message GetPaymentCustomersResponse {
+    PaymentCustomer result = 1;
+}
+
+message SendDeleteUserCodeResponse {}
+
+message DeleteUserDataResponse {}
+
+service UserAPI {
+    rpc SignUp (SignUpRequest) returns (SignUpResponse);
+    rpc ResendActiveCode (ResendActiveCodeRequest) returns (ResendActiveCodeResponse);
+    rpc ActiveAccount (ActiveAccountRequest) returns (ActiveAccountResponse);
+    rpc Login (LoginRequest) returns (LoginResponse);
+    rpc RequestResetPassword (RequestResetPasswordRequest) returns (RequestResetPasswordResponse);
+    rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
+    rpc SignOut (SignOutRequest) returns (SignOutResponse);
+    rpc SignOutAllDevices (SignOutAllDevicesRequest) returns (SignOutAllDevicesResponse);
+    rpc GetMyUserInfo (GetMyUserInfoRequest) returns (GetMyUserInfoResponse);
+    rpc DeactivateUser (DeactivateUserRequest) returns (DeactivateUserResponse);
+    rpc RemoveAdmin (RemoveAdminRequest) returns (RemoveAdminResponse);
+    rpc CreateRedditSession (CreateRedditSessionRequest) returns (CreateRedditSessionResponse);
+    rpc GetRedditSessions (GetRedditSessionsRequest) returns (stream GetRedditSessionsResponse);
+    rpc SetCurrentFolder (SetCurrentFolderRequest) returns (SetCurrentFolderResponse);
+    rpc SetCurrentSource (SetCurrentSourceRequest) returns (SetCurrentSourceResponse);
+    rpc RemoveCurrentFolderAndSource (RemoveCurrentFolderAndSourceRequest) returns (RemoveCurrentFolderAndSourceResponse);
+    rpc GetPaymentCustomers (GetPaymentCustomersRequest) returns (stream GetPaymentCustomersResponse);
+    rpc SendDeleteUserCode (SendDeleteUserCodeRequest) returns (SendDeleteUserCodeResponse);
+    rpc DeleteUserData (DeleteUserDataRequest) returns (DeleteUserDataResponse);
+}
+
+// Define me.binwang.rss.service.StripePaymentService
+
+message PaymentCallbackRequest {
+    string payload = 1;
+    string sigHeader = 2;
+}
+
+message CreateCheckoutSessionRequest {
+    string token = 1;
+    string successUrl = 2;
+    string cancelUrl = 3;
+    bool needRedirect = 4;
+}
+
+message CreatePortalLinkRequest {
+    string token = 1;
+    string returnUrl = 2;
+    bool needRedirect = 3;
+}
+message PaymentCallbackResponse {}
+
+message CreateCheckoutSessionResponse {
+    string result = 1;
+}
+
+message CreatePortalLinkResponse {
+    string result = 1;
+}
+
+service StripePaymentAPI {
+    rpc PaymentCallback (PaymentCallbackRequest) returns (PaymentCallbackResponse);
+    rpc CreateCheckoutSession (CreateCheckoutSessionRequest) returns (CreateCheckoutSessionResponse);
+    rpc CreatePortalLink (CreatePortalLinkRequest) returns (CreatePortalLinkResponse);
+}
+
+// Define me.binwang.rss.service.ApplePaymentService
+
+message GetAppleCustomerIDRequest {
+    string token = 1;
+}
+
+message InAppPurchaseCallbackRequest {
+    string responseBodyV2Str = 1;
+    bool isSandBox = 2;
+}
+message GetAppleCustomerIDResponse {
+    string result = 1;
+}
+
+message InAppPurchaseCallbackResponse {}
+
+service ApplePaymentAPI {
+    rpc GetAppleCustomerID (GetAppleCustomerIDRequest) returns (GetAppleCustomerIDResponse);
+    rpc InAppPurchaseCallback (InAppPurchaseCallbackRequest) returns (InAppPurchaseCallbackResponse);
+}
+
+// Define me.binwang.rss.service.SystemService
+
+message GetApiVersionRequest {
+
+}
+
+message VersionIsCompatibleRequest {
+    string version = 1;
+}
+message GetApiVersionResponse {
+    string result = 1;
+}
+
+message VersionIsCompatibleResponse {
+    bool result = 1;
+}
+
+service SystemAPI {
+    rpc GetApiVersion (GetApiVersionRequest) returns (GetApiVersionResponse);
+    rpc VersionIsCompatible (VersionIsCompatibleRequest) returns (VersionIsCompatibleResponse);
+}
+
+// Define me.binwang.rss.service.MoreLikeThisService
+
+message GetMoreLikeThisMappingsRequest {
+    string token = 1;
+    string fromID = 2;
+    MoreLikeThisType fromType = 3;
+    int32 size = 4;
+    int64 startPosition = 5;
+}
+
+message AddMoreLikeThisMappingRequest {
+    string token = 1;
+    string fromID = 2;
+    MoreLikeThisType fromType = 3;
+    string moreLikeThisID = 4;
+    MoreLikeThisType moreLikeThisType = 5;
+    int64 position = 6;
+}
+
+message DelMoreLikeThisMappingRequest {
+    string token = 1;
+    string fromID = 2;
+    MoreLikeThisType fromType = 3;
+    string moreLikeThisID = 4;
+    MoreLikeThisType moreLikeThisType = 5;
+}
+
+message UpdateMoreLikeThisMappingRequest {
+    string token = 1;
+    string fromID = 2;
+    MoreLikeThisType fromType = 3;
+    string moreLikeThisID = 4;
+    MoreLikeThisType moreLikeThisType = 5;
+    int64 position = 6;
+}
+
+message CleanupMappingsPositionRequest {
+    string token = 1;
+    string fromID = 2;
+    MoreLikeThisType fromType = 3;
+}
+message GetMoreLikeThisMappingsResponse {
+    MoreLikeThisMapping result = 1;
+}
+
+message AddMoreLikeThisMappingResponse {
+    bool result = 1;
+}
+
+message DelMoreLikeThisMappingResponse {
+    bool result = 1;
+}
+
+message UpdateMoreLikeThisMappingResponse {
+    bool result = 1;
+}
+
+message CleanupMappingsPositionResponse {}
+
+service MoreLikeThisAPI {
+    rpc GetMoreLikeThisMappings (GetMoreLikeThisMappingsRequest) returns (stream GetMoreLikeThisMappingsResponse);
+    rpc AddMoreLikeThisMapping (AddMoreLikeThisMappingRequest) returns (AddMoreLikeThisMappingResponse);
+    rpc DelMoreLikeThisMapping (DelMoreLikeThisMappingRequest) returns (DelMoreLikeThisMappingResponse);
+    rpc UpdateMoreLikeThisMapping (UpdateMoreLikeThisMappingRequest) returns (UpdateMoreLikeThisMappingResponse);
+    rpc CleanupMappingsPosition (CleanupMappingsPositionRequest) returns (CleanupMappingsPositionResponse);
+}

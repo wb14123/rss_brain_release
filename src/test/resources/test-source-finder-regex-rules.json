@@ -1,0 +1,18 @@
+{
+  "rules": [
+    {
+      "source": "(?<proto>https)://www.youtube.com/channel/(?<channel>[\\w|_]+)",
+      "target": "$proto://www.youtube.com/feeds/videos.xml?channel_id=$channel"
+    },
+    {
+      "source": "https://www.reddit.com/r/(?<subreddit>[\\w|_]+)",
+      "target": "https://www.reddit.com/r/$subreddit/hot.json?count=100",
+      "recommend": true,
+      "recommendString": "This is an internal Reddit integration to provide better result"
+    },
+    {
+      "source": "https://www.reddit.com/r/(?<subreddit>[\\w|_]+)",
+      "target": "https://www.reddit.com/r/$subreddit/new.json?count=100"
+    }
+  ]
+}

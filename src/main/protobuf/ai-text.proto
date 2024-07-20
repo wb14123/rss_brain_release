@@ -1,0 +1,20 @@
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "me.binwang.aitext";
+
+package aitext;
+
+message Vector {
+  repeated double values = 1;
+}
+
+message GetEmbeddingRequest {
+  string text = 1;
+}
+
+service SentenceTransformer {
+  rpc GetEmbedding(GetEmbeddingRequest) returns (Vector) {}
+}
+
