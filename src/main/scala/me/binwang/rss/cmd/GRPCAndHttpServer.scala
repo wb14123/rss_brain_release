@@ -45,7 +45,7 @@ object GRPCAndHttpServer extends IOApp {
       new ArticleListView(services.articleService, services.userService, services.folderService,
         services.sourceService).routes <+>
       new ArticleView(services.articleService).routes <+>
-      new UserView(services.userService).routes <+>
+      new UserView(services.userService, services.systemService).routes <+>
       new PaymentView(services.userService, services.stripePaymentService).routes <+>
       new ImportFeedView(services.sourceService, services.folderService).routes <+>
       new RecommendationView(services.moreLikeThisService, services.articleService, services.sourceService,

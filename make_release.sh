@@ -19,6 +19,8 @@ rsync --delete -av --exclude .git --filter=':- .gitignore' . ../rss_brain_releas
 
 if [ $RELEASE_VERSION = 'amend' ] ; then
 	echo "Amend existing commit"
+	git tag --delete $RELEASE_VERSION
+	git tag $RELEASE_VERSION
 	cd ../rss_brain_release
 	git add -A .
 	git commit --amend --no-edit

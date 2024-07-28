@@ -1,6 +1,18 @@
 {
   "rules" : [
     {
+      "source" : "https?://jwc.upc.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/upc/jwc?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://jwc.upc.edu.cn(?<any>.*)/(?<type>[\\w|_]+)/list.htm",
+      "target" : "https://rsshub.app/upc/jwc/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://zs.gs.upc.edu.cn(?<any>.*)/sszs/list.htm",
       "target" : "https://rsshub.app/upc/yjs?format=atom&mode=fulltext",
       "recommend" : null,
@@ -9,6 +21,12 @@
     {
       "source" : "https?://zs.gs.upc.edu.cn(?<any>.*)/?",
       "target" : "https://rsshub.app/upc/yjs?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.cccfna.org.cn(?<any>.*)/(?<category>[\\w|_]+)/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/cccfna/$category/$type?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -85,26 +103,14 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://500px.com.cn(?<any>.*)/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/500px/user/works/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://500px.com.cn(?<any>.*)/community/user-details/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/500px/user/works/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://500px.com.cn(?<any>.*)/community/user-details/(?<id>[\\w|_]+)/*",
-      "target" : "https://rsshub.app/500px/user/works/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://coindesk.com(?<any>.*)/?",
       "target" : "https://rsshub.app/coindesk/consensus-magazine?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zrblog.net(?<any>.*)/?",
+      "target" : "https://rsshub.app/zrblog/?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -199,18 +205,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://zrblog.net(?<any>.*)/?",
-      "target" : "https://rsshub.app/zrblog/?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.seejav.pw(?<any>.*)/?",
-      "target" : "https://rsshub.app/javbus*?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://www.iresearch.com.cn(?<any>.*)/report.shtml",
       "target" : "https://rsshub.app/iresearch/report?format=atom&mode=fulltext",
       "recommend" : null,
@@ -242,7 +236,7 @@
     },
     {
       "source" : "https?://nber.org(?<any>.*)/papers",
-      "target" : "https://rsshub.app/nber/news?format=atom&mode=fulltext",
+      "target" : "https://rsshub.app/nber/new?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -309,6 +303,18 @@
     {
       "source" : "https?://wen.woshipm.com(?<any>.*)/?",
       "target" : "https://rsshub.app/woshipm/wen?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://myfans.jp(?<any>.*)/(?<username>[\\w|_]+)",
+      "target" : "https://rsshub.app/myfans/user/$username?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://myfans.jp(?<any>.*)/(?<language>[\\w|_]+)/(?<username>[\\w|_]+)",
+      "target" : "https://rsshub.app/myfans/user/$username?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -673,6 +679,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://typst.app(?<any>.*)/universe",
+      "target" : "https://rsshub.app/typst/universe?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://www.mem.gov.cn(?<any>.*)/gk/sgcc/(?<category>[\\w|_]+)",
       "target" : "https://rsshub.app/gov/mem/gk/sgcc/$category?format=atom&mode=fulltext",
       "recommend" : null,
@@ -793,8 +805,8 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://minecraft.net(?<any>.*)/?",
-      "target" : "https://rsshub.app/minecraft/version?format=atom&mode=fulltext",
+      "source" : "https?://www.imdb.com(?<any>.*)/chart/(?<chart>[\\w|_]+)/",
+      "target" : "https://rsshub.app/imdb/chart/$chart?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -819,6 +831,12 @@
     {
       "source" : "https?://plurk.com(?<any>.*)/topic/(?<topic>[\\w|_]+)",
       "target" : "https://rsshub.app/plurk/topic/$topic?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://new.xianbao.fun(?<any>.*)/?",
+      "target" : "https://rsshub.app/xianbao/?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -889,8 +907,80 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://m.weibo.cn(?<any>.*)/u/(?<uid>[\\w|_]+)",
+      "target" : "https://rsshub.app/weibo/user/$uid?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://m.weibo.cn(?<any>.*)/profile/(?<uid>[\\w|_]+)",
       "target" : "https://rsshub.app/weibo/user/$uid?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://accessbriefing.com(?<any>.*)/(?<category>[\\w|_]+)*",
+      "target" : "https://rsshub.app/accessbriefing/$category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://accessbriefing.com(?<any>.*)/latest/news",
+      "target" : "https://rsshub.app/accessbriefing/latest/news?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://accessbriefing.com(?<any>.*)/latest/products-and-technology",
+      "target" : "https://rsshub.app/accessbriefing/latest/products-and-technology?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://accessbriefing.com(?<any>.*)/latest/rental-news",
+      "target" : "https://rsshub.app/accessbriefing/latest/rental-news?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://accessbriefing.com(?<any>.*)/latest/people",
+      "target" : "https://rsshub.app/accessbriefing/latest/people?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://accessbriefing.com(?<any>.*)/latest/regualtions-safety",
+      "target" : "https://rsshub.app/accessbriefing/latest/regualtions-safety?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://accessbriefing.com(?<any>.*)/latest/finance",
+      "target" : "https://rsshub.app/accessbriefing/latest/finance?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://accessbriefing.com(?<any>.*)/latest/sustainability",
+      "target" : "https://rsshub.app/accessbriefing/latest/sustainability?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://accessbriefing.com(?<any>.*)/insight/interviews",
+      "target" : "https://rsshub.app/accessbriefing/insight/interviews?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://accessbriefing.com(?<any>.*)/insight/longer-reads",
+      "target" : "https://rsshub.app/accessbriefing/insight/longer-reads?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://accessbriefing.com(?<any>.*)/insight/videos-and-podcasts",
+      "target" : "https://rsshub.app/accessbriefing/insight/videos-and-podcasts?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -907,18 +997,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://cast.org.cn(?<any>.*)/(?<column>[\\w|_]+)/(?<subColumn>[\\w|_]+)/(?<category>[\\w|_]+)/index.html",
-      "target" : "https://rsshub.app/cast/$column/$subColumn/$category?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://cast.org.cn(?<any>.*)/(?<column>[\\w|_]+)/(?<subColumn>[\\w|_]+)/index.html",
-      "target" : "https://rsshub.app/cast/$column/$subColumn?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://reuters.com(?<any>.*)/(?<category>[\\w|_]+)/(?<topic>[\\w|_]+)",
       "target" : "https://rsshub.app/reuters/$category/$topic?format=atom&mode=fulltext",
       "recommend" : null,
@@ -927,6 +1005,30 @@
     {
       "source" : "https?://reuters.com(?<any>.*)/?",
       "target" : "https://rsshub.app/reuters/:category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://minecraft.net(?<any>.*)/?",
+      "target" : "https://rsshub.app/minecraft/blockedservers?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://minecraft.net(?<any>.*)/?",
+      "target" : "https://rsshub.app/minecraft/java-runtime?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://minecraft.net(?<any>.*)/?",
+      "target" : "https://rsshub.app/minecraft/version?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.iplaysoft.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/iplaysoft/?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -1069,18 +1171,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://hub.baai.ac.cn(?<any>.*)/comments",
-      "target" : "https://rsshub.app/baai/hub/comments?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://hub.baai.ac.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/baai/hub/comments?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://hub.baai.ac.cn(?<any>.*)/events",
       "target" : "https://rsshub.app/baai/hub/events?format=atom&mode=fulltext",
       "recommend" : null,
@@ -1089,6 +1179,12 @@
     {
       "source" : "https?://hub.baai.ac.cn(?<any>.*)/?",
       "target" : "https://rsshub.app/baai/hub/events?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://baai.ac.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/baai(_params,url)=>{const searchParams=new URL(url).searchParams;const tagId=searchParams.get(\"tag_id\");const sort=searchParams.get(\"sort\");const range=searchParams.get(\"time_range\");return`/baai/hub${tagId?`/${tagId}`:\"\"}${sort?`/${sort}`:\"\"}${range?`/${range}`:\"\"}`}?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -1129,6 +1225,30 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://cast.org.cn(?<any>.*)/(?<column>[\\w|_]+)/(?<subColumn>[\\w|_]+)/(?<category>[\\w|_]+)/index.html",
+      "target" : "https://rsshub.app/cast/$column/$subColumn/$category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cast.org.cn(?<any>.*)/(?<column>[\\w|_]+)/(?<subColumn>[\\w|_]+)/index.html",
+      "target" : "https://rsshub.app/cast/$column/$subColumn?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ollama.com(?<any>.*)/blog",
+      "target" : "https://rsshub.app/ollama/blog?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ollama.com(?<any>.*)/library",
+      "target" : "https://rsshub.app/ollama/library?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://gamersecret.com(?<any>.*)/(?<type>[\\w|_]+)",
       "target" : "https://rsshub.app/gamersecret/$type?format=atom&mode=fulltext",
       "recommend" : null,
@@ -1143,6 +1263,18 @@
     {
       "source" : "https?://gamersecret.com(?<any>.*)/?",
       "target" : "https://rsshub.app/gamersecret?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://wx.zsxq.com(?<any>.*)/dweb2/index/group/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/zsxq/group/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://wx.zsxq.com(?<any>.*)/dweb2/index/footprint/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/zsxq/user/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -1213,26 +1345,14 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://tokeninsight.com(?<any>.*)/(?<lang>[\\w|_]+)/blogs",
-      "target" : "https://rsshub.app/tokeninsight/blog/$lang?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://tokeninsight.com(?<any>.*)/(?<lang>[\\w|_]+)/latest",
-      "target" : "https://rsshub.app/tokeninsight/bulletin/$lang?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://tokeninsight.com(?<any>.*)/(?<lang>[\\w|_]+)/report",
-      "target" : "https://rsshub.app/tokeninsight/report/$lang?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://www.producthunt.com(?<any>.*)/?",
       "target" : "https://rsshub.app/producthunt/today?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.69shuba.pro(?<any>.*)/book/(?<id>[\\w|_]+).htm",
+      "target" : "https://rsshub.app/69shu/article/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -1251,6 +1371,12 @@
     {
       "source" : "https?://notefolio.net(?<any>.*)/search",
       "target" : "https://rsshub.app/notefolio/search?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.jiuyangongshe.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/jiuyangongshe/community?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -1339,6 +1465,84 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://cfhd.cf.qq.com(?<any>.*)/webplat/info/news_version3/37427/59139/59140/60847/m22510/list_1.shtml",
+      "target" : "https://rsshub.app/qq/cfhd/news/60847?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cfhd.cf.qq.com(?<any>.*)/webplat/info/news_version3/37427/59139/59140/59625/m22510/list_1.shtml",
+      "target" : "https://rsshub.app/qq/cfhd/news/59625?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cfhd.cf.qq.com(?<any>.*)/webplat/info/news_version3/37427/59139/59140/60850/m22510/list_1.shtml",
+      "target" : "https://rsshub.app/qq/cfhd/news/60850?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cfhd.cf.qq.com(?<any>.*)/webplat/info/news_version3/37427/59139/59140/59626/m22510/list_1.shtml",
+      "target" : "https://rsshub.app/qq/cfhd/news/59626?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cfhd.cf.qq.com(?<any>.*)/webplat/info/news_version3/37427/59139/59140/59624/m22510/list_1.shtml",
+      "target" : "https://rsshub.app/qq/cfhd/news/59624?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://podwise.ai(?<any>.*)/?",
+      "target" : "https://rsshub.app/podwise/explore?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://podwise.ai(?<any>.*)/explore",
+      "target" : "https://rsshub.app/podwise/explore?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://podwise.ai(?<any>.*)/explore/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/podwise/explore/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://tokeninsight.com(?<any>.*)/(?<lang>[\\w|_]+)/blogs",
+      "target" : "https://rsshub.app/tokeninsight/blog/$lang?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://tokeninsight.com(?<any>.*)/(?<lang>[\\w|_]+)/latest",
+      "target" : "https://rsshub.app/tokeninsight/bulletin/$lang?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://tokeninsight.com(?<any>.*)/(?<lang>[\\w|_]+)/report",
+      "target" : "https://rsshub.app/tokeninsight/report/$lang?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.manyvids.com(?<any>.*)/Profile/(?<uid>[\\w|_]+)/(?<handle>[\\w|_]+)/Store/*",
+      "target" : "https://rsshub.app/manyvids/profile/vids/$uid?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.manyvids.com(?<any>.*)/Profile/(?<uid>[\\w|_]+)/(?<handle>[\\w|_]+)/Store",
+      "target" : "https://rsshub.app/manyvids/profile/vids/$uid?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://8kcosplay.com(?<any>.*)/?",
       "target" : "https://rsshub.app/8kcos/cat/:cat{.+}??format=atom&mode=fulltext",
       "recommend" : null,
@@ -1359,6 +1563,12 @@
     {
       "source" : "https?://routledge.com(?<any>.*)/(?<bookName>[\\w|_]+)/book-series/(?<bookId>[\\w|_]+)",
       "target" : "https://rsshub.app/routledge/$bookName/book-series/$bookId?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://atptour.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/atptour/news?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -1423,12 +1633,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://factpaper.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/thepaper/factpaper/:status?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://consumer.org.hk(?<any>.*)/?",
       "target" : "https://rsshub.app/consumer?format=atom&mode=fulltext",
       "recommend" : null,
@@ -1483,6 +1687,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://www.stream-capital.com(?<any>.*)/search",
+      "target" : "https://rsshub.app/stream-capital/search?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://www.alternativeto.net(?<any>.*)/platform/(?<name>[\\w|_]+)",
       "target" : "https://rsshub.app/alternativeto/platform/$name?format=atom&mode=fulltext",
       "recommend" : null,
@@ -1491,12 +1701,6 @@
     {
       "source" : "https?://www.alternativeto.net(?<any>.*)/software/(?<name>[\\w|_]+)",
       "target" : "https://rsshub.app/alternativeto/software/$name?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://mohw.gov.tw(?<any>.*)/?",
-      "target" : "https://rsshub.app/mohw/clarification?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -1537,6 +1741,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://tech.meituan.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/meituan/tech?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://qianzhan.com(?<any>.*)/analyst",
       "target" : "https://rsshub.app/qianzhan/analyst/rank?format=atom&mode=fulltext",
       "recommend" : null,
@@ -1545,6 +1755,18 @@
     {
       "source" : "https?://qianzhan.com(?<any>.*)/?",
       "target" : "https://rsshub.app/qianzhan/analyst/rank?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://factpaper.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/thepaper/factpaper/:status?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://app.xinhuanet.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/xinhuanet/app?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -1729,6 +1951,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://cloud.tencent.com(?<any>.*)/developer/column",
+      "target" : "https://rsshub.app/tencent/cloud/developer/column?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://startuplatte.com(?<any>.*)/category/(?<category>[\\w|_]+)",
       "target" : "https://rsshub.app/startuplatte/$category?format=atom&mode=fulltext",
       "recommend" : null,
@@ -1765,8 +1993,26 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://icac.org.hk(?<any>.*)/(?<lang>[\\w|_]+)/press/index.html",
-      "target" : "https://rsshub.app/icac/news/$lang?format=atom&mode=fulltext",
+      "source" : "https?://dehenglaw.com(?<any>.*)/(?<language>[\\w|_]+)/paper/0008/000902.aspx",
+      "target" : "https://rsshub.app/dehenglaw/$language/paper?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://dehenglaw.com(?<any>.*)/(?<language>[\\w|_]+)/publish/0008/000903.aspx",
+      "target" : "https://rsshub.app/dehenglaw/$language/publish?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://dehenglaw.com(?<any>.*)/(?<language>[\\w|_]+)/luntan/0008/000901.aspx",
+      "target" : "https://rsshub.app/dehenglaw/$language/luntan?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mohw.gov.tw(?<any>.*)/?",
+      "target" : "https://rsshub.app/mohw/clarification?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -1915,6 +2161,30 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://theinitium.com(?<any>.*)/author/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/theinitium/author/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://theinitium.com(?<any>.*)/channel/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/theinitium/channel/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://theinitium.com(?<any>.*)/author/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/theinitium/author/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://theinitium.com(?<any>.*)/tags/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/theinitium/tags/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://tech.sina.com.cn(?<any>.*)/chuangshiji",
       "target" : "https://rsshub.app/sina/csj?format=atom&mode=fulltext",
       "recommend" : null,
@@ -1957,18 +2227,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://yjsswjt.com(?<any>.*)/zxdt_list.jsp",
-      "target" : "https://rsshub.app/tingshuitz/yangjiang?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://yjsswjt.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/tingshuitz/yangjiang?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://book.douban.com(?<any>.*)/(?<id>[\\w|_]+)/discussion",
       "target" : "https://rsshub.app/douban/$id/discussion?format=atom&mode=fulltext",
       "recommend" : null,
@@ -1983,12 +2241,6 @@
     {
       "source" : "https?://www.douban.com(?<any>.*)/subject_collection/(?<type>[\\w|_]+)",
       "target" : "https://rsshub.app/douban/list/$type?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.biodiscover.com(?<any>.*)/(?<channel>[\\w|_]+)",
-      "target" : "https://rsshub.app/biodiscover/$channel?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -2079,6 +2331,72 @@
     {
       "source" : "https?://www.bilibili.com(?<any>.*)/?",
       "target" : "https://rsshub.app/bilibili/hot-search?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://icac.org.hk(?<any>.*)/(?<lang>[\\w|_]+)/press/index.html",
+      "target" : "https://rsshub.app/icac/news/$lang?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lrepacks.net(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/lrepacksparams=>{const category=params.category;return`/lrepacks${category?`/${category}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lrepacks.net(?<any>.*)/novye-repaki-elchupacabra/",
+      "target" : "https://rsshub.app/lrepacks/novye-repaki-elchupacabra?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lrepacks.net(?<any>.*)/repaki-sistemnyh-programm/",
+      "target" : "https://rsshub.app/lrepacks/repaki-sistemnyh-programm?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lrepacks.net(?<any>.*)/repaki-programm-dlya-grafiki/",
+      "target" : "https://rsshub.app/lrepacks/repaki-programm-dlya-grafiki?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lrepacks.net(?<any>.*)/repaki-programm-dlya-interneta/",
+      "target" : "https://rsshub.app/lrepacks/repaki-programm-dlya-interneta?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lrepacks.net(?<any>.*)/repaki-multimedia-programm/",
+      "target" : "https://rsshub.app/lrepacks/repaki-multimedia-programm?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lrepacks.net(?<any>.*)/repaki-programm-dlya-ofisa/",
+      "target" : "https://rsshub.app/lrepacks/repaki-programm-dlya-ofisa?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lrepacks.net(?<any>.*)/repaki-raznyh-programm/",
+      "target" : "https://rsshub.app/lrepacks/repaki-raznyh-programm?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lrepacks.net(?<any>.*)/sistemnye-biblioteki/",
+      "target" : "https://rsshub.app/lrepacks/sistemnye-biblioteki?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lrepacks.net(?<any>.*)/informaciya/",
+      "target" : "https://rsshub.app/lrepacks/informaciya?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -2251,6 +2569,150 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://yjsswjt.com(?<any>.*)/zxdt_list.jsp",
+      "target" : "https://rsshub.app/tingshuitz/yangjiang?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://yjsswjt.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/tingshuitz/yangjiang?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://423down.com(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/423downparams=>{const category=params.category;return`/423down${category?`/${category}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://423down.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/423downparams=>{const category=params.category;return`/423down${category?`/${category}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/423down/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/apk",
+      "target" : "https://rsshub.app/423down/apk?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/zd423",
+      "target" : "https://rsshub.app/423down/zd423?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/multimedia",
+      "target" : "https://rsshub.app/423down/multimedia?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/browser",
+      "target" : "https://rsshub.app/423down/browser?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/image",
+      "target" : "https://rsshub.app/423down/image?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/im",
+      "target" : "https://rsshub.app/423down/im?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/work",
+      "target" : "https://rsshub.app/423down/work?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/down",
+      "target" : "https://rsshub.app/423down/down?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/softtool",
+      "target" : "https://rsshub.app/423down/softtool?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/systemsoft",
+      "target" : "https://rsshub.app/423down/systemsoft?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/systemplus",
+      "target" : "https://rsshub.app/423down/systemplus?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/security",
+      "target" : "https://rsshub.app/423down/security?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/patch",
+      "target" : "https://rsshub.app/423down/patch?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/hardware",
+      "target" : "https://rsshub.app/423down/hardware?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/win11",
+      "target" : "https://rsshub.app/423down/win11?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/win10",
+      "target" : "https://rsshub.app/423down/win10?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/win7",
+      "target" : "https://rsshub.app/423down/win7?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/win7/winxp",
+      "target" : "https://rsshub.app/423down/win7/winxp?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.423down.com(?<any>.*)/pe-system",
+      "target" : "https://rsshub.app/423down/pe-system?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://techcrunch.com(?<any>.*)/?",
       "target" : "https://rsshub.app/techcrunch/news?format=atom&mode=fulltext",
       "recommend" : null,
@@ -2263,14 +2725,20 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://www.mee.gov.cn(?<any>.*)/ywdt/(?<category>[\\w|_]+)",
-      "target" : "https://rsshub.app/gov/mee/ywdt/$category?format=atom&mode=fulltext",
+      "source" : "https?://www.thoughtworks.com(?<any>.*)/zh-cn/insights/blog",
+      "target" : "https://rsshub.app/thoughtworks/blog?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://www.cnbc.com(?<any>.*)/id/(?<id>[\\w|_]+)/device/rss/rss.html",
-      "target" : "https://rsshub.app/cnbc/rss/$id?format=atom&mode=fulltext",
+      "source" : "https?://www.biodiscover.com(?<any>.*)/(?<channel>[\\w|_]+)",
+      "target" : "https://rsshub.app/biodiscover/$channel?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.mee.gov.cn(?<any>.*)/ywdt/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/gov/mee/ywdt/$category?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -2307,18 +2775,6 @@
     {
       "source" : "https?://freewechat.com(?<any>.*)/profile/(?<id>[\\w|_]+)",
       "target" : "https://rsshub.app/freewechat/profile/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://c114.com.cn(?<any>.*)/news/roll.asp",
-      "target" : "https://rsshub.app/c114/roll?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://c114.com.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/c114/roll?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -2383,6 +2839,18 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://www.cnbc.com(?<any>.*)/id/(?<id>[\\w|_]+)/device/rss/rss.html",
+      "target" : "https://rsshub.app/cnbc/rss/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://dataguidance.com(?<any>.*)/search/news",
+      "target" : "https://rsshub.app/dataguidance/news?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://qbitai.com(?<any>.*)/category/(?<category>[\\w|_]+)",
       "target" : "https://rsshub.app/qbitai/category/$category?format=atom&mode=fulltext",
       "recommend" : null,
@@ -2403,6 +2871,30 @@
     {
       "source" : "https?://wallhaven.cc(?<any>.*)/?",
       "target" : "https://rsshub.app/wallhaven?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://papers.cool(?<any>.*)/arxiv/cs.AI",
+      "target" : "https://rsshub.app/papers/arxiv/cs.AI?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://papers.cool(?<any>.*)/arxiv/cs.CL",
+      "target" : "https://rsshub.app/papers/arxiv/cs.CL?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://papers.cool(?<any>.*)/arxiv/cs.CV",
+      "target" : "https://rsshub.app/papers/arxiv/cs.CV?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://papers.cool(?<any>.*)/arxiv/cs.LG",
+      "target" : "https://rsshub.app/papers/arxiv/cs.LG?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -2433,6 +2925,48 @@
     {
       "source" : "https?://50forum.org.cn(?<any>.*)/?",
       "target" : "https://rsshub.app/50forum/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mirrormedia.mg(?<any>.*)/category/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/mirrormedia/category/$category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mirrormedia.mg(?<any>.*)/section/(?<section>[\\w|_]+)",
+      "target" : "https://rsshub.app/mirrormedia/category/:category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mirrormedia.mg(?<any>.*)/category/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/mirrormedia/section/:section?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mirrormedia.mg(?<any>.*)/section/(?<section>[\\w|_]+)",
+      "target" : "https://rsshub.app/mirrormedia/section/$section?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mirrormedia.mg(?<any>.*)/?",
+      "target" : "https://rsshub.app/mirrormedia/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://c114.com.cn(?<any>.*)/news/roll.asp",
+      "target" : "https://rsshub.app/c114/roll?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://c114.com.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/c114/roll?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -2497,12 +3031,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://jlpt.neea.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/neea/jlpt?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://ccf.org.cn(?<any>.*)/(?<category>[\\w|_]+)",
       "target" : "https://rsshub.app/ccf/news/$category?format=atom&mode=fulltext",
       "recommend" : null,
@@ -2563,18 +3091,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://yxdzqb.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/yxdzqb/:type?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://hkepc.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/hkepc?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://oschina.net(?<any>.*)/news/(?<category>[\\w|_]+)",
       "target" : "https://rsshub.app/oschina/news/$category?format=atom&mode=fulltext",
       "recommend" : null,
@@ -2617,38 +3133,44 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://ycombinator.com(?<any>.*)/(?<section>[\\w|_]+)",
-      "target" : "https://rsshub.app/hackernews/$section?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://ycombinator.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/hackernews?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://www.cmse.gov.cn(?<any>.*)/fxrw",
       "target" : "https://rsshub.app/gov/cmse/fxrw?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://thwiki.cc(?<any>.*)/?",
-      "target" : "https://rsshub.app/thwiki/calendar?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://thwiki.cc(?<any>.*)/%E6%97%A5%E7%A8%8B%E8%A1%A8",
-      "target" : "https://rsshub.app/thwiki/calendar?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://btbtt20.com(?<any>.*)/?",
       "target" : "https://rsshub.app/btzj?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://asmr-200.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/asmr-200asmr-200/works?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://deadbydaylight.com(?<any>.*)/news",
+      "target" : "https://rsshub.app/deadbydaylight/news?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://yxdzqb.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/yxdzqb/:type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://hkepc.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/hkepc?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://gs.bjtu.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/bjtu/gs?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -2679,6 +3201,162 @@
     {
       "source" : "https?://neunews.neu.edu.cn(?<any>.*)/(?<type>[\\w|_]+)/list.htm",
       "target" : "https://rsshub.app/neu/news/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ntce.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/ntce?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ntce.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/ntce?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://tdxl.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/tdxl?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://tdxl.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/tdxl?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://gaokao.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/gaokao?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://gaokao.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/gaokao?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://yankao.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/yankao?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://yankao.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/yankao?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://nit.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/nit?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://nit.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/nit?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://jlpt.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/global/jlpt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://jlpt.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/global/jlpt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://pets.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/pets?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://pets.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/pets?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cet.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/cet?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cet.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/cet?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://chengkao.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/chengkao?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://chengkao.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/chengkao?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ccpt.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/ccpt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ccpt.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/ccpt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zikao.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/zikao?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zikao.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/zikao?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ncre.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/ncre?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ncre.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/ncre?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://wsk.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/wsk?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://wsk.neea.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/neea/local/wsk?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -2731,6 +3409,60 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://investor.org.cn(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/investorparams=>{const category=params.category;return`/investor${category?`/${category}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.investor.org.cn(?<any>.*)/information_release/news_release_from_authorities/zjhfb/",
+      "target" : "https://rsshub.app/investor/information_release/news_release_from_authorities/zjhfb/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.investor.org.cn(?<any>.*)/information_release/news_release_from_authorities/hsjysfb/",
+      "target" : "https://rsshub.app/investor/information_release/news_release_from_authorities/hsjysfb/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.investor.org.cn(?<any>.*)/information_release/news_release_from_authorities/qhjysfb/",
+      "target" : "https://rsshub.app/investor/information_release/news_release_from_authorities/qhjysfb/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.investor.org.cn(?<any>.*)/information_release/news_release_from_authorities/hyxhfb/",
+      "target" : "https://rsshub.app/investor/information_release/news_release_from_authorities/hyxhfb/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.investor.org.cn(?<any>.*)/information_release/news_release_from_authorities/otner/",
+      "target" : "https://rsshub.app/investor/information_release/news_release_from_authorities/otner/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.investor.org.cn(?<any>.*)/information_release/market_news/",
+      "target" : "https://rsshub.app/investor/information_release/market_news/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.investor.org.cn(?<any>.*)/information_release/policy_interpretation/",
+      "target" : "https://rsshub.app/investor/information_release/policy_interpretation/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.investor.org.cn(?<any>.*)/information_release/international_communication/",
+      "target" : "https://rsshub.app/investor/information_release/international_communication/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://www.linovelib.com(?<any>.*)/novel/(?<id>[\\w|_]+)/catalog",
       "target" : "https://rsshub.app/linovelib/volume/$id?format=atom&mode=fulltext",
       "recommend" : null,
@@ -2756,13 +3488,13 @@
     },
     {
       "source" : "https?://utgd.net(?<any>.*)/category/s/(?<category>[\\w|_]+)",
-      "target" : "https://rsshub.app/utgd/$category?format=atom&mode=fulltext",
+      "target" : "https://rsshub.app/utgd/category/$category?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
       "source" : "https?://utgd.net(?<any>.*)/?",
-      "target" : "https://rsshub.app/utgd/:category?format=atom&mode=fulltext",
+      "target" : "https://rsshub.app/utgd/category/:category?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -2797,6 +3529,30 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://news.ycombinator.com(?<any>.*)/(?<section>[\\w|_]+)",
+      "target" : "https://rsshub.app/hackernews/$section?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://news.ycombinator.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/hackernews?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.cfr.org(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/cfr/$category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.cfr.org(?<any>.*)/(?<category>[\\w|_]+)/(?<subCategory>[\\w|_]+)",
+      "target" : "https://rsshub.app/cfr/$category/$subCategory?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://www.transcriptforest.com(?<any>.*)/en/channel",
       "target" : "https://rsshub.app/transcriptforest?format=atom&mode=fulltext",
       "recommend" : null,
@@ -2811,6 +3567,30 @@
     {
       "source" : "https?://navi.cnki.net(?<any>.*)/knavi/journals/(?<name>[\\w|_]+)/detail",
       "target" : "https://rsshub.app/cnki/journals/$name?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kpmg.com(?<any>.*)/xx/en/home/insights.html",
+      "target" : "https://rsshub.app/kpmg/insights/en?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kpmg.com(?<any>.*)/cn/zh/home/insights.html",
+      "target" : "https://rsshub.app/kpmg/insights/zh?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thwiki.cc(?<any>.*)/?",
+      "target" : "https://rsshub.app/thwiki/calendar?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thwiki.cc(?<any>.*)/%E6%97%A5%E7%A8%8B%E8%A1%A8",
+      "target" : "https://rsshub.app/thwiki/calendar?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -3223,6 +4003,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://mp.sohu.com(?<any>.*)/profile",
+      "target" : "https://rsshub.app/sohu(_params,url)=>`/sohu/mp/${new URL(url).searchParams.get(\"xpt\")}`?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://playpcesor.com(?<any>.*)/?",
       "target" : "https://rsshub.app/playpcesor/?format=atom&mode=fulltext",
       "recommend" : null,
@@ -3231,6 +4017,12 @@
     {
       "source" : "https?://gotokeep.com(?<any>.*)/users/(?<id>[\\w|_]+)",
       "target" : "https://rsshub.app/keep/user/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.copernicium.tw(?<any>.*)/?",
+      "target" : "https://rsshub.app/copernicium/:category?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -3351,12 +4143,6 @@
     {
       "source" : "https?://hao6v.com(?<any>.*)/gvod/dsj.html",
       "target" : "https://rsshub.app/6v123/latestTVSeries?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.zaozao.run(?<any>.*)/article/(?<type>[\\w|_]+)",
-      "target" : "https://rsshub.app/zaozao/article/$type?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -3523,14 +4309,158 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://gocn.vip(?<any>.*)/?",
-      "target" : "https://rsshub.app/gocn/jobs?format=atom&mode=fulltext",
+      "source" : "https?://www.zaozao.run(?<any>.*)/article/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/zaozao/article/$type?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://gocn.vip(?<any>.*)/?",
-      "target" : "https://rsshub.app/gocn/topics?format=atom&mode=fulltext",
+      "source" : "https?://www.esquirehk.com(?<any>.*)/tag/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/esquirehk/tag/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.esquirehk.com(?<any>.*)/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/esquirehk/tag/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php",
+      "target" : "https://rsshub.app/cpcaauto(_,url)=>{url=new URL(url);const types=url.searchParams.get(\"types\");const id=url.searchParams.get(\"id\");return types?`/${types}${id?`/${id}`:\"\"}`:\"\"}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=news&anid=10",
+      "target" : "https://rsshub.app/cpcaauto/news/news/10?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=news&anid=64",
+      "target" : "https://rsshub.app/cpcaauto/news/news/64?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=news&anid=44",
+      "target" : "https://rsshub.app/cpcaauto/news/news/44?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=news&anid=62",
+      "target" : "https://rsshub.app/cpcaauto/news/news/62?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=csjd&anid=128",
+      "target" : "https://rsshub.app/cpcaauto/news/csjd/128?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=csjd&anid=129",
+      "target" : "https://rsshub.app/cpcaauto/news/csjd/129?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=csjd&anid=130",
+      "target" : "https://rsshub.app/cpcaauto/news/csjd/130?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=csjd&anid=131",
+      "target" : "https://rsshub.app/cpcaauto/news/csjd/131?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=bgzl&anid=119",
+      "target" : "https://rsshub.app/cpcaauto/news/bgzl/119?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=bgzl&anid=122",
+      "target" : "https://rsshub.app/cpcaauto/news/bgzl/122?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=bgzl&anid=120",
+      "target" : "https://rsshub.app/cpcaauto/news/bgzl/120?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=bgzl&anid=121",
+      "target" : "https://rsshub.app/cpcaauto/news/bgzl/121?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=bgzl&anid=124",
+      "target" : "https://rsshub.app/cpcaauto/news/bgzl/124?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=bgzl&anid=125",
+      "target" : "https://rsshub.app/cpcaauto/news/bgzl/125?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=bgzl&anid=126",
+      "target" : "https://rsshub.app/cpcaauto/news/bgzl/126?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=bgzl&anid=127",
+      "target" : "https://rsshub.app/cpcaauto/news/bgzl/127?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=bgzl&anid=123",
+      "target" : "https://rsshub.app/cpcaauto/news/bgzl/123?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=meeting&anid=46",
+      "target" : "https://rsshub.app/cpcaauto/news/meeting/46?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=meeting&anid=47",
+      "target" : "https://rsshub.app/cpcaauto/news/meeting/47?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=yjsy&anid=49",
+      "target" : "https://rsshub.app/cpcaauto/news/yjsy/49?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=yjsy&anid=111",
+      "target" : "https://rsshub.app/cpcaauto/news/yjsy/111?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cpcaauto.com(?<any>.*)/news.php?types=yjsy&anid=113",
+      "target" : "https://rsshub.app/cpcaauto/news/yjsy/113?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -3585,6 +4515,12 @@
     {
       "source" : "https?://support.apple.com(?<any>.*)/(?<country>[\\w|_]+)/service-programs",
       "target" : "https://rsshub.app/apple/exchange_repair/$country?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://podcasts.apple.com(?<any>.*)/cn/podcast/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/apple/podcast/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -3655,8 +4591,80 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://magnumphotos.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/magnumphotos/magazine?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://genshin.hoyoverse.com(?<any>.*)/(?<location>[\\w|_]+)/news",
       "target" : "https://rsshub.app/mihoyo/ys/$location?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://gocn.vip(?<any>.*)/?",
+      "target" : "https://rsshub.app/gocn/jobs?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://gocn.vip(?<any>.*)/?",
+      "target" : "https://rsshub.app/gocn/topics?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fashionnetwork.cn(?<any>.*)/lists/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/fashionnetworkparams=>{const id=params.id;return`/fashionnetwork/cn/lists${id?`/${id}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fashionnetwork.cn(?<any>.*)/lists/13",
+      "target" : "https://rsshub.app/fashionnetwork/cn/lists/13?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fashionnetwork.cn(?<any>.*)/lists/1",
+      "target" : "https://rsshub.app/fashionnetwork/cn/lists/1?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fashionnetwork.cn(?<any>.*)/lists/8",
+      "target" : "https://rsshub.app/fashionnetwork/cn/lists/8?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fashionnetwork.cn(?<any>.*)/lists/3",
+      "target" : "https://rsshub.app/fashionnetwork/cn/lists/3?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fashionnetwork.cn(?<any>.*)/lists/5",
+      "target" : "https://rsshub.app/fashionnetwork/cn/lists/5?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fashionnetwork.cn(?<any>.*)/lists/6",
+      "target" : "https://rsshub.app/fashionnetwork/cn/lists/6?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fashionnetwork.cn(?<any>.*)/lists/12",
+      "target" : "https://rsshub.app/fashionnetwork/cn/lists/12?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fashionnetwork.cn(?<any>.*)/lists/11",
+      "target" : "https://rsshub.app/fashionnetwork/cn/lists/11?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -3739,12 +4747,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://soundofhope.org(?<any>.*)/(?<channel>[\\w|_]+)/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/soundofhope/$channel/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://cse.sysu.edu.cn(?<any>.*)/?",
       "target" : "https://rsshub.app/sysu/cse?format=atom&mode=fulltext",
       "recommend" : null,
@@ -3819,6 +4821,18 @@
     {
       "source" : "https?://wallpaperhub.app(?<any>.*)/?",
       "target" : "https://rsshub.app/wallpaperhub/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.colamanga.com(?<any>.*)/(?<id>[\\w|_]+)/",
+      "target" : "https://rsshub.app/colamanga/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://soundofhope.org(?<any>.*)/(?<channel>[\\w|_]+)/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/soundofhope/$channel/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -3913,8 +4927,14 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://cn.bing.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/bing/?format=atom&mode=fulltext",
+      "source" : "https?://www.bing.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/bing?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.bing.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/bing?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -4045,12 +5065,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://developer.aliyun.com(?<any>.*)/group/(?<type>[\\w|_]+)",
-      "target" : "https://rsshub.app/aliyun/developer/group/$type?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://wuhan.gov.cn(?<any>.*)/sy/whyw/",
       "target" : "https://rsshub.app/gov/wuhan/sy/whyw?format=atom&mode=fulltext",
       "recommend" : null,
@@ -4111,6 +5125,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://aneot.arktca.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/hypergryph/arknights/arktca?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://asiantolick.com(?<any>.*)/?",
       "target" : "https://rsshub.app/asiantolick/:category{.+}??format=atom&mode=fulltext",
       "recommend" : null,
@@ -4119,6 +5139,24 @@
     {
       "source" : "https?://sinchew.com.my(?<any>.*)/?",
       "target" : "https://rsshub.app/sinchew*?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://steamcommunity.com(?<any>.*)/app/(?<appid>[\\w|_]+)",
+      "target" : "https://rsshub.app/steam/appcommunityfeed/$appid?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://steamcommunity.com(?<any>.*)/sharedfiles/filedetails/changelog/(?<sharefileID>[\\w|_]+)",
+      "target" : "https://rsshub.app/steam/sharefile-changelog/$sharefileID?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://steamcommunity.com(?<any>.*)/app/(?<appid>[\\w|_]+)/workshop/",
+      "target" : "https://rsshub.app/steam/workshopsearch/$appid?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -4135,62 +5173,14 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://yuba.douyu.com(?<any>.*)/group/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/douyu/group/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://yuba.douyu.com(?<any>.*)/group/newself/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/douyu/group/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://yuba.douyu.com(?<any>.*)/group/newall/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/douyu/group/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://yuba.douyu.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/douyu/group/:id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://yuba.douyu.com(?<any>.*)/p/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/douyu/post/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://yuba.douyu.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/douyu/post/:id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.douyu.com(?<any>.*)/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/douyu/room/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.douyu.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/douyu/room/:id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://gihyo.jp(?<any>.*)/list/group/(?<id>[\\w|_]+)",
       "target" : "https://rsshub.app/gihyo/list/group/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://cnbeta.com.tw(?<any>.*)/?",
-      "target" : "https://rsshub.app/cnbeta/:type/:id?format=atom&mode=fulltext",
+      "source" : "https?://cnbeta.com.tw(?<any>.*)/category/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/cnbetaparams=>`/cnbeta/category/${params.id.replace(\".htm\",\"\")}`?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -4201,8 +5191,26 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://cnbeta.com.tw(?<any>.*)/topics/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/cnbetaparams=>`/cnbeta/topics/${params.id.replace(\".htm\",\"\")}`?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://businessreview.global(?<any>.*)/?",
       "target" : "https://rsshub.app/economist/global-business-review?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.12371.cn(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/12371/$category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://developer.aliyun.com(?<any>.*)/group/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/aliyun/developer/group/$type?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -4233,6 +5241,12 @@
     {
       "source" : "https?://dky.sicau.edu.cn(?<any>.*)/?",
       "target" : "https://rsshub.app/sicau/zsjy?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://jiaowu.sicau.edu.cn(?<any>.*)/web/web/web/index.asp",
+      "target" : "https://rsshub.app/sicau/jiaowu/jxtz?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -4303,6 +5317,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://ai.ruc.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/ruc/ai?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://hr.ruc.edu.cn(?<any>.*)/?",
       "target" : "https://rsshub.app/ruc/hr?format=atom&mode=fulltext",
       "recommend" : null,
@@ -4327,14 +5347,8 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://jwc.swjtu.edu.cn(?<any>.*)/vatuu/WebAction",
-      "target" : "https://rsshub.app/swjtu/jwc?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://jwc.swjtu.edu.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/swjtu/jwc?format=atom&mode=fulltext",
+      "source" : "https?://gsee.swjtu.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/swjtu/gsee/yjs?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -4381,6 +5395,18 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://jwc.swjtu.edu.cn(?<any>.*)/vatuu/WebAction",
+      "target" : "https://rsshub.app/swjtu/jwc?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://jwc.swjtu.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/swjtu/jwc?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://macfilos.com(?<any>.*)/blog",
       "target" : "https://rsshub.app/macfilos/blog?format=atom&mode=fulltext",
       "recommend" : null,
@@ -4389,6 +5415,60 @@
     {
       "source" : "https?://macfilos.com(?<any>.*)/?",
       "target" : "https://rsshub.app/macfilos/blog?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://yuba.douyu.com(?<any>.*)/group/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/douyu/group/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://yuba.douyu.com(?<any>.*)/group/newself/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/douyu/group/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://yuba.douyu.com(?<any>.*)/group/newall/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/douyu/group/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://yuba.douyu.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/douyu/group/:id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://yuba.douyu.com(?<any>.*)/p/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/douyu/post/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://yuba.douyu.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/douyu/post/:id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.douyu.com(?<any>.*)/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/douyu/room/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.douyu.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/douyu/room/:id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.jjmhw.cc(?<any>.*)/book/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/freexcomic/book/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -4513,6 +5593,228 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/RPJQWQYZ?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/ZJ5TPJQWJP?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/ZJ10TQWJP?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/ZJ20TQWJP?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/ZJ30TQWJP?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/BYYLQWJP?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/BJYLQWJP?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/BNYLQWJP?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/QGRJSLFBT0808S?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/ZJ5TJSLFBT?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/ZJ10TJSL?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/ZJ20TJSL?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/ZJ30TJSL?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/ncc-cma/cmdp/image/BYYLJSL?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/BJYLJSL?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/ZJ10TJSLJP?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/ZJ20TJSLJP?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/ZJ30TJSLJP?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/BYYLJSLJPZYQHZ?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/BJYLJSLJPZJQHZ?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/BNYLJSLJP?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbtmeana10_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbtmeana20_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbtmeana30_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbtmeana90_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbtmina30_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbtmina90_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbtmaxa30_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbtmaxa90_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbrain10_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbrain20_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbrain30_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbrain90_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbraina10_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbraina20_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbraina30_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cmdp.ncc-cma.net(?<any>.*)/cn/index.htm",
+      "target" : "https://rsshub.app/ncc-cma/cmdp/image/glbraina90_?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://annualreviews.org(?<any>.*)/journal/(?<id>[\\w|_]+)",
       "target" : "https://rsshub.app/annualreviews/$id?format=atom&mode=fulltext",
       "recommend" : null,
@@ -4537,14 +5839,14 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://insider.finology.in(?<any>.*)/(?<category>[\\w|_]+)",
-      "target" : "https://rsshub.app/finology/$category?format=atom&mode=fulltext",
+      "source" : "https?://insider.finology.in(?<any>.*)/most-viewed",
+      "target" : "https://rsshub.app/finology/most-viewed/monthly?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://insider.finology.in(?<any>.*)/(?<category>[\\w|_]+)",
-      "target" : "https://rsshub.app/finology/tag/:topic?format=atom&mode=fulltext",
+      "source" : "https?://insider.finology.in(?<any>.*)/tag/(?<topic>[\\w|_]+)",
+      "target" : "https://rsshub.app/finology/tag/$topic?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -4598,6 +5900,12 @@
     },
     {
       "source" : "https?://www.zhihu.com(?<any>.*)/(?<usertype>[\\w|_]+)/(?<id>[\\w|_]+)/posts",
+      "target" : "https://rsshub.app/zhihu/posts/$usertype/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.zhihu.com(?<any>.*)/(?<usertype>[\\w|_]+)/(?<id>[\\w|_]+)",
       "target" : "https://rsshub.app/zhihu/posts/$usertype/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
@@ -4723,20 +6031,74 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://rsj.sh.gov.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/gov/shanghai/rsj/ksxm?format=atom&mode=fulltext",
+      "source" : "https?://fgw.sh.gov.cn(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/govparams=>{const category=params.category.replace(/\\/index\\.html/,\"\");return`/gov/sh/fgw${category?`/${category}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fgw.sh.gov.cn(?<any>.*)/fgw_zxxxgk/index.html",
+      "target" : "https://rsshub.app/gov/sh/fgw/fgw_zxxxgk?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fgw.sh.gov.cn(?<any>.*)/fgw_fzggdt/index.html",
+      "target" : "https://rsshub.app/gov/sh/fgw/fgw_fzggdt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fgw.sh.gov.cn(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/govparams=>{const category=params.category.replace(/\\/index\\.html/,\"\");return`/gov/sh/fgw${category?`/${category}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fgw.sh.gov.cn(?<any>.*)/fgw_zxxxgk/index.html",
+      "target" : "https://rsshub.app/gov/sh/fgw/fgw_zxxxgk?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fgw.sh.gov.cn(?<any>.*)/fgw_fzggdt/index.html",
+      "target" : "https://rsshub.app/gov/sh/fgw/fgw_fzggdt?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
       "source" : "https?://wsbs.wgj.sh.gov.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/gov/shanghai/wgj?format=atom&mode=fulltext",
+      "target" : "https://rsshub.app/gov/sh/wgj?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://wsbs.wgj.sh.gov.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/gov/sh/wgj?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://wsjkw.sh.gov.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/gov/sh/wsjkw/yqtb?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
       "source" : "https?://wsjkw.sh.gov.cn(?<any>.*)/?",
       "target" : "https://rsshub.app/gov/shanghai/wsjkw/yqtb?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://rsj.sh.gov.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/gov/sh/rsj/ksxm?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://rsj.sh.gov.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/gov/shanghai/rsj/ksxm?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -4879,6 +6241,18 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://www.lianxh.cn(?<any>.*)/blogs/all.html",
+      "target" : "https://rsshub.app/lianxh?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.lianxh.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/lianxh?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://missav.com(?<any>.*)/dm397/new",
       "target" : "https://rsshub.app/missav/new?format=atom&mode=fulltext",
       "recommend" : null,
@@ -4899,6 +6273,12 @@
     {
       "source" : "https?://runtrail.cn(?<any>.*)/?",
       "target" : "https://rsshub.app/runtrail/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.linkedin.com(?<any>.*)/jobs/search",
+      "target" : "https://rsshub.app/linkedin(params,url)=>{const searchParams=new URLSearchParams(new URL(url).search);const fJT=(0,import_utils.parseRouteParam)(searchParams.get(\"f_JT\"));const fE=(0,import_utils.parseRouteParam)(searchParams.get(\"f_E\"));const keywords=encodeURIComponent(searchParams.get(\"keywords\")||\"\");const newSearchParams=new URLSearchParams;for(const[key,value]of searchParams.entries()){if(![\"f_JT\",\"f_E\",\"keywords\"].includes(key)){newSearchParams.append(key,value)}}return`/linkedin/jobs/${fJT}/${fE}/${keywords}/?${newSearchParams.toString()}`}?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -4983,6 +6363,18 @@
     {
       "source" : "https?://blogread.cn(?<any>.*)/news/newest.php",
       "target" : "https://rsshub.app/blogread/newest?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://keylol.com(?<any>.*)/(?<path>[\\w|_]+)",
+      "target" : "https://rsshub.app/keylol(params,url)=>url.replaceAll(\"forum.php?\",\"\")?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://bbs.deepin.org(?<any>.*)/user/(?<userid>[\\w|_]+)",
+      "target" : "https://rsshub.app/deepin/homepage/$userid?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -5491,6 +6883,18 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://ncpssd.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/ncpssd/newlist?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ncpssd.cn(?<any>.*)/newlist",
+      "target" : "https://rsshub.app/ncpssd/newlist?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://thehindu.com(?<any>.*)/topic/(?<topic>[\\w|_]+)",
       "target" : "https://rsshub.app/thehindu/topic/$topic?format=atom&mode=fulltext",
       "recommend" : null,
@@ -5701,14 +7105,20 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://dnaindia.com(?<any>.*)/(?<category>[\\w|_]+)",
+      "source" : "https?://www.dnaindia.com(?<any>.*)/(?<category>[\\w|_]+)",
       "target" : "https://rsshub.app/dnaindia/$category?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://dnaindia.com(?<any>.*)/(?<category>[\\w|_]+)",
-      "target" : "https://rsshub.app/dnaindia/topic/:topic?format=atom&mode=fulltext",
+      "source" : "https?://www.dnaindia.com(?<any>.*)/topic/(?<topic>[\\w|_]+)",
+      "target" : "https://rsshub.app/dnaindia/topic/$topic?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://gq.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/gq/news?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -5929,6 +7339,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://my-formosa.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/my-formosa/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://www.njxzc.edu.cn(?<any>.*)/89/list.htm",
       "target" : "https://rsshub.app/njxzc/tzgg?format=atom&mode=fulltext",
       "recommend" : null,
@@ -6049,6 +7465,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://jsjxy.stbu.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/stbu/jsjxy?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://stbu.edu.cn(?<any>.*)/html/news/xueyuan",
       "target" : "https://rsshub.app/stbu/xyxw?format=atom&mode=fulltext",
       "recommend" : null,
@@ -6103,8 +7525,38 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://matters.town(?<any>.*)/(?<uid>[\\w|_]+)",
+      "target" : "https://rsshub.app/mattersparams=>`/matters/author/${params.uid.slice(1)}`?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://matters.town(?<any>.*)/?",
+      "target" : "https://rsshub.app/matters/latest?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://matters.town(?<any>.*)/tags/(?<tid>[\\w|_]+)",
+      "target" : "https://rsshub.app/matters/tags/$tid?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://shoac.com.cn(?<any>.*)/?",
       "target" : "https://rsshub.app/shoac/recent-show?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.olevod.one(?<any>.*)/vod/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/olevod/vod/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.olevod.one(?<any>.*)/?",
+      "target" : "https://rsshub.app/olevod/vodlist?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -6199,6 +7651,30 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://wnacg.com(?<any>.*)/*",
+      "target" : "https://rsshub.app/wnacg(_,url)=>`/wnacg/category/${new URL(url).pathname.match(/albums-index-cate-(\\d+)\\.html$/)[1]}`?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://wnacg.com(?<any>.*)/albums.html",
+      "target" : "https://rsshub.app/wnacg/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://wnacg.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/wnacg/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://wnacg.com(?<any>.*)/*",
+      "target" : "https://rsshub.app/wnacg(_,url)=>`/wnacg/tag/${new URL(url).pathname.match(/albums-index-tag-(.+?)\\.html$/)[1]}`?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://yysub.net(?<any>.*)/tv/schedule",
       "target" : "https://rsshub.app/yyets/today?format=atom&mode=fulltext",
       "recommend" : null,
@@ -6224,13 +7700,13 @@
     },
     {
       "source" : "https?://ak.arknights.jp(?<any>.*)/news",
-      "target" : "https://rsshub.app/arknights/japan?format=atom&mode=fulltext",
+      "target" : "https://rsshub.app/hypergryph/arknights/japan?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
       "source" : "https?://ak.arknights.jp(?<any>.*)/?",
-      "target" : "https://rsshub.app/arknights/japan?format=atom&mode=fulltext",
+      "target" : "https://rsshub.app/hypergryph/arknights/japan?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -6289,8 +7765,8 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://ak-conf.hypergryph.com(?<any>.*)/*",
-      "target" : "https://rsshub.app/arknights/news?format=atom&mode=fulltext",
+      "source" : "https?://ak-conf.hypergryph.com(?<any>.*)/news",
+      "target" : "https://rsshub.app/hypergryph/arknights/news?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -6379,6 +7855,48 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://jwc.jlu.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/jlu/jwc?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://jwc.jlu.edu.cn(?<any>.*)/index.htm",
+      "target" : "https://rsshub.app/jlu/jwc?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ccst.jlu.edu.cn(?<any>.*)/xwzx/gsl.htm",
+      "target" : "https://rsshub.app/jlu/ccst/xwzx/:category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ccst.jlu.edu.cn(?<any>.*)/xwzx/xstd.htm",
+      "target" : "https://rsshub.app/jlu/ccst/xwzx/:category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ccst.jlu.edu.cn(?<any>.*)/xwzx/xytz.htm",
+      "target" : "https://rsshub.app/jlu/ccst/xwzx/:category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ccst.jlu.edu.cn(?<any>.*)/xwzx/xyxw.htm",
+      "target" : "https://rsshub.app/jlu/ccst/xwzx/:category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ccst.jlu.edu.cn(?<any>.*)/xwzx/zsjy.htm",
+      "target" : "https://rsshub.app/jlu/ccst/xwzx/:category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://www.showstart.com(?<any>.*)/artist/(?<id>[\\w|_]+)",
       "target" : "https://rsshub.app/showstart/artist/$id?format=atom&mode=fulltext",
       "recommend" : null,
@@ -6445,24 +7963,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://3dmgame.com(?<any>.*)/games/(?<name>[\\w|_]+)/(?<type>[\\w|_]+)",
-      "target" : "https://rsshub.app/3dmgame/games/$name/$type?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://3dmgame.com(?<any>.*)/news/(?<category>[\\w|_]+)",
-      "target" : "https://rsshub.app/3dmgame/news/$category?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://3dmgame.com(?<any>.*)/news",
-      "target" : "https://rsshub.app/3dmgame/news?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://lanqiao.cn(?<any>.*)/users/(?<uid>[\\w|_]+)",
       "target" : "https://rsshub.app/lanqiao/author/$uid?format=atom&mode=fulltext",
       "recommend" : null,
@@ -6477,6 +7977,18 @@
     {
       "source" : "https?://lanqiao.cn(?<any>.*)/questions/topics/(?<id>[\\w|_]+)",
       "target" : "https://rsshub.app/lanqiao/questions/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.javbus.com(?<any>.*)/(?<path>[\\w|_]+)*",
+      "target" : "https://rsshub.app/javbus/$path?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://digitalcameraworld.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/digitalcameraworld/news?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -6507,48 +8019,6 @@
     {
       "source" : "https?://globallawreview.org(?<any>.*)/?",
       "target" : "https://rsshub.app/globallawreview/?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.iee.cas.cn(?<any>.*)/xwzx/kydt",
-      "target" : "https://rsshub.app/cas/iee/kydt?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.iee.cas.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/cas/iee/kydt?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.sim.cas.cn(?<any>.*)/xwzx2016/kyjz",
-      "target" : "https://rsshub.app/cas/sim/kyjz?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.sim.cas.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/cas/sim/kyjz?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.ia.cas.cn(?<any>.*)/yjsjy/zs/sszs",
-      "target" : "https://rsshub.app/cas/ia/yjs?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.ia.cas.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/cas/ia/yjs?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www.cas.cn(?<any>.*)/cg/(?<caty>[\\w|_]+)",
-      "target" : "https://rsshub.app/cas/cg/$caty?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -6627,6 +8097,12 @@
     {
       "source" : "https?://xiaote.com(?<any>.*)/?",
       "target" : "https://rsshub.app/xiaote/news?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://rsgis.whu.edu.cn(?<any>.*)/index.htm",
+      "target" : "https://rsshub.app/whu/rsgis/index?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -6769,8 +8245,44 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://wlt.jiangsu.gov.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/gov/jiangsu/wlt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://blog.worldofwarships.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/worldofwarships/devblog?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://3dmgame.com(?<any>.*)/games/(?<name>[\\w|_]+)/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/3dmgame/games/$name/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://3dmgame.com(?<any>.*)/news/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/3dmgame/news/$category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://3dmgame.com(?<any>.*)/news",
+      "target" : "https://rsshub.app/3dmgame/news?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://www.xunhupay.com(?<any>.*)/blog",
       "target" : "https://rsshub.app/xunhupay/blog?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://binance.com(?<any>.*)/(?<lang>[\\w|_]+)/support/announcement",
+      "target" : "https://rsshub.app/binance/launchpool?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -6895,6 +8407,60 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://www.iee.cas.cn(?<any>.*)/xwzx/kydt",
+      "target" : "https://rsshub.app/cas/iee/kydt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.iee.cas.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/cas/iee/kydt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.sim.cas.cn(?<any>.*)/xwzx2016/kyjz",
+      "target" : "https://rsshub.app/cas/sim/kyjz?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.sim.cas.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/cas/sim/kyjz?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.ia.cas.cn(?<any>.*)/yjsjy/zs/sszs",
+      "target" : "https://rsshub.app/cas/ia/yjs?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.ia.cas.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/cas/ia/yjs?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.cas.cn(?<any>.*)/cg/(?<caty>[\\w|_]+)",
+      "target" : "https://rsshub.app/cas/cg/$caty?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.j-test.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/j-test/news?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.wellcee.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/wellcee/support-city?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://taiwannews.com.tw(?<any>.*)/(?<lang>[\\w|_]+)/index",
       "target" : "https://rsshub.app/taiwannews/hot/$lang?format=atom&mode=fulltext",
       "recommend" : null,
@@ -7003,6 +8569,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://academia.edu(?<any>.*)/Documents/in/(?<interest>[\\w|_]+)",
+      "target" : "https://rsshub.app/academia/topic/$interest?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://news.yxrb.net(?<any>.*)/(?<category>[\\w|_]+)",
       "target" : "https://rsshub.app/yxrb/$category?format=atom&mode=fulltext",
       "recommend" : null,
@@ -7087,6 +8659,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://www.npmjs.com(?<any>.*)/package/(?<name>[\\w|_]+)",
+      "target" : "https://rsshub.app/npm/package/$name{(@[a-z0-9-~][a-z0-9-._~]*/)?[a-z0-9-~][a-z0-9-._~]*}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://techpowerup.com(?<any>.*)/?",
       "target" : "https://rsshub.app/techpowerup/?format=atom&mode=fulltext",
       "recommend" : null,
@@ -7107,12 +8685,6 @@
     {
       "source" : "https?://javdb.com(?<any>.*)/?",
       "target" : "https://rsshub.app/javdb/home?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://javdb.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/javdb?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -7153,6 +8725,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://javdb.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/javdb/video_codes/:code?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://daily.dev(?<any>.*)/popular",
       "target" : "https://rsshub.app/daily/discussed?format=atom&mode=fulltext",
       "recommend" : null,
@@ -7167,6 +8745,18 @@
     {
       "source" : "https?://daily.dev(?<any>.*)/popular",
       "target" : "https://rsshub.app/daily/upvoted?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://daily.dev(?<any>.*)/(?<userId>[\\w|_]+)/posts",
+      "target" : "https://rsshub.app/daily/user/$userId?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://daily.dev(?<any>.*)/(?<userId>[\\w|_]+)",
+      "target" : "https://rsshub.app/daily/user/$userId?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -7201,6 +8791,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://read.readwise.io(?<any>.*)/?",
+      "target" : "https://rsshub.app/readwise/list?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://ikea.com(?<any>.*)/gb/en/new/new-products/",
       "target" : "https://rsshub.app/ikea/gb/new?format=atom&mode=fulltext",
       "recommend" : null,
@@ -7225,14 +8821,20 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://web.vip.miui.com(?<any>.*)/page/info/mio/mio/homePage",
-      "target" : "https://rsshub.app/miui(_,url)=>`/miui/community/user/${new URL(url).searchParams.get(\"uid\")}`?format=atom&mode=fulltext",
+      "source" : "https?://domp4.cc(?<any>.*)/detail/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/domp4/detail/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://domp4.cc(?<any>.*)/detail/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/domp4/detail/$id?format=atom&mode=fulltext",
+      "source" : "https?://domp4.cc(?<any>.*)/?",
+      "target" : "https://rsshub.app/domp4/latest_movie_bt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://domp4.cc(?<any>.*)/custom/update.html",
+      "target" : "https://rsshub.app/domp4/latest_movie_bt?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -7263,48 +8865,6 @@
     {
       "source" : "https?://hbr.org(?<any>.*)/?",
       "target" : "https://rsshub.app/hbr/topic?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://zh.myfigurecollection.net(?<any>.*)/browse",
-      "target" : "https://rsshub.app/myfigurecollection?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://zh.myfigurecollection.net(?<any>.*)/?",
-      "target" : "https://rsshub.app/myfigurecollection?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://zh.myfigurecollection.net(?<any>.*)/browse",
-      "target" : "https://rsshub.app/myfigurecollection?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://zh.myfigurecollection.net(?<any>.*)/?",
-      "target" : "https://rsshub.app/myfigurecollection?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://agora0.gitlab.io(?<any>.*)/blog/(?<category>[\\w|_]+)",
-      "target" : "https://rsshub.app/agora0/$category?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://agora0.gitlab.io(?<any>.*)/?",
-      "target" : "https://rsshub.app/agora0/:category?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://paradigm.xyz(?<any>.*)/writing",
-      "target" : "https://rsshub.app/paradigm/writing?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -7501,8 +9061,116 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://yahoo.com(?<any>.*)/?",
+      "source" : "https?://open.itc.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/itc/collection/:colType?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://web.vip.miui.com(?<any>.*)/page/info/mio/mio/homePage",
+      "target" : "https://rsshub.app/miui(_,url)=>`/miui/community/user/${new URL(url).searchParams.get(\"uid\")}`?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zh.myfigurecollection.net(?<any>.*)/browse",
+      "target" : "https://rsshub.app/myfigurecollection?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zh.myfigurecollection.net(?<any>.*)/?",
+      "target" : "https://rsshub.app/myfigurecollection?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zh.myfigurecollection.net(?<any>.*)/browse",
+      "target" : "https://rsshub.app/myfigurecollection?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zh.myfigurecollection.net(?<any>.*)/?",
+      "target" : "https://rsshub.app/myfigurecollection?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://xinwen.byau.edu.cn(?<any>.*)/(?<typeid>[\\w|_]+)/list.htm",
+      "target" : "https://rsshub.app/byau/news/$typeid?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://informedainews.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/informedainews/zh-Hans/docs/:type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://informedainews.com(?<any>.*)/zh-Hans/docs/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/informedainews/zh-Hans/docs/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://informedainews.com(?<any>.*)/docs/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/informedainews/zh-Hans/docs/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://agora0.gitlab.io(?<any>.*)/blog/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/agora0/$category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://agora0.gitlab.io(?<any>.*)/?",
+      "target" : "https://rsshub.app/agora0/:category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://paradigm.xyz(?<any>.*)/writing",
+      "target" : "https://rsshub.app/paradigm/writing?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.vice.com(?<any>.*)/(?<language>[\\w|_]+)/topic/(?<topic>[\\w|_]+)",
+      "target" : "https://rsshub.app/vice/topic/$topic/$language?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://news.yahoo.com(?<any>.*)/?",
       "target" : "https://rsshub.app/yahoo/news/:region?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://hk.news.yahoo.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/yahoo/news/providers/:region/list?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://hk.news.yahoo.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/yahoo/news/providers/:region/list?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://hk.news.yahoo.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/yahoo/news/provider/:region/:providerId?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://hk.news.yahoo.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/yahoo/news/provider/:region/:providerId?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -7521,18 +9189,6 @@
     {
       "source" : "https?://wap.ciweimao.com(?<any>.*)/book/(?<id>[\\w|_]+)",
       "target" : "https://rsshub.app/ciweimao/chapter/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://miit.gov.cn(?<any>.*)/jgsj/(?<ministry>[\\w|_]+)/wjfb/index.html",
-      "target" : "https://rsshub.app/gov/miit/wjfb/$ministry?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://miit.gov.cn(?<any>.*)/gzcy/yjzj/index.html",
-      "target" : "https://rsshub.app/gov/miit/yjzj?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -7563,6 +9219,24 @@
     {
       "source" : "https?://95mm.org(?<any>.*)/?",
       "target" : "https://rsshub.app/95mm/tag/:tag?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://iehou.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/iehou/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://iehou.com(?<any>.*)/page-dayhot.htm",
+      "target" : "https://rsshub.app/iehou/dayhot?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://iehou.com(?<any>.*)/page-weekhot.htm",
+      "target" : "https://rsshub.app/iehou/weekhot?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -7615,18 +9289,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://zotero.org(?<any>.*)/?",
-      "target" : "https://rsshub.app/zotero/versions?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://zotero.org(?<any>.*)/support/changelog",
-      "target" : "https://rsshub.app/zotero/versions?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://changba.com(?<any>.*)/s/(?<userid>[\\w|_]+)",
       "target" : "https://rsshub.app/changba/$userid?format=atom&mode=fulltext",
       "recommend" : null,
@@ -7641,6 +9303,96 @@
     {
       "source" : "https?://laohu8.com(?<any>.*)/personal/(?<id>[\\w|_]+)",
       "target" : "https://rsshub.app/laohu8/personal/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://miit.gov.cn(?<any>.*)/jgsj/(?<ministry>[\\w|_]+)/wjfb/index.html",
+      "target" : "https://rsshub.app/gov/miit/wjfb/$ministry?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://miit.gov.cn(?<any>.*)/gzcy/yjzj/index.html",
+      "target" : "https://rsshub.app/gov/miit/yjzj?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://51cto.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/51cto/index/recommend?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zotero.org(?<any>.*)/?",
+      "target" : "https://rsshub.app/zotero/versions?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zotero.org(?<any>.*)/support/changelog",
+      "target" : "https://rsshub.app/zotero/versions?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://isabelle-dev.sketis.net(?<any>.*)/phame/",
+      "target" : "https://rsshub.app/sketis/isabelle-dev/blog/1?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://isabelle-dev.sketis.net(?<any>.*)/phame/blog/",
+      "target" : "https://rsshub.app/sketis/isabelle-dev/blog/1?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://isabelle-dev.sketis.net(?<any>.*)/phame/blog/view/(?<blog>[\\w|_]+)/",
+      "target" : "https://rsshub.app/sketis/isabelle-dev/blog/1?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://isabelle-dev.sketis.net(?<any>.*)/phame/post/",
+      "target" : "https://rsshub.app/sketis/isabelle-dev/blog/1?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://isabelle-dev.sketis.net(?<any>.*)/phame/post/view/(?<postid>[\\w|_]+)/(?<posttitle>[\\w|_]+)/",
+      "target" : "https://rsshub.app/sketis/isabelle-dev/blog/1?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://isabelle-dev.sketis.net(?<any>.*)/phame/",
+      "target" : "https://rsshub.app/sketis/isabelle-dev/blog/2?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://isabelle-dev.sketis.net(?<any>.*)/phame/blog/",
+      "target" : "https://rsshub.app/sketis/isabelle-dev/blog/2?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://isabelle-dev.sketis.net(?<any>.*)/phame/blog/view/(?<blog>[\\w|_]+)/",
+      "target" : "https://rsshub.app/sketis/isabelle-dev/blog/2?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://isabelle-dev.sketis.net(?<any>.*)/phame/post/",
+      "target" : "https://rsshub.app/sketis/isabelle-dev/blog/2?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://isabelle-dev.sketis.net(?<any>.*)/phame/post/view/(?<postid>[\\w|_]+)/(?<posttitle>[\\w|_]+)/",
+      "target" : "https://rsshub.app/sketis/isabelle-dev/blog/2?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -7783,54 +9535,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://bgm.tv(?<any>.*)/calendar",
-      "target" : "https://rsshub.app/bangumi/tv/calendar/today?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://bgm.tv(?<any>.*)/group/topic/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/bangumi/tv/topic/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://bgm.tv(?<any>.*)/group/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/bangumi/tv/group/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://bgm.tv(?<any>.*)/anime",
-      "target" : "https://rsshub.app/bangumi/tv/followrank?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://bgm.tv(?<any>.*)/person/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/bangumi/tv/person/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://bgm.tv(?<any>.*)/subject/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/bangumi/tv/subject/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://bgm.tv(?<any>.*)/user/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/bangumi/tv/user/blog/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://bgm.tv(?<any>.*)/anime/list/(?<id>[\\w|_]+)/wish",
-      "target" : "https://rsshub.app/bangumi/tv/user/wish/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://phoronix.com(?<any>.*)/(?<category>[\\w|_]+)?/(?<topic>[\\w|_]+)?",
       "target" : "https://rsshub.app/phoronix/$category/$topic?format=atom&mode=fulltext",
       "recommend" : null,
@@ -7855,6 +9559,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://njuferret.github.io(?<any>.*)/?",
+      "target" : "https://rsshub.app/njuferret/blog?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://panewslab.com(?<any>.*)/?",
       "target" : "https://rsshub.app/panewslab/author/:id?format=atom&mode=fulltext",
       "recommend" : null,
@@ -7868,19 +9578,19 @@
     },
     {
       "source" : "https?://panewslab.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/panewslab?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://panewslab.com(?<any>.*)/?",
       "target" : "https://rsshub.app/panewslab/news?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
       "source" : "https?://panewslab.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/panewslab/newsflash?format=atom&mode=fulltext",
+      "target" : "https://rsshub.app/panewslab/profundity?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://panewslab.com(?<any>.*)/zh/profundity/index.html",
+      "target" : "https://rsshub.app/panewslab/profundity?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -7904,7 +9614,7 @@
     },
     {
       "source" : "https?://nhentai.net(?<any>.*)/(?<key>[\\w|_]+)/(?<keyword>[\\w|_]+)",
-      "target" : "https://rsshub.app/nhentai/$key/$keyword?format=atom&mode=fulltext",
+      "target" : "https://rsshub.app/nhentai/index/$key/$keyword?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -7965,6 +9675,66 @@
     {
       "source" : "https?://guangdiu.com(?<any>.*)/rank",
       "target" : "https://rsshub.app/guangdiu/rank?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://p-articles.com(?<any>.*)/contributors/(?<author>[\\w|_]+)",
+      "target" : "https://rsshub.app/p-articles/contributors/$author?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://p-articles.com(?<any>.*)/(?<section>[\\w|_]+)/",
+      "target" : "https://rsshub.app/p-articles/section/$section?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://bgm.tv(?<any>.*)/calendar",
+      "target" : "https://rsshub.app/bangumi/tv/calendar/today?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://bgm.tv(?<any>.*)/group/topic/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/bangumi/tv/topic/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://bgm.tv(?<any>.*)/group/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/bangumi/tv/group/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://bgm.tv(?<any>.*)/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/bangumi/$type/followrank?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://bgm.tv(?<any>.*)/person/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/bangumi/tv/person/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://bgm.tv(?<any>.*)/subject/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/bangumi/tv/subject/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://bgm.tv(?<any>.*)/user/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/bangumi/tv/user/blog/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://bgm.tv(?<any>.*)/anime/list/(?<id>[\\w|_]+)/wish",
+      "target" : "https://rsshub.app/bangumi/tv/user/wish/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -8113,6 +9883,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://sspai.com(?<any>.*)/community",
+      "target" : "https://rsshub.app/sspai/prime/community?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://sspai.com(?<any>.*)/series/(?<id>[\\w|_]+)",
       "target" : "https://rsshub.app/sspai/series/$id?format=atom&mode=fulltext",
       "recommend" : null,
@@ -8245,6 +10021,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://weibo.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/weibo/user_bookmarks/:uid?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://s.weibo.com(?<any>.*)/top/summary",
       "target" : "https://rsshub.app/weibo/search/hot?format=atom&mode=fulltext",
       "recommend" : null,
@@ -8299,12 +10081,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://zhongchou.modian.com(?<any>.*)/(?<category>[\\w|_]+)/(?<sort>[\\w|_]+)/(?<status>[\\w|_]+)",
-      "target" : "https://rsshub.app/modian/zhongchou/$category/$sort/$status?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://www.hpoi.net(?<any>.*)/hobby/all",
       "target" : "https://rsshub.app/hpoi/items/all?format=atom&mode=fulltext",
       "recommend" : null,
@@ -8331,6 +10107,24 @@
     {
       "source" : "https?://hackertalk.net(?<any>.*)/?",
       "target" : "https://rsshub.app/hackertalk/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.theblockbeats.info(?<any>.*)/article",
+      "target" : "https://rsshub.app/theblockbeats/article?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.theblockbeats.info(?<any>.*)/newsflash",
+      "target" : "https://rsshub.app/theblockbeats/newsflash?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zeroday.hitcon.org(?<any>.*)/vulnerability/(?<status>[\\w|_]+)",
+      "target" : "https://rsshub.app/hitcon/zeroday/vulnerability/$status?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -8437,8 +10231,68 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://news.shisu.edu.cn(?<any>.*)/(?<category>[\\w|_]+)/index.html",
-      "target" : "https://rsshub.app/shisu/news/$category?format=atom&mode=fulltext",
+      "source" : "https?://en.shisu.edu.cn(?<any>.*)/resources/(?<section>[\\w|_]+)/",
+      "target" : "https://rsshub.app/shisu/en/$section?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://news.shisu.edu.cn(?<any>.*)/(?<section>[\\w|_]+)/index.html",
+      "target" : "https://rsshub.app/shisu/news/$section?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zhongchou.modian.com(?<any>.*)/(?<category>[\\w|_]+)/(?<sort>[\\w|_]+)/(?<status>[\\w|_]+)",
+      "target" : "https://rsshub.app/modian/zhongchou/$category/$sort/$status?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cuilingmag.com(?<any>.*)/category/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/cuilingmagparams=>{const category=params.category;return`/cuilingmag${category?`/${category}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cuilingmag.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/cuilingmag/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cuilingmag.com(?<any>.*)/category/philosophy_civilization",
+      "target" : "https://rsshub.app/cuilingmag/philosophy_civilization?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cuilingmag.com(?<any>.*)/category/art_science",
+      "target" : "https://rsshub.app/cuilingmag/art_science?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cuilingmag.com(?<any>.*)/category/future_life",
+      "target" : "https://rsshub.app/cuilingmag/future_life?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cuilingmag.com(?<any>.*)/category/planetary_wisdom",
+      "target" : "https://rsshub.app/cuilingmag/planetary_wisdom?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cuilingmag.com(?<any>.*)/category/digital_governance",
+      "target" : "https://rsshub.app/cuilingmag/digital_governance?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cuilingmag.com(?<any>.*)/category/selected_noema",
+      "target" : "https://rsshub.app/cuilingmag/selected_noema?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -8497,20 +10351,8 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://newsmarket.com.tw(?<any>.*)/blog/category/(?<category>[\\w|_]+)",
-      "target" : "https://rsshub.app/newsmarket/$category?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://newsmarket.com.tw(?<any>.*)/?",
-      "target" : "https://rsshub.app/newsmarket?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://xiaozhuanlan.com(?<any>.*)/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/xiaozhuanlan/column/$id?format=atom&mode=fulltext",
+      "source" : "https?://www.famitsu.com(?<any>.*)/category/(?<category>[\\w|_]+)/page/1",
+      "target" : "https://rsshub.app/famitsu/category/$category?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -8523,6 +10365,12 @@
     {
       "source" : "https?://zhujia.zhuwang.cc(?<any>.*)/?",
       "target" : "https://rsshub.app/zhuwang/zhujia?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://apnews.com(?<any>.*)/(?<rss>[\\w|_]+)",
+      "target" : "https://rsshub.app/apnews/rss/$rss?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -8593,8 +10441,68 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://news.ahjzu.edu.cn(?<any>.*)/20/list.htm",
-      "target" : "https://rsshub.app/ahjzu/news?format=atom&mode=fulltext",
+      "source" : "https?://kadokawa.com.tw(?<any>.*)/blog/posts",
+      "target" : "https://rsshub.app/kadokawa/blog?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://apps.shopify.com(?<any>.*)/(?<handle>[\\w|_]+)",
+      "target" : "https://rsshub.app/shopify/apps/$handle/reviews?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://apps.shopify.com(?<any>.*)/search",
+      "target" : "https://rsshub.app/shopify(_params,url)=>{const{searchParams}=new URL(url).searchParams;return searchParams.has(\"q\")?`/shopify/apps/search/${searchParams.get(\"q\")}`:null}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://newsmarket.com.tw(?<any>.*)/blog/category/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/newsmarket/$category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://newsmarket.com.tw(?<any>.*)/?",
+      "target" : "https://rsshub.app/newsmarket?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://x.com(?<any>.*)/home",
+      "target" : "https://rsshub.app/twitter/home?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://x.com(?<any>.*)/search",
+      "target" : "https://rsshub.app/twitter/keyword/:keyword?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://x.com(?<any>.*)/i/lists/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/twitter/list/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://x.com(?<any>.*)/(?<id>[\\w|_]+)/media",
+      "target" : "https://rsshub.app/twitter/media/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://x.com(?<any>.*)/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/twitter/user/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://xiaozhuanlan.com(?<any>.*)/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/xiaozhuanlan/column/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -8647,6 +10555,24 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://2bt0.com(?<any>.*)/mv/",
+      "target" : "https://rsshub.app/bt0/mv/:number?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://2bt0.com(?<any>.*)/tlist/",
+      "target" : "https://rsshub.app/bt0/tlist/:sc?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://news.ahjzu.edu.cn(?<any>.*)/20/list.htm",
+      "target" : "https://rsshub.app/ahjzu/news?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://www.abmedia.io(?<any>.*)/category/(?<catehory>[\\w|_]+)",
       "target" : "https://rsshub.app/abmedia/:category?format=atom&mode=fulltext",
       "recommend" : null,
@@ -8671,56 +10597,134 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://taoguba.com.cn(?<any>.*)/blog/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/taoguba/blog/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://taoguba.com.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/taoguba/blog/:id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://taoguba.com.cn(?<any>.*)/blog/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/taoguba/user/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://taoguba.com.cn(?<any>.*)/?",
-      "target" : "https://rsshub.app/taoguba/user/:id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://youzhiyouxing.cn(?<any>.*)/materials",
       "target" : "https://rsshub.app/youzhiyouxing/materials?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://grist.org(?<any>.*)/?",
-      "target" : "https://rsshub.app/grist/featured?format=atom&mode=fulltext",
+      "source" : "https?://nintendo.co.jp(?<any>.*)/software/switch/index.html",
+      "target" : "https://rsshub.app/nintendo/eshop/jp?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://grist.org(?<any>.*)/articles/",
-      "target" : "https://rsshub.app/grist/?format=atom&mode=fulltext",
+      "source" : "https?://nintendo.co.jp(?<any>.*)/?",
+      "target" : "https://rsshub.app/nintendo/eshop/jp?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://grist.org(?<any>.*)/series/(?<series>[\\w|_]+)",
-      "target" : "https://rsshub.app/grist/series/$series?format=atom&mode=fulltext",
+      "source" : "https?://nintendo.co.jp(?<any>.*)/support/switch/system_update/index.html",
+      "target" : "https://rsshub.app/nintendo/system-update?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://grist.org(?<any>.*)/(?<topic>[\\w|_]+)",
-      "target" : "https://rsshub.app/grist/topic/$topic?format=atom&mode=fulltext",
+      "source" : "https?://nintendo.co.jp(?<any>.*)/?",
+      "target" : "https://rsshub.app/nintendo/system-update?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/govparams=>{const category=params.category;return`/gov/ah/kjt${category?`/${category}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzx/tzgg/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzx/tzgg?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzx/gzdt/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzx/gzdt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzx/jckj/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzx/jckj?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzx/mtjj/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzx/mtjj?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzx/zyzz/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzx/zyzz?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzx/tpsp/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzx/tpsp?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzy/kjtj/jsscjy/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzy/kjtj/jsscjy?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzy/kjtj/kjcggb/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzy/kjtj/kjcggb?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzy/kjtj/cyfhfz/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzy/kjtj/cyfhfz?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzy/kjsj/cxqy/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzy/kjsj/cxqy?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzy/kjsj/cxxm/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzy/kjsj/cxxm?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzy/kjsj/cxcg/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzy/kjsj/cxcg?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzy/kjsj/zhjjrkxm/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzy/kjsj/zhjjrkxm?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzy/kjsj/cxpt/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzy/kjsj/cxpt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzy/kjsj/cxyq/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzy/kjsj/cxyq?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kjt.ah.gov.cn(?<any>.*)/kjzy/kjsj/cxxk/index.html",
+      "target" : "https://rsshub.app/gov/ah/kjt/kjzy/kjsj/cxxk?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -8751,6 +10755,12 @@
     {
       "source" : "https?://gcores.com(?<any>.*)/?",
       "target" : "https://rsshub.app/gcores/tag/:tag?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://yenpress.com(?<any>.*)/series/(?<name>[\\w|_]+)",
+      "target" : "https://rsshub.app/yenpress/series/$name?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -8803,62 +10813,116 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://nintendo.co.jp(?<any>.*)/software/switch/index.html",
-      "target" : "https://rsshub.app/nintendo/eshop/jp?format=atom&mode=fulltext",
+      "source" : "https?://taoguba.com.cn(?<any>.*)/blog/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/taoguba/blog/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://nintendo.co.jp(?<any>.*)/?",
-      "target" : "https://rsshub.app/nintendo/eshop/jp?format=atom&mode=fulltext",
+      "source" : "https?://taoguba.com.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/taoguba/blog/:id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://nintendo.co.jp(?<any>.*)/support/switch/system_update/index.html",
-      "target" : "https://rsshub.app/nintendo/system-update?format=atom&mode=fulltext",
+      "source" : "https?://taoguba.com.cn(?<any>.*)/blog/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/taoguba/user/$id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://nintendo.co.jp(?<any>.*)/?",
-      "target" : "https://rsshub.app/nintendo/system-update?format=atom&mode=fulltext",
+      "source" : "https?://taoguba.com.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/taoguba/user/:id?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://wnacg.org(?<any>.*)/albums.html",
-      "target" : "https://rsshub.app/wnacg/?format=atom&mode=fulltext",
+      "source" : "https?://psyche.co(?<any>.*)/(?<topic>[\\w|_]+)",
+      "target" : "https://rsshub.app/psyche/topic/$topic?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://wnacg.org(?<any>.*)/?",
-      "target" : "https://rsshub.app/wnacg/?format=atom&mode=fulltext",
+      "source" : "https?://psyche.co(?<any>.*)/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/psyche/type/$type?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://wnacg.org(?<any>.*)/albums.html",
-      "target" : "https://rsshub.app/wnacg/category/:cid?format=atom&mode=fulltext",
+      "source" : "https?://grist.org(?<any>.*)/?",
+      "target" : "https://rsshub.app/grist/featured?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://wnacg.org(?<any>.*)/?",
-      "target" : "https://rsshub.app/wnacg/category/:cid?format=atom&mode=fulltext",
+      "source" : "https?://grist.org(?<any>.*)/articles/",
+      "target" : "https://rsshub.app/grist/?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://wnacg.org(?<any>.*)/albums.html",
-      "target" : "https://rsshub.app/wnacg/tag/:tag?format=atom&mode=fulltext",
+      "source" : "https?://grist.org(?<any>.*)/series/(?<series>[\\w|_]+)",
+      "target" : "https://rsshub.app/grist/series/$series?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://wnacg.org(?<any>.*)/?",
-      "target" : "https://rsshub.app/wnacg/tag/:tag?format=atom&mode=fulltext",
+      "source" : "https?://grist.org(?<any>.*)/(?<topic>[\\w|_]+)",
+      "target" : "https://rsshub.app/grist/topic/$topic?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://beijingprice.cn(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/beijingpriceparams=>{const category=params.category;return`/beijingprice${category?`/${category}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://beijingprice.cn(?<any>.*)/jgzx/xwzx/",
+      "target" : "https://rsshub.app/beijingprice/jgzx/xwzx?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://beijingprice.cn(?<any>.*)/jgzx/gzdt/",
+      "target" : "https://rsshub.app/beijingprice/jgzx/gzdt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://beijingprice.cn(?<any>.*)/jgzx/gqdt/",
+      "target" : "https://rsshub.app/beijingprice/jgzx/gqdt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://beijingprice.cn(?<any>.*)/jgzx/tzgg/",
+      "target" : "https://rsshub.app/beijingprice/jgzx/tzgg?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://beijingprice.cn(?<any>.*)/jgzx/jgzb/",
+      "target" : "https://rsshub.app/beijingprice/jgzx/jgzb?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://beijingprice.cn(?<any>.*)/zhxx/jgtz/",
+      "target" : "https://rsshub.app/beijingprice/zhxx/jgtz?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://beijingprice.cn(?<any>.*)/zhxx/jgjcdddwmd/",
+      "target" : "https://rsshub.app/beijingprice/zhxx/jgjcdddwmd?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://beijingprice.cn(?<any>.*)/bmys/",
+      "target" : "https://rsshub.app/beijingprice/bmys?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -8961,6 +11025,12 @@
     {
       "source" : "https?://www.iiilab.com(?<any>.*)/?",
       "target" : "https://rsshub.app/iiilab/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://dcfever.com(?<any>.*)/news/index.php",
+      "target" : "https://rsshub.app/dcfever/news?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -9159,30 +11229,6 @@
     {
       "source" : "https?://xyzrank.com(?<any>.*)/?",
       "target" : "https://rsshub.app/xyzrank?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://whitehouse.gov(?<any>.*)/briefing-room/(?<category>[\\w|_]+)",
-      "target" : "https://rsshub.app/whitehouse/briefing-room/$category?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://whitehouse.gov(?<any>.*)/?",
-      "target" : "https://rsshub.app/whitehouse/briefing-room/:category?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://whitehouse.gov(?<any>.*)/ostp",
-      "target" : "https://rsshub.app/whitehouse/ostp?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://whitehouse.gov(?<any>.*)/?",
-      "target" : "https://rsshub.app/whitehouse/ostp?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -9391,6 +11437,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://newyorker.com(?<any>.*)/feed/(?<category>[\\w|_]+)/(?<subCategory>[\\w|_]+)",
+      "target" : "https://rsshub.app/newyorker/$category/$subCategory?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://mp.data258.com(?<any>.*)/?",
       "target" : "https://rsshub.app/wechat/data258?format=atom&mode=fulltext",
       "recommend" : null,
@@ -9547,6 +11599,36 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://www.wired.com(?<any>.*)/tag/(?<tag>[\\w|_]+)/",
+      "target" : "https://rsshub.app/wired/tag/$tag?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://whitehouse.gov(?<any>.*)/briefing-room/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/whitehouse/briefing-room/$category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://whitehouse.gov(?<any>.*)/?",
+      "target" : "https://rsshub.app/whitehouse/briefing-room/:category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://whitehouse.gov(?<any>.*)/ostp",
+      "target" : "https://rsshub.app/whitehouse/ostp?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://whitehouse.gov(?<any>.*)/?",
+      "target" : "https://rsshub.app/whitehouse/ostp?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://docschina.org(?<any>.*)/news/weekly/js/*",
       "target" : "https://rsshub.app/docschina/jsweekly?format=atom&mode=fulltext",
       "recommend" : null,
@@ -9619,6 +11701,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://news.ttv.com.tw(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/ttv/$category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://www.njit.edu.cn(?<any>.*)/?",
       "target" : "https://rsshub.app/njit/tzgg?format=atom&mode=fulltext",
       "recommend" : null,
@@ -9639,84 +11727,6 @@
     {
       "source" : "https?://segmentfault.com(?<any>.*)/u/(?<name>[\\w|_]+)",
       "target" : "https://rsshub.app/segmentfault/user/$name?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://houxu.app(?<any>.*)/events",
-      "target" : "https://rsshub.app/houxu/events?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://houxu.app(?<any>.*)/?",
-      "target" : "https://rsshub.app/houxu/events?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://houxu.app(?<any>.*)/?",
-      "target" : "https://rsshub.app/houxu/featured?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://houxu.app(?<any>.*)/?",
-      "target" : "https://rsshub.app/houxu/index?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://houxu.app(?<any>.*)/?",
-      "target" : "https://rsshub.app/houxu/?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://houxu.app(?<any>.*)/lives/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/houxu/lives/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://houxu.app(?<any>.*)/?",
-      "target" : "https://rsshub.app/houxu/lives/:id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://houxu.app(?<any>.*)/memory",
-      "target" : "https://rsshub.app/houxu/memory?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://houxu.app(?<any>.*)/?",
-      "target" : "https://rsshub.app/houxu/memory?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www3.nhk.or.jp(?<any>.*)/news/easy/",
-      "target" : "https://rsshub.app/nhk/news_web_easy?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www3.nhk.or.jp(?<any>.*)/?",
-      "target" : "https://rsshub.app/nhk/news_web_easy?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www3.nhk.or.jp(?<any>.*)/nhkworld/(?<lang>[\\w|_]+)/news/list/",
-      "target" : "https://rsshub.app/nhk/news/$lang?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://www3.nhk.or.jp(?<any>.*)/nhkworld/(?<lang>[\\w|_]+)/news/",
-      "target" : "https://rsshub.app/nhk/news/$lang?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -9835,14 +11845,20 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://techflowpost.com(?<any>.*)/newsletter/index.html",
-      "target" : "https://rsshub.app/techflowpost/newsflash?format=atom&mode=fulltext",
+      "source" : "https?://techflowpost.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/techflowpost/?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://techflowpost.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/techflowpost/?format=atom&mode=fulltext",
+      "source" : "https?://mixcloud.com(?<any>.*)/(?<username>[\\w|_]+)/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/mixcloud/$username/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.mixcloud.com(?<any>.*)/(?<username>[\\w|_]+)/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/mixcloud/$username/$type?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -9939,6 +11955,84 @@
     {
       "source" : "https?://global.udn.com(?<any>.*)/?",
       "target" : "https://rsshub.app/udn/global/tag?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://houxu.app(?<any>.*)/events",
+      "target" : "https://rsshub.app/houxu/events?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://houxu.app(?<any>.*)/?",
+      "target" : "https://rsshub.app/houxu/events?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://houxu.app(?<any>.*)/?",
+      "target" : "https://rsshub.app/houxu/?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://houxu.app(?<any>.*)/lives/(?<id>[\\w|_]+)",
+      "target" : "https://rsshub.app/houxu/lives/$id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://houxu.app(?<any>.*)/?",
+      "target" : "https://rsshub.app/houxu/lives/:id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://houxu.app(?<any>.*)/memory",
+      "target" : "https://rsshub.app/houxu/memory?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://houxu.app(?<any>.*)/?",
+      "target" : "https://rsshub.app/houxu/memory?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://search.zj.gov.cn(?<any>.*)/jsearchfront/search.do",
+      "target" : "https://rsshub.app/gov/zj/search/:word?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.kelownacapnews.com(?<any>.*)/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/kelownacapnews/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www3.nhk.or.jp(?<any>.*)/news/easy/",
+      "target" : "https://rsshub.app/nhk/news_web_easy?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www3.nhk.or.jp(?<any>.*)/?",
+      "target" : "https://rsshub.app/nhk/news_web_easy?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www3.nhk.or.jp(?<any>.*)/nhkworld/(?<lang>[\\w|_]+)/news/list/",
+      "target" : "https://rsshub.app/nhk/news/$lang?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www3.nhk.or.jp(?<any>.*)/nhkworld/(?<lang>[\\w|_]+)/news/",
+      "target" : "https://rsshub.app/nhk/news/$lang?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -10177,56 +12271,20 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://getquicker.net(?<any>.*)/Share/(?<category>[\\w|_]+)",
-      "target" : "https://rsshub.app/quicker/share/$category?format=atom&mode=fulltext",
+      "source" : "https?://www.alipan.com(?<any>.*)/s/(?<shareid>[\\w|_]+)/folder/(?<parentfileid>[\\w|_]+)",
+      "target" : "https://rsshub.app/alipan/files/$shareid/$parentfileid?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://getquicker.net(?<any>.*)/?",
-      "target" : "https://rsshub.app/quicker/share?format=atom&mode=fulltext",
+      "source" : "https?://www.alipan.com(?<any>.*)/s/(?<shareid>[\\w|_]+)",
+      "target" : "https://rsshub.app/alipan/files/$shareid?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
     {
-      "source" : "https?://brave.com(?<any>.*)/latest",
-      "target" : "https://rsshub.app/brave/latest?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://brave.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/brave/latest?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://twitter.com(?<any>.*)/home",
-      "target" : "https://rsshub.app/twitter/home?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://twitter.com(?<any>.*)/search",
-      "target" : "https://rsshub.app/twitter/keyword/:keyword?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://twitter.com(?<any>.*)/i/lists/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/twitter/list/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://twitter.com(?<any>.*)/(?<id>[\\w|_]+)/media",
-      "target" : "https://rsshub.app/twitter/media/$id?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://twitter.com(?<any>.*)/(?<id>[\\w|_]+)",
-      "target" : "https://rsshub.app/twitter/user/$id?format=atom&mode=fulltext",
+      "source" : "https?://github.com(?<any>.*)/(?<user>[\\w|_]+)",
+      "target" : "https://rsshub.app/github/activity/$user?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -10495,6 +12553,72 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://cara.app(?<any>.*)/(?<user>[\\w|_]+)",
+      "target" : "https://rsshub.app/cara/likes/$user?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cara.app(?<any>.*)/(?<user>[\\w|_]+)/*",
+      "target" : "https://rsshub.app/cara/likes/$user?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cara.app(?<any>.*)/(?<user>[\\w|_]+)",
+      "target" : "https://rsshub.app/cara/portfolio/$user?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cara.app(?<any>.*)/(?<user>[\\w|_]+)/*",
+      "target" : "https://rsshub.app/cara/portfolio/$user?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cara.app(?<any>.*)/(?<user>[\\w|_]+)",
+      "target" : "https://rsshub.app/cara/timeline/$user?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cara.app(?<any>.*)/(?<user>[\\w|_]+)/*",
+      "target" : "https://rsshub.app/cara/timeline/$user?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://getquicker.net(?<any>.*)/Share/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/quicker/share/$category?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://getquicker.net(?<any>.*)/?",
+      "target" : "https://rsshub.app/quicker/share?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://fanqienovel.com(?<any>.*)/page/(?<bookId>[\\w|_]+)",
+      "target" : "https://rsshub.app/fanqienovel/page/$bookId?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://brave.com(?<any>.*)/latest",
+      "target" : "https://rsshub.app/brave/latest?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://brave.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/brave/latest?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://njglyy.com(?<any>.*)/ygb/jypx/jypx.aspx",
       "target" : "https://rsshub.app/njglyy/ygbjypx?format=atom&mode=fulltext",
       "recommend" : null,
@@ -10587,6 +12711,18 @@
     {
       "source" : "https?://hk01.com(?<any>.*)/?",
       "target" : "https://rsshub.app/hk01/zone?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://watasuke.net(?<any>.*)/blog/",
+      "target" : "https://rsshub.app/watasuke/blog?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://watasuke.net(?<any>.*)/?",
+      "target" : "https://rsshub.app/watasuke/blog?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -10687,6 +12823,60 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://www.jwc.ecnu.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/ecnu/tzgg?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.jwc.ecnu.edu.cn(?<any>.*)/?",
+      "target" : "https://rsshub.app/ecnu/tzgg?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cn.nikkei.com(?<any>.*)/(?<category>[\\w|_]+)/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/nikkeiparams=>{if(params.category&&params.type){return`/nikkei/cn/cn/${params.category}/${params.type.replace(\".html\",\"\")}`}else if(params.category&&!params.type){return`/nikkei/cn/cn/${params.category.replace(\".html\",\"\")}`}else{return`/nikkei/cn/cn`}}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cn.nikkei.com(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/nikkeiparams=>{if(params.category&&params.type){return`/nikkei/cn/cn/${params.category}/${params.type.replace(\".html\",\"\")}`}else if(params.category&&!params.type){return`/nikkei/cn/cn/${params.category.replace(\".html\",\"\")}`}else{return`/nikkei/cn/cn`}}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://cn.nikkei.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/nikkeiparams=>{if(params.category&&params.type){return`/nikkei/cn/cn/${params.category}/${params.type.replace(\".html\",\"\")}`}else if(params.category&&!params.type){return`/nikkei/cn/cn/${params.category.replace(\".html\",\"\")}`}else{return`/nikkei/cn/cn`}}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zh.cn.nikkei.com(?<any>.*)/(?<category>[\\w|_]+)/(?<type>[\\w|_]+)",
+      "target" : "https://rsshub.app/nikkeiparams=>{if(params.category&&params.type){return`/nikkei/cn/zh/${params.category}/${params.type.replace(\".html\",\"\")}`}else if(params.category&&!params.type){return`/nikkei/cn/zh/${params.category.replace(\".html\",\"\")}`}else{return`/nikkei/cn/zh`}}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zh.cn.nikkei.com(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/nikkeiparams=>{if(params.category&&params.type){return`/nikkei/cn/zh/${params.category}/${params.type.replace(\".html\",\"\")}`}else if(params.category&&!params.type){return`/nikkei/cn/zh/${params.category.replace(\".html\",\"\")}`}else{return`/nikkei/cn/zh`}}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://zh.cn.nikkei.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/nikkeiparams=>{if(params.category&&params.type){return`/nikkei/cn/zh/${params.category}/${params.type.replace(\".html\",\"\")}`}else if(params.category&&!params.type){return`/nikkei/cn/zh/${params.category.replace(\".html\",\"\")}`}else{return`/nikkei/cn/zh`}}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://asia.nikkei.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/nikkei/asia?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://www.nikkei.com(?<any>.*)/(?<category>[\\w|_]+)/archive",
       "target" : "https://rsshub.app/nikkei/$category?format=atom&mode=fulltext",
       "recommend" : null,
@@ -10699,8 +12889,8 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://asia.nikkei.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/nikkei/asia?format=atom&mode=fulltext",
+      "source" : "https?://store.steampowered.com(?<any>.*)/app/(?<appid>[\\w|_]+)/*/",
+      "target" : "https://rsshub.app/steam/appcommunityfeed/$appid?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -10789,6 +12979,12 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://web.bc3ts.net(?<any>.*)/?",
+      "target" : "https://rsshub.app/bc3ts/post/list?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://scmp.com(?<any>.*)/rss/(?<categoryid>[\\w|_]+)/feed",
       "target" : "https://rsshub.app/scmp/$categoryid?format=atom&mode=fulltext",
       "recommend" : null,
@@ -10837,12 +13033,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://egsea.com(?<any>.*)/news/flash",
-      "target" : "https://rsshub.app/egsea/flash?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://www.research.ke.com(?<any>.*)/researchResults",
       "target" : "https://rsshub.app/ke/researchResults?format=atom&mode=fulltext",
       "recommend" : null,
@@ -10857,12 +13047,6 @@
     {
       "source" : "https?://mpaypass.com.cn(?<any>.*)/?",
       "target" : "https://rsshub.app/mpaypass/news?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://thecatcity.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/thecatcity?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -10922,18 +13106,6 @@
     },
     {
       "source" : "https?://darwinawards.com(?<any>.*)/darwin",
-      "target" : "https://rsshub.app/darwinawards/all?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://darwinawards.com(?<any>.*)/?",
-      "target" : "https://rsshub.app/darwinawards/all?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
-      "source" : "https?://darwinawards.com(?<any>.*)/darwin",
       "target" : "https://rsshub.app/darwinawards/?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
@@ -10957,12 +13129,6 @@
       "recommendReason" : null
     },
     {
-      "source" : "https?://zh.wikinews.org(?<any>.*)/wiki/Special:%E6%96%B0%E9%97%BB%E8%AE%A2%E9%98%85",
-      "target" : "https://rsshub.app/wikinews/latest?format=atom&mode=fulltext",
-      "recommend" : null,
-      "recommendReason" : null
-    },
-    {
       "source" : "https?://ci-en.dlsite.com(?<any>.*)/creator/(?<id>[\\w|_]+)/article/843558",
       "target" : "https://rsshub.app/dlsite/ci-en/$id/article?format=atom&mode=fulltext",
       "recommend" : null,
@@ -10971,6 +13137,102 @@
     {
       "source" : "https?://ci-en.dlsite.com(?<any>.*)/?",
       "target" : "https://rsshub.app/dlsite/ci-en/:id/article?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thepetcity.co(?<any>.*)/category/cute-item",
+      "target" : "https://rsshub.app/thepetcity/1?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thepetcity.co(?<any>.*)/?",
+      "target" : "https://rsshub.app/thepetcity/1?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thepetcity.co(?<any>.*)/category/funny-news",
+      "target" : "https://rsshub.app/thepetcity/2?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thepetcity.co(?<any>.*)/?",
+      "target" : "https://rsshub.app/thepetcity/2?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thepetcity.co(?<any>.*)/category/knowledge",
+      "target" : "https://rsshub.app/thepetcity/3?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thepetcity.co(?<any>.*)/?",
+      "target" : "https://rsshub.app/thepetcity/3?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thepetcity.co(?<any>.*)/category/hot-spot",
+      "target" : "https://rsshub.app/thepetcity/4?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thepetcity.co(?<any>.*)/?",
+      "target" : "https://rsshub.app/thepetcity/4?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thepetcity.co(?<any>.*)/category/raise-cats",
+      "target" : "https://rsshub.app/thepetcity/5?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thepetcity.co(?<any>.*)/?",
+      "target" : "https://rsshub.app/thepetcity/5?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://thepetcity.co(?<any>.*)/?",
+      "target" : "https://rsshub.app/thepetcity?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://egsea.com(?<any>.*)/news/flash",
+      "target" : "https://rsshub.app/egsea/flash?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lib.tsinghua.edu.cn(?<any>.*)/zydt/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/tsinghuaparams=>{const category=params.category?.replace(/\\.htm$/,\"\");return`/tsinghua/lib/zydt${category?`/${category}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lib.tsinghua.edu.cn(?<any>.*)/zydt",
+      "target" : "https://rsshub.app/tsinghua/lib/zydt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lib.tsinghua.edu.cn(?<any>.*)/zydt/yg",
+      "target" : "https://rsshub.app/tsinghua/lib/zydt/yg?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://lib.tsinghua.edu.cn(?<any>.*)/zydt/sy",
+      "target" : "https://rsshub.app/tsinghua/lib/zydt/sy?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -11031,6 +13293,84 @@
     {
       "source" : "https?://dwxgb.bnu.edu.cn(?<any>.*)/(?<category>[\\w|_]+)/(?<type>[\\w|_]+)/index.html",
       "target" : "https://rsshub.app/bnu/dwxgb/$category/$type?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/bnuparams=>{const category=params.category;return category?`/${category.replace(/\\/index\\.html$/,\"\")}`:\"\"}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/xwdt/index.html",
+      "target" : "https://rsshub.app/bnu/mba/xwdt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/tzgg/index.html",
+      "target" : "https://rsshub.app/bnu/mba/tzgg?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/mbaxljz/index.html",
+      "target" : "https://rsshub.app/bnu/mba/mbaxljz?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/zsdt/cjwt/index.html",
+      "target" : "https://rsshub.app/bnu/mba/zsdt/cjwt?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/gjhz/hwjd/index.html",
+      "target" : "https://rsshub.app/bnu/mba/gjhz/hwjd?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/gjhz/xwhz/index.html",
+      "target" : "https://rsshub.app/bnu/mba/gjhz/xwhz?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/gjhz/zqjh/index.html",
+      "target" : "https://rsshub.app/bnu/mba/gjhz/zqjh?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/gjhz/dqxm/index.html",
+      "target" : "https://rsshub.app/bnu/mba/gjhz/dqxm?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/xysh/xszz/index.html",
+      "target" : "https://rsshub.app/bnu/mba/xysh/xszz?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/zyfz/xwds/index.html",
+      "target" : "https://rsshub.app/bnu/mba/zyfz/xwds?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/zyfz/zycp/index.html",
+      "target" : "https://rsshub.app/bnu/mba/zyfz/zycp?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://mba.bnu.edu.cn(?<any>.*)/zyfz/jycy/index.html",
+      "target" : "https://rsshub.app/bnu/mba/zyfz/jycy?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },
@@ -11203,6 +13543,18 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://zh.wikinews.org(?<any>.*)/wiki/Special:%E6%96%B0%E9%97%BB%E8%AE%A2%E9%98%85",
+      "target" : "https://rsshub.app/wikinews/latest?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://81rc.81.cn(?<any>.*)/(?<category>[\\w|_]+)",
+      "target" : "https://rsshub.app/81params=>{const category=params.category;return`/81/81rc/${category?`/${category}`:\"\"}`}?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://bitmovin.com(?<any>.*)/blog",
       "target" : "https://rsshub.app/bitmovin/blog?format=atom&mode=fulltext",
       "recommend" : null,
@@ -11341,6 +13693,30 @@
       "recommendReason" : null
     },
     {
+      "source" : "https?://zhonglun.com(?<any>.*)/research/articles",
+      "target" : "https://rsshub.app/zhonglun/research/article/zh?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://kr.zhonglun.com(?<any>.*)/research/articles",
+      "target" : "https://rsshub.app/zhonglun/research/article/kr?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://en.zhonglun.com(?<any>.*)/research/articles",
+      "target" : "https://rsshub.app/zhonglun/research/article/en?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://ja.zhonglun.com(?<any>.*)/research/articles",
+      "target" : "https://rsshub.app/zhonglun/research/article/ja?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
       "source" : "https?://jiaoliudao.com(?<any>.*)/?",
       "target" : "https://rsshub.app/jiaoliudao/?format=atom&mode=fulltext",
       "recommend" : null,
@@ -11415,6 +13791,12 @@
     {
       "source" : "https?://pubs.acs.org(?<any>.*)/?",
       "target" : "https://rsshub.app/acs/journal/:id?format=atom&mode=fulltext",
+      "recommend" : null,
+      "recommendReason" : null
+    },
+    {
+      "source" : "https?://www.jingzhengu.com(?<any>.*)/?",
+      "target" : "https://rsshub.app/jingzhengu/news?format=atom&mode=fulltext",
       "recommend" : null,
       "recommendReason" : null
     },

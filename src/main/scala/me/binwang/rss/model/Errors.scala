@@ -119,4 +119,7 @@ final case class SubscriptionExpireDateTooEarly(userID: String, customerID: Stri
   msg = s"Subscription expire date $expireDate is earlier than user's current expire data $userSubscriptionExpireDate, " +
   s"userID: $userID, customerID: $customerID, thirdParty: $thirdParty")
 
+final case class InvalidCallbackUrl(url: String) extends ServerException(code = 90005,
+  msg = s"Invalid callback url: $url")
+
 

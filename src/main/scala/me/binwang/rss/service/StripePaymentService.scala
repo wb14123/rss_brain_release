@@ -14,10 +14,10 @@ import me.binwang.archmage.core.CatsMacros.timed
 import me.binwang.rss.dao.{PaymentCustomerDao, SourceDao, UserDao, UserSessionDao}
 import me.binwang.rss.mail.MailSender
 import me.binwang.rss.metric.TimeMetrics
-import me.binwang.rss.model.User
+import me.binwang.rss.model.{InvalidCallbackUrl, User}
 import org.typelevel.log4cats.LoggerFactory
 
-import java.net.URLEncoder
+import java.net.{URL, URLEncoder}
 import java.time.{Instant, ZoneId, ZonedDateTime}
 
 class StripePaymentService(
@@ -30,6 +30,8 @@ class StripePaymentService(
 )(implicit val loggerFactory: LoggerFactory[IO]) extends PaymentService with TimeMetrics {
 
   private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
+  private val websiteBaseUrl = ConfigFactory.load().getString("website.baseUrl")
+  private val validHost = new URL(websiteBaseUrl).getHost
   private val config = ConfigFactory.load()
   override val thirdParty: String = "STRIPE"
 
@@ -112,6 +114,10 @@ class StripePaymentService(
   }
 
   private def getCallbackUrl(url: String, needRedirect: Boolean) = {
+    val host = new URL(url).getHost
+    if (!host.equals(validHost)) {
+      throw InvalidCallbackUrl(url)
+    }
     if (!needRedirect) {
       url
     } else {

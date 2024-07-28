@@ -17,8 +17,9 @@ sbt assembly
 ## Download and Generate RSSHub rules
 
 ```
-./bin/download-rsshub-rules.sh
-sbt compile convertRsshubRules
+cd ./bin && ./download-rsshub-rules.sh
+sbt compile generateRsshubRules
+sbt validateRsshubRules
 ```
 
 ## Test

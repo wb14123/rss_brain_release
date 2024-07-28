@@ -2,6 +2,7 @@ package me.binwang.rss.cmd
 
 import cats.effect.{IO, Resource}
 import cats.implicits._
+import com.typesafe.config.ConfigFactory
 import me.binwang.rss.llm.OpenAILLM
 import me.binwang.rss.service._
 import me.binwang.rss.sourcefinder.{HtmlSourceFinder, MultiSourceFinder, RegexSourceFinder}
@@ -24,6 +25,10 @@ object Services {
 
   implicit val loggerFactory: LoggerFactory[IO] = Slf4jFactory.create[IO]
   private val throttler: Throttler = Throttler()
+  private val config = ConfigFactory.load()
+  private val paymentEnabled = config.getBoolean("payment.enabled")
+  // give it 1 thousand years free trail if don't need payment
+  private val freeTrailDays = if (paymentEnabled) 7 else 365 * 1000
 
   def apply(baseServer: BaseServer): Resource[IO, Services] = {
 
@@ -46,7 +51,7 @@ object Services {
         new UserService(baseServer.userDao, baseServer.userSessionDao, baseServer.userDeleteCodeDao,
           baseServer.articleUserMarkingDao, baseServer.folderSourceDao, baseServer.moreLikeThisMappingDao,
           baseServer.folderDao, baseServer.redditSessionDao, baseServer.passwordResetDao, baseServer.paymentCustomerDao,
-          baseServer.mailSender, authorizer),
+          baseServer.mailSender, authorizer, freeTrailDays = freeTrailDays),
         new MoreLikeThisService(baseServer.moreLikeThisMappingDao, authorizer),
         new StripePaymentService(baseServer.userDao, baseServer.userSessionDao,
           baseServer.paymentCustomerDao, baseServer.sourceDao, authorizer, baseServer.mailSender),

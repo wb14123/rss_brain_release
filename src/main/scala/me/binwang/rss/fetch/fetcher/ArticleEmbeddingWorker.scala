@@ -10,7 +10,6 @@ import me.binwang.rss.metric.MetricReporter
 import me.binwang.rss.model.{ArticleEmbeddingTask, ArticleEmbeddingTaskUpdater, EmbeddingUpdateStatus}
 import org.typelevel.log4cats.LoggerFactory
 
-import java.net.InetSocketAddress
 import java.time.{ZoneId, ZonedDateTime}
 
 object ArticleEmbeddingWorker {

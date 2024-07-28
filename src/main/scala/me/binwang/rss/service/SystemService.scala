@@ -5,10 +5,16 @@ import com.typesafe.config.ConfigFactory
 
 class SystemService {
 
-  private val apiVersion = ConfigFactory.load().getString("api.version")
+  private val config = ConfigFactory.load()
+  private val apiVersion = config.getString("api.version")
+  private val paymentEnabled = config.getBoolean("payment.enabled")
 
   def getApiVersion(): IO[String] = {
     IO.pure(apiVersion)
+  }
+
+  def checkPaymentEnabled(): IO[Boolean] = {
+    IO.pure(paymentEnabled)
   }
 
   def versionIsCompatible(version: String): IO[Boolean] = {

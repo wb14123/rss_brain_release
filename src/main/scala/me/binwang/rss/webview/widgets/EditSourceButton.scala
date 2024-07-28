@@ -48,7 +48,7 @@ object EditSourceButton {
     folderIDOpt.map { folderID =>
       popoverMenu(
         PopoverMenu.menuAttrs,
-        a(cls := "folder-op-button", nullHref, title := "Folder operations", iconSpan("more_horiz")),
+        a(cls := "folder-op-button", nullHref, title := "Feed operations", iconSpan("more_horiz")),
         popoverContent(
           cls := "folder-op-menu",
           zIndex := "10",
@@ -56,7 +56,7 @@ object EditSourceButton {
           folderMovingMenu(sourceID, folderID, "Copy to folder ...", "copySourceToFolder"),
           sourceMovingMenu(sourceID, folderID, "Move before feed ...", "moveSourceBefore"),
           sourceMovingMenu(sourceID, folderID, "Move after feed ...", "moveSourceAfter"),
-          a(nullHref, "Edit source", hxGet := s"/folders/$folderID/sources/$sourceID/edit", hxSwapContentAttrs, hxPushUrl := "true",
+          a(nullHref, "Edit feed", hxGet := s"/folders/$folderID/sources/$sourceID/edit", hxSwapContentAttrs, hxPushUrl := "true",
             xOnClick := "$refs.folderEditMenu.closePopover()"),
           a(nullHref, "Delete from folder",
             xOnClick := s"deleteSourceFromFolder('$sourceID', '$folderID') ; $$refs.folderEditMenu.closePopover()"),

@@ -38,6 +38,7 @@ class UserService(
   private val tokenExpireTimeInDays: Int = 7,
   private val resetTokenExpireTimeInHours: Int = 1,
   private val validateEmail: Boolean = true,
+  private val freeTrailDays: Int = 7,
 )(implicit val loggerFactory: LoggerFactory[IO]) extends TimeMetrics {
 
   private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
@@ -52,7 +53,7 @@ class UserService(
       defaultFolderID <- generateDefaultFolder(userID)
       nowInstant <- Clock[IO].realTimeInstant
       now = ZonedDateTime.ofInstant(nowInstant, ZoneId.systemDefault()).withNano(0)
-      subscribeEndAt = now.plusDays(7)
+      subscribeEndAt = now.plusDays(freeTrailDays)
       user <- IO.pure(User(
         id = userID,
         username = username,

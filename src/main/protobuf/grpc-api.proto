@@ -1361,11 +1361,19 @@ message GetApiVersionRequest {
 
 }
 
+message CheckPaymentEnabledRequest {
+
+}
+
 message VersionIsCompatibleRequest {
     string version = 1;
 }
 message GetApiVersionResponse {
     string result = 1;
+}
+
+message CheckPaymentEnabledResponse {
+    bool result = 1;
 }
 
 message VersionIsCompatibleResponse {
@@ -1374,6 +1382,7 @@ message VersionIsCompatibleResponse {
 
 service SystemAPI {
     rpc GetApiVersion (GetApiVersionRequest) returns (GetApiVersionResponse);
+    rpc CheckPaymentEnabled (CheckPaymentEnabledRequest) returns (CheckPaymentEnabledResponse);
     rpc VersionIsCompatible (VersionIsCompatibleRequest) returns (VersionIsCompatibleResponse);
 }
 
