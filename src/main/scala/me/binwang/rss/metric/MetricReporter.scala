@@ -22,6 +22,9 @@ object MetricReporter {
   private val updateArticleCacheMissCounter = Counter.build().name("update_article_cache_miss_total")
     .help("Total cache miss count when update article").register()
 
+  private val articleNotUpdatedCounter = Counter.build().name("article_not_updated_total")
+    .help("Article not inserted or updated when request, can when there is a hash collision").register()
+
   private val updateArticleContentCacheHitCounter = Counter.build().name("update_article_content_cache_hit_total")
     .help("Total cache hit count when update article content").register()
 
@@ -58,6 +61,10 @@ object MetricReporter {
     } else {
       updateArticleCacheMissCounter.inc()
     }
+  }
+
+  def countArticleNotUpdated(): IO[Unit] = IO {
+    articleNotUpdatedCounter.inc()
   }
 
   def countUpdateArticleContent(cacheHit: Boolean): IO[Unit] = IO {

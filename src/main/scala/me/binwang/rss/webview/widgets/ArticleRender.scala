@@ -21,12 +21,13 @@ object ArticleRender {
       showVideoThumbnail: Boolean,
       showVideoPlayer: Boolean,
       showImage: Boolean,
+      showImageInArticle: Boolean,
   )
 
   val mediaRenderOptionInList: MediaRenderOption = MediaRenderOption(
-    showAudio = false, showVideoThumbnail = true, showVideoPlayer = false, showImage = true)
+    showAudio = false, showVideoThumbnail = true, showVideoPlayer = false, showImage = true, showImageInArticle = true)
   val mediaRenderOptionInReader: MediaRenderOption = MediaRenderOption(
-    showAudio = true, showVideoThumbnail = false, showVideoPlayer = true, showImage = false)
+    showAudio = true, showVideoThumbnail = false, showVideoPlayer = true, showImage = true, showImageInArticle = false)
 
   private def renderAudio(mediaGroup: MediaGroup): Frag = {
     div(
@@ -45,8 +46,11 @@ object ArticleRender {
   private def mediaGroupDom(mediaGroup: MediaGroup, option: MediaRenderOption): Frag = {
     mediaGroup.content.medium match {
       case None => ""
-      case Some(MediaMedium.IMAGE) if option.showImage =>
-        proxyImage(mediaGroup.content.url, mediaGroup.description)
+      case Some(MediaMedium.IMAGE) =>
+        val fromArticle = mediaGroup.content.fromArticle.getOrElse(false)
+        if ((fromArticle && option.showImageInArticle) || (!fromArticle && option.showImage)) {
+          proxyImage(mediaGroup.content.url, mediaGroup.description)
+        } else ""
       case Some(MediaMedium.VIDEO) if option.showVideoThumbnail && mediaGroup.thumbnails.nonEmpty  =>
         proxyImage(mediaGroup.thumbnails.head.url, mediaGroup.description)
       case Some(MediaMedium.VIDEO) if option.showVideoPlayer =>

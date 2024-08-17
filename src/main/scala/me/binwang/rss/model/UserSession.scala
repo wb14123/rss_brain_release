@@ -8,4 +8,5 @@ case class UserSession(
   expireTime: ZonedDateTime,
   isAdmin: Boolean = false,
   subscribeEndTime: ZonedDateTime,
+  subscribed: Boolean = false,
 )

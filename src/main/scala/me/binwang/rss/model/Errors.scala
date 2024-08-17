@@ -94,6 +94,28 @@ final case class ArticleNotFound(articleID: String)
 final case class FolderDuplicateError(folderID: String, folderName: String)
   extends ServerException(code = 60001, msg = s"""Folder with name \"$folderName\" already exists""")
 
+final case class FolderNotFound(folderName: String)
+  extends ServerException(code = 60002, msg = s"""Folder with name \"$folderName\" not found""")
+
+final case class ImportOPMLTaskNotFound(userID: String)
+  extends ServerException(code = 60003, msg = s"""Import OPML task for user $userID not found""")
+
+final case class FreeTrailSourceLimitExceed(sourceCount: Int, sourceLimit: Int)
+  extends ServerException(code = 60004, msg = s"Feed count out of limit for free user. "
+    + s"Feed limit: $sourceLimit, feed count: $sourceCount.")
+
+final case class PaidUserSourceLimitExceed(sourceCount: Int, sourceLimit: Int)
+  extends ServerException(code = 60005, msg = s"Feed count out of limit for paid user. "
+    + s"Feed limit: $sourceLimit, feed count: $sourceCount.")
+
+final case class FreeTrailFolderLimitExceed(folderCount: Int, folderLimit: Int)
+  extends ServerException(code = 60006, msg = s"Folder count out of limit for free user. "
+    + s"Folder limit: $folderLimit, folder count: $folderCount.")
+
+final case class PaidUserFolderLimitExceed(folderCount: Int, folderLimit: Int)
+  extends ServerException(code = 60005, msg = s"Folder count out of limit for paid user. "
+    + s"Folder limit: $folderLimit, folder count: $folderCount.")
+
 final case class RedditAPIException(code: Int, msg: String) extends ServerException(code = 70001, msg = msg)
 
 // Mail service

@@ -73,8 +73,9 @@ class ArticleHybridDao(val articleSqlDao: ArticleSqlDao, val articleElasticDao: 
 
     val insert = for {
       _ <- logger.debug(s"Article changed for ${article.id}, will insert to db")
-      _ <- articleSqlDao.insertOrUpdate(article)
-      _ <- articleElasticDao.insertOrUpdate(article)
+      inserted <- articleSqlDao.insertOrUpdate(article)
+      _ <- if (!inserted) IO.unit else articleElasticDao.insertOrUpdate(article)
+      _ <- if (inserted) IO.unit else MetricReporter.countArticleNotUpdated()
       _ <- MetricReporter.countUpdateArticle(false)
     } yield true
 

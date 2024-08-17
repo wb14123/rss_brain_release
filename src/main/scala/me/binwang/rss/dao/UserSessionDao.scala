@@ -11,6 +11,6 @@ trait UserSessionDao {
   def get(token: String): IO[Option[UserSession]]
   def delete(token: String): IO[Boolean]
   def deleteByUser(userID: String): IO[Long]
-  def updateSubscribeEndTime(userID: String, subscribeEndTime: ZonedDateTime): IO[Long]
+  def updateSubscription(userID: String, subscribeEndTime: ZonedDateTime, subscribed: Boolean): IO[Long]
 
 }

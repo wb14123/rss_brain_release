@@ -32,6 +32,7 @@ class BaseServer(
     val paymentCustomerDao: PaymentCustomerDao,
     val moreLikeThisMappingDao: MoreLikeThisMappingDao,
     val articleEmbeddingTaskDao: ArticleEmbeddingTaskDao,
+    val importSourcesTaskDao: ImportSourcesTaskDao,
     val mailSender: SendGridMailSender,
     val crawler: Crawler,
     val fetcher: BackgroundFetcher,
@@ -77,6 +78,7 @@ object BaseServer {
         implicit val paymentCustomerDao: PaymentCustomerSqlDao = new PaymentCustomerSqlDao()
         implicit val moreLikeThisMappingDao: MoreLikeThisMappingSqlDao = new MoreLikeThisMappingSqlDao()
         implicit val articleEmbeddingTaskDao: ArticleEmbeddingTaskSqlDao = new ArticleEmbeddingTaskSqlDao()
+        implicit val importSourcesTaskDao: ImportSourcesTaskSqlDao = new ImportSourcesTaskSqlDao()
 
         val mailSender = new SendGridMailSender()
 
@@ -98,6 +100,7 @@ object BaseServer {
             paymentCustomerDao.createTable() >>
             moreLikeThisMappingDao.createTable() >>
             articleEmbeddingTaskDao.createTable() >>
+            importSourcesTaskDao.createTable() >>
             BackgroundFetcher(crawler, sourceDao, updater, config.getInt("fetcher.batchSize")).map { fetcher =>
               new BaseServer(
                 articleDao,
@@ -115,6 +118,7 @@ object BaseServer {
                 paymentCustomerDao,
                 moreLikeThisMappingDao,
                 articleEmbeddingTaskDao,
+                importSourcesTaskDao,
                 mailSender,
                 crawler,
                 fetcher,

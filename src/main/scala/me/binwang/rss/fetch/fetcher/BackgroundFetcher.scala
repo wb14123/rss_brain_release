@@ -55,6 +55,7 @@ class BackgroundFetcher(
    * It will get FetchTasks from database and call `fetcher` to fetch the URLs.
    */
   def run(): IO[Unit]= {
+    logger.info("Starting background fetcher ...") >>
     NonEmptyList.of(
       TimerLoop(getSourcesToFetch, fetchSourceIntervalMillis),
       if (cleanTimeout) TimerLoop(cleanTimeoutSources, cleanTimeoutSourceIntervalMillis) else IO.unit,

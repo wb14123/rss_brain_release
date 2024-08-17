@@ -160,7 +160,7 @@ class FetchUpdater(
      Check article first to avoid hash conflict. This can still happens since it's not in the same transaction as the
      insert. But the chance of a hash conflict and a transaction conflict happens at the same time is very small.
      */
-    articleHashCheckDao.exists(articleWithContent.article) flatMap {
+    logger.info(s"handle article ${articleWithContent.article.id}") >> articleHashCheckDao.exists(articleWithContent.article).flatMap {
       case true =>
         for {
           _ <- logger.debug(s"Article doesn't change for ${articleWithContent.article.id}, skip insert into db")
@@ -169,45 +169,35 @@ class FetchUpdater(
           _ <- articleContentDao.insertOrUpdate(ArticleContent(articleWithContent.article.id, articleWithContent.content))
         } yield ()
       case false =>
-        articleDao.get(articleWithContent.article.id).flatMap {
-          case None => insertArticle(articleWithContent)
-          case Some(article) =>
-            // check hash conflict
-            if (article.sourceID.equals(articleWithContent.article.sourceID)
-              && article.guid.equals(articleWithContent.article.guid)) {
-              val content = if (articleWithContent.article.postedAtIsMissing) {
-                // use old postedAt if postedAtIsMissing is true
-                articleWithContent.copy(article = articleWithContent.article.copy(
-                  postedAt = article.postedAt).getArticleWithScore)
-              } else {
-                articleWithContent
-              }
-              insertArticle(content)
-            } else {
-              IO.raiseError(ArticleIDConflictError(article, articleWithContent.article))
-            }
-        }.flatMap { _ =>
-          for {
-            nowInstant <- Clock[IO].realTimeInstant
-            now = ZonedDateTime.ofInstant(nowInstant, ZoneId.systemDefault())
-            schedule <- articleEmbeddingTaskDao.schedule(ArticleEmbeddingTask(
-              articleWithContent.article.id,
-              articleWithContent.article.title,
-              now,
-            ))
-          } yield schedule
-
-        }.handleErrorWith(err => handleArticlesFailure(url, Seq(err)))
-    }
+        for {
+          _ <- insertArticle(articleWithContent)
+          nowInstant <- Clock[IO].realTimeInstant
+          now = ZonedDateTime.ofInstant(nowInstant, ZoneId.systemDefault())
+          schedule <- articleEmbeddingTaskDao.schedule(ArticleEmbeddingTask(
+            articleWithContent.article.id,
+            articleWithContent.article.title,
+            now,
+          ))
+        } yield schedule
+    }.handleErrorWith(err => handleArticlesFailure(url, Seq(err)))
   }
 
   private def insertArticle(articleWithContent: FullArticle): IO[Unit] = {
-    // insert content first so if it failed the article info is not inserted
-    articleContentDao
-      .insertOrUpdate(ArticleContent(articleWithContent.article.id, articleWithContent.content))
-      .flatMap(_ => articleDao.insertOrUpdate(articleWithContent.article))
-      .flatMap(_ => articleHashCheckDao.insertOrUpdate(articleWithContent.article))
-      .map(_ => ())
+    for {
+      /*
+       Insert article first may result content not inserted. But this is a trade-off for hash conflict.
+       Content should be updated for next fetch.
+       If inserted is false, it means there is a hash conflict, do not update content or hash check
+       */
+      _ <- logger.info(s"Inserting article ${articleWithContent.article.id}")
+      inserted <- articleDao.insertOrUpdate(articleWithContent.article)
+      _ <- if (inserted) IO.unit else
+        articleDao.get(articleWithContent.article.id).flatMap { articleOpt =>
+          IO.raiseError(ArticleIDConflictError(articleOpt.get, articleWithContent.article))
+        }
+      _ <- articleContentDao.insertOrUpdate(ArticleContent(articleWithContent.article.id, articleWithContent.content))
+      _ <- articleHashCheckDao.insertOrUpdate(articleWithContent.article)
+    } yield ()
   }
 
 }

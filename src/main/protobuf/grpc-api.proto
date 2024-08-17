@@ -357,6 +357,7 @@ message UserSession {
     int64 expireTime = 3;
     bool isAdmin = 4;
     int64 subscribeEndTime = 5;
+    bool subscribed = 6;
 }
 
 // Define ArticleUserMarking
@@ -530,6 +531,24 @@ message TermWeights {
 
 message SearchTerms {
     repeated string terms = 1;
+}
+
+// Define ImportSourcesTask
+
+message ImportSourcesTask {
+    string id = 1;
+    string userID = 2;
+    int64 createdAt = 3;
+    int32 totalSources = 4;
+    int32 failedSources = 5;
+    int32 successfulSources = 6;
+}
+
+// Define ImportFailedSource
+
+message ImportFailedSource {
+    string xmlUrl = 1;
+    string error = 2;
 }
 
 // Define me.binwang.rss.service.ArticleService
@@ -850,6 +869,18 @@ message ImportFromOPMLRequest {
     string inputStream = 2;
 }
 
+message GetImportOPMLTaskRequest {
+    string token = 1;
+}
+
+message GetImportOPMLFailedSourcesRequest {
+    string token = 1;
+}
+
+message DeleteOPMLImportTasksRequest {
+    string token = 1;
+}
+
 message ExportOPMLRequest {
     string token = 1;
 }
@@ -892,8 +923,18 @@ message DeleteFolderRequest {
     string folderID = 2;
 }
 message ImportFromOPMLResponse {
-    int32 result = 1;
+    ImportSourcesTask result = 1;
 }
+
+message GetImportOPMLTaskResponse {
+    ImportSourcesTask result = 1;
+}
+
+message GetImportOPMLFailedSourcesResponse {
+    ImportFailedSource result = 1;
+}
+
+message DeleteOPMLImportTasksResponse {}
 
 message ExportOPMLResponse {
     string result = 1;
@@ -927,6 +968,9 @@ message DeleteFolderResponse {}
 
 service FolderAPI {
     rpc ImportFromOPML (ImportFromOPMLRequest) returns (ImportFromOPMLResponse);
+    rpc GetImportOPMLTask (GetImportOPMLTaskRequest) returns (GetImportOPMLTaskResponse);
+    rpc GetImportOPMLFailedSources (GetImportOPMLFailedSourcesRequest) returns (stream GetImportOPMLFailedSourcesResponse);
+    rpc DeleteOPMLImportTasks (DeleteOPMLImportTasksRequest) returns (DeleteOPMLImportTasksResponse);
     rpc ExportOPML (ExportOPMLRequest) returns (ExportOPMLResponse);
     rpc GetMyFolders (GetMyFoldersRequest) returns (stream GetMyFoldersResponse);
     rpc GetFolderByID (GetFolderByIDRequest) returns (GetFolderByIDResponse);

@@ -17,7 +17,7 @@ import me.binwang.rss.metric.TimeMetrics
 import me.binwang.rss.model.{InvalidCallbackUrl, User}
 import org.typelevel.log4cats.LoggerFactory
 
-import java.net.{URL, URLEncoder}
+import java.net.{URI, URLEncoder}
 import java.time.{Instant, ZoneId, ZonedDateTime}
 
 class StripePaymentService(
@@ -31,7 +31,7 @@ class StripePaymentService(
 
   private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
   private val websiteBaseUrl = ConfigFactory.load().getString("website.baseUrl")
-  private val validHost = new URL(websiteBaseUrl).getHost
+  private val validHost = new URI(websiteBaseUrl).getHost
   private val config = ConfigFactory.load()
   override val thirdParty: String = "STRIPE"
 
@@ -114,7 +114,7 @@ class StripePaymentService(
   }
 
   private def getCallbackUrl(url: String, needRedirect: Boolean) = {
-    val host = new URL(url).getHost
+    val host = new URI(url).getHost
     if (!host.equals(validHost)) {
       throw InvalidCallbackUrl(url)
     }

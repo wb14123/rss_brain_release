@@ -139,6 +139,7 @@ class UserService(
             expireTime = ZonedDateTime.now().withNano(0).plusDays(tokenExpireTimeInDays),
             isAdmin = user.isAdmin,
             subscribeEndTime = user.subscribeEndAt,
+            subscribed = user.subscribed,
           ))
           _ <- userSessionDao.insert(userSession)
         } yield userSession

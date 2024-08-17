@@ -55,6 +55,13 @@ figcaption {
   display: none !important;
 }
 
+.isDisabled {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
+
 
 /* login page */
 
@@ -765,6 +772,31 @@ progress {
 .import-feed-hint {
   align-self: start;
   color: var(--pico-muted-color);
+  margin-top: 10px;
+}
+
+.opml-import-task-info {
+  font-size: 20px;
+  font-weight: lighter;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.opml-import-progress {
+  height: 20px;
+}
+
+.import-err-msg {
+  max-height: 300px;
+  display: flex;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  text-wrap: wrap;
+  flex-direction: column;
+  color: var(--pico-code-color);
 }
 
 #preview-feeds {

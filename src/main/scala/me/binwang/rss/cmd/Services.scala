@@ -4,11 +4,15 @@ import cats.effect.{IO, Resource}
 import cats.implicits._
 import com.typesafe.config.ConfigFactory
 import me.binwang.rss.llm.OpenAILLM
+import me.binwang.rss.model.ImportLimit
 import me.binwang.rss.service._
 import me.binwang.rss.sourcefinder.{HtmlSourceFinder, MultiSourceFinder, RegexSourceFinder}
 import me.binwang.rss.util.Throttler
 import org.typelevel.log4cats.LoggerFactory
 import org.typelevel.log4cats.slf4j.Slf4jFactory
+
+import scala.util.Try
+
 
 case class Services (
     articleService: ArticleService,
@@ -35,6 +39,13 @@ object Services {
     val authorizer: Authorizer = new Authorizer(throttler, baseServer.userSessionDao, baseServer.folderDao)
     val llm = new OpenAILLM(baseServer.sttpBackend)
 
+    val importLimit = ImportLimit(
+      paidFolderCount = Try(config.getInt("import.limit.paid-user-folders")).toOption,
+      paidSourceCount = Try(config.getInt("import.limit.paid-user-sources")).toOption,
+      freeFolderCount = Try(config.getInt("import.limit.free-trail-folders")).toOption,
+      freeSourceCount = Try(config.getInt("import.limit.free-trail-sources")).toOption,
+    )
+
     Resource.eval(Seq(
       RegexSourceFinder("rssbrain-regex-rules.json"),
       RegexSourceFinder("rsshub-regex-rules.json"),
@@ -45,7 +56,7 @@ object Services {
         new ArticleService(baseServer.articleDao, baseServer.articleContentDao, baseServer.articleUserMarkingDao,
           baseServer.articleSearchDao, llm, authorizer),
         new FolderService(baseServer.folderDao, baseServer.folderSourceDao,
-          baseServer.sourceDao, authorizer),
+          baseServer.sourceDao, baseServer.importSourcesTaskDao, authorizer, importLimit),
         new SourceService(baseServer.sourceDao, baseServer.folderSourceDao, baseServer.folderDao, baseServer.fetcher,
           authorizer, sourceFinder),
         new UserService(baseServer.userDao, baseServer.userSessionDao, baseServer.userDeleteCodeDao,

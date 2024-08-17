@@ -26,11 +26,12 @@ object EditSourceButton {
   }
 
   private def sourceMovingMenu(sourceID: String, folderID: String, text: String, func: String): Frag = {
+    val checkLengthJs = "if (sources.length === 0) sources = [{name: 'No other feed', disabled: true}];"
     popoverMenu(
       PopoverMenu.subMenuAttrs,
       a(cls := "folder-move-menu-button", nullHref, text),
       xData := "{sources: []}",
-      xOn("popover-opened") := s"sources = getSourcesFromFolder('$folderID', '$sourceID')",
+      xOn("popover-opened") := s"sources = getSourcesFromFolder('$folderID', '$sourceID'); $checkLengthJs",
       popoverContent(
         zIndex := "11",
         cls := "folder-select-menu",
@@ -38,6 +39,7 @@ object EditSourceButton {
           xFor := "s in sources",
           attr(":key") := "s.id",
           a(nullHref, xText := "s.name",
+            xBind("class") := "s.disabled ? 'isDisabled' : ''",
             xOnClick := s"$func('$folderID', '$sourceID', s.id) ; $$refs.folderEditMenu.closePopover(); ")
         )
       )

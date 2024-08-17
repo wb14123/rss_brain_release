@@ -45,6 +45,7 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
       .flatMap(_ => createIndexWithFields(Seq(("sourceID", false), ("postedAt", true))))
       // .flatMap(_ => createIndex("score", desc = true))
       .flatMap(_ => createIndexWithFields(Seq(("sourceID", false), ("score", true))))
+      .flatMap(_ => createIndexWithFields(Seq(("sourceID", false), ("guid", false)), unique = true))
       .map(_ => ())
       .transact(xa)
   }
@@ -96,27 +97,52 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
    * @return Article ID if it is already exist. None otherwise
    */
   override def insertOrUpdate(article: Article): IO[Boolean] = {
-    run(quote {
-      query[Article]
-        .insertValue(lift(article))
-        .onConflictUpdate(_.id)(
-          (t, e) => t.title -> e.title,
-          (t, e) => t.sourceID -> e.sourceID, // update source info in case of hash conflict
-          (t, e) => t.sourceTitle -> e.sourceTitle,
-          (t, e) => t.guid -> e.guid,
-          (t, e) => t.description -> e.description,
-          (t, e) => t.link -> e.link,
-          (t, e) => t.postedAt -> e.postedAt,
-          (t, e) => t.upVotes -> e.upVotes,
-          (t, e) => t.downVotes -> e.downVotes,
-          (t, e) => t.comments -> e.comments,
-          (t, e) => t.score -> e.score,
-          (t, e) => t.author -> e.author,
-          (t, e) => t.mediaGroups -> e.mediaGroups,
-          (t, e) => t.nsfw -> e.nsfw,
-          (t, e) => t.postedAtIsMissing -> e.postedAtIsMissing,
-        )
-    }).transact(xa).map(_ > 0)
+    // TODO: return 0 if on other conflicts
+    val q = if (article.postedAtIsMissing) {
+      // do not update postedAt and postedAtIsMissing
+      quote {
+        query[Article]
+          .insertValue(lift(article))
+          .onConflictUpdate(_.sourceID, _.guid)(
+            (t, e) => t.title -> e.title,
+            (t, e) => t.sourceID -> e.sourceID, // update source info in case of hash conflict
+            (t, e) => t.sourceTitle -> e.sourceTitle,
+            (t, e) => t.guid -> e.guid,
+            (t, e) => t.description -> e.description,
+            (t, e) => t.link -> e.link,
+            (t, e) => t.upVotes -> e.upVotes,
+            (t, e) => t.downVotes -> e.downVotes,
+            (t, e) => t.comments -> e.comments,
+            (t, e) => t.score -> e.score,
+            (t, e) => t.author -> e.author,
+            (t, e) => t.mediaGroups -> e.mediaGroups,
+            (t, e) => t.nsfw -> e.nsfw,
+          )
+      }
+    } else {
+      quote {
+        query[Article]
+          .insertValue(lift(article))
+          .onConflictUpdate(_.sourceID, _.guid)(
+            (t, e) => t.title -> e.title,
+            (t, e) => t.sourceID -> e.sourceID, // update source info in case of hash conflict
+            (t, e) => t.sourceTitle -> e.sourceTitle,
+            (t, e) => t.guid -> e.guid,
+            (t, e) => t.description -> e.description,
+            (t, e) => t.link -> e.link,
+            (t, e) => t.postedAt -> e.postedAt,
+            (t, e) => t.upVotes -> e.upVotes,
+            (t, e) => t.downVotes -> e.downVotes,
+            (t, e) => t.comments -> e.comments,
+            (t, e) => t.score -> e.score,
+            (t, e) => t.author -> e.author,
+            (t, e) => t.mediaGroups -> e.mediaGroups,
+            (t, e) => t.nsfw -> e.nsfw,
+            (t, e) => t.postedAtIsMissing -> e.postedAtIsMissing,
+          )
+      }
+    }
+    run(q).transact(xa).map(_ > 0)
   }
 
   override def listByFolder(folderID: String, size: Int, postedBefore: ZonedDateTime, articleID: ID): fs2.Stream[IO, Article] = {

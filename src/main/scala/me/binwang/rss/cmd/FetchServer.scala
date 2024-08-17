@@ -1,7 +1,7 @@
 package me.binwang.rss.cmd
 
 import cats.effect.unsafe.IORuntime
-import cats.effect.{ExitCode, IO, IOApp}
+import cats.effect.{ExitCode, IO, IOApp, Resource}
 import com.typesafe.config.ConfigFactory
 import me.binwang.rss.fetch.fetcher.ArticleEmbeddingWorker
 import me.binwang.rss.metric.MetricServer
@@ -32,19 +32,27 @@ object FetchServer extends IOApp {
   override def run(args: List[String]): IO[ExitCode] = {
     MetricServer()
       .flatMap { _ => BaseServer()}
-      .flatMap { baseServer => ArticleEmbeddingWorker(
-        baseServer.articleEmbeddingTaskDao,
-        baseServer.articleSearchDao,
-        config.getLong("article-embedding.update-interval-millis"),
-        config.getLong("article-embedding.cleanup-interval-millis"),
-        config.getLong("article-embedding.timeout-millis"),
-        config.getInt("article-embedding.batch-size"),
-        config.getInt("article-embedding.parallelism"),
-        config.getString("ai-server.host"),
-        config.getInt("ai-server.port"))
-        .evalMap { articleEmbeddingWorker =>
-          baseServer.fetcher.run() &> articleEmbeddingWorker.run()
-        }}
+      .flatMap { baseServer =>
+        val workerOpt: Resource[IO, Option[ArticleEmbeddingWorker]] =
+          if (!config.getBoolean("article-embedding.enabled")) {
+            Resource.pure(None)
+          } else {
+            ArticleEmbeddingWorker(
+              baseServer.articleEmbeddingTaskDao,
+              baseServer.articleSearchDao,
+              config.getLong("article-embedding.update-interval-millis"),
+              config.getLong("article-embedding.cleanup-interval-millis"),
+              config.getLong("article-embedding.timeout-millis"),
+              config.getInt("article-embedding.batch-size"),
+              config.getInt("article-embedding.parallelism"),
+              config.getString("ai-server.host"),
+              config.getInt("ai-server.port")
+            ).map(Some(_))
+          }
+        workerOpt.evalMap { articleEmbeddingWorker =>
+          baseServer.fetcher.run() &> articleEmbeddingWorker.map(_.run()).getOrElse(IO.unit)
+        }
+      }
       .useForever
   }
 

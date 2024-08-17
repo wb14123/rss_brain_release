@@ -35,7 +35,7 @@ trait PaymentService {
           case Some(_) =>
             for {
               _ <- userDao.update(userID, UserUpdater(subscribeEndAt = Some(subscribeEndTime), subscribed = Some(true)))
-              _ <- userSessionDao.updateSubscribeEndTime(userID, subscribeEndTime)
+              _ <- userSessionDao.updateSubscription(userID, subscribeEndTime, subscribed = true)
               resumedCount <- sourceDao.resumeSourcesForUser(userID)
               _ <- logger.info(s"User paid, user ID: $userID, subscribeEndTime: $subscribeEndTime, " +
                 s"comment: $comment, resumed sources: $resumedCount")

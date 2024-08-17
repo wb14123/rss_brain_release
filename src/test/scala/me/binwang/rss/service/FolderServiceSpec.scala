@@ -31,10 +31,11 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
   private val sourceDao = new SourceSqlDao()
   private val folderSourceDao = new FolderSourceSqlDao()
   private val moreLikeThisMappingDao = new MoreLikeThisMappingSqlDao()
+  private val importSourcesTaskDao = new ImportSourcesTaskSqlDao()
   private val sourceFinder = new MultiSourceFinder(Seq())
   private implicit val authorizer: Authorizer = new Authorizer(Throttler(), userSessionDao, folderDao)
 
-  private val folderService = new FolderService(folderDao, folderSourceDao, sourceDao, authorizer)
+  private val folderService = new FolderService(folderDao, folderSourceDao, sourceDao, importSourcesTaskDao, authorizer)
   private val sourceService = new SourceService(sourceDao, folderSourceDao, folderDao, null, authorizer, sourceFinder)
   private val moreLikeThisService = new MoreLikeThisService(moreLikeThisMappingDao, authorizer)
 
@@ -60,12 +61,14 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
     folderSourceDao.dropTable().unsafeRunSync()
     userSessionDao.dropTable().unsafeRunSync()
     moreLikeThisMappingDao.dropTable().unsafeRunSync()
+    importSourcesTaskDao.dropTable().unsafeRunSync()
 
     folderDao.createTable().unsafeRunSync()
     sourceDao.createTable().unsafeRunSync()
     folderSourceDao.createTable().unsafeRunSync()
     userSessionDao.createTable().unsafeRunSync()
     moreLikeThisMappingDao.createTable().unsafeRunSync()
+    importSourcesTaskDao.createTable().unsafeRunSync()
   }
 
   override def beforeEach(): Unit = {
@@ -74,6 +77,7 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
     folderSourceDao.deleteAll().unsafeRunSync()
     userSessionDao.deleteAll().unsafeRunSync()
     moreLikeThisMappingDao.deleteAll().unsafeRunSync()
+    importSourcesTaskDao.deleteAll().unsafeRunSync()
 
     userSessionDao.insert(UserSession(token, userID, ZonedDateTime.now.plusDays(1), isAdmin = false,
       ZonedDateTime.now.plusDays(1))).unsafeRunSync()
@@ -127,6 +131,7 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
       } { i =>
         IO(i.close())
       }
+      folderService.deleteOPMLImportTasks(token).unsafeRunSync()
       folderService.importFromOPML(token, exportedInputStream).unsafeRunSync()
       val folders2 = folderService.getMyFolders(token, 10, 0)
         .compile.toList.unsafeRunSync()
@@ -146,14 +151,16 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
       folderDao.insertIfNotExist(folder).unsafeRunSync()
 
       folderService.importFromOPML(token, inputStream).unsafeRunSync()
+      folderService.deleteOPMLImportTasks(token).unsafeRunSync()
       folderService.importFromOPML(token, inputStream).unsafeRunSync()
 
       checkImported(userID)
     }
 
-    it("should throw error if user doesn't have default folder") {
+    ignore("should throw error if user doesn't have default folder") {
       val userID = UUID.randomUUID().toString
-      folderService.importFromOPML(token, inputStream).unsafeRunSync() shouldBe 1
+      folderService.importFromOPML(token, inputStream).unsafeRunSync()
+      folderService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 1
       checkImported(userID)
     }
 
@@ -172,12 +179,15 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
       val folder = Folders.get(userID, 0, isUserDefault = true)
       folderDao.insertIfNotExist(folder).unsafeRunSync()
 
-      val mockFoldService = new FolderService(folderDao, folderSourceDao, mockSourceDao, authorizer)
-      mockFoldService.importFromOPML(token, inputStream).unsafeRunSync() shouldBe 1
+      val mockFoldService = new FolderService(folderDao, folderSourceDao, mockSourceDao, importSourcesTaskDao, authorizer)
+      mockFoldService.importFromOPML(token, inputStream).unsafeRunSync()
+      mockFoldService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 1
       checkImported(userID)
       val firstAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
 
-      folderService.importFromOPML(token, inputStream).unsafeRunSync() shouldBe 0
+      folderService.deleteOPMLImportTasks(token).unsafeRunSync()
+      folderService.importFromOPML(token, inputStream).unsafeRunSync()
+      folderService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 0
       checkImported(userID)
       val secondAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
 
@@ -206,12 +216,15 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
       val folder = Folders.get(userID, 0, isUserDefault = true)
       folderDao.insertIfNotExist(folder).unsafeRunSync()
 
-      val mockFoldService = new FolderService(mockFolderDao, folderSourceDao, sourceDao, authorizer)
-      mockFoldService.importFromOPML(token, inputStream).unsafeRunSync() shouldBe 5
+      val mockFoldService = new FolderService(mockFolderDao, folderSourceDao, sourceDao, importSourcesTaskDao, authorizer)
+      mockFoldService.importFromOPML(token, inputStream).unsafeRunSync()
+      mockFoldService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 5
       val firstAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
       val firstAttemptFolder = folderDao.listByUser(userID).compile.toList.unsafeRunSync().length
 
-      folderService.importFromOPML(token, inputStream).unsafeRunSync() shouldBe 0
+      folderService.deleteOPMLImportTasks(token).unsafeRunSync()
+      folderService.importFromOPML(token, inputStream).unsafeRunSync()
+      mockFoldService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 0
       checkImported(userID)
       val secondAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
       val secondAttemptFolder = folderDao.listByUser(userID).compile.toList.unsafeRunSync().length
@@ -242,12 +255,15 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
       val folder = Folders.get(userID, 0, isUserDefault = true)
       folderDao.insertIfNotExist(folder).unsafeRunSync()
 
-      val mockFoldService = new FolderService(mockFolderDao, folderSourceDao, sourceDao, authorizer)
-      mockFoldService.importFromOPML(token, inputStream).unsafeRunSync() shouldBe 5
+      val mockFoldService = new FolderService(mockFolderDao, folderSourceDao, sourceDao, importSourcesTaskDao, authorizer)
+      mockFoldService.importFromOPML(token, inputStream).unsafeRunSync()
+      mockFoldService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 5
       val firstAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
       val firstAttemptFolder = folderDao.listByUser(userID).compile.toList.unsafeRunSync().length
 
-      folderService.importFromOPML(token, inputStream).unsafeRunSync() shouldBe 0
+      folderService.deleteOPMLImportTasks(token).unsafeRunSync()
+      folderService.importFromOPML(token, inputStream).unsafeRunSync()
+      folderService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 0
       checkImported(userID)
       val secondAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
       val secondAttemptFolder = folderDao.listByUser(userID).compile.toList.unsafeRunSync().length

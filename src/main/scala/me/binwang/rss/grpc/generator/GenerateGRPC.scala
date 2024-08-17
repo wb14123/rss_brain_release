@@ -83,6 +83,8 @@ object GenerateGRPC extends GRPCGenerator {
     typeOf[TermWeight],
     typeOf[TermWeights],
     typeOf[SearchTerms],
+    typeOf[ImportSourcesTask],
+    typeOf[ImportFailedSource],
   )
 
   override val serviceClasses: Seq[Type] = Seq(

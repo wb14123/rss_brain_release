@@ -42,15 +42,17 @@ object FolderListView {
 
     val sortBy = ArticleList.sortBy(fs.folderMapping.articleOrder)
     val layout = ArticleList.layout(fs.folderMapping.articleListLayout)
+    val proxyImageUrl = if (fs.source.iconUrl.isEmpty) Seq() else {
+      val iconUrl = fs.source.iconUrl.get.escapeHtml
+      val httpsUrl = iconUrl.toHttps
+      val proxyUrl = ProxyUrl(iconUrl)
+      iconUrl +: Seq(httpsUrl, proxyUrl).filter(!_.equals(iconUrl))
+    } :+ sourceIconFromGoogle(fs.source.htmlUrl)
+    val proxyImageUrlStr = proxyImageUrl.map("'" + _ + "'").mkString(",")
     div(
       cls := "source-name",
       extraAttrs,
-      xInit := s"""setSourceImages('$sourceID', [
-                  |  '${fs.source.iconUrl.map(_.toHttps.escapeHtml).getOrElse("")}',
-                  |  '${fs.source.iconUrl.map(_.escapeHtml).getOrElse("")}',
-                  |  '${ProxyUrl(fs.source.iconUrl.map(_.toHttps.escapeHtml).getOrElse(""))}',
-                  |  '${sourceIconFromGoogle(fs.source.htmlUrl)}',
-                  |])""".stripMargin,
+      xInit := s"""setSourceImages('$sourceID', [$proxyImageUrlStr])""".stripMargin,
       div(
         cls := "source-name-avatar",
         SourceIcon(sourceID),

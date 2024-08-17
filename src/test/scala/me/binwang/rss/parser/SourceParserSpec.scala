@@ -209,6 +209,19 @@ class SourceParserSpec extends AnyFunSpec with BeforeAndAfterEach with Matchers 
 
       articles.exists(_.get.article.mediaGroups.get.groups.head.thumbnails.size == 1) shouldBe true
     }
+
+    it("should parse rss that only has thumbnails") {
+      val testFeedFile = "/test-feed-bbc-sports-rss.xml"
+      val (_, articles) = SourceParser.parse(testFeedUrl, inputStream(testFeedFile)).unsafeRunSync()
+      articles.isEmpty shouldBe false
+      articles.foreach { a =>
+        val mediaGroups = a.get.article.mediaGroups
+        mediaGroups.isDefined shouldBe true
+        mediaGroups.get.groups.nonEmpty shouldBe true
+        mediaGroups.get.groups.head.content.url.isEmpty shouldBe false
+        mediaGroups.get.groups.head.content.medium.get shouldBe MediaMedium.IMAGE
+      }
+    }
   }
 
   private def getArticlesFromSubreddit(subreddit: String): (Source, Seq[Try[FullArticle]]) = {

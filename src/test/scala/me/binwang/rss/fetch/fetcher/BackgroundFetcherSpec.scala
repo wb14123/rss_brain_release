@@ -36,8 +36,6 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
   private val articleContentDao = new ArticleContentSqlDao
   private val articleEmbeddingTaskDao = new ArticleEmbeddingTaskSqlDao()
   private val crawler = HttpCrawler().allocated.unsafeRunSync()._1
-  private var updater: FetchUpdater = _
-  private var fetcher: BackgroundFetcher = _
   private var mockServer: ClientAndServer = _
   private var fetcherRunTask: IO[FiberIO[Unit]] = _
 
@@ -94,8 +92,8 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
 
     it("should get feed") {
       createValidFeed()
-      updater = new FetchUpdater(sourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
-      fetcher = BackgroundFetcher(crawler, sourceDao, updater, 10, cleanTimeout = false, pauseSource = false).unsafeRunSync()
+      val updater = new FetchUpdater(sourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
+      val fetcher = BackgroundFetcher(crawler, sourceDao, updater, 10, cleanTimeout = false, pauseSource = false).unsafeRunSync()
       val id = SourceID(url)
       val source = Sources.get(Some(ZonedDateTime.now().minusHours(1)), Some(url))
       sourceDao.insert(source).unsafeRunSync()
@@ -108,6 +106,8 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
 
     it("should get articles with invalid formats") {
       createValidFeed("/feed.xml", "test-feed-invalid-article.xml")
+      val updater = new FetchUpdater(sourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
+      val fetcher = BackgroundFetcher(crawler, sourceDao, updater, 10, cleanTimeout = false, pauseSource = false).unsafeRunSync()
       val id = SourceID(url)
       val source = Sources.get(Some(ZonedDateTime.now().minusHours(1)), Some(url))
       sourceDao.insert(source).unsafeRunSync()
@@ -121,7 +121,8 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
 
     it("should wait on empty") {
       createValidFeed()
-      fetcher = BackgroundFetcher(crawler, sourceDao, updater, 10, 1000, cleanTimeout = false, pauseSource = false).unsafeRunSync()
+      val updater = new FetchUpdater(sourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
+      val fetcher = BackgroundFetcher(crawler, sourceDao, updater, 10, 1000, cleanTimeout = false, pauseSource = false).unsafeRunSync()
       fetcherRunTask = fetcher.run().start
       fetcherRunTask.unsafeRunAndForget()
       Thread.sleep(500) // wait for the first fetch result
@@ -137,8 +138,8 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
     it("should get multiple feed") {
       createValidFeed()
       createValidFeed("/feed2.xml", "test-feed2.xml")
-      updater = new FetchUpdater(sourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
-      fetcher = BackgroundFetcher(crawler, sourceDao, updater, 1, cleanTimeout = false, pauseSource = false).unsafeRunSync()
+      val updater = new FetchUpdater(sourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
+      val fetcher = BackgroundFetcher(crawler, sourceDao, updater, 1, cleanTimeout = false, pauseSource = false).unsafeRunSync()
       val source1 = Sources.get(Some(ZonedDateTime.now().minusHours(1)), Some("http://localhost:9998/feed.xml"))
       val source2 = Sources.get(Some(ZonedDateTime.now().minusHours(1)), Some("http://localhost:9998/feed2.xml"))
       sourceDao.insert(source1).unsafeRunSync()
@@ -165,8 +166,8 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       (mockSourceDao.update _).expects(*, *).returning(IO(true)).atLeastOnce()
       (mockSourceDao.get _).expects(*).returning(IO(Some(source1))).atLeastOnce()
 
-      updater = new FetchUpdater(mockSourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
-      fetcher = BackgroundFetcher(crawler, mockSourceDao, updater, 1, 1000,
+      val updater = new FetchUpdater(mockSourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
+      val fetcher = BackgroundFetcher(crawler, mockSourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
 
       fetcherRunTask = fetcher.run().start
@@ -188,8 +189,8 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       (mockSourceDao.getFetchURLs _).expects(*, *).returning(
         fs2.Stream.eval(IO.raiseError(new Exception("Mock getFetchURLs failure")))).atLeastOnce()
 
-      updater = new FetchUpdater(mockSourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
-      fetcher = BackgroundFetcher(crawler, mockSourceDao, updater, 1, 1000,
+      val updater = new FetchUpdater(mockSourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
+      val fetcher = BackgroundFetcher(crawler, mockSourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
 
       fetcherRunTask = fetcher.run().start
@@ -206,8 +207,8 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
 
       sourceDao.insert(source1).unsafeRunSync()
 
-      updater = new FetchUpdater(sourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
-      fetcher = BackgroundFetcher(mockCrawler, sourceDao, updater, 1, 1000,
+      val updater = new FetchUpdater(sourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
+      val fetcher = BackgroundFetcher(mockCrawler, sourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
 
       fetcherRunTask = fetcher.run().start
@@ -245,8 +246,8 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
           .anyNumberOfTimes()
       (mockSourceDao.get _).expects(*).onCall{id: ID => sourceDao.get(id)}.anyNumberOfTimes()
 
-      updater = new FetchUpdater(mockSourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
-      fetcher = BackgroundFetcher(mockCrawler, mockSourceDao, updater, 1, 1000,
+      val updater = new FetchUpdater(mockSourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
+      val fetcher = BackgroundFetcher(mockCrawler, mockSourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
 
       fetcherRunTask = fetcher.run().start
@@ -259,14 +260,14 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
     it("should handle update article failure") {
       createValidFeed()
       val mockArticleDao = mock[ArticleDao]
-      (mockArticleDao.get _).expects(*).returning(IO.pure(None)).atLeastOnce()
+      (mockArticleDao.get _).expects(*).returning(IO.pure(None)).anyNumberOfTimes()
       (mockArticleDao.insertOrUpdate _).expects(*).returning(
         IO.raiseError(new Exception("Mock update article failure"))).once()
       (mockArticleDao.insertOrUpdate _).expects(*).returning(IO(true)).atLeastOnce()
       val source1 = Sources.get(Some(ZonedDateTime.now().minusHours(1)), Some("http://localhost:9998/feed.xml"))
       sourceDao.insert(source1).unsafeRunSync()
-      updater = new FetchUpdater(sourceDao, mockArticleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
-      fetcher = BackgroundFetcher(crawler, sourceDao, updater, 1, 1000,
+      val updater = new FetchUpdater(sourceDao, mockArticleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
+      val fetcher = BackgroundFetcher(crawler, sourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
       fetcherRunTask = fetcher.run().start
       fetcherRunTask.unsafeRunAndForget()
@@ -281,8 +282,8 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       (mockArticleContentDao.insertOrUpdate _).expects(*).returning(IO(true)).atLeastOnce()
       val source1 = Sources.get(Some(ZonedDateTime.now().minusHours(1)), Some("http://localhost:9998/feed.xml"))
       sourceDao.insert(source1).unsafeRunSync()
-      updater = new FetchUpdater(sourceDao, articleDao, mockArticleContentDao, articleHashDao, articleEmbeddingTaskDao)
-      fetcher = BackgroundFetcher(crawler, sourceDao, updater, 1, 1000,
+      val updater = new FetchUpdater(sourceDao, articleDao, mockArticleContentDao, articleHashDao, articleEmbeddingTaskDao)
+      val fetcher = BackgroundFetcher(crawler, sourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
       fetcherRunTask = fetcher.run().start
       fetcherRunTask.unsafeRunAndForget()

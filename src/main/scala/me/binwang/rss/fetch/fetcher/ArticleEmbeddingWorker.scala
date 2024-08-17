@@ -65,6 +65,7 @@ class ArticleEmbeddingWorker(
   private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
 
   def run(): IO[Unit] = {
+    logger.info("Starting article embedding worker ...") >>
     (TimerLoop(getTasksFromDB, updateIntervalMillis) &>
       TimerLoop(cleanupFinishedTasks, cleanupIntervalMillis) &>
       TimerLoop(rescheduleTimeoutTasks, taskTimeoutMillis) &>

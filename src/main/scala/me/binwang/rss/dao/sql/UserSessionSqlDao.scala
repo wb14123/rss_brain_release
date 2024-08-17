@@ -26,7 +26,8 @@ class UserSessionSqlDao(implicit val connectionPool: ConnectionPool) extends Use
             userID char($UUID_LENGTH) not null,
             expireTime timestamp not null,
             isAdmin boolean not null default false,
-            subscribeEndTime timestamp not null
+            subscribeEndTime timestamp not null,
+            subscribed boolean not null default false
           )
          """)
       .update
@@ -83,11 +84,14 @@ class UserSessionSqlDao(implicit val connectionPool: ConnectionPool) extends Use
     run(q).transact(xa)
   }
 
-  override def updateSubscribeEndTime(userID: String, subscribeEndTime: ZonedDateTime): IO[Long] = {
+  override def updateSubscription(userID: String, subscribeEndTime: ZonedDateTime, subscribed: Boolean): IO[Long] = {
     val q = quote {
       query[UserSession]
         .filter(_.userID == lift(userID))
-        .update(_.subscribeEndTime -> lift(subscribeEndTime))
+        .update(
+          _.subscribeEndTime -> lift(subscribeEndTime),
+          _.subscribed -> lift(subscribed),
+        )
     }
     run(q).transact(xa)
   }

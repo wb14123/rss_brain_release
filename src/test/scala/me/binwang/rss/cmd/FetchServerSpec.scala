@@ -42,9 +42,10 @@ class FetchServerSpec extends AnyFunSpec with BeforeAndAfterEach with Matchers w
   private val articleHashDao: ArticleHashCheckDao = new ArticleHashCheckDao(redisClient)
   private val articleEmbeddingTaskDao = new ArticleEmbeddingTaskSqlDao()
   private implicit val userSessionDao: UserSessionSqlDao = new UserSessionSqlDao()
+  private val importSourcesTaskDao = new ImportSourcesTaskSqlDao()
   private val authorizer = new Authorizer(Throttler(), userSessionDao, folderDao)
 
-  private val folderService = new FolderService(folderDao, folderSourceDao, sourceDao, authorizer)
+  private val folderService = new FolderService(folderDao, folderSourceDao, sourceDao, importSourcesTaskDao, authorizer)
 
   private val testFile = "/opml-mock-test.xml"
 
@@ -69,6 +70,7 @@ class FetchServerSpec extends AnyFunSpec with BeforeAndAfterEach with Matchers w
     articleUserMarkingDao.dropTable().unsafeRunSync()
     articleHashDao.dropTable().unsafeRunSync()
     articleEmbeddingTaskDao.dropTable().unsafeRunSync()
+    importSourcesTaskDao.dropTable().unsafeRunSync()
 
     folderDao.createTable().unsafeRunSync()
     sourceDao.createTable().unsafeRunSync()
@@ -78,6 +80,7 @@ class FetchServerSpec extends AnyFunSpec with BeforeAndAfterEach with Matchers w
     moreLikeThisMappingDao.createTable().unsafeRunSync()
     articleUserMarkingDao.createTable().unsafeRunSync()
     articleEmbeddingTaskDao.createTable().unsafeRunSync()
+    importSourcesTaskDao.createTable().unsafeRunSync()
 
     userSessionDao.insert(UserSession(token, userID, ZonedDateTime.now.plusDays(1), isAdmin = false,
       ZonedDateTime.now.plusDays(7))).unsafeRunSync()

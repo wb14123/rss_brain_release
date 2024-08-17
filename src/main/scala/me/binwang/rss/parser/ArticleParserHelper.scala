@@ -1,12 +1,12 @@
 package me.binwang.rss.parser
 
-import me.binwang.rss.model.{MediaContent, MediaGroup, MediaGroups, MediaMedium, MediaThumbnail}
+import me.binwang.rss.model._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document.OutputSettings
 import org.jsoup.safety.{Cleaner, Safelist}
 import org.slf4j.LoggerFactory
 
-import java.net.URL
+import java.net.URI
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import scala.jdk.CollectionConverters._
@@ -85,7 +85,13 @@ object ArticleParserHelper {
   }
 
   def getIcon(htmlUrl: String): Option[String] = {
-    Try {new URL(htmlUrl)}.toOption.map(url => s"${url.getProtocol}://${url.getHost}/favicon.ico")
+    Try {new URI(htmlUrl)}.toOption.flatMap(url =>
+      if (url.getScheme == null || url.getHost == null) {
+        None
+      } else {
+        Some(s"${url.getScheme}://${url.getHost}/favicon.ico")
+      }
+    )
   }
 
   def parseTime(dateStr: String): Option[ZonedDateTime] = {
@@ -113,11 +119,13 @@ object ArticleParserHelper {
 
   def parseMediaGroups(articleNode: Node, html: String): Option[MediaGroups] = {
 
+    val articleThumbnails = (articleNode \ "thumbnail").map(getThumbnailFromNode)
     val groups = (articleNode \\ "group").map { n => (n \\ "content").headOption.map {content =>
       val typ = Option(content \@ "type").filter(_.nonEmpty)
 
       // For some feed like Peertube, information like thumbnails, title and description can be out of media group
-      val thumbnails = (n \\ "thumbnail").map(getThumbnailFromNode) ++ (articleNode \ "thumbnail").map(getThumbnailFromNode)
+      val groupThumbnails = (n \\ "thumbnail").map(getThumbnailFromNode)
+      val thumbnails = if (groupThumbnails.nonEmpty) groupThumbnails else articleThumbnails
 
       MediaGroup(
         content = MediaContent(
@@ -133,10 +141,24 @@ object ArticleParserHelper {
       )
     }}.filter(_.isDefined).map(_.get)
 
-    if (groups.isEmpty) {
+    val groupsWithThumbnails = if (groups.isEmpty) {
+      articleThumbnails.map { n =>
+        MediaGroup(
+          content = MediaContent(
+            url = n.url,
+            medium = Some(MediaMedium.IMAGE),
+            width = n.width,
+            height = n.height
+          ),
+          thumbnails = Seq(n)
+        )
+      }
+    } else groups
+
+    if (groupsWithThumbnails.isEmpty) {
       getImgFromHtml(html) // only parse from article content when there is no media tags
     } else {
-      Some(MediaGroups(groups))
+      Some(MediaGroups(groupsWithThumbnails))
     }
 
   }
