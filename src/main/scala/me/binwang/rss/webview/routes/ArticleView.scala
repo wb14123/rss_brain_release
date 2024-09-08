@@ -38,6 +38,7 @@ class ArticleView(articleService: ArticleService) extends Http4sView with Scalat
               ArticleRender.mediaDom(article.article, ArticleRender.mediaRenderOptionInReader),
               div(cls := "article-content")(raw(article.content.validHtml)),
               ArticleRender.renderOps(article.article, showActionable = false),
+              tag("somment-comment")(attr("link") := article.article.link),
               div(
                 id := "recommendation-sections",
                 div(hxTrigger := "intersect once",  hxTarget := "this", hxSwap := "outerHTML",

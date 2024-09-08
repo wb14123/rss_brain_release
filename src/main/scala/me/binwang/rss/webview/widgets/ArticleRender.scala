@@ -38,9 +38,13 @@ object ArticleRender {
   }
 
   private def proxyImage(url: String, desc: Option[String]): Frag = {
+    val proxyUrl = ProxyUrl(url)
     img(
-      src := s"${ProxyUrl(url.escapeHtml)}",
-      alt := s"${desc.getOrElse("").escapeHtml}")
+      is := "multi-imgs",
+      attr("srcs") := s"$url $proxyUrl",
+      attr("loading") := "lazy",
+      alt := s"${desc.getOrElse("").escapeHtml}",
+    )
   }
 
   private def mediaGroupDom(mediaGroup: MediaGroup, option: MediaRenderOption): Frag = {

@@ -30,6 +30,7 @@ else
 	cd ../rss_brain_release
 	git add -A .
 	git commit -m "Release $RELEASE_VERSION"
+	git tag $RELEASE_VERSION
 	# git push origin master
 fi
 
