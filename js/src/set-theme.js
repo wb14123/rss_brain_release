@@ -11,6 +11,7 @@ function setTheme(name) {
     document.querySelector('body').setAttribute('data-theme', realName);
     localStorage.setItem("data-theme", name);
 }
+window.setTheme = setTheme;
 
 function getCurrentTheme() {
     const theme = localStorage.getItem("data-theme");
@@ -19,6 +20,7 @@ function getCurrentTheme() {
     }
     return "auto";
 }
+window.getCurrentTheme = getCurrentTheme;
 
 function initTheme() {
     setTheme(getCurrentTheme());

@@ -2,13 +2,13 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(/static/lib/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ.ttf) format('truetype');
+  src: url(../fonts/google-material-icons.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Material Icons Outlined';
   font-style: normal;
   font-weight: 400;
-  src: url(/static/lib/gok-H7zzDkdnRel8-DQ6KAXJ69wP1tGnf4ZGhUcd.otf) format('opentype');
+  src: url(../fonts/google-material-icons-outlined.otf) format('opentype');
 }
 
 .material-icons {

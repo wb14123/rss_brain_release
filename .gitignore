@@ -1,3 +1,5 @@
 target/
 *.class
 .bsp/
+node_modules/
+js/dist

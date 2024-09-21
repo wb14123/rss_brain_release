@@ -47,6 +47,7 @@ function setSourceImages(sourceId, images) {
         }
     });
 }
+window.setSourceImages = setSourceImages;
 
 function getInitSourceImage(sourceId) {
     var images = getStorageImages(sourceId);
@@ -55,6 +56,7 @@ function getInitSourceImage(sourceId) {
     }
     return images[0];
 }
+window.getInitSourceImage = getInitSourceImage;
 
 function updateImageDomSrc(imageDom, sourceId, event, retried) {
     navigator.locks.request(getLockKey(sourceId), () => {
@@ -87,3 +89,4 @@ function addSourceIconErrorHandler(imageDom, sourceId) {
         updateImageDomSrc(imageDom, sourceId, event, false);
     });
 }
+window.addSourceIconErrorHandler = addSourceIconErrorHandler;

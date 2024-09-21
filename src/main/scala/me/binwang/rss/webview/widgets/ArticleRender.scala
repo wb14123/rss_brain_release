@@ -32,18 +32,19 @@ object ArticleRender {
   private def renderAudio(mediaGroup: MediaGroup): Frag = {
     div(
       cls := "article-audio-player",
-      mediaGroup.thumbnails.headOption.map(t => proxyImage(t.url, None)),
+      mediaGroup.thumbnails.headOption.map(t => proxyImage(t.url, None, addVideoClass = false)),
       audio(attr("controls").empty, src := mediaGroup.content.url),
     )
   }
 
-  private def proxyImage(url: String, desc: Option[String]): Frag = {
+  private def proxyImage(url: String, desc: Option[String], addVideoClass: Boolean): Frag = {
     val proxyUrl = ProxyUrl(url)
     img(
       is := "multi-imgs",
       attr("srcs") := s"$url $proxyUrl",
       attr("loading") := "lazy",
       alt := s"${desc.getOrElse("").escapeHtml}",
+      if (addVideoClass) cls := "video-img" else "",
     )
   }
 
@@ -53,10 +54,10 @@ object ArticleRender {
       case Some(MediaMedium.IMAGE) =>
         val fromArticle = mediaGroup.content.fromArticle.getOrElse(false)
         if ((fromArticle && option.showImageInArticle) || (!fromArticle && option.showImage)) {
-          proxyImage(mediaGroup.content.url, mediaGroup.description)
+          proxyImage(mediaGroup.content.url, mediaGroup.description, addVideoClass = false)
         } else ""
       case Some(MediaMedium.VIDEO) if option.showVideoThumbnail && mediaGroup.thumbnails.nonEmpty  =>
-        proxyImage(mediaGroup.thumbnails.head.url, mediaGroup.description)
+        proxyImage(mediaGroup.thumbnails.head.url, mediaGroup.description, addVideoClass = true)
       case Some(MediaMedium.VIDEO) if option.showVideoPlayer =>
         YoutubeVideoPlayer(mediaGroup.content.url)
       case Some(MediaMedium.AUDIO) if option.showAudio =>
@@ -68,7 +69,7 @@ object ArticleRender {
   def mediaDom(article: Article, option: MediaRenderOption = mediaRenderOptionInList): Frag = {
     article.mediaGroups.map(_.groups.head) match {
       case None => ""
-      case _ => div(cls := "article-media", article.mediaGroups.get.groups.map(m => mediaGroupDom(m, option)))
+      case _ => tag("img-viewer")(cls := "article-media", article.mediaGroups.get.groups.map(m => mediaGroupDom(m, option)))
     }
   }
 

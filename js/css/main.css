@@ -588,9 +588,11 @@ progress {
 }
 
 .article-grid img {
-  aspect-ratio: 16 / 9;
   object-fit: cover;
-  width: 100%;
+}
+
+.article-grid .video-img {
+  aspect-ratio: 16 / 9;
 }
 
 .article-info {
@@ -613,13 +615,13 @@ progress {
 .article-media {
   display: flex;
   flex-direction: row;
+  overflow-x: scroll;
 }
 
 .article-media img {
   margin: 0 auto;
   border-radius: 2%;
   max-height: 260px;
-  overflow: hidden;
 }
 
 .article-content {
@@ -965,4 +967,10 @@ popover-content a:hover {
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: auto;
+}
+
+/* fix pico override of viewer-js styles */
+.viewer-footer [role="button"] {
+  padding: 0 0 0 0;
+  font-size: 0; /* needed for Chrome */
 }

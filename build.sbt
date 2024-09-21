@@ -1,4 +1,6 @@
 import scala.language.postfixOps
+import scala.sys.process._
+import sbt._
 
 name := "rss_brain"
 
@@ -64,6 +66,18 @@ validateRsshubRules := Def.taskDyn {
   }
 }.value
 
+lazy val webpack = taskKey[Unit]("Run webpack in js directory")
+webpack :=  {
+  val workDir = new File("./js")
+  Process("npm" :: "install" :: Nil, workDir) #&& Process("npx" :: "webpack" :: Nil, workDir) !
+}
+
+Compile / resourceGenerators += Def.task {
+  webpack.value
+  val file = (Compile / resourceManaged).value / "webview" / "static" / "dist"
+  IO.copyDirectory(new File("./js/dist"), file, overwrite = true)
+  IO.listFiles(file).toSeq
+}.taskValue
 
 assemblyMergeStrategy in assembly := {
   case x if x.endsWith("META-INF/services/io.grpc.LoadBalancerProvider") => MergeStrategy.first

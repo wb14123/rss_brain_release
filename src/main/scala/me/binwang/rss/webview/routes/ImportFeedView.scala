@@ -40,7 +40,7 @@ class ImportFeedView(sourceService: SourceService, folderService: FolderService)
           input(id := "import-feed-input", `type` := "text", placeholder := "Feed or Website URL", name := "url"),
           button(hxGet := "/find_feed", hxTrigger := "click", hxTarget := "#content",
             hxIndicator := "#content-indicator", hxParamsAll, hxPushUrl := "true",
-            hxInclude := "#import-feed-input")("Find"),
+            hxSync := "#content:replace", hxInclude := "#import-feed-input")("Find"),
         )
       ))
     }
