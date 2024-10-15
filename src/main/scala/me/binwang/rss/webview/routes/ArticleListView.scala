@@ -9,7 +9,7 @@ import me.binwang.rss.model._
 import me.binwang.rss.service.{ArticleService, FolderService, SourceService, UserService}
 import me.binwang.rss.webview.auth.CookieGetter.reqToCookieGetter
 import me.binwang.rss.webview.basic.ContentRender
-import me.binwang.rss.webview.basic.ContentRender.{hxSwapContentAttrs, wrapContentRaw}
+import me.binwang.rss.webview.basic.ContentRender.{hxSwapContentAttrs, wrapContentRaw, wrapUrl}
 import me.binwang.rss.webview.basic.ErrorHandler.RedirectDefaultFolderException
 import me.binwang.rss.webview.basic.HtmlCleaner.str2cleaner
 import me.binwang.rss.webview.basic.ScalaTagAttributes._
@@ -236,20 +236,17 @@ class ArticleListView(articleService: ArticleService, userService: UserService, 
     }
 
 
-    case req @ GET -> Root / "sources" / sourceID / "articles" =>
+    case req @ GET -> Root / "sources" / sourceID / "articles" => wrapUrl(req) {
       val token = req.authToken
       val folderSourceIO = req.params.get("in_folder")
-        .map{folderID => sourceService.getSourceInFolder(token, folderID, sourceID)}
+        .map { folderID => sourceService.getSourceInFolder(token, folderID, sourceID) }
         .getOrElse(sourceService.getSourceInUser(token, sourceID))
         .recoverWith {
-          case err @ (_: NoPermissionOnFolder | _: SourceNotFound | _: SourceInFolderNotFoundError) =>
+          case err@(_: NoPermissionOnFolder | _: SourceNotFound | _: SourceInFolderNotFoundError) =>
             IO.raiseError(RedirectDefaultFolderException(err))
         }
-      userService.setCurrentSource(token, sourceID) &>
-        folderSourceIO.flatMap { folderSource =>
-          val hxLink = hxLinkFromSource(folderSource)
-          Ok(ContentRender(hxLink), `Content-Type`(MediaType.text.html))
-        }
+      userService.setCurrentSource(token, sourceID) &> folderSourceIO.map(hxLinkFromSource)
+    }
 
 
     case req @ GET -> Root / "hx" / "sources" / sourceID / "articles" / "by_time" / layout =>

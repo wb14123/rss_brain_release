@@ -26,4 +26,11 @@ function initTheme() {
     setTheme(getCurrentTheme());
 }
 
+async function loadNSFWClass() {
+    const res = await fetch("/hx/settings/nsfw", {method: 'GET'});
+    const setting = await res.text();
+    return "nsfw-" + setting.toLowerCase();
+}
+window.loadNSFWClass = loadNSFWClass;
+
 initTheme();

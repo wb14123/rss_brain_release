@@ -35,7 +35,7 @@ object ScalaTagAttributes {
   val hxParamsAll: generic.AttrPair[Builder, String] = hxParams := "*"
   val hxInclude: Attr = attr("hx-include")
   val hxSwapOob: Attr = attr("hx-swap-oob")
-  val hxDisableElt: Attr = attr("hx-disable-elt")
+  val hxDisableElt: Attr = attr("hx-disabled-elt")
   val hxDisableThis: generic.AttrPair[Builder, String] = hxDisableElt := "this"
   val hxEncoding: Attr = attr("hx-encoding")
 
@@ -47,6 +47,7 @@ object ScalaTagAttributes {
     xText := s"new Date(${time.toEpochSecond * 1000L}).toLocaleString()"
   val xShow: Attr = attr("x-show")
   def xOn(event: String): Attr = attr(s"x-on:$event")
+  val xModel: Attr = attr("x-model")
   val xOnClick: Attr = xOn("click")
   def xBind(name: String): Attr = attr(s"x-bind:$name")
   val xRef: Attr = attr("x-ref")

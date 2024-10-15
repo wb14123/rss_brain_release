@@ -7,6 +7,7 @@ import me.binwang.archmage.core.CatsMacros.timed
 import me.binwang.rss.dao._
 import me.binwang.rss.mail.MailSender
 import me.binwang.rss.metric.TimeMetrics
+import me.binwang.rss.model.NSFWSetting.NSFWSetting
 import me.binwang.rss.model._
 import me.binwang.rss.service.UserService._
 import org.typelevel.log4cats.LoggerFactory
@@ -267,6 +268,18 @@ class UserService(
         .update(userSession.userID, UserUpdater(
           currentFolderID = Some(None),
           currentSourceID = Some(Some(currentSourceID)),
+        ))
+        .map(_ => ())
+    }
+  }
+
+  def updateUserSettings(token: String,
+      nsfwSetting: Option[NSFWSetting], searchEngine: Option[SearchEngine]): IO[Unit] = timed {
+    authorizer.authorize(token).flatMap { userSession =>
+      userDao
+        .update(userSession.userID, UserUpdater(
+          nsfwSetting = nsfwSetting,
+          searchEngine = searchEngine,
         ))
         .map(_ => ())
     }

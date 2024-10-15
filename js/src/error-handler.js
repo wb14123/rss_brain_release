@@ -1,7 +1,8 @@
 
 function showErrorMessage(errMsg, details) {
+    const maxLength = 100;
     Toastify({
-        text: errMsg,
+        text: errMsg.substring(0, maxLength),
         className: 'error-toast',
         duration: 30000,
         newWindow: false,

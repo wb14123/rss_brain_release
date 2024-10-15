@@ -1,12 +1,13 @@
 package me.binwang.rss.webview.routes
 import cats.effect.IO
+import me.binwang.rss.model.{NSFWSetting, SearchEngine}
 import me.binwang.rss.service.{SystemService, UserService}
 import me.binwang.rss.webview.auth.CookieGetter.reqToCookieGetter
 import me.binwang.rss.webview.basic.ContentRender.wrapContentRaw
 import me.binwang.rss.webview.basic.ScalaTagAttributes._
-import me.binwang.rss.webview.basic.ScalatagsSeqInstances
+import me.binwang.rss.webview.basic.{ContentRender, HttpResponse, ScalatagsSeqInstances}
 import me.binwang.rss.webview.widgets.PageHeader
-import org.http4s.{HttpRoutes, MediaType}
+import org.http4s.{HttpRoutes, MediaType, UrlForm}
 import org.http4s.dsl.io._
 import org.http4s.headers.`Content-Type`
 import org.http4s.scalatags.ScalatagsInstances
@@ -39,6 +40,31 @@ class UserView(userService: UserService, systemService: SystemService) extends H
       Ok(dom, `Content-Type`(MediaType.text.html))
     }
 
+    case req @ POST -> Root / "settings" =>
+      val token = req.authToken
+      req.decode[UrlForm] { data =>
+
+        // `search-engine-url` is disabled when submit if there is a name, so find the engine from predefined ones.
+        val searchEngineName = data.values.get("search-engine-name").flatMap(_.headOption).filter(_.nonEmpty)
+        val searchEngine = SearchEngine.ALL.find(_.name.equals(searchEngineName)).getOrElse(
+          SearchEngine(name = searchEngineName,
+            urlPrefix = data.values.get("search-engine-url").flatMap(_.headOption).get)
+        )
+
+        userService.updateUserSettings(token = token,
+          nsfwSetting = data.values.get("nsfw-setting").map(s => NSFWSetting.withName(s.headOption.get)),
+          searchEngine = Some(searchEngine),
+        ).flatMap(_ => HttpResponse.redirect("", "/settings", req))
+      }
+
+
+    case req @ GET -> Root / "hx" / "settings" / "nsfw" =>
+      val token = req.authToken
+      userService.getMyUserInfo(token).flatMap { user =>
+        Ok(user.nsfwSetting.toString, `Content-Type`(MediaType.text.plain))
+      }
+
+
     case req @ GET -> Root / "settings" => wrapContentRaw(req) {
       val token = req.authToken
       for {
@@ -55,7 +81,7 @@ class UserView(userService: UserService, systemService: SystemService) extends H
               div(s"Username: ${user.username}"),
               div(s"Email: ${user.email}"),
               div(s"Account created at ", span(xDate(user.createdAt))),
-              div(cls := "button-row", button(cls := "secondary", hxPost := "/hx/logout", "Sign Out")),
+              div(cls := "button-row", button(cls := "secondary", hxDisableThis, hxPost := "/hx/logout", "Sign Out")),
             ),
             hr(),
             if (!paymentEnabled) "" else div(
@@ -66,19 +92,49 @@ class UserView(userService: UserService, systemService: SystemService) extends H
               a(target := "_blank", href := "/payment/stripe/portal", "Manage Subscription"),
               hr(),
             ),
-            div(
+            form(
+              xData :=s"""{
+                searchEngineName: '${user.searchEngine.name.getOrElse("")}',
+                searchEngineUrl: '${user.searchEngine.urlPrefix}',
+                nsfwSetting: '${user.nsfwSetting.toString}',
+                }""",
               cls := "form-section",
               h2("System"),
               label("Dark Mode"),
               select(
                 name := "dark-mode",
-                xData := "{}",
                 xOn("change") := "setTheme($el.value)",
                 option("Follow System Settings", xBind("selected") := "getCurrentTheme() == 'auto'", value := "auto"),
                 option("Disable", xBind("selected") := "getCurrentTheme() == 'light'", value := "light"),
                 option("Enable", xBind("selected") := "getCurrentTheme() == 'dark'", value := "dark"),
               ),
+              label("Search Engine"),
+              select(
+                name := "search-engine-name",
+                xModel := "searchEngineName",
+                xOn("change") := "searchEngineUrl = $el.options[$el.selectedIndex].dataset.url",
+                (SearchEngine.ALL :+ user.searchEngine.copy(name=None)).map { searchEngine =>
+                  option(
+                    searchEngine.name.getOrElse[String]("Custom"),
+                    value := searchEngine.name.getOrElse(""),
+                    data("url") := searchEngine.urlPrefix,
+                  )
+                }
+              ),
+              label("Search Engine URL Prefix"),
+              input(name := "search-engine-url", xModel := "searchEngineUrl", `type` := "text",
+                xBind("disabled") := "searchEngineName !== ''"),
+              label("NSFW Content Display"),
+              select(
+                name := "nsfw-setting",
+                xModel := "nsfwSetting",
+                option("Hide", value := "HIDE"),
+                option("Blur", value := "BLUR"),
+                option("Show", value := "SHOW"),
+              ),
               a(href := "/opml-export", target := "_blank", "Export OPML"),
+              div(cls := "button-row",
+                button(hxPost := "/settings", ContentRender.hxSwapContentAttrs, hxDisableThis, "Save")),
               /*
               label(cls := "form-row", input(is := "boolean-checkbox", `type` := "checkbox", name := "enable-search"),
                 "Auto hide left Panel"),

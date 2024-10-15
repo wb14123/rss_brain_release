@@ -14,6 +14,7 @@ import me.binwang.rss.model.EmbeddingUpdateStatus.EmbeddingUpdateStatus
 import me.binwang.rss.model.FetchStatus.FetchStatus
 import me.binwang.rss.model.ID.ID
 import me.binwang.rss.model.MoreLikeThisType.MoreLikeThisType
+import me.binwang.rss.model.NSFWSetting.NSFWSetting
 import me.binwang.rss.model._
 import org.postgresql.util.PGobject
 
@@ -88,7 +89,13 @@ trait BaseSqlDao {
   protected implicit val encodeArticleListLayout: MappedEncoding[ArticleListLayout, String] =
     MappedEncoding[ArticleListLayout, String](_.toString)
 
-  protected implicit val jsonbEncoder: Encoder[MediaGroups] = encoder(java.sql.Types.OTHER, (index, mediaGroups, row) => {
+  protected implicit val decodeNsfwSetting: MappedEncoding[String, NSFWSetting] =
+    MappedEncoding[String, NSFWSetting](NSFWSetting.withName)
+
+  protected implicit val encodeNsfwSetting: MappedEncoding[NSFWSetting, String] =
+    MappedEncoding[NSFWSetting, String](_.toString)
+
+  protected implicit val mediaGroupsEncoder: Encoder[MediaGroups] = encoder(java.sql.Types.OTHER, (index, mediaGroups, row) => {
     val value = io.circe.syntax.EncoderOps(mediaGroups).asJson.toString()
     val pgObj = new PGobject()
     pgObj.setType("jsonb")
@@ -96,13 +103,30 @@ trait BaseSqlDao {
     row.setObject(index, pgObj)
   })
 
-  protected implicit val jsonbDecoder: Decoder[MediaGroups] = decoder { (index, row, _) =>
+  protected implicit val mediaGroupsDecoder: Decoder[MediaGroups] = decoder { (index, row, _) =>
     val defaultMediaGroups = MediaGroups(groups = Seq())
     val pgObj = row.getObject(index).asInstanceOf[PGobject]
     if (pgObj == null) {
       defaultMediaGroups
     } else {
       parser.parse(pgObj.getValue).flatMap(_.as[MediaGroups]).getOrElse(defaultMediaGroups)
+    }
+  }
+
+  protected implicit val searchEngineEncoder: Encoder[SearchEngine] = encoder(java.sql.Types.OTHER, (index, searchEngine, row) => {
+    val value = io.circe.syntax.EncoderOps(searchEngine).asJson.toString()
+    val pgObj = new PGobject()
+    pgObj.setType("jsonb")
+    pgObj.setValue(value)
+    row.setObject(index, pgObj)
+  })
+
+  protected implicit val searchEngineDecoder: Decoder[SearchEngine] = decoder { (index, row, _) =>
+    val pgObj = row.getObject(index).asInstanceOf[PGobject]
+    if (pgObj == null) {
+      SearchEngine.DEFAULT
+    } else {
+      parser.parse(pgObj.getValue).flatMap(_.as[SearchEngine]).getOrElse(SearchEngine.DEFAULT)
     }
   }
 

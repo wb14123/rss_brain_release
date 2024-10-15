@@ -38,7 +38,7 @@ class ImportFeedView(sourceService: SourceService, folderService: FolderService)
           small(cls := "import-feed-hint")("Input a RSS or Atom feed below. " +
             "You can also input any website URL, RSS Brain will try to find a feed for you."),
           input(id := "import-feed-input", `type` := "text", placeholder := "Feed or Website URL", name := "url"),
-          button(hxGet := "/find_feed", hxTrigger := "click", hxTarget := "#content",
+          button(hxGet := "/find_feed", hxTrigger := "click", hxTarget := "#content", hxDisableThis,
             hxIndicator := "#content-indicator", hxParamsAll, hxPushUrl := "true",
             hxSync := "#content:replace", hxInclude := "#import-feed-input")("Find"),
         )

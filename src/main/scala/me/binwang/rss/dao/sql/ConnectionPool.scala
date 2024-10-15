@@ -6,7 +6,8 @@ import com.zaxxer.hikari.HikariConfig
 import doobie.hikari.HikariTransactor
 
 object ConnectionPool {
-  def apply(): Resource[IO, ConnectionPool] = {
+
+  def apply(isolationLevel: String = IsolationLevel.SERIALIZABLE): Resource[IO, ConnectionPool] = {
 
     val config = ConfigFactory.load()
 
@@ -17,6 +18,7 @@ object ConnectionPool {
     hikariConfig.setPassword(config.getString("db.password"))
     hikariConfig.setMaximumPoolSize(config.getInt("db.maxPoolSize"))
     hikariConfig.setMinimumIdle(config.getInt("db.minIdle"))
+    hikariConfig.setTransactionIsolation(isolationLevel)
 
     HikariTransactor.fromHikariConfig[IO](hikariConfig).map(ConnectionPool(_))
   }

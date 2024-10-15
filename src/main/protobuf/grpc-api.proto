@@ -275,6 +275,21 @@ message SourceUpdater {
     optional IconUrlOption iconUrl = 15;
 }
 
+// Define NSFWSetting
+
+enum NSFWSetting {
+    HIDE = 0;
+    BLUR = 1;
+    SHOW = 2;
+}
+
+// Define SearchEngine
+
+message SearchEngine {
+    optional string name = 1;
+    string urlPrefix = 2;
+}
+
 // Define User
 
 message User {
@@ -294,6 +309,8 @@ message User {
     optional string activeCode = 14;
     int64 subscribeEndAt = 15;
     bool subscribed = 16;
+    NSFWSetting nsfwSetting = 17;
+    SearchEngine searchEngine = 18;
 }
 
 // Define UserInfo
@@ -309,6 +326,8 @@ message UserInfo {
     optional string currentFolderID = 8;
     optional string currentSourceID = 9;
     bool subscribed = 10;
+    NSFWSetting nsfwSetting = 11;
+    SearchEngine searchEngine = 12;
 }
 
 // Define UserUpdater
@@ -347,6 +366,8 @@ message UserUpdater {
     optional int64 subscribeEndAt = 11;
     optional bool subscribed = 12;
     optional string username = 13;
+    optional NSFWSetting nsfwSetting = 14;
+    optional SearchEngine searchEngine = 15;
 }
 
 // Define UserSession
@@ -1250,6 +1271,12 @@ message SetCurrentSourceRequest {
     string currentSourceID = 2;
 }
 
+message UpdateUserSettingsRequest {
+    string token = 1;
+    optional NSFWSetting nsfwSetting = 2;
+    optional SearchEngine searchEngine = 3;
+}
+
 message RemoveCurrentFolderAndSourceRequest {
     string token = 1;
 }
@@ -1311,6 +1338,8 @@ message SetCurrentFolderResponse {}
 
 message SetCurrentSourceResponse {}
 
+message UpdateUserSettingsResponse {}
+
 message RemoveCurrentFolderAndSourceResponse {}
 
 message GetPaymentCustomersResponse {
@@ -1337,6 +1366,7 @@ service UserAPI {
     rpc GetRedditSessions (GetRedditSessionsRequest) returns (stream GetRedditSessionsResponse);
     rpc SetCurrentFolder (SetCurrentFolderRequest) returns (SetCurrentFolderResponse);
     rpc SetCurrentSource (SetCurrentSourceRequest) returns (SetCurrentSourceResponse);
+    rpc UpdateUserSettings (UpdateUserSettingsRequest) returns (UpdateUserSettingsResponse);
     rpc RemoveCurrentFolderAndSource (RemoveCurrentFolderAndSourceRequest) returns (RemoveCurrentFolderAndSourceResponse);
     rpc GetPaymentCustomers (GetPaymentCustomersRequest) returns (stream GetPaymentCustomersResponse);
     rpc SendDeleteUserCode (SendDeleteUserCodeRequest) returns (SendDeleteUserCodeResponse);

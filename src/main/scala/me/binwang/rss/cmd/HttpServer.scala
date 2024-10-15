@@ -6,7 +6,7 @@ import org.http4s.HttpRoutes
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.implicits._
 import org.http4s.server.Server
-import org.http4s.server.middleware.{ErrorAction, Logger}
+import org.http4s.server.middleware.{ErrorAction, GZip, Logger}
 import org.typelevel.log4cats.LoggerFactory
 import org.typelevel.log4cats.slf4j.Slf4jFactory
 
@@ -25,7 +25,7 @@ object HttpServer {
     )(routes)
 
     val httpService = ErrorAction.httpRoutes[IO](
-      loggingService,
+      GZip(loggingService),
       (req, thr) => http4sLogger.error(thr)(s"Error when handling request: ${req.uri}")
     ).orNotFound
 

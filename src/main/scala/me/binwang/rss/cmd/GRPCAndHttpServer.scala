@@ -49,7 +49,7 @@ object GRPCAndHttpServer extends IOApp {
       new PaymentView(services.userService, services.stripePaymentService).routes <+>
       new ImportFeedView(services.sourceService, services.folderService).routes <+>
       new RecommendationView(services.moreLikeThisService, services.articleService, services.sourceService,
-        services.folderService).routes
+        services.folderService, services.userService).routes
     )))
     HttpServer(httpRoute, config.getString("frontend.ip"), config.getInt("frontend.port"), logBody = false)
   }

@@ -29,7 +29,7 @@ class LoginView(userService: UserService) extends Http4sView with ScalatagsInsta
             input(`type` := "text", name := "email", id := "email", placeholder := "Email", required),
             input(`type` := "password", name := "password", id := "password", placeholder := "Password", required),
           ),
-          button(hxPost := "/hx/login", "Login"),
+          button(hxPost := "/hx/login", hxDisableThis, "Login"),
           div(
             cls := "login-hint",
             small("Don't have an account yet? Click ", a(href := "/signup")("here"), " to create a new account."),
@@ -82,7 +82,7 @@ class LoginView(userService: UserService) extends Http4sView with ScalatagsInsta
             input(`type` := "password", name := "password", id := "password", placeholder := "Password", required),
             input(`type` := "password", name := "password2", id := "password2", placeholder := "Repeat Password", required),
           ),
-          button(hxPost := "/hx/signup", "Sign Up"),
+          button(hxPost := "/hx/signup", hxDisableThis, "Sign Up"),
           div(
             cls := "login-hint",
             small("Already have an account? Click ", a(href := "/login")("here"), " to login."),

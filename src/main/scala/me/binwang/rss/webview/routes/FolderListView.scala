@@ -243,7 +243,7 @@ class FolderListView(folderService: FolderService, sourceService: SourceService,
           label(div("Name"), input(`type` := "text", name := "name")),
           label(div("Description"), input(`type` := "text", name := "description")),
           div(cls := "button-row",
-            button(hxPost := s"/hx/folders", hxExt := "json-enc",
+            button(hxPost := s"/hx/folders", hxExt := "json-enc", hxDisableThis,
               hxVals := "js:{position:getNextFolderPosition()}", "Create")),
         )
       )

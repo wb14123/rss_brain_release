@@ -27,7 +27,7 @@ object SourcesPreview {
           cls := "feed-preview-header",
           h2(cls := "feed-preview-title")(source.title.getOrElse[String]("Unknown")),
           button(xShow := s"$subscribedScript != null", cls := "feed-subscribe-btn", disabled)("Subscribed"),
-          button(id := s"feed-subscribe-btn-${source.id}", cls := "feed-subscribe-btn",
+          button(id := s"feed-subscribe-btn-${source.id}", cls := "feed-subscribe-btn", hxDisableThis,
             xShow := s"$subscribedScript == null", hxPost := "/hx/subscribe_feed", hxExt := "json-enc",
             hxVals := subscribeVars)("Subscribe"), hxSwap := "none"),
         source.description.map(d => div(cls := "feed-preview-desc", d)).getOrElse[Frag](""),

@@ -974,3 +974,38 @@ popover-content a:hover {
   padding: 0 0 0 0;
   font-size: 0; /* needed for Chrome */
 }
+
+/* nsfw */
+.article-desc-nsfw {
+    font-size: 18px;
+    color: var(--pico-code-color);
+    display: none;
+}
+
+.nsfw-blur .nsfw .article-media img {
+    filter: blur(20px);
+}
+
+.nsfw-blur .nsfw .article-desc {
+    display: none;
+}
+
+.nsfw-blur .nsfw .article-desc-nsfw {
+    display: block;
+}
+
+.nsfw-hide .nsfw .article-media img {
+    display: none;
+}
+
+.nsfw-hide .nsfw .article-desc {
+    display: none;
+}
+
+.nsfw-hide .nsfw .article-desc-nsfw {
+    display: block;
+}
+
+.nsfw-show .nsfw .article-desc-nsfw {
+    display: none;
+}

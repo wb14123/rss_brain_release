@@ -34,7 +34,7 @@ class ArticleView(articleService: ArticleService) extends Http4sView with Scalat
             div(
               id := "article-reader",
               div(cls := "article-title")(article.article.title),
-              ArticleRender.renderInfo(article.article),
+              ArticleRender.renderInfo(article.article, req.params.get("in_folder")),
               ArticleRender.mediaDom(article.article, ArticleRender.mediaRenderOptionInReader),
               div(cls := "article-content")(raw(article.content.validHtml)),
               ArticleRender.renderOps(article.article, showActionable = false),

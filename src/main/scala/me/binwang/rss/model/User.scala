@@ -3,6 +3,29 @@ package me.binwang.rss.model
 import java.time.ZonedDateTime
 import java.util.UUID
 
+import me.binwang.rss.model.NSFWSetting.NSFWSetting
+
+object NSFWSetting extends Enumeration {
+  type NSFWSetting = Value
+  val
+  HIDE,
+  BLUR,
+  SHOW
+  = Value
+}
+
+case class SearchEngine(name: Option[String], urlPrefix: String)
+
+object SearchEngine {
+  val DUCKDUCKGO = SearchEngine(Some("DuckDuckGo"), "https://duckduckgo.com/?q=")
+  val GOOGLE = SearchEngine(Some("Google"), "https://www.google.com/search?q=")
+  val BING = SearchEngine(Some("Bing"), "https://www.bing.com/search?q=")
+  val KAGI = SearchEngine(Some("Kagi"), "https://kagi.com/search?q=")
+
+  val ALL = Seq(DUCKDUCKGO, GOOGLE, BING, KAGI)
+  val DEFAULT = DUCKDUCKGO
+}
+
 case class User (
   id: String,
   username: String,
@@ -20,6 +43,8 @@ case class User (
   activeCode: Option[String] = Some(UUID.randomUUID().toString),
   subscribeEndAt: ZonedDateTime,
   subscribed: Boolean = false,
+  nsfwSetting: NSFWSetting = NSFWSetting.BLUR,
+  searchEngine: SearchEngine = SearchEngine.DEFAULT,
 ) {
 
   def toInfo: UserInfo = {
@@ -34,6 +59,8 @@ case class User (
       isAdmin = isAdmin,
       subscribeEndAt = subscribeEndAt,
       subscribed = subscribed,
+      nsfwSetting = nsfwSetting,
+      searchEngine = searchEngine,
     )
   }
 
@@ -50,6 +77,8 @@ case class UserInfo (
   currentFolderID: Option[String] = None,
   currentSourceID: Option[String] = None,
   subscribed: Boolean = false,
+  nsfwSetting: NSFWSetting = NSFWSetting.BLUR,
+  searchEngine: SearchEngine = SearchEngine.DUCKDUCKGO,
 )
 
 case class UserUpdater (
@@ -66,4 +95,6 @@ case class UserUpdater (
   subscribeEndAt: Option[ZonedDateTime] = None,
   subscribed: Option[Boolean] = None,
   username: Option[String] = None,
+  nsfwSetting: Option[NSFWSetting] = None,
+  searchEngine: Option[SearchEngine] = None,
 )

@@ -32,7 +32,9 @@ class UserSqlDao(implicit val connectionPool: ConnectionPool) extends UserDao wi
             currentSourceID char(${ID.maxLength}) default null,
             activeCode char($UUID_LENGTH) unique default null,
             subscribeEndAt timestamp not null,
-            subscribed boolean not null default false
+            subscribed boolean not null default false,
+            nsfwSetting varchar not null default 'BLUR',
+            searchEngine jsonb not null
           )
          """)
       .update
@@ -89,7 +91,9 @@ class UserSqlDao(implicit val connectionPool: ConnectionPool) extends UserDao wi
         setOpt(_.activeCode, updater.activeCode),
         setOpt(_.subscribeEndAt, updater.subscribeEndAt),
         setOpt(_.subscribed, updater.subscribed),
-        setOpt(_.username, updater.username)
+        setOpt(_.username, updater.username),
+        setOpt(_.nsfwSetting, updater.nsfwSetting),
+        setOpt(_.searchEngine, updater.searchEngine),
       )
     run(q).transact(xa).map(_ > 0)
   }

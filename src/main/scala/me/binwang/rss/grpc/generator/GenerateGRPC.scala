@@ -8,6 +8,7 @@ import me.binwang.rss.model.ArticleOrder.ArticleOrder
 import me.binwang.rss.model.FetchStatus.FetchStatus
 import me.binwang.rss.model.ID.ID
 import me.binwang.rss.model.MoreLikeThisType.MoreLikeThisType
+import me.binwang.rss.model.NSFWSetting.NSFWSetting
 import me.binwang.rss.model._
 import me.binwang.rss.service._
 import me.binwang.rss.sourcefinder.SourceResult
@@ -60,6 +61,8 @@ object GenerateGRPC extends GRPCGenerator {
     typeOf[FetchStatus],
     typeOf[Source],
     typeOf[SourceUpdater],
+    typeOf[NSFWSetting],
+    typeOf[SearchEngine],
     typeOf[User],
     typeOf[UserInfo],
     typeOf[UserUpdater],

@@ -2,7 +2,7 @@ package me.binwang.rss.webview.routes
 import cats.effect._
 import me.binwang.rss.grpc.ModelTranslator
 import me.binwang.rss.model.MoreLikeThisType
-import me.binwang.rss.service.{ArticleService, FolderService, MoreLikeThisService, SourceService}
+import me.binwang.rss.service.{ArticleService, FolderService, MoreLikeThisService, SourceService, UserService}
 import me.binwang.rss.webview.auth.CookieGetter.reqToCookieGetter
 import me.binwang.rss.webview.basic.ContentRender.{hxSwapContentAttrs, wrapContentRaw}
 import me.binwang.rss.webview.basic.ScalaTagAttributes._
@@ -17,8 +17,12 @@ import org.http4s.scalatags.ScalatagsInstances
 import org.typelevel.log4cats.LoggerFactory
 import scalatags.Text.all._
 
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+
 class RecommendationView(moreLikeThisService: MoreLikeThisService, articleService: ArticleService,
-    sourceService: SourceService, folderService: FolderService)(implicit val loggerFactory: LoggerFactory[IO])
+    sourceService: SourceService, folderService: FolderService, userService: UserService,
+    )(implicit val loggerFactory: LoggerFactory[IO])
     extends Http4sView with ScalatagsInstances with ScalatagsSeqInstances {
 
   private val DEFAULT_SIZE = 10
@@ -258,5 +262,14 @@ class RecommendationView(moreLikeThisService: MoreLikeThisService, articleServic
       Ok(dom, `Content-Type`(MediaType.text.html))
     }
 
+    case req @ GET -> Root / "articles" / articleID / "external-search" =>
+      val token = req.authToken
+      userService.getMyUserInfo(token).flatMap { user =>
+        articleService.getArticleTermVector(token, articleID, 10).flatMap { terms =>
+          val searchTerm = terms.terms.map(_.term).mkString(" ")
+          val url = user.searchEngine.urlPrefix + URLEncoder.encode(searchTerm, StandardCharsets.UTF_8)
+          HttpResponse.redirect("", url, req)
+        }
+      }
   }
 }
