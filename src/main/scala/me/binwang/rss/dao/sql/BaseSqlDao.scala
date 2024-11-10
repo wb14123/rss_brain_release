@@ -13,6 +13,7 @@ import me.binwang.rss.model.ArticleOrder.ArticleOrder
 import me.binwang.rss.model.EmbeddingUpdateStatus.EmbeddingUpdateStatus
 import me.binwang.rss.model.FetchStatus.FetchStatus
 import me.binwang.rss.model.ID.ID
+import me.binwang.rss.model.LLMEngine.LLMEngine
 import me.binwang.rss.model.MoreLikeThisType.MoreLikeThisType
 import me.binwang.rss.model.NSFWSetting.NSFWSetting
 import me.binwang.rss.model._
@@ -94,6 +95,13 @@ trait BaseSqlDao {
 
   protected implicit val encodeNsfwSetting: MappedEncoding[NSFWSetting, String] =
     MappedEncoding[NSFWSetting, String](_.toString)
+
+  protected implicit val decodeLLMEngine: MappedEncoding[String, LLMEngine] =
+    MappedEncoding[String, LLMEngine](LLMEngine.withName)
+
+  protected implicit val encodeLLMSetting: MappedEncoding[LLMEngine, String] =
+    MappedEncoding[LLMEngine, String](_.toString)
+
 
   protected implicit val mediaGroupsEncoder: Encoder[MediaGroups] = encoder(java.sql.Types.OTHER, (index, mediaGroups, row) => {
     val value = io.circe.syntax.EncoderOps(mediaGroups).asJson.toString()

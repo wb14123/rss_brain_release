@@ -22,10 +22,9 @@ case class OpenAIChatResponse(
 
 class OpenAILLM(backend: SttpBackend[IO, _])(implicit val loggerFactory: LoggerFactory[IO]) extends LargeLanguageModel {
 
-  private val apiKey = ConfigFactory.load().getString("open-ai.apiKey")
   private val model = ConfigFactory.load().getString("open-ai.model")
 
-  override def chat(messages: Seq[ChatMessage]): IO[Seq[ChatMessage]] = {
+  override def chat(messages: Seq[ChatMessage], apiKey: String): IO[Seq[ChatMessage]] = {
     val req = OpenAIChatRequest(model, messages)
     basicRequest
       .post(uri"https://api.openai.com/v1/chat/completions")

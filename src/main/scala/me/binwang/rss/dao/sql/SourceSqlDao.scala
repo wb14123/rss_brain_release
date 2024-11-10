@@ -107,6 +107,7 @@ class SourceSqlDao(implicit val connectionPool: ConnectionPool) extends SourceDa
         .filter(_.fetchStatus == lift(FetchStatus.SCHEDULED))
         .sortBy(source => source.fetchScheduledAt) (Ord.asc)
         .take(lift(size))
+        .forUpdate()
     }
     /*
     This doesn't work because it returns String instead of List[String]

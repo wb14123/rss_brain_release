@@ -52,6 +52,7 @@ class ArticleEmbeddingTaskSqlDao(implicit val connectionPool: ConnectionPool) ex
         .filter(_.status == lift(EmbeddingUpdateStatus.PENDING))
         .sortBy(_.scheduledAt)(Ord.asc)
         .take(lift(size))
+        .forUpdate()
     }
 
     val q = for {

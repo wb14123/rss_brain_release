@@ -120,7 +120,7 @@ libraryDependencies ++= Seq(
   "org.tpolecat" %% "doobie-specs2"   % doobieVersion,
   "org.tpolecat" %% "doobie-hikari"   % doobieVersion,
   "io.getquill"  %% "quill-doobie"    % "4.8.4",
-  "org.postgresql" % "postgresql"     % "42.7.3",
+  "org.postgresql" % "postgresql"     % "42.7.4",
   "io.getquill" %% "quill-cassandra-monix" % "4.8.4",
 
   // search

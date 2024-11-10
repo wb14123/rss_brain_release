@@ -7,6 +7,7 @@ import me.binwang.rss.model.ArticleListLayout.ArticleListLayout
 import me.binwang.rss.model.ArticleOrder.ArticleOrder
 import me.binwang.rss.model.FetchStatus.FetchStatus
 import me.binwang.rss.model.ID.ID
+import me.binwang.rss.model.LLMEngine.LLMEngine
 import me.binwang.rss.model.MoreLikeThisType.MoreLikeThisType
 import me.binwang.rss.model.NSFWSetting.NSFWSetting
 import me.binwang.rss.model._
@@ -88,6 +89,7 @@ object GenerateGRPC extends GRPCGenerator {
     typeOf[SearchTerms],
     typeOf[ImportSourcesTask],
     typeOf[ImportFailedSource],
+    typeOf[LLMEngine],
   )
 
   override val serviceClasses: Seq[Type] = Seq(

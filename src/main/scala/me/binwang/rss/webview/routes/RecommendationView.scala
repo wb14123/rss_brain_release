@@ -1,7 +1,7 @@
 package me.binwang.rss.webview.routes
 import cats.effect._
 import me.binwang.rss.grpc.ModelTranslator
-import me.binwang.rss.model.MoreLikeThisType
+import me.binwang.rss.model.{MoreLikeThisType, UserInfo}
 import me.binwang.rss.service.{ArticleService, FolderService, MoreLikeThisService, SourceService, UserService}
 import me.binwang.rss.webview.auth.CookieGetter.reqToCookieGetter
 import me.binwang.rss.webview.basic.ContentRender.{hxSwapContentAttrs, wrapContentRaw}
@@ -19,6 +19,7 @@ import scalatags.Text.all._
 
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import java.time.{ZoneId, ZonedDateTime}
 
 class RecommendationView(moreLikeThisService: MoreLikeThisService, articleService: ArticleService,
     sourceService: SourceService, folderService: FolderService, userService: UserService,
@@ -267,9 +268,48 @@ class RecommendationView(moreLikeThisService: MoreLikeThisService, articleServic
       userService.getMyUserInfo(token).flatMap { user =>
         articleService.getArticleTermVector(token, articleID, 10).flatMap { terms =>
           val searchTerm = terms.terms.map(_.term).mkString(" ")
-          val url = user.searchEngine.urlPrefix + URLEncoder.encode(searchTerm, StandardCharsets.UTF_8)
+          val url = externalSearchUrl(user, searchTerm)
           HttpResponse.redirect("", url, req)
         }
       }
+
+    case req @ GET -> Root / "folders" / folderID / "external-recommend" => wrapContentRaw(req) {
+      val token = req.authToken
+      for {
+        now <- Clock[IO].realTimeInstant
+        postAfter = ZonedDateTime.ofInstant(now, ZoneId.systemDefault()).minusWeeks(4)
+        user <- userService.getMyUserInfo(token)
+        links <- articleService.getFolderRecommendSearchTerms(token, folderID, 10, postAfter, 5)
+          .map(Some(_)).handleError(_ => None)
+        content: Frag = if (links.nonEmpty) {
+          label(cls := "external-recommend-hint", "Choose one to search in external search engine") +:
+          links.get.terms.map { term =>
+            a(
+              cls := "external-recommend-link",
+              href := externalSearchUrl(user, term),
+              target := "_blank",
+              term,
+            )
+          }
+        } else {
+          div("LLM (large language model) is not configured. Go to ",
+            a(nullHref, hxGet := "/settings", hxPushUrl := "true", hxSwapContentAttrs, "settings"),
+            " to configure it."
+          )
+        }
+        dom = Seq(
+          PageHeader(Some("External Recommendation")),
+          div(
+            cls := "form-body form-start",
+            content,
+          )
+        )
+        res <- Ok(dom, `Content-Type`(MediaType.text.html))
+      } yield res
+    }
+  }
+
+  private def externalSearchUrl(user: UserInfo, term: String): String = {
+    user.searchEngine.urlPrefix + URLEncoder.encode(term, StandardCharsets.UTF_8)
   }
 }

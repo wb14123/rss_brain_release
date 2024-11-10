@@ -1,8 +1,9 @@
 package me.binwang.rss.model
 
+import me.binwang.rss.model.LLMEngine.LLMEngine
+
 import java.time.ZonedDateTime
 import java.util.UUID
-
 import me.binwang.rss.model.NSFWSetting.NSFWSetting
 
 object NSFWSetting extends Enumeration {
@@ -11,6 +12,13 @@ object NSFWSetting extends Enumeration {
   HIDE,
   BLUR,
   SHOW
+  = Value
+}
+
+object LLMEngine extends Enumeration {
+  type LLMEngine = Value
+  val
+  OpenAI
   = Value
 }
 
@@ -45,6 +53,8 @@ case class User (
   subscribed: Boolean = false,
   nsfwSetting: NSFWSetting = NSFWSetting.BLUR,
   searchEngine: SearchEngine = SearchEngine.DEFAULT,
+  llmEngine: Option[LLMEngine] = None,
+  llmApiKey: Option[String] = None,
 ) {
 
   def toInfo: UserInfo = {
@@ -61,6 +71,7 @@ case class User (
       subscribed = subscribed,
       nsfwSetting = nsfwSetting,
       searchEngine = searchEngine,
+      llmEngine = llmEngine,
     )
   }
 
@@ -78,7 +89,8 @@ case class UserInfo (
   currentSourceID: Option[String] = None,
   subscribed: Boolean = false,
   nsfwSetting: NSFWSetting = NSFWSetting.BLUR,
-  searchEngine: SearchEngine = SearchEngine.DUCKDUCKGO,
+  searchEngine: SearchEngine = SearchEngine.DEFAULT,
+  llmEngine: Option[LLMEngine] = None,
 )
 
 case class UserUpdater (
@@ -97,4 +109,6 @@ case class UserUpdater (
   username: Option[String] = None,
   nsfwSetting: Option[NSFWSetting] = None,
   searchEngine: Option[SearchEngine] = None,
+  llmEngine: Option[Option[LLMEngine]] = None,
+  llmApiKey: Option[Option[String]] = None,
 )

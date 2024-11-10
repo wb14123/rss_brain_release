@@ -2,8 +2,8 @@ package me.binwang.rss.service
 
 import cats.effect.{Clock, IO}
 import me.binwang.archmage.core.CatsMacros.timed
-import me.binwang.rss.dao.{ArticleContentDao, ArticleDao, ArticleSearchDao, ArticleUserMarkingDao}
-import me.binwang.rss.llm.LargeLanguageModel
+import me.binwang.rss.dao._
+import me.binwang.rss.llm.LLMModels
 import me.binwang.rss.metric.TimeMetrics
 import me.binwang.rss.model.ID.ID
 import me.binwang.rss.model._
@@ -15,7 +15,8 @@ class ArticleService(
   private val articleContentDao: ArticleContentDao,
   private val articleUserMarkingDao: ArticleUserMarkingDao,
   private val articleSearchDao: ArticleSearchDao,
-  private val llm: LargeLanguageModel,
+  private val userDao: UserDao,
+  private val llmModels: LLMModels,
   private implicit val authorizer: Authorizer,
 ) extends TimeMetrics {
 
@@ -167,6 +168,12 @@ class ArticleService(
       likedArticlesPostedAfter: ZonedDateTime, resultSize: Int): IO[SearchTerms] = timed {
     for {
       session <- authorizer.checkFolderPermission(token, folderID).map(_._1)
+      user <- userDao.getByID(session.userID)
+      llmApiKey = user.flatMap(_.llmApiKey)
+      llmModel = user.flatMap(_.llmEngine).map(llmModels.getModel)
+      _ <- if (llmApiKey.isEmpty || llmModel.isEmpty) {
+          IO.raiseError(LLMEngineNotConfigured(user.map(_.id).getOrElse("")))
+        } else IO.pure()
       nowInstant <- Clock[IO].realTimeInstant
       now = ZonedDateTime.ofInstant(nowInstant, ZoneId.systemDefault())
       recentLiked <- articleDao.listByFolderWithUserMarking(folderID, articleSize,
@@ -179,8 +186,8 @@ class ArticleService(
         articleDao.listByFolderWithUserMarking(folderID, articleSize - recentLiked.size,
           now, "", session.userID, bookmarked = Some(false)).compile.toList
       }
-      titles = (recentLiked ++ moreArticles).map(_.article.title)
-      searches <- llm.getRecommendSearchQueries(titles, resultSize)
+      articles = (recentLiked ++ moreArticles).map(_.article)
+      searches <- llmModel.get.getRecommendSearchQueries(articles, resultSize, llmApiKey.get)
     } yield SearchTerms(searches)
   }
 

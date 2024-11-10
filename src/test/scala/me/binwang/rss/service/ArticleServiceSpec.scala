@@ -10,7 +10,7 @@ import me.binwang.rss.dao.sql._
 import me.binwang.rss.dao.{ArticleContentDao, ArticleDao}
 import me.binwang.rss.generator.ConnectionPoolManager.connectionPool
 import me.binwang.rss.generator.{ArticleContents, Articles, Folders}
-import me.binwang.rss.llm.OpenAILLM
+import me.binwang.rss.llm.{LLMModels, OpenAILLM}
 import me.binwang.rss.model._
 import me.binwang.rss.util.Throttler
 import org.scalatest.funspec.AnyFunSpec
@@ -46,11 +46,12 @@ class ArticleServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeA
   private implicit val userSessionDao: UserSessionSqlDao = new UserSessionSqlDao()
   private implicit val folderDao: FolderSqlDao = new FolderSqlDao()
   private implicit val folderSourceDao: FolderSourceSqlDao = new FolderSourceSqlDao()
+  private implicit val userDao: UserSqlDao = new UserSqlDao()
   private val articleSearchDao = new ArticleSearchElasticDao(1.0, 0.0)
   private implicit val authorizer: Authorizer = new Authorizer(Throttler(), userSessionDao, folderDao)
-  private val llm = new OpenAILLM(sttpBackend)
+  private val llm = LLMModels(openAI = new OpenAILLM(sttpBackend))
   private val articleService = new ArticleService(articleDao, articleContentDao, articleUserMarkingDao,
-    articleSearchDao, llm, authorizer)
+    articleSearchDao, userDao, llm, authorizer)
 
   private val token = UUID.randomUUID().toString
   private val userID = UUID.randomUUID().toString
@@ -68,6 +69,8 @@ class ArticleServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeA
       _ <- folderSourceDao.createTable()
       _ <- articleUserMarkingDao.dropTable()
       _ <- articleUserMarkingDao.createTable()
+      _ <- userDao.dropTable()
+      _ <- userDao.createTable()
     } yield ()
     createTables.unsafeRunSync()
   }
@@ -80,6 +83,7 @@ class ArticleServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeA
       _ <- folderDao.deleteAll()
       _ <- folderSourceDao.deleteAll()
       _ <- articleUserMarkingDao.deleteAll()
+      _ <- userDao.deleteAll()
     } yield ()
     clearTables.unsafeRunSync()
 

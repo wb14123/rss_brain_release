@@ -311,6 +311,8 @@ message User {
     bool subscribed = 16;
     NSFWSetting nsfwSetting = 17;
     SearchEngine searchEngine = 18;
+    optional LLMEngine llmEngine = 19;
+    optional string llmApiKey = 20;
 }
 
 // Define UserInfo
@@ -328,6 +330,7 @@ message UserInfo {
     bool subscribed = 10;
     NSFWSetting nsfwSetting = 11;
     SearchEngine searchEngine = 12;
+    optional LLMEngine llmEngine = 13;
 }
 
 // Define UserUpdater
@@ -368,6 +371,16 @@ message UserUpdater {
     optional string username = 13;
     optional NSFWSetting nsfwSetting = 14;
     optional SearchEngine searchEngine = 15;
+
+    message LlmEngineOption {
+        optional LLMEngine llmEngineOption = 1;
+    }
+    optional LlmEngineOption llmEngine = 16;
+
+    message LlmApiKeyOption {
+        optional string llmApiKeyOption = 1;
+    }
+    optional LlmApiKeyOption llmApiKey = 17;
 }
 
 // Define UserSession
@@ -570,6 +583,12 @@ message ImportSourcesTask {
 message ImportFailedSource {
     string xmlUrl = 1;
     string error = 2;
+}
+
+// Define LLMEngine
+
+enum LLMEngine {
+    OpenAI = 0;
 }
 
 // Define me.binwang.rss.service.ArticleService
@@ -1275,6 +1294,16 @@ message UpdateUserSettingsRequest {
     string token = 1;
     optional NSFWSetting nsfwSetting = 2;
     optional SearchEngine searchEngine = 3;
+
+    message LlmEngineOption {
+        optional LLMEngine llmEngineOption = 1;
+    }
+    optional LlmEngineOption llmEngine = 4;
+
+    message LlmApiKeyOption {
+        optional string llmApiKeyOption = 1;
+    }
+    optional LlmApiKeyOption llmApiKey = 5;
 }
 
 message RemoveCurrentFolderAndSourceRequest {

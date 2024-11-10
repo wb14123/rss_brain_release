@@ -55,6 +55,9 @@ final case class UserCannotBeActivated(email: String)
 final case class UserDeleteCodeInvalidException(code: String)
   extends ServerException(code = 20009, msg = s"User delete verification code $code is not valid")
 
+final case class LLMEngineNotConfigured(userID: String)
+  extends ServerException(code = 20010, msg = s"LLM engine not configured for user $userID")
+
 // Source service
 
 final case class SourceNotFound(sourceID: String)

@@ -11,16 +11,18 @@ object EditFolderButton {
       xFor := "f in folders",
       attr(":key") := "f.id",
       a(nullHref, xText := "f.name",
-        xOnClick := s"updateFolderPosition('$folderID', await $getPositionFunc(f.id)); $$refs.folderEditMenu.closePopover();")
+        xBind("class") := "f.disabled ? 'isDisabled' : ''",
+        xOnClick := s"if (!f.disabled) {updateFolderPosition('$folderID', await $getPositionFunc(f.id));} $$refs.folderEditMenu.closePopover();")
     )
   }
 
-  private def folderMovingMenu(folderID: String, text: String, getPositionJSFunc: String): Frag = {
+  private def folderMovingMenu(folderID: String, text: Frag, getPositionJSFunc: String): Frag = {
+    val checkLengthJs = "if (folders.length === 0) folders = [{name: 'No other folder', disabled: true}];"
     popoverMenu(
       PopoverMenu.subMenuAttrs,
       a(cls := "folder-move-menu-button", nullHref, text),
       xData := "{folders: []}",
-      xOn("popover-opened") := s"folders = getFoldersFromDom('$folderID', false)",
+      xOn("popover-opened") := s"folders = getFoldersFromDom('$folderID', false) ; $checkLengthJs",
       popoverContent(
         zIndex := "11",
         cls := "folder-select-menu",
@@ -36,12 +38,15 @@ object EditFolderButton {
       popoverContent(
         cls := "folder-op-menu",
         zIndex := "10",
-        folderMovingMenu(folderID, "Move after folder ...", "getPositionAfter"),
-        folderMovingMenu(folderID, "Move before folder ...", "getPositionBefore"),
-        a(nullHref, "Edit folder", hxGet := s"/folders/$folderID/edit", hxSwapContentAttrs, hxPushUrl := "true",
+        folderMovingMenu(folderID, TextWithIcon("north_west", "Move before folder ..."), "getPositionBefore"),
+        folderMovingMenu(folderID, TextWithIcon("south_west", "Move after folder ..."), "getPositionAfter"),
+        a(nullHref, TextWithIcon("settings", "Folder settings"),
+          hxGet := s"/folders/$folderID/edit", hxSwapContentAttrs, hxPushUrl := "true",
           xOnClick := "$refs.folderEditMenu.closePopover()"),
-        a(nullHref, "Delete folder", hxDelete := s"/hx/folders/$folderID",
+        a(nullHref, TextWithIcon("delete", "Delete folder"), hxDelete := s"/hx/folders/$folderID",
           xOnClick := "$refs.folderEditMenu.closePopover()"),
+        a(nullHref, TextWithIcon("public", "Recommendations"),
+          hxGet := s"/folders/$folderID/external-recommend", hxPushUrl := "true", hxSwapContentAttrs)
       )
     )
 

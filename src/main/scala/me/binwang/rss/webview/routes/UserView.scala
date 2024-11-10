@@ -1,6 +1,6 @@
 package me.binwang.rss.webview.routes
 import cats.effect.IO
-import me.binwang.rss.model.{NSFWSetting, SearchEngine}
+import me.binwang.rss.model.{LLMEngine, NSFWSetting, SearchEngine}
 import me.binwang.rss.service.{SystemService, UserService}
 import me.binwang.rss.webview.auth.CookieGetter.reqToCookieGetter
 import me.binwang.rss.webview.basic.ContentRender.wrapContentRaw
@@ -32,8 +32,14 @@ class UserView(userService: UserService, systemService: SystemService) extends H
         div(
           cls := "form-body",
           div(
-            "If you have any feedback or question, feel free to contact us at ",
-            a(href := s"mailto:$customerServiceEmail")(customerServiceEmail), ".",
+            p(
+              "If you encounter any bug, report it to ",
+              a(href := "https://github.com/wb14123/rss_brain_release/issues", target := "_blank")("Github issue tracker"), ".",
+            ),
+            p(
+              "If you have any feedback or question, feel free to contact us at ",
+              a(href := s"mailto:$customerServiceEmail")(customerServiceEmail), ".",
+            ),
           )
         )
       )
@@ -51,9 +57,12 @@ class UserView(userService: UserService, systemService: SystemService) extends H
             urlPrefix = data.values.get("search-engine-url").flatMap(_.headOption).get)
         )
 
+        val llmEngine = data.values.get("llm-engine").flatMap(_.headOption.filter(_.nonEmpty)).map(LLMEngine.withName)
+        val llmApiKey = data.values.get("llm-api-key").flatMap(_.headOption.filter(_.nonEmpty))
+
         userService.updateUserSettings(token = token,
           nsfwSetting = data.values.get("nsfw-setting").map(s => NSFWSetting.withName(s.headOption.get)),
-          searchEngine = Some(searchEngine),
+          searchEngine = Some(searchEngine), Some(llmEngine), llmApiKey.map(Some(_)),
         ).flatMap(_ => HttpResponse.redirect("", "/settings", req))
       }
 
@@ -97,6 +106,8 @@ class UserView(userService: UserService, systemService: SystemService) extends H
                 searchEngineName: '${user.searchEngine.name.getOrElse("")}',
                 searchEngineUrl: '${user.searchEngine.urlPrefix}',
                 nsfwSetting: '${user.nsfwSetting.toString}',
+                llmEngine:  '${user.llmEngine.map(_.toString).getOrElse("")}',
+                llmApiKey:  '',
                 }""",
               cls := "form-section",
               h2("System"),
@@ -124,6 +135,16 @@ class UserView(userService: UserService, systemService: SystemService) extends H
               label("Search Engine URL Prefix"),
               input(name := "search-engine-url", xModel := "searchEngineUrl", `type` := "text",
                 xBind("disabled") := "searchEngineName !== ''"),
+              label("LLM Engine"),
+              select(
+                name := "llm-engine",
+                xModel := "llmEngine",
+                option("Disable", value := ""),
+                option("OpenAI", value := "OpenAI"),
+              ),
+              label("LLM API Key (Hidden once saved)"),
+              input(name := "llm-api-key", xModel := "llmApiKey", `type` := "text",
+                xBind("disabled") := "llmEngine == ''"),
               label("NSFW Content Display"),
               select(
                 name := "nsfw-setting",

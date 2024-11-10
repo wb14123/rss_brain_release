@@ -2,6 +2,7 @@ package me.binwang.rss.llm
 
 import cats.effect.IO
 import me.binwang.rss.llm.LargeLanguageModel.initMessage
+import me.binwang.rss.model.Article
 import org.typelevel.log4cats.LoggerFactory
 
 case class ChatMessage(
@@ -22,27 +23,26 @@ trait LargeLanguageModel {
   private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
 
   // return multiple choices based on previous message
-  def chat(messages: Seq[ChatMessage]): IO[Seq[ChatMessage]]
+  def chat(messages: Seq[ChatMessage], apiKey: String): IO[Seq[ChatMessage]]
 
-  def getRecommendSearchQueries(likedArticleTitles: Seq[String], size: Int): IO[Seq[String]] = {
-    // TODO: replace "videos" in prompt based on the type of articles
+  def getRecommendSearchQueries(articles: Seq[Article], size: Int, apiKey: String): IO[Seq[String]] = {
     val interestQueryStr =
-      """Here are some recent videos in a user's subscription feed, what is his interest?
+      """Here are some recent posts in a user's subscription feed, what is his interest?
         | Which languages the user speak?""".stripMargin + "\n\n" +
-        likedArticleTitles.map(t => s"* $t").mkString("\n")
+        articles.map(a => s"* ${a.title}, posted at ${a.postedAt.toLocalDateTime}").mkString("\n")
     val interestQuery = ChatMessage(role = "user", content = interestQueryStr)
     val initReq = Seq(initMessage, interestQuery)
     for {
-      interestChoices <- chat(initReq)
+      interestChoices <- chat(initReq, apiKey)
       recommendQueryStr = s"""Based on that, could you help me to come with $size search queries so that I can find more
-        | interesting videos for him/her on the Internet? Better to use all the languages the user speaks.
-        | Show only the search queries without any explanation. One query per line.""".stripMargin
+        | interesting articles or videos for him/her on the Internet? Better to use all the languages the user speaks.
+        | Show only the search queries without any explanation. One query per line. Do not include number or quotes""".stripMargin
       recommendQuery = ChatMessage(role = "user", content = recommendQueryStr)
       nextQueries = initReq :+ interestChoices.head :+ recommendQuery
-      recommendChoices <- chat(nextQueries)
+      recommendChoices <- chat(nextQueries, apiKey)
       // TODO: change to debug (or output to a seperate log file) after tuning results
       _ <- logger.info(s"LLM prompts and results for recommend search. Query: $nextQueries, result: $recommendChoices")
-      result = recommendChoices.head.content.split('\n').map(removeLeadingListNumber)
+      result = recommendChoices.head.content.split('\n').map(removeLeadingListNumber).filter(_.nonEmpty)
     } yield result
   }
 

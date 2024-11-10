@@ -27,21 +27,27 @@ object SearchBox {
       ),
       div(
         cls := "form-row search-options",
-        label("Order By"),
-        select(
-          name := "by_time",
-          option(value := "false", "Most relevant first", if (!searchOptions.exists(_.sortByTime)) selected else ""),
-          option(value := "true", "Most recent first", if (searchOptions.exists(_.sortByTime)) selected else ""),
+        div(
+          cls := "search-option",
+          label("Order By"),
+          select(
+            name := "by_time",
+            option(value := "false", "Most relevant first", if (!searchOptions.exists(_.sortByTime)) selected else ""),
+            option(value := "true", "Most recent first", if (searchOptions.exists(_.sortByTime)) selected else ""),
+          ),
         ),
-        label("Time"),
-        select(
-          name := "time_range",
-          option(value := "", "All time"),
-          option(value := daySeconds, "Past 24 hours", timeSelected(daySeconds, timeRangeOpt)),
-          option(value := weekSeconds, "Past week", timeSelected(weekSeconds, timeRangeOpt)),
-          option(value := monthSeconds, "Past month", timeSelected(monthSeconds, timeRangeOpt)),
-          option(value := yearSeconds, "Past year", timeSelected(yearSeconds, timeRangeOpt)),
-        )
+        div(
+          cls := "search-option",
+          label("Time"),
+          select(
+            name := "time_range",
+            option(value := "", "All time"),
+            option(value := daySeconds, "Past 24 hours", timeSelected(daySeconds, timeRangeOpt)),
+            option(value := weekSeconds, "Past week", timeSelected(weekSeconds, timeRangeOpt)),
+            option(value := monthSeconds, "Past month", timeSelected(monthSeconds, timeRangeOpt)),
+            option(value := yearSeconds, "Past year", timeSelected(yearSeconds, timeRangeOpt)),
+          )
+        ),
       ),
     )
   }

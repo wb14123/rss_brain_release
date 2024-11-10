@@ -182,6 +182,9 @@ window.getPositionBefore = getPositionBefore;
 
 function getNextFolderPosition() {
     const folders = getFoldersFromDom();
+    if (folders.length == 0) {
+        return POS_STEP;
+    }
     const lastFolder = folders[folders.length - 1];
     return lastFolder.position + POS_STEP;
 }

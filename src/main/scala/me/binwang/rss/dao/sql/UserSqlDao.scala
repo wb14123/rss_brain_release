@@ -34,7 +34,9 @@ class UserSqlDao(implicit val connectionPool: ConnectionPool) extends UserDao wi
             subscribeEndAt timestamp not null,
             subscribed boolean not null default false,
             nsfwSetting varchar not null default 'BLUR',
-            searchEngine jsonb not null
+            searchEngine jsonb not null,
+            llmEngine varchar default null,
+            llmApiKey varchar default null
           )
          """)
       .update
@@ -94,6 +96,8 @@ class UserSqlDao(implicit val connectionPool: ConnectionPool) extends UserDao wi
         setOpt(_.username, updater.username),
         setOpt(_.nsfwSetting, updater.nsfwSetting),
         setOpt(_.searchEngine, updater.searchEngine),
+        setOpt(_.llmEngine, updater.llmEngine),
+        setOpt(_.llmApiKey, updater.llmApiKey),
       )
     run(q).transact(xa).map(_ > 0)
   }

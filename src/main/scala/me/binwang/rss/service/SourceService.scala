@@ -1,6 +1,7 @@
 package me.binwang.rss.service
 
 import cats.effect.{Clock, IO}
+import cats.implicits._
 import me.binwang.archmage.core.CatsMacros.timed
 import me.binwang.rss.dao.{FolderDao, FolderSourceDao, SourceDao}
 import me.binwang.rss.fetch.fetcher.BackgroundFetcher
@@ -218,35 +219,39 @@ class SourceService(
   }
 
   def findSource(token: String, url: String): fs2.Stream[IO, SourceResult] = timed {
-    authorizer.authorizeAsStream(token).flatMap( _ =>
+    authorizer.authorizeAsStream(token).flatMap(_ =>
       seqToStream(sourceFinder.findSource(url)))
   }
 
   def replaceSourceInstance(token: String, oldInstance: String, newInstance: String, size: Int): IO[Int] = timed {
     authorizer.authorize(token).flatMap { session =>
-      folderSourceDao.getSourcesByUser(session.userID, size).evalMap { folderSource =>
-        val oldUrl = folderSource.source.xmlUrl
-        val newUrl = oldUrl.replace(oldInstance, newInstance)
-        if (newUrl.equals(oldUrl)) {
-          IO.pure(None)
-        } else {
-          (for {
-            _ <- logger.info(s"Try to verify source from $newUrl for replacing instance")
-            source <- getOrImportSourceInner(newUrl)
-            _ <- logger.info(s"Verified source from $newUrl for replacing instance")
-            _ <- logger.info(s"Adding source ${source.id} from $newUrl to folder ${folderSource.folderMapping.folderID}")
-            _ <- folderSourceDao.addSourceToFolder(folderSource.folderMapping.copy(sourceID = source.id))
-            _ <- logger.info(s"Added source ${source.id} from $newUrl to folder ${folderSource.folderMapping.folderID}")
-            _ <- logger.info(s"Deleting source ${folderSource.source.id} from ${folderSource.source.xmlUrl} " +
-              s"from folder ${folderSource.folderMapping.folderID}")
-            _ <- folderSourceDao.delSourceFromFolder(folderSource.folderMapping.folderID, folderSource.source.id)
-            _ <- logger.info(s"Deleted source ${folderSource.source.id} from ${folderSource.source.xmlUrl} " +
-              s"from folder ${folderSource.folderMapping.folderID}")
-          } yield Some()).handleErrorWith { err =>
-            logger.error(err)(s"Error when replace $oldInstance with $newInstance").map(_ => None)
+      folderSourceDao.getSourcesByUser(session.userID, size).compile.toList.flatMap {
+        _.map { folderSource =>
+          val oldUrl = folderSource.source.xmlUrl
+          val newUrl = oldUrl.replace(oldInstance, newInstance)
+          if (newUrl.equals(oldUrl)) {
+            IO.pure(None)
+          } else {
+            (for {
+              _ <- logger.info(s"Try to verify source from $newUrl for replacing instance")
+              source <- getOrImportSourceInner(newUrl)
+              _ <- logger.info(s"Verified source from $newUrl for replacing instance")
+              _ <- logger.info(s"Adding source ${source.id} from $newUrl to folder ${folderSource.folderMapping.folderID}")
+              _ <- folderSourceDao.addSourceToFolder(folderSource.folderMapping.copy(sourceID = source.id))
+              _ <- logger.info(s"Added source ${source.id} from $newUrl to folder ${folderSource.folderMapping.folderID}")
+              _ <- logger.info(s"Deleting source ${folderSource.source.id} from ${folderSource.source.xmlUrl} " +
+                s"from folder ${folderSource.folderMapping.folderID}")
+              _ <- folderSourceDao.delSourceFromFolder(folderSource.folderMapping.folderID, folderSource.source.id)
+              _ <- logger.info(s"Deleted source ${folderSource.source.id} from ${folderSource.source.xmlUrl} " +
+                s"from folder ${folderSource.folderMapping.folderID}")
+            } yield Some()).handleErrorWith { err =>
+              logger.error(err)(s"Error when replace $oldInstance with $newInstance").map(_ => None)
+            }
           }
+        }.sequence.map {
+          _.count(_.isDefined)
         }
-      }.filter(_.isDefined).fold(0)((count, _) => count + 1).compile.last.map(_.getOrElse(0))
+      }
     }
   }
 

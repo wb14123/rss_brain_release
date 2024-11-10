@@ -940,6 +940,9 @@ popover-content a:hover {
 .search-options {
     width: 100%;
     font-size: 12px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .search-options * {
@@ -952,6 +955,12 @@ popover-content a:hover {
 
 .search-options select {
     margin-right: 20px;
+    padding-right: 60px !important;
+}
+
+.search-option {
+    display: flex;
+    flex-direction: row;
 }
 
 /* audio player */
@@ -1008,4 +1017,15 @@ popover-content a:hover {
 
 .nsfw-show .nsfw .article-desc-nsfw {
     display: none;
+}
+
+.text-with-icon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.show-comment-btn {
+    font-size: 18px;
 }

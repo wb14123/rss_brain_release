@@ -3,7 +3,7 @@ package me.binwang.rss.cmd
 import cats.effect.{IO, Resource}
 import cats.implicits._
 import com.typesafe.config.ConfigFactory
-import me.binwang.rss.llm.OpenAILLM
+import me.binwang.rss.llm.{LLMModels, OpenAILLM}
 import me.binwang.rss.model.ImportLimit
 import me.binwang.rss.service._
 import me.binwang.rss.sourcefinder.{HtmlSourceFinder, MultiSourceFinder, RegexSourceFinder}
@@ -37,7 +37,7 @@ object Services {
   def apply(baseServer: BaseServer): Resource[IO, Services] = {
 
     val authorizer: Authorizer = new Authorizer(throttler, baseServer.userSessionDao, baseServer.folderDao)
-    val llm = new OpenAILLM(baseServer.sttpBackend)
+    val llmModels = LLMModels(openAI = new OpenAILLM(baseServer.sttpBackend))
 
     val importLimit = ImportLimit(
       paidFolderCount = Try(config.getInt("import.limit.paid-user-folders")).toOption,
@@ -54,7 +54,7 @@ object Services {
 
       new Services(
         new ArticleService(baseServer.articleDao, baseServer.articleContentDao, baseServer.articleUserMarkingDao,
-          baseServer.articleSearchDao, llm, authorizer),
+          baseServer.articleSearchDao, baseServer.userDao, llmModels, authorizer),
         new FolderService(baseServer.folderDao, baseServer.folderSourceDao,
           baseServer.sourceDao, baseServer.importSourcesTaskDao, authorizer, importLimit),
         new SourceService(baseServer.sourceDao, baseServer.folderSourceDao, baseServer.folderDao, baseServer.fetcher,

@@ -6,12 +6,13 @@ import scalatags.Text.all._
 
 object EditSourceButton {
 
-  private def folderMovingMenu(sourceID: String, folderID: String, text: String, func: String): Frag = {
+  private def folderMovingMenu(sourceID: String, folderID: String, text: Frag, func: String): Frag = {
+    val checkLengthJs = "if (folders.length === 0) folders = [{name: 'No other folder', disabled: true}];"
     popoverMenu(
       PopoverMenu.subMenuAttrs,
       a(cls := "folder-move-menu-button", nullHref, text),
       xData := "{folders: []}",
-      xOn("popover-opened") := s"folders = getFoldersFromDom('$folderID', true)",
+      xOn("popover-opened") := s"folders = getFoldersFromDom('$folderID', true) ; $checkLengthJs",
       popoverContent(
         zIndex := "11",
         cls := "folder-select-menu",
@@ -19,13 +20,14 @@ object EditSourceButton {
           xFor := "f in folders",
           attr(":key") := "f.id",
           a(nullHref, xText := "f.name",
-            xOnClick := s"$func('$sourceID', '$folderID', f.id, f.nextPosition); $$refs.folderEditMenu.closePopover();")
+            xBind("class") := "f.disabled ? 'isDisabled' : ''",
+            xOnClick := s"if (!f.disabled) {$func('$sourceID', '$folderID', f.id, f.nextPosition);} $$refs.folderEditMenu.closePopover();")
         )
       ),
     )
   }
 
-  private def sourceMovingMenu(sourceID: String, folderID: String, text: String, func: String): Frag = {
+  private def sourceMovingMenu(sourceID: String, folderID: String, text: Frag, func: String): Frag = {
     val checkLengthJs = "if (sources.length === 0) sources = [{name: 'No other feed', disabled: true}];"
     popoverMenu(
       PopoverMenu.subMenuAttrs,
@@ -40,7 +42,7 @@ object EditSourceButton {
           attr(":key") := "s.id",
           a(nullHref, xText := "s.name",
             xBind("class") := "s.disabled ? 'isDisabled' : ''",
-            xOnClick := s"$func('$folderID', '$sourceID', s.id) ; $$refs.folderEditMenu.closePopover(); ")
+            xOnClick := s"if (!s.disabled) {$func('$folderID', '$sourceID', s.id);} $$refs.folderEditMenu.closePopover(); ")
         )
       )
     )
@@ -54,15 +56,17 @@ object EditSourceButton {
         popoverContent(
           cls := "folder-op-menu",
           zIndex := "10",
-          folderMovingMenu(sourceID, folderID, "Move to folder ...", "moveSourceToFolder"),
-          folderMovingMenu(sourceID, folderID, "Copy to folder ...", "copySourceToFolder"),
-          sourceMovingMenu(sourceID, folderID, "Move before feed ...", "moveSourceBefore"),
-          sourceMovingMenu(sourceID, folderID, "Move after feed ...", "moveSourceAfter"),
-          a(nullHref, "Edit feed", hxGet := s"/folders/$folderID/sources/$sourceID/edit", hxSwapContentAttrs, hxPushUrl := "true",
-            xOnClick := "$refs.folderEditMenu.closePopover()"),
-          a(nullHref, "Delete from folder",
+          folderMovingMenu(sourceID, folderID, TextWithIcon("content_cut", "Move to folder ..."), "moveSourceToFolder"),
+          folderMovingMenu(sourceID, folderID, TextWithIcon("content_copy", "Copy to folder ..."), "copySourceToFolder"),
+          sourceMovingMenu(sourceID, folderID, TextWithIcon("north_west", "Move before feed ..."), "moveSourceBefore"),
+          sourceMovingMenu(sourceID, folderID, TextWithIcon("south_west", "Move after feed ..."), "moveSourceAfter"),
+          a(nullHref, TextWithIcon("settings", "Feed settings"),
+            hxGet := s"/folders/$folderID/sources/$sourceID/edit",
+            hxSwapContentAttrs, hxPushUrl := "true", xOnClick := "$refs.folderEditMenu.closePopover()"),
+          a(nullHref, TextWithIcon("delete", "Delete from folder"),
             xOnClick := s"deleteSourceFromFolder('$sourceID', '$folderID') ; $$refs.folderEditMenu.closePopover()"),
-          a(nullHref, "Unsubscribe", xOnClick := s"unsubscribeSource('$sourceID'); $$refs.folderEditMenu.closePopover()"),
+          a(nullHref, TextWithIcon("delete_forever", "Unsubscribe"),
+            xOnClick := s"unsubscribeSource('$sourceID'); $$refs.folderEditMenu.closePopover()"),
         )
       )
     }

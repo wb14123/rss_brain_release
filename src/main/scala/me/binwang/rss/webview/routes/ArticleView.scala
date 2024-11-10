@@ -33,12 +33,19 @@ class ArticleView(articleService: ArticleService) extends Http4sView with Scalat
             ArticleRender.articleAttrs(articleWithMarking.userMarking, bindReadClass = false),
             div(
               id := "article-reader",
+              xData := "{showComments: true}",
               div(cls := "article-title")(article.article.title),
               ArticleRender.renderInfo(article.article, req.params.get("in_folder")),
               ArticleRender.mediaDom(article.article, ArticleRender.mediaRenderOptionInReader),
               div(cls := "article-content")(raw(article.content.validHtml)),
               ArticleRender.renderOps(article.article, showActionable = false),
-              tag("somment-comment")(attr("link") := article.article.link),
+              if (article.article.comments.getOrElse(0) > 0) { Seq(
+                a(nullHref, cls := "comment-op show-comment-btn", xShow := "showComments",
+                  xOnClick := "showComments = false", "Hide comments"),
+                a(nullHref, cls := "comment-op show-comment-btn", xShow := "!showComments",
+                  xOnClick := "showComments = true", "Show comments"),
+                tag("somment-comment")(xShow := "showComments", attr("link") := article.article.link),
+              )} else "",
               div(
                 id := "recommendation-sections",
                 div(hxTrigger := "intersect once",  hxTarget := "this", hxSwap := "outerHTML",
