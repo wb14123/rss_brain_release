@@ -38,6 +38,7 @@ object EditFolderButton {
       popoverContent(
         cls := "folder-op-menu",
         zIndex := "10",
+        ArticleLayoutMenu(s"/hx/folders/$folderID/updateAndRefresh"),
         folderMovingMenu(folderID, TextWithIcon("north_west", "Move before folder ..."), "getPositionBefore"),
         folderMovingMenu(folderID, TextWithIcon("south_west", "Move after folder ..."), "getPositionAfter"),
         a(nullHref, TextWithIcon("settings", "Folder settings"),

@@ -35,7 +35,9 @@ initialize := {
 }
 
 
-lazy val doobieVersion = "1.0.0-RC4"
+// I fixed a bug based in doobie but it's not released yet: https://github.com/typelevel/doobie/issues/2132
+// TODO: Update to new version after it's released
+lazy val doobieVersion = "1.0.0-RC5"
 
 Test / parallelExecution := false
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oF")
@@ -148,7 +150,7 @@ libraryDependencies ++= Seq(
   "io.prometheus" % "simpleclient" % prometheusVersion,
   "io.prometheus" % "simpleclient_hotspot" % prometheusVersion,
   "io.prometheus" % "simpleclient_httpserver" % prometheusVersion,
-  "me.binwang.archmage" %% "core" % "0.1.0-SNAPSHOT",
+  "me.binwang.archmage" %% "core" % "0.1.0",
 
   // throttling
   "com.google.guava" % "guava" % "31.1-jre",

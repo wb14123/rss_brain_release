@@ -4,6 +4,8 @@ object ArticleListLayout extends Enumeration {
   type ArticleListLayout = Value
   val
   LIST,
-  GRID
+  GRID,
+  SOCIAL_MEDIA,
+  COMPACT
   = Value
 }

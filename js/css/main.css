@@ -604,6 +604,39 @@ progress {
   font-size: 14px !important;
 }
 
+.article-info-social-media {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.article-info-social-media .source-avatar {
+  height: 48px !important;
+  width: 48px !important;
+  border-radius: 50%;
+}
+
+.social-media-info-details {
+  display: flex;
+  flex-direction: column
+}
+
+.social-media-info-details .source-title {
+  color: var(--pico-color-force);;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.social-media-info-details .source-title:hover {
+  color: var(--pico-color);
+}
+
+.social-media-info-details .article-time {
+  font-size: 16px;
+  color: var(--pico-code-color);
+}
+
 .article-desc {
   font-size: 18px;
   max-height: 260px;

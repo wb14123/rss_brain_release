@@ -40,7 +40,7 @@ object SourcesPreview {
         tag("progress")(id := s"feed-article-indicator-${source.id}", cls := "htmx-indicator"),
         div(cls := "feed-preview-article-list-loader", hxTrigger := "load once", hxSwap := "outerHTML",
           hxIndicator := s"#feed-article-indicator-${source.id}",
-          hxGet := s"/hx/sources/${source.id}/articles/by_time/horizontal?noWrap")
+          hxGet := s"/hx/sources/${source.id}/articles/by_time/list?direction=horizontal&noWrap")
       )
     }.ifEmpty(fs2.Stream.emit(emptyDom))
 

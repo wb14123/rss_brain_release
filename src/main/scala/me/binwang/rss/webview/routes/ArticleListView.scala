@@ -14,7 +14,7 @@ import me.binwang.rss.webview.basic.ErrorHandler.RedirectDefaultFolderException
 import me.binwang.rss.webview.basic.HtmlCleaner.str2cleaner
 import me.binwang.rss.webview.basic.ScalaTagAttributes._
 import me.binwang.rss.webview.routes.ArticleList._
-import me.binwang.rss.webview.widgets.ArticleRender.{ArticleRenderLayout, GridLayout, HorizontalLayout, VerticalLayout}
+import me.binwang.rss.webview.widgets.ArticleRender.{ArticleListDirection, Horizontal, Vertical}
 import me.binwang.rss.webview.widgets.{ArticleRender, EditFolderButton, EditSourceButton, PageHeader, SearchBox}
 import org.http4s.dsl.io._
 import org.http4s.headers._
@@ -28,11 +28,6 @@ object ArticleList {
   def sortBy(articleOrder: ArticleOrder): String = articleOrder match {
     case ArticleOrder.TIME => "by_time"
     case ArticleOrder.SCORE => "by_score"
-  }
-
-  def layout(layout: ArticleListLayout): String = layout match {
-    case ArticleListLayout.LIST => "list"
-    case ArticleListLayout.GRID => "grid"
   }
 
   def mapToQueryStr(m: Map[String, String]): String = {
@@ -52,9 +47,9 @@ object ArticleList {
     if (folder.isUserDefault) {
       s"/hx/articles?title=All Articles"
     } else if (folder.searchEnabled && folder.searchTerm.isDefined) {
-      s"/folders/$folderID/articles/search/${layout(folder.articleListLayout)}?title=$folderName&by_time&q=${folder.searchTerm.get}"
+      s"/folders/$folderID/articles/search/${folder.articleListLayout}?title=$folderName&by_time&q=${folder.searchTerm.get}"
     } else {
-      s"/hx/folders/$folderID/articles/${sortBy(folder.articleOrder)}/${layout(folder.articleListLayout)}?title=$folderName"
+      s"/hx/folders/$folderID/articles/${sortBy(folder.articleOrder)}/${folder.articleListLayout}?title=$folderName"
     }
   }
 
@@ -64,7 +59,7 @@ object ArticleList {
       "in_folder" -> fs.folderMapping.folderID,
     )
     s"/hx/sources/${fs.folderMapping.sourceID}/articles/${sortBy(fs.folderMapping.articleOrder)}" +
-      s"/${layout(fs.folderMapping.articleListLayout)}?${mapToQueryStr(newParams)}"
+      s"/${fs.folderMapping.articleListLayout}?${mapToQueryStr(newParams)}"
   }
 
 }
@@ -91,15 +86,6 @@ class ArticleListView(articleService: ArticleService, userService: UserService, 
       rangeSeconds.map(s => now.minusSeconds(s))
     }
   }
-
-  private def layoutFromStr(str: String): ArticleRenderLayout = str match {
-    case "list" => VerticalLayout()
-    case "grid" => GridLayout()
-    case "horizontal" => HorizontalLayout()
-    case _ => VerticalLayout()
-  }
-
-
 
   private def articlesWithHeader(req: Request[IO], showFilters: Boolean, editButton: Option[Frag],
       searchLink: Option[String]): Frag = {
@@ -194,6 +180,14 @@ class ArticleListView(articleService: ArticleService, userService: UserService, 
     s"/search?sourceID=$sourceID&layout=$layout&${mapToQueryStr(req.params)}"
   }
 
+  private def direction(req: Request[IO]): ArticleListDirection = {
+    if (req.params.get("direction").exists(_.equals("horizontal"))) {
+      Horizontal()
+    } else {
+      Vertical()
+    }
+  }
+
   val routes: HttpRoutes[IO] = HttpRoutes.of[IO] {
 
     case req @ GET -> Root / "hx" / "articles" => articleWrapperOr(req, searchLink = Some(allSearchLink(req))) {
@@ -205,7 +199,7 @@ class ArticleListView(articleService: ArticleService, userService: UserService, 
           req.params.get("read").map(_ => false),
           req.params.get("bookmarked").map(_ => true),
         )
-        ArticleRender.renderList(articlesStream, VerticalLayout(), Some(article => {
+        ArticleRender.renderList(articlesStream, direction(req), ArticleListLayout.LIST, Some(article => {
           val postedBefore = ModelTranslator.dateTimeToLong(article.postedAt)
           val newParams = req.params ++ Map(
             "postedBefore" -> postedBefore.toString,
@@ -228,7 +222,7 @@ class ArticleListView(articleService: ArticleService, userService: UserService, 
           val baseLink = baseAllSearchLink()
           val searchBox: fs2.Stream[IO, Frag] = if (showSearchBox)
             fs2.Stream.emit(SearchBox(baseLink, req, Some(searchOptions))) else fs2.Stream.empty
-          searchBox ++ ArticleRender.renderList(articlesStream, VerticalLayout(), Some(_ =>
+          searchBox ++ ArticleRender.renderList(articlesStream, direction(req), ArticleListLayout.LIST, Some(_ =>
             s"$baseLink?${searchOptionsToUrlParams(nextSearchOption)}"
           ))
         }
@@ -261,7 +255,7 @@ class ArticleListView(articleService: ArticleService, userService: UserService, 
             req.params.get("read").map(_ => false),
             req.params.get("bookmarked").map(_ => true),
           )
-          ArticleRender.renderList(articlesStream, layoutFromStr(layout), Some(article => {
+          ArticleRender.renderList(articlesStream, direction(req), ArticleListLayout.withName(layout.toUpperCase), Some(article => {
             val postedBefore = ModelTranslator.dateTimeToLong(article.postedAt)
             val newParams = req.params ++ Map(
               "postedBefore" -> postedBefore.toString,
@@ -284,7 +278,7 @@ class ArticleListView(articleService: ArticleService, userService: UserService, 
           req.params.get("read").map(_ => false),
           req.params.get("bookmarked").map(_ => true),
         )
-        ArticleRender.renderList(articlesStream, layoutFromStr(layout), Some(article => {
+        ArticleRender.renderList(articlesStream, direction(req), ArticleListLayout.withName(layout.toUpperCase), Some(article => {
           val newParams = req.params ++ Map(
             "maxScore" -> article.score.toString,
             "articleID" -> article.id,
@@ -306,9 +300,10 @@ class ArticleListView(articleService: ArticleService, userService: UserService, 
           val baseLink = baseSourceSearchLink(sourceID, layout)
           val searchBox: fs2.Stream[IO, Frag] = if (showSearchBox)
             fs2.Stream.emit(SearchBox(baseLink, req, Some(searchOptions))) else fs2.Stream.empty
-          searchBox ++ ArticleRender.renderList(articlesStream, layoutFromStr(layout), Some(_ =>
-            s"$baseLink?${searchOptionsToUrlParams(nextSearchOption)}"
-          ))
+          searchBox ++ ArticleRender.renderList(articlesStream, direction(req),
+            ArticleListLayout.withName(layout.toUpperCase),
+            Some(_ => s"$baseLink?${searchOptionsToUrlParams(nextSearchOption)}"),
+          )
         }
       }
     }
@@ -334,7 +329,7 @@ class ArticleListView(articleService: ArticleService, userService: UserService, 
             req.params.get("read").map(_ => false),
             req.params.get("bookmarked").map(_ => true),
           )
-          ArticleRender.renderList(articlesStream, layoutFromStr(layout), Some(article => {
+          ArticleRender.renderList(articlesStream, direction(req), ArticleListLayout.withName(layout.toUpperCase), Some(article => {
             val postedBefore = ModelTranslator.dateTimeToLong(article.postedAt)
             val newParams = req.params ++ Map(
               "postedBefore" -> postedBefore.toString,
@@ -357,7 +352,7 @@ class ArticleListView(articleService: ArticleService, userService: UserService, 
           req.params.get("read").map(_ => false),
           req.params.get("bookmarked").map(_ => true),
         )
-        ArticleRender.renderList(articlesStream, layoutFromStr(layout), Some(article => {
+        ArticleRender.renderList(articlesStream, direction(req), ArticleListLayout.withName(layout.toUpperCase), Some(article => {
           val newParams = req.params ++ Map(
             "maxScore" -> article.score.toString,
             "articleID" -> article.id,
@@ -379,9 +374,10 @@ class ArticleListView(articleService: ArticleService, userService: UserService, 
           val baseLink = baseFolderSearchLink(folderID, layout)
           val searchBox: fs2.Stream[IO, Frag] = if (showSearchBox)
             fs2.Stream.emit(SearchBox(baseLink, req, Some(searchOptions))) else fs2.Stream.empty
-          searchBox ++ ArticleRender.renderList(articlesStream, layoutFromStr(layout), Some(_ =>
-            s"$baseLink?${searchOptionsToUrlParams(nextSearchOption)}"
-          ))
+          searchBox ++ ArticleRender.renderList(articlesStream, direction(req),
+            ArticleListLayout.withName(layout.toUpperCase),
+            Some(_ => s"$baseLink?${searchOptionsToUrlParams(nextSearchOption)}")
+          )
         }
       }
     }

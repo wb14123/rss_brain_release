@@ -1,7 +1,9 @@
 package me.binwang.rss.webview.widgets
 
 import cats.effect.IO
-import me.binwang.rss.model.{Article, ArticleUserMarking, ArticleWithUserMarking, MediaGroup, MediaMedium}
+import me.binwang.rss.grpc.grpc_api.UserUpdater.CurrentFolderIDOption
+import me.binwang.rss.model.ArticleListLayout.ArticleListLayout
+import me.binwang.rss.model.{Article, ArticleListLayout, ArticleUserMarking, ArticleWithUserMarking, MediaGroup, MediaMedium}
 import me.binwang.rss.webview.basic.HtmlCleaner.str2cleaner
 import me.binwang.rss.webview.basic.{ContentRender, ProxyUrl}
 import me.binwang.rss.webview.basic.ScalaTagAttributes._
@@ -14,10 +16,9 @@ import java.nio.charset.{Charset, StandardCharsets}
 
 object ArticleRender {
 
-  sealed trait ArticleRenderLayout
-  case class VerticalLayout() extends ArticleRenderLayout
-  case class HorizontalLayout() extends ArticleRenderLayout
-  case class GridLayout() extends ArticleRenderLayout
+  sealed trait ArticleListDirection
+  case class Vertical() extends ArticleListDirection
+  case class Horizontal() extends ArticleListDirection
 
   case class MediaRenderOption(
       showAudio: Boolean,
@@ -46,7 +47,7 @@ object ArticleRender {
       is := "multi-imgs",
       attr("srcs") := s"$url $proxyUrl",
       attr("loading") := "lazy",
-      alt := s"${desc.getOrElse("").escapeHtml}",
+      alt := s"${desc.getOrElse("").escapeHtml.take(20)}",
       if (addVideoClass) cls := "video-img" else "",
     )
   }
@@ -96,6 +97,21 @@ object ArticleRender {
     )
   }
 
+  def renderSocialMediaInfo(article: Article, folderIDOpt: Option[String]): Frag = {
+    val sourceUrl = s"/sources/${article.sourceID}/articles${getFolderParam(folderIDOpt)}"
+    val sourceTitle = a(cls := "source-title", hxGet := sourceUrl, hxPushUrl := sourceUrl,
+      ContentRender.hxSwapContentAttrs, nullHref)(article.sourceTitle.getOrElse[String]("Unknown"))
+    div(
+      cls := "article-info-social-media",
+      SourceIcon(article.sourceID),
+      div(cls := "social-media-info-details",
+        div(sourceTitle),
+        div(cls := "article-time", xText := s"new Date(${article.postedAt.toEpochSecond * 1000}).toLocaleString()")
+      ),
+    )
+  }
+
+
   def articleAttrs(userMarking: ArticleUserMarking, bindReadClass: Boolean): Seq[generic.AttrPair[Builder, String]] = {
     val bindClass = attr("x-bind:class") := "read?'article-read':''"
     val data = xData := s"{read: ${userMarking.read}, bookmarked: ${userMarking.bookmarked}}"
@@ -138,8 +154,8 @@ object ArticleRender {
   }
 
 
-  def render(articleWithMarking: ArticleWithUserMarking, layout: ArticleRenderLayout,
-      folderIDOpt: Option[String]): Frag = {
+  def render(articleWithMarking: ArticleWithUserMarking, direction: ArticleListDirection,
+      layout: ArticleListLayout, folderIDOpt: Option[String]): Frag = {
     val article = articleWithMarking.article
     val readAttr = articleAttrs(articleWithMarking.userMarking, bindReadClass = true)
 
@@ -160,22 +176,25 @@ object ArticleRender {
     val markReadDom = div(hxPost :=s"/hx/articles/${article.id}/state/read/true", hxSwap := "none",
       hxTrigger := s"click from:.article-${article.id}-click")
 
-    val articleInfo = renderInfo(article, folderIDOpt)
+    val articleInfo = if (layout == ArticleListLayout.SOCIAL_MEDIA) renderSocialMediaInfo(article, folderIDOpt)
+      else  renderInfo(article, folderIDOpt)
     val articleOps = renderOps(article)
     val articleTitle = div(cls := s"article-title $clickClasses", clickAttr)(article.title)
     val nsfwClass = if (article.nsfw) "nsfw" else ""
-    if (!layout.isInstanceOf[GridLayout]) {
-      val directionClass = if (layout.isInstanceOf[VerticalLayout]) "article-vertical" else "article-horizontal"
+    val layoutClass = s"article-${layout.toString.toLowerCase.replace("_", "-")}"
+    if (layout != ArticleListLayout.GRID) {
+      val directionClass = if (direction.isInstanceOf[Vertical]) "article-vertical" else "article-horizontal"
       div(
         id := s"article-${article.id}",
-        cls := s"article $directionClass $nsfwClass",
+        cls := s"article $directionClass $nsfwClass $layoutClass",
         readAttr,
         markReadDom,
-        articleTitle,
+        if (layout != ArticleListLayout.SOCIAL_MEDIA) articleTitle else "",
         articleInfo,
-        mediaDom(article),
-        div(cls := s"article-desc $clickClasses", clickAttr)(raw(article.description.validHtml)),
-        if (article.nsfw) {
+        if (layout != ArticleListLayout.COMPACT) mediaDom(article) else "",
+        if (layout != ArticleListLayout.COMPACT)
+          div(cls := s"article-desc $clickClasses", clickAttr)(raw(article.description.validHtml)) else "",
+        if (layout != ArticleListLayout.COMPACT && article.nsfw) {
           div(cls := s"article-desc-nsfw", clickAttr)("[NSFW Content]")
         } else "",
         articleOps,
@@ -196,14 +215,19 @@ object ArticleRender {
     }
   }
 
-  def renderList(articles: fs2.Stream[IO, ArticleWithUserMarking], layout: ArticleRenderLayout = VerticalLayout(),
-      nextPageUrl: Option[Article => String] = None, folderIDOpt: Option[String] = None): fs2.Stream[IO, Frag] = {
+  def renderList(
+      articles: fs2.Stream[IO, ArticleWithUserMarking],
+      direction: ArticleListDirection = Vertical(),
+      layout: ArticleListLayout = ArticleListLayout.LIST,
+      nextPageUrl: Option[Article => String] = None,
+      folderIDOpt: Option[String] = None,
+    ): fs2.Stream[IO, Frag] = {
 
     val articlesDom = if (nextPageUrl.isEmpty) {
-      articles.map(a => render(a, layout ,folderIDOpt))
+      articles.map(a => render(a, direction, layout, folderIDOpt))
     } else {
       articles.zipWithNext.flatMap { case (article, nextArticleOpt) =>
-        val articleDom = render(article, layout, folderIDOpt)
+        val articleDom = render(article, direction, layout, folderIDOpt)
         if (nextArticleOpt.isDefined) {
           fs2.Stream.emit(articleDom)
         } else {
@@ -217,10 +241,13 @@ object ArticleRender {
       }
     }
 
-    val listClass = layout match {
-      case _: VerticalLayout => "article-list-vertical"
-      case _: HorizontalLayout => "article-list-horizontal"
-      case _: GridLayout => "article-list-grid"
+    val listClass = if (layout == ArticleListLayout.GRID) {
+      "article-list-grid"
+    } else {
+      direction match {
+        case _: Vertical => "article-list-vertical"
+        case _: Horizontal => "article-list-horizontal"
+      }
     }
     val header: Frag = raw(s"""<div class="$listClass">""")
     val tail: Frag = raw("</div>")

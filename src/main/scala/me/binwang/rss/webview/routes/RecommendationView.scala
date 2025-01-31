@@ -8,7 +8,7 @@ import me.binwang.rss.webview.basic.ContentRender.{hxSwapContentAttrs, wrapConte
 import me.binwang.rss.webview.basic.ScalaTagAttributes._
 import me.binwang.rss.webview.basic.{HttpResponse, ScalatagsSeqInstances}
 import me.binwang.rss.webview.widgets.{ArticleRender, PageHeader, SourcesPreview}
-import me.binwang.rss.webview.widgets.ArticleRender.HorizontalLayout
+import me.binwang.rss.webview.widgets.ArticleRender.Horizontal
 import me.binwang.rss.webview.widgets.TimeSelection._
 import org.http4s.{HttpRoutes, MediaType}
 import org.http4s.dsl.io._
@@ -207,7 +207,7 @@ class RecommendationView(moreLikeThisService: MoreLikeThisService, articleServic
         req.params.get("postedBefore").flatMap(_.toLongOption).map(t => ModelTranslator.longToDateTime(t)),
         req.params.get("postedAfter").flatMap(_.toLongOption).map(t => ModelTranslator.longToDateTime(t)),
       )
-      val articlesDom = ArticleRender.renderList(articles, HorizontalLayout())
+      val articlesDom = ArticleRender.renderList(articles, Horizontal())
       Ok(articlesDom, `Content-Type`(MediaType.text.html))
 
 
@@ -219,7 +219,7 @@ class RecommendationView(moreLikeThisService: MoreLikeThisService, articleServic
         req.params.get("postedBefore").flatMap(_.toLongOption).map(t => ModelTranslator.longToDateTime(t)),
         req.params.get("postedAfter").flatMap(_.toLongOption).map(t => ModelTranslator.longToDateTime(t)),
       )
-      val articlesDom = ArticleRender.renderList(articles, HorizontalLayout())
+      val articlesDom = ArticleRender.renderList(articles, Horizontal())
       Ok(articlesDom, `Content-Type`(MediaType.text.html))
 
 
@@ -231,7 +231,7 @@ class RecommendationView(moreLikeThisService: MoreLikeThisService, articleServic
         req.params.get("postedBefore").flatMap(_.toLongOption).map(t => ModelTranslator.longToDateTime(t)),
         req.params.get("postedAfter").flatMap(_.toLongOption).map(t => ModelTranslator.longToDateTime(t)),
       )
-      val articlesDom = ArticleRender.renderList(articles, HorizontalLayout())
+      val articlesDom = ArticleRender.renderList(articles, Horizontal())
       Ok(articlesDom, `Content-Type`(MediaType.text.html))
 
     case req @ GET -> Root / "explore" => wrapContentRaw(req) {

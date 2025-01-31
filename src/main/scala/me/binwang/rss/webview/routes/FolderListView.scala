@@ -41,7 +41,7 @@ object FolderListView {
       span(cls := "material-icons-outlined warning", title := fs.source.fetchFailedMsg.get)("error_outline")
 
     val sortBy = ArticleList.sortBy(fs.folderMapping.articleOrder)
-    val layout = ArticleList.layout(fs.folderMapping.articleListLayout)
+    val layout = fs.folderMapping.articleListLayout.toString
     val proxyImageUrl = if (fs.source.iconUrl.isEmpty) Seq() else {
       val iconUrl = fs.source.iconUrl.get.escapeHtml
       val httpsUrl = iconUrl.toHttps
@@ -277,9 +277,9 @@ class FolderListView(folderService: FolderService, sourceService: SourceService,
               input(`type` := "text", name := "description", value := folder.description.getOrElse(""))),
             label(cls := "form-row",
               input(is := "boolean-checkbox", `type` := "checkbox", name := "searchEnabled",
-              if (folder.searchEnabled) checked else ""), "Enable Search",
+              if (folder.searchEnabled) checked else ""), "Enable Filter",
             ),
-            label(div("Search Term"),
+            label(div("Filter Search Term"),
               input(`type` := "text", name := "searchTerm", value := folder.searchTerm.getOrElse(""))),
             label(div("Order By"), select(name := "articleOrder",
               option(value := ArticleOrder.TIME.toString,
@@ -290,9 +290,13 @@ class FolderListView(folderService: FolderService, sourceService: SourceService,
             label(div("Article List Layout"), select(
               name := "articleListLayout",
               option(value := ArticleListLayout.LIST.toString,
-                if (folder.articleListLayout == ArticleListLayout.LIST) selected else "")("Vertical List"),
+                if (folder.articleListLayout == ArticleListLayout.LIST) selected else "")("List"),
               option(value := ArticleListLayout.GRID.toString,
                 if (folder.articleListLayout == ArticleListLayout.GRID) selected else "")("Grid"),
+              option(value := ArticleListLayout.SOCIAL_MEDIA.toString,
+                if (folder.articleListLayout == ArticleListLayout.SOCIAL_MEDIA) selected else "")("Social Media"),
+              option(value := ArticleListLayout.COMPACT.toString,
+                if (folder.articleListLayout == ArticleListLayout.COMPACT) selected else "")("Compact"),
             )),
             div(cls := "button-row",
               button(cls := "secondary", ContentRender.hxSwapContentAttrs,

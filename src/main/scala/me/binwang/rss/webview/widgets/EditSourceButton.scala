@@ -56,6 +56,7 @@ object EditSourceButton {
         popoverContent(
           cls := "folder-op-menu",
           zIndex := "10",
+          ArticleLayoutMenu(s"/hx/folders/$folderID/sources/$sourceID/updateAndRefresh"),
           folderMovingMenu(sourceID, folderID, TextWithIcon("content_cut", "Move to folder ..."), "moveSourceToFolder"),
           folderMovingMenu(sourceID, folderID, TextWithIcon("content_copy", "Copy to folder ..."), "copySourceToFolder"),
           sourceMovingMenu(sourceID, folderID, TextWithIcon("north_west", "Move before feed ..."), "moveSourceBefore"),

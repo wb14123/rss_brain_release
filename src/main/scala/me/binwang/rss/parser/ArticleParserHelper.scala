@@ -34,7 +34,7 @@ object ArticleParserHelper {
         .charset("UTF-8")
         .outline(true)
         .indentAmount(2)
-      val dom = Jsoup.parse(html).outputSettings(settings)
+      val dom = Jsoup.parse(html.replaceAll("\u0000", "")).outputSettings(settings)
       removeTags.foreach(dom.select(_).remove())
       val cleaner = new Cleaner(safeList)
       val cleaned = cleaner.clean(dom).body()

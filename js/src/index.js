@@ -10,6 +10,7 @@ import '../css/google-fonts.css';
 import '../css/main.css';
 
 // js
+import '@ungap/custom-elements';
 import './boolean-checkbox.js';
 
 import 'htmx.org';
@@ -39,6 +40,5 @@ import './popover-menu.js';
 import './match-id.js';
 import './set-theme.js';
 import './source-images.js';
-import './register-service-worker.js';
 
 Alpine.start();

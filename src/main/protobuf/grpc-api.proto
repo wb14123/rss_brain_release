@@ -96,6 +96,8 @@ enum ArticleOrder {
 enum ArticleListLayout {
     LIST = 0;
     GRID = 1;
+    SOCIAL_MEDIA = 2;
+    COMPACT = 3;
 }
 
 // Define Folder

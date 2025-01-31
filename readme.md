@@ -8,6 +8,23 @@ RSS Brain is a modern RSS Reader. Check [the official website](https://www.rssbr
 
 ## Build
 
+### Build Custom Doobie Version 
+
+This version uses a custom branch of doobie to resolve [this issue](https://github.com/typelevel/doobie/issues/2132).
+
+Build the [this branch](https://github.com/wb14123/doobie/tree/stream-leak-patch) locally with:
+
+```
+git clone https://github.com/wb14123/doobie
+git checkout stream-leak-patch
+sbt +publishLocal
+```
+
+Then find the built version at `~/.ivy2/local/org.tpolecat/doobie-postgres_2.13` and assign the version to
+`doobieVersion` in RSS Brain's `build.sbt`.
+
+### Build RSS Brain
+
 ```
 sbt clean generateGRPCCode
 sbt compile
