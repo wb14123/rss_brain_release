@@ -22,6 +22,7 @@ class ArticleUserMarkingSqlDao (implicit val connectionPool: ConnectionPool) ext
         bookmarked boolean not null default false,
         read boolean not null default false,
         deleted boolean not null default false,
+        readProgress int not null default 0,
         PRIMARY KEY (articleID, userID)
       )""")
       .update
@@ -42,6 +43,7 @@ class ArticleUserMarkingSqlDao (implicit val connectionPool: ConnectionPool) ext
           bookmarked = updater.bookmarked.getOrElse(false),
           read = updater.read.getOrElse(false),
           deleted = updater.deleted.getOrElse(false),
+          readProgress = updater.readProgress.getOrElse(0),
         ))).onConflictIgnore
     }
 
@@ -50,7 +52,8 @@ class ArticleUserMarkingSqlDao (implicit val connectionPool: ConnectionPool) ext
       .update(
         setOpt(_.bookmarked, updater.bookmarked),
         setOpt(_.read, updater.read),
-        setOpt(_.deleted, updater.deleted)
+        setOpt(_.deleted, updater.deleted),
+        setOpt(_.readProgress, updater.readProgress),
       )
 
     run(insert).flatMap { result =>

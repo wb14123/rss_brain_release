@@ -40,5 +40,7 @@ import './popover-menu.js';
 import './match-id.js';
 import './set-theme.js';
 import './source-images.js';
+import './audio-tracker.js'
+import './lite-youtube-tracker.js'
 
 Alpine.start();

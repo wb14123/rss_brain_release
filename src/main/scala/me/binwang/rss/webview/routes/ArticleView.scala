@@ -1,6 +1,7 @@
 package me.binwang.rss.webview.routes
 
 import cats.effect.IO
+import me.binwang.rss.model.ArticleWithUserMarking
 import me.binwang.rss.service.ArticleService
 import me.binwang.rss.webview.auth.CookieGetter.reqToCookieGetter
 import me.binwang.rss.webview.basic.ContentRender
@@ -36,7 +37,9 @@ class ArticleView(articleService: ArticleService) extends Http4sView with Scalat
               xData := "{showComments: true}",
               div(cls := "article-title")(article.article.title),
               ArticleRender.renderInfo(article.article, req.params.get("in_folder")),
-              ArticleRender.mediaDom(article.article, ArticleRender.mediaRenderOptionInReader),
+              ArticleRender.mediaDom(
+                ArticleWithUserMarking(articleWithMarking.article.article, articleWithMarking.userMarking),
+                ArticleRender.mediaRenderOptionInReader),
               div(cls := "article-content")(raw(article.content.validHtml)),
               ArticleRender.renderOps(article.article, showActionable = false),
               if (article.article.comments.getOrElse(0) > 0) { Seq(
@@ -60,12 +63,13 @@ class ArticleView(articleService: ArticleService) extends Http4sView with Scalat
 
     case req @ POST -> Root / "hx" / "articles" / articleID / "state" / state / value =>
       val token = req.authToken
-      val boolValue = value.toBooleanOption
-      ((state, boolValue) match {
-        case ("bookmark", Some(true)) => articleService.bookmarkArticle(token, articleID)
-        case ("bookmark", Some(false)) => articleService.unBookmarkArticle(token, articleID)
-        case ("read", Some(true)) => articleService.readArticle(token, articleID)
-        case ("read", Some(false)) => articleService.unreadArticle(token ,articleID)
+      ((state, value) match {
+        case ("bookmark", "true") => articleService.bookmarkArticle(token, articleID)
+        case ("bookmark", "false") => articleService.unBookmarkArticle(token, articleID)
+        case ("read", "true") => articleService.readArticle(token, articleID)
+        case ("read", "false") => articleService.unreadArticle(token ,articleID)
+        case ("read-progress", _) if value.toIntOption.isDefined =>
+          articleService.markArticleReadProgress(token, articleID, value.toInt)
         case _ => IO.raiseError(new Exception("Wrong params"))
       }).flatMap(r => Ok(r.toString))
 

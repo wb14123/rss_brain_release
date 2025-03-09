@@ -227,6 +227,12 @@ class ArticleService(
     }
   }
 
+  def markArticleReadProgress(token: String, articleID: ID, progress: Int): IO[Boolean] = timed {
+    authorizer.authorize(token).flatMap { session =>
+      articleUserMarkingDao.updateMarking(articleID, session.userID, ArticleUserMarkingUpdater(readProgress = Some(progress)))
+    }
+  }
+
   def getArticleTermVector(token: String, articleID: ID, size: Int): IO[TermWeights] = timed {
     authorizer.authorize(token).flatMap( _ => articleSearchDao.getTermVector(articleID, size).map(TermWeights))
   }

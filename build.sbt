@@ -6,7 +6,7 @@ name := "rss_brain"
 
 version := "0.1"
 
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.16"
 
 enablePlugins(Fs2Grpc)
 enablePlugins(Scala2GrpcPlugin)
@@ -23,15 +23,15 @@ dependencyCheckFailBuildOnCVSS := 4
 
 fork := true
 
-javacOptions ++= Seq("-source", "17", "-target", "17", "-Xlint")
+javacOptions ++= Seq("-source", "21", "-target", "21", "-Xlint")
 
 javaOptions += "-Xmx2G"
 
 initialize := {
   val _ = initialize.value
   val javaVersion = sys.props("java.specification.version")
-  if (javaVersion != "17")
-    sys.error("Java 17 is required for this project. Found " + javaVersion + " instead")
+  if (javaVersion != "21")
+    sys.error("Java 21 is required for this project. Found " + javaVersion + " instead")
 }
 
 
@@ -123,7 +123,6 @@ libraryDependencies ++= Seq(
   "org.tpolecat" %% "doobie-hikari"   % doobieVersion,
   "io.getquill"  %% "quill-doobie"    % "4.8.4",
   "org.postgresql" % "postgresql"     % "42.7.4",
-  "io.getquill" %% "quill-cassandra-monix" % "4.8.4",
 
   // search
   "co.elastic.clients" % "elasticsearch-java" % esVersion,

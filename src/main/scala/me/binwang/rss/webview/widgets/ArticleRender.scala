@@ -1,20 +1,18 @@
 package me.binwang.rss.webview.widgets
 
 import cats.effect.IO
-import me.binwang.rss.grpc.grpc_api.UserUpdater.CurrentFolderIDOption
+import com.typesafe.config.ConfigFactory
 import me.binwang.rss.model.ArticleListLayout.ArticleListLayout
-import me.binwang.rss.model.{Article, ArticleListLayout, ArticleUserMarking, ArticleWithUserMarking, MediaGroup, MediaMedium}
+import me.binwang.rss.model._
 import me.binwang.rss.webview.basic.HtmlCleaner.str2cleaner
-import me.binwang.rss.webview.basic.{ContentRender, ProxyUrl}
 import me.binwang.rss.webview.basic.ScalaTagAttributes._
-import scalatags.generic
+import me.binwang.rss.webview.basic.{ContentRender, ProxyUrl}
 import scalatags.Text.all._
+import scalatags.generic
 import scalatags.text.Builder
 
-import java.net.URLEncoder
-import java.nio.charset.{Charset, StandardCharsets}
-
 object ArticleRender {
+
 
   sealed trait ArticleListDirection
   case class Vertical() extends ArticleListDirection
@@ -33,11 +31,17 @@ object ArticleRender {
   val mediaRenderOptionInReader: MediaRenderOption = MediaRenderOption(
     showAudio = true, showVideoThumbnail = false, showVideoPlayer = true, showImage = true, showImageInArticle = false)
 
-  private def renderAudio(mediaGroup: MediaGroup): Frag = {
+  private def renderAudio(article: ArticleWithUserMarking, mediaGroup: MediaGroup): Frag = {
     div(
       cls := "article-audio-player",
       mediaGroup.thumbnails.headOption.map(t => proxyImage(t.url, None, addVideoClass = false)),
-      audio(attr("controls").empty, src := mediaGroup.content.url),
+      audio(
+        attr("controls").empty,
+        is := "audio-tracker",
+        src := mediaGroup.content.url,
+        attr("saved-progress") := article.userMarking.readProgress,
+        attr("save-progress-url") := SaveProgressUrl(article.article.id)
+      ),
     )
   }
 
@@ -52,7 +56,7 @@ object ArticleRender {
     )
   }
 
-  private def mediaGroupDom(mediaGroup: MediaGroup, option: MediaRenderOption): Frag = {
+  private def mediaGroupDom(article: ArticleWithUserMarking, mediaGroup: MediaGroup, option: MediaRenderOption): Frag = {
     mediaGroup.content.medium match {
       case None => ""
       case Some(MediaMedium.IMAGE) =>
@@ -63,17 +67,18 @@ object ArticleRender {
       case Some(MediaMedium.VIDEO) if option.showVideoThumbnail && mediaGroup.thumbnails.nonEmpty  =>
         proxyImage(mediaGroup.thumbnails.head.url, mediaGroup.description, addVideoClass = true)
       case Some(MediaMedium.VIDEO) if option.showVideoPlayer =>
-        YoutubeVideoPlayer(mediaGroup.content.url)
+        YoutubeVideoPlayer(article, mediaGroup.content.url)
       case Some(MediaMedium.AUDIO) if option.showAudio =>
-        renderAudio(mediaGroup)
+        renderAudio(article, mediaGroup)
       case _ => ""
     }
   }
 
-  def mediaDom(article: Article, option: MediaRenderOption = mediaRenderOptionInList): Frag = {
-    article.mediaGroups.map(_.groups.head) match {
+  def mediaDom(article: ArticleWithUserMarking, option: MediaRenderOption = mediaRenderOptionInList): Frag = {
+    article.article.mediaGroups.map(_.groups.head) match {
       case None => ""
-      case _ => tag("img-viewer")(cls := "article-media", article.mediaGroups.get.groups.map(m => mediaGroupDom(m, option)))
+      case _ => tag("img-viewer")(cls := "article-media", article.article.mediaGroups.get.groups.map(
+        m => mediaGroupDom(article, m, option)))
     }
   }
 
@@ -97,7 +102,7 @@ object ArticleRender {
     )
   }
 
-  def renderSocialMediaInfo(article: Article, folderIDOpt: Option[String]): Frag = {
+  private def renderSocialMediaInfo(article: Article, folderIDOpt: Option[String]): Frag = {
     val sourceUrl = s"/sources/${article.sourceID}/articles${getFolderParam(folderIDOpt)}"
     val sourceTitle = a(cls := "source-title", hxGet := sourceUrl, hxPushUrl := sourceUrl,
       ContentRender.hxSwapContentAttrs, nullHref)(article.sourceTitle.getOrElse[String]("Unknown"))
@@ -123,7 +128,6 @@ object ArticleRender {
   }
 
   def renderOps(article: Article, showActionable: Boolean = true, showNonActionable: Boolean = true): Frag = {
-    val externalSearchPrefix = URLEncoder.encode("https://kagi.com/search?q=", StandardCharsets.UTF_8)
     div(
       cls := "article-ops",
       if (showActionable) Seq(
@@ -191,7 +195,7 @@ object ArticleRender {
         markReadDom,
         if (layout != ArticleListLayout.SOCIAL_MEDIA) articleTitle else "",
         articleInfo,
-        if (layout != ArticleListLayout.COMPACT) mediaDom(article) else "",
+        if (layout != ArticleListLayout.COMPACT) mediaDom(articleWithMarking) else "",
         if (layout != ArticleListLayout.COMPACT)
           div(cls := s"article-desc $clickClasses", clickAttr)(raw(article.description.validHtml)) else "",
         if (layout != ArticleListLayout.COMPACT && article.nsfw) {
@@ -203,7 +207,7 @@ object ArticleRender {
       div(
         cls := s"article article-grid $nsfwClass",
         readAttr,
-        mediaDom(article),
+        mediaDom(articleWithMarking),
         div(
           cls := "article-card-content",
           articleTitle,

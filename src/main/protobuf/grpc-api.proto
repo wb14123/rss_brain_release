@@ -404,6 +404,7 @@ message ArticleUserMarking {
     bool bookmarked = 3;
     bool read = 4;
     bool deleted = 5;
+    int32 readProgress = 6;
 }
 
 // Define ArticleWithUserMarking
@@ -771,6 +772,12 @@ message MarkArticleAsNotDeletedRequest {
     string articleID = 2;
 }
 
+message MarkArticleReadProgressRequest {
+    string token = 1;
+    string articleID = 2;
+    int32 progress = 3;
+}
+
 message GetArticleTermVectorRequest {
     string token = 1;
     string articleID = 2;
@@ -872,6 +879,10 @@ message MarkArticleAsNotDeletedResponse {
     bool result = 1;
 }
 
+message MarkArticleReadProgressResponse {
+    bool result = 1;
+}
+
 message GetArticleTermVectorResponse {
     TermWeights result = 1;
 }
@@ -901,6 +912,7 @@ service ArticleAPI {
     rpc UnBookmarkArticle (UnBookmarkArticleRequest) returns (UnBookmarkArticleResponse);
     rpc MarkArticleAsDeleted (MarkArticleAsDeletedRequest) returns (MarkArticleAsDeletedResponse);
     rpc MarkArticleAsNotDeleted (MarkArticleAsNotDeletedRequest) returns (MarkArticleAsNotDeletedResponse);
+    rpc MarkArticleReadProgress (MarkArticleReadProgressRequest) returns (MarkArticleReadProgressResponse);
     rpc GetArticleTermVector (GetArticleTermVectorRequest) returns (GetArticleTermVectorResponse);
 }
 

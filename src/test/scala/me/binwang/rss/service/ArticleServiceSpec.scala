@@ -398,6 +398,17 @@ class ArticleServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeA
       articles.head.userMarking.bookmarked shouldBe true
     }
 
+    it("should mark article's read progress") {
+      val sourceID = SourceID("http://localhost")
+      val article1 = Articles.get(Some(sourceID))
+      articleDao.insertOrUpdate(article1).unsafeRunSync()
+      articleService.markArticleReadProgress(token, article1.id, 10).unsafeRunSync()
+      val articles = articleService.getArticlesBySourceWithUserMarking(token, sourceID, 10, ZonedDateTime.now(), "")
+        .compile.toList.unsafeRunSync()
+      articles.size shouldBe 1
+      articles.head.userMarking.readProgress shouldBe 10
+    }
+
     it("should filter articles by bookmarked") {
       val sourceID = SourceID("http://localhost")
       val article1 = Articles.get(Some(sourceID))

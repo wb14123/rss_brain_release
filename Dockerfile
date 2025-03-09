@@ -1,4 +1,4 @@
-FROM openjdk:17-slim
+FROM eclipse-temurin:21-jre
 
 ENV JAVA_PARAMS=""
 

@@ -1,6 +1,8 @@
 package me.binwang.rss.webview.widgets
 
-import scalatags.Text.all.{script, _}
+import me.binwang.rss.model.ArticleWithUserMarking
+import me.binwang.rss.webview.basic.ScalaTagAttributes.is
+import scalatags.Text.all._
 
 object YoutubeVideoPlayer {
 
@@ -11,12 +13,16 @@ object YoutubeVideoPlayer {
     regExp.findFirstMatchIn(urlStr).map(_.group(7))
   }
 
-  def apply(videoUrl: String): Option[Frag] = {
+  def apply(article: ArticleWithUserMarking, videoUrl: String): Option[Frag] = {
     getVideoID(videoUrl).map { videoID =>
       div(
         cls := "video-player",
-        tag("lite-youtube")(attr("videoid") := videoID),
-        script(src := "/static/lib/lite-yt-embed-0.3.2.js"),
+        tag("lite-youtube-tracker")(
+          attr("videoid") := videoID,
+          attr("js-api").empty,
+          attr("saved-progress") := article.userMarking.readProgress,
+          attr("save-progress-url") := SaveProgressUrl(article.article.id),
+        ),
       )
     }
   }
