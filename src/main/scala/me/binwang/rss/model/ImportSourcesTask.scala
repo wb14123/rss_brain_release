@@ -4,6 +4,16 @@ import me.binwang.rss.model.ID.ID
 
 import java.time.ZonedDateTime
 
+/**
+ * The progress of source imports from OPML.
+ *
+ * @param id The ID of the task.
+ * @param userID Which user this task belongs to.
+ * @param createdAt When the task is created.
+ * @param totalSources How many sources are in the import task.
+ * @param failedSources How many sources are failed.
+ * @param successfulSources How many sources are successful.
+ */
 case class ImportSourcesTask(
   id: String,
   userID: String,
@@ -33,6 +43,12 @@ case class ImportSourcesTaskMapping(
   error: Option[String],
 )
 
+/**
+ * The details of failed to import sources.
+ *
+ * @param xmlUrl The feed url.
+ * @param error The error message.
+ */
 case class ImportFailedSource(
   xmlUrl: String,
   error: String,

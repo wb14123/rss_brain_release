@@ -6,13 +6,28 @@ import java.time.ZonedDateTime
 import java.util.UUID
 import me.binwang.rss.model.NSFWSetting.NSFWSetting
 
+/**
+ * How to show NSFW content. This is only used for client to display the content. Server does nothing other than
+ * storing the value for the clients. Clients can decide what to do based on the values but here is the guide:
+ */
 object NSFWSetting extends Enumeration {
   type NSFWSetting = Value
-  val
-  HIDE,
-  BLUR,
-  SHOW
-  = Value
+
+  /**
+   * Hide the NSFW content in article list. But can be shown when click into article.
+   */
+  val HIDE: NSFWSetting = Value
+
+  /**
+   * Blur the NSFW images and video cover. Hide the text in article list. But all the content will be shown when
+   * click into the article.
+   */
+  val BLUR: NSFWSetting = Value
+
+  /**
+   * Show all the NSFW content in the article list.
+   */
+  val SHOW: NSFWSetting = Value
 }
 
 object LLMEngine extends Enumeration {
@@ -77,6 +92,12 @@ case class User (
 
 }
 
+/**
+ * The user information returned to client. Removed sensitive information like password and activeCode.
+ *
+ * @param currentFolderID The last folder that the user visited. None if user last visited a source instead of folder.
+ * @param currentSourceID The last source that the user visited. None if user last visited a folder instead of source.
+ */
 case class UserInfo (
   id: String,
   username: String,
@@ -93,6 +114,9 @@ case class UserInfo (
   llmEngine: Option[LLMEngine] = None,
 )
 
+/**
+ * Structure to update user information. Every param is default to None which means no update for that field.
+ */
 case class UserUpdater (
   password: Option[String] = None,
   salt: Option[String] = None,

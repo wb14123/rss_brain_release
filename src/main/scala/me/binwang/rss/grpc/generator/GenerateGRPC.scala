@@ -21,17 +21,6 @@ import java.io.InputStream
 import java.time.ZonedDateTime
 import scala.reflect.runtime.universe.{Type, typeOf}
 
-case class TestInner(
-  str: String
-)
-
-case class Test(
-  listField: Seq[Seq[Seq[TestInner]]],
-  optionField: Option[Option[Option[TestInner]]],
-  mixField1: Option[Seq[Option[TestInner]]],
-  mixField2: Seq[Option[Seq[TestInner]]],
-)
-
 object GenerateGRPC extends GRPCGenerator {
   override val protoJavaPackage: String = "me.binwang.rss.grpc"
   override val protoPackage: String = "rss"
@@ -45,8 +34,6 @@ object GenerateGRPC extends GRPCGenerator {
   override val implicitTransformClass: Option[Class[_]] = Some(ModelTranslator.getClass)
 
   override val modelClasses: Seq[Type] = Seq(
-    typeOf[TestInner],
-    typeOf[Test],
     typeOf[Article],
     typeOf[ArticleIDs],
     typeOf[ArticleContent],
@@ -113,15 +100,14 @@ object GenerateGRPC extends GRPCGenerator {
           (error match {
             case _: UserNotAuthorized =>
               logger.info(s"User unauthorized: ${error.getMessage}") >>
-                IO.pure(Status.UNAUTHENTICATED.withCause(error))
+                IO.pure(Status.UNAUTHENTICATED.withCause(error).withDescription(error.toString))
             case _: UserSubscriptionEnded =>
               logger.info(s"User subscription ended: ${error.getMessage}") >>
-                IO.pure(Status.UNAUTHENTICATED.withCause(error))
+                IO.pure(Status.UNAUTHENTICATED.withCause(error).withDescription(error.toString))
             case _ =>
               logger.error(error)("Error while handling request") >>
-                IO.pure(Status.UNKNOWN.withCause(error))
+                IO.pure(Status.UNKNOWN.withCause(error).withDescription(error.toString))
           }).map { status =>
-            metadata.put(Metadata.Key.of("err_msg", Metadata.ASCII_STRING_MARSHALLER), error.toString)
             Left(new StatusRuntimeException(status, metadata))
           }
         case value => IO.pure(value)

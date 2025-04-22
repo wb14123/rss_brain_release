@@ -14,6 +14,9 @@ import java.io.InputStream
 import java.time.{ZoneId, ZonedDateTime}
 import java.util.UUID
 
+/**
+ * Folder related APIs.
+ */
 class FolderService (
     private val folderDao: FolderDao,
     private val folderSourceDao: FolderSourceDao,
@@ -26,10 +29,12 @@ class FolderService (
   private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
 
   /**
-   * Import folder and sources from OPML file
-   * @param token User token
-   * @param inputStream Input stream for the OPML file
-   * @return Number of failed imported sources
+   * Import folder and sources from OPML file. After this request is sent, the client can use
+   * [[FolderService.getImportOPMLTask]] to poll the importing status.
+   *
+   * @param token User token.
+   * @param inputStream The OPML file.
+   * @return the status of importing task.
    */
   def importFromOPML(token: String, inputStream: Resource[IO, InputStream]): IO[ImportSourcesTask] = timed {
     authorizer.authorize(token).flatMap { session =>
@@ -71,6 +76,9 @@ class FolderService (
     }
   }
 
+  /**
+   * Get the status of the importing OMPL task.
+   */
   def getImportOPMLTask(token: String): IO[ImportSourcesTask] = timed {
     for {
       nowInstant <- Clock[IO].realTimeInstant
@@ -83,6 +91,9 @@ class FolderService (
     } yield result
   }
 
+  /**
+   * Get failed sources for an OPML importing task.
+   */
   def getImportOPMLFailedSources(token: String): fs2.Stream[IO, ImportFailedSource] = timed {
     for {
       nowInstant <- fs2.Stream.eval(Clock[IO].realTimeInstant)
@@ -93,11 +104,17 @@ class FolderService (
     } yield result
   }
 
+  /**
+   * Delete the OPML import task. It will stop the importing progress.
+   */
   def deleteOPMLImportTasks(token: String): IO[Unit] = timed {
     authorizer.authorize(token).flatMap(session => importSourcesTaskDao.deleteByUser(session.userID))
   }
 
 
+  /**
+   * Export all the subscribed sources to an OPML file.
+   */
   def exportOPML(token: String): IO[String] = timed {
     for {
       session <- authorizer.authorize(token)
@@ -119,22 +136,38 @@ class FolderService (
     }
   }
 
+  /**
+   * Get all the folders for a user.
+   *
+   * @param size How many folders to return at most. Default is 0. Must specify otherwise it will just return an empty response.
+   * @param startPosition Only return folders that with a position lager than this.
+   */
   def getMyFolders(token: String, size: Int, startPosition: Long): fs2.Stream[IO, Folder] = timed {
     authorizer.authorizeAsStream(token).flatMap { session =>
       folderDao.listByUser(session.userID, size, startPosition)
     }
   }
 
+  /**
+   * Get folder details by folder ID.
+   */
   def getFolderByID(token: String, folderID: String):IO[Folder] = timed {
     authorizer.checkFolderPermission(token, folderID).map(_._2)
   }
 
+  /**
+   * Cleanup folder positions for a user. It will keep the folders with the same order, but make the positions start
+   * from 1000 and the gap to be 1000.
+   */
   def cleanupPosition(token: String): IO[Int] = timed {
     authorizer.authorize(token).flatMap { session =>
       folderDao.cleanupPositionForUser(session.userID)
     }
   }
 
+  /**
+   * Create a folder for the user.
+   */
   def addFolder(token: String, folder: FolderCreator): IO[Folder] = timed {
     authorizer.authorize(token).flatMap { session =>
       val insertFolder = Folder(
@@ -152,6 +185,9 @@ class FolderService (
     }
   }
 
+  /**
+   * Update folder details. It will ignore `recommend` and `language` field.
+   */
   def updateFolder(token: String, folderID: String, folderUpdater: FolderUpdater): IO[Folder] = timed {
     authorizer.checkFolderPermission(token, folderID).flatMap { case (session, _) =>
       val updater = if (session.isAdmin) folderUpdater else folderUpdater.copy(recommend = None, language = None)
@@ -159,12 +195,18 @@ class FolderService (
     }
   }
 
+  /**
+   * Get all the recommended folders. The client can display them as example feeds.
+   */
   def getRecommendFolders(token: String, lang: String, size: Int, startPosition: Int): fs2.Stream[IO, Folder] = timed {
     authorizer.authorizeAsStream(token).flatMap { _ =>
       folderDao.listRecommended(lang, size, startPosition)
     }
   }
 
+  /**
+   * Delete a folder. The data cannot be recovered.
+   */
   def deleteFolder(token: String, folderID: String): IO[Unit] = timed {
     authorizer.checkFolderPermission(token, folderID).flatMap { _ =>
       for {

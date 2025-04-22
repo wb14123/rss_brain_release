@@ -426,17 +426,6 @@ class UserServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAndA
       }
     }
 
-    it("should get payment info") {
-      val userInfo = userService.signUp(username, password, email).unsafeRunSync()
-      val session = userService.login(email, password).unsafeRunSync()
-      val customerID1 = UUID.randomUUID().toString
-      val customerID2 = UUID.randomUUID().toString
-      paymentCustomerDao.insert(PaymentCustomer(userInfo.id, "STRIPE", customerID1, ZonedDateTime.now())).unsafeRunSync()
-      paymentCustomerDao.insert(PaymentCustomer(userInfo.id, "APPLE", customerID2, ZonedDateTime.now())).unsafeRunSync()
-      val customers = userService.getPaymentCustomers(session.token).compile.toList.unsafeRunSync()
-      customers.size shouldBe 2
-    }
-
     it("should deny user delete if email and password is not correct") {
       val code = "abc"
       val userInfo = userService.signUp(username, password, email).unsafeRunSync()

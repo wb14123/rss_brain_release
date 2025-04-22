@@ -24,6 +24,10 @@ object UserService {
   val deleteCodeLinkPrefix = s"$websiteBaseUrl/#/user-delete/"
 }
 
+/**
+ * Service related to User APIs.
+ * @param tokenExpireTimeInDays The time before auth token is expired
+ */
 class UserService(
   private val userDao: UserDao,
   private val userSessionDao: UserSessionDao,
@@ -45,6 +49,12 @@ class UserService(
 
   private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
 
+  /**
+   * Sign up a new user. A link that contains the active code will be sent to the Email. Client need to call
+   * `activeAccount` with the code in order to activate the account so that the user can login.
+   *
+   * @return The user info if registered successfully. Will return error if username already exists.
+   */
   def signUp(username: String, password: String, email: String): IO[UserInfo] = timed {
     val salt = UUID.randomUUID().toString
     val userID = UUID.randomUUID().toString
@@ -107,6 +117,9 @@ class UserService(
     } yield finalUser.get.toInfo
   }
 
+  /**
+   * Resend the Email that contains the active code.
+   */
   def resendActiveCode(email: String): IO[Unit] = timed {
     userDao.getByEmail(email.toLowerCase).flatMap {
       case None => IO.raiseError(UserNotFound(email.toLowerCase))
@@ -117,6 +130,9 @@ class UserService(
     }
   }
 
+  /**
+   * API to activate the user account so that the user can login.
+   */
   def activeAccount(activeCode: String): IO[Unit] = timed {
     if (activeCode.isBlank) {
       IO.raiseError(InvalidActiveCodeException(activeCode))
@@ -129,6 +145,9 @@ class UserService(
     }
   }
 
+  /**
+   * @return A user session that contains a token used for other API request.
+   */
   def login(email: String, password: String): IO[UserSession] = timed {
     userDao.getByEmail(email.toLowerCase).flatMap {
       case Some(user) if !user.isActive && passwordHash(password, user.salt).equals(user.password) =>
@@ -149,6 +168,10 @@ class UserService(
     }
   }
 
+  /**
+   * Start a process to reset the password. An email that contains `resetToken` will be sent to the user's Email.
+   * The client needs to call `resetPassword` to finish the process.
+   */
   def requestResetPassword(email: String): IO[Unit] = timed {
     val validToken = userDao.getByEmail(email.toLowerCase).flatMap {
       case None => IO.raiseError(UserNotFound(email.toLowerCase))
@@ -181,6 +204,10 @@ class UserService(
     }
   }
 
+  /**
+   * Reset the user's password.
+   * @param resetToken Token sent to the user's Email by calling `requestResetPassword`
+   */
   def resetPassword(resetToken: String, newPassword: String): IO[Unit] = timed {
     passwordResetDao.getByToken(resetToken).flatMap {
       case None => IO.raiseError(PasswordResetInvalidException(resetToken))
@@ -198,16 +225,25 @@ class UserService(
     }
   }
 
+  /**
+   * Sign out the user. The current session token will be deleted.
+   */
   def signOut(token: String): IO[Boolean] = timed {
     userSessionDao.delete(token)
   }
 
+  /**
+   * Sign out the user from all devices. All the session tokens associated to the user will be deleted.
+   */
   def signOutAllDevices(token: String): IO[Long] = timed {
     authorizer.authorize(token).flatMap { userSession =>
       userSessionDao.deleteByUser(userSession.userID)
     }
   }
 
+  /**
+   * Get the info for the logged in user.
+   */
   def getMyUserInfo(token: String): IO[UserInfo] = timed {
     authorizer
       .authorize(token, allowNotPaid = true)
@@ -219,14 +255,24 @@ class UserService(
       }
   }
 
+  /**
+   * Disable login for a user. Only admin can call this API.
+   */
   def deactivateUser(token: String, userID: String): IO[Unit] = timed {
     adminUpdateUser(token, userID, UserUpdater(isActive = Some(false)))
   }
 
+  /**
+   * Remove admin role for a user. Only admin can call this API.
+   */
   def removeAdmin(token: String, userID: String): IO[Unit] = timed {
     adminUpdateUser(token, userID, UserUpdater(isAdmin = Some(false)))
   }
 
+  /**
+   * Do not use this anymore.
+   * @deprecated
+   */
   def createRedditSession(token: String): IO[String] = timed {
     for {
       nowInstant <- Clock[IO].realTimeInstant
@@ -246,12 +292,9 @@ class UserService(
     } yield result
   }
 
-  def getRedditSessions(token: String): fs2.Stream[IO, RedditSession] = timed {
-    authorizer.authorizeAsStream(token).flatMap { userSession =>
-      redditSessionDao.getByUserID(userSession.userID).map(_.copy(token = None, refreshToken = None))
-    }
-  }
-
+  /**
+   * Set the current folder that user is visiting. This will set `currentSource` to None.
+   */
   def setCurrentFolder(token: String, currentFolderID: String): IO[Unit] = timed {
     authorizer.authorize(token).flatMap { userSession =>
       userDao
@@ -263,6 +306,9 @@ class UserService(
     }
   }
 
+  /**
+   * Set the current source that user is visiting. This will set `currentFolder` to None.
+   */
   def setCurrentSource(token: String, currentSourceID: String): IO[Unit] = timed {
     authorizer.authorize(token).flatMap { userSession =>
       userDao
@@ -274,6 +320,9 @@ class UserService(
     }
   }
 
+  /**
+   * Update user settings. If param is set to None, it will not be updated.
+   */
   def updateUserSettings(token: String, nsfwSetting: Option[NSFWSetting], searchEngine: Option[SearchEngine],
       llmEngine: Option[Option[LLMEngine]], llmApiKey: Option[Option[String]]): IO[Unit] = timed {
     authorizer.authorize(token).flatMap { userSession =>
@@ -288,20 +337,23 @@ class UserService(
     }
   }
 
+  /**
+   * Remove the current folder or source that user is visiting. The client should load all articles if neigher of
+   * current folder or source is set.
+   */
   def removeCurrentFolderAndSource(token: String): IO[Unit] = timed {
     authorizer.authorize(token).flatMap { userSession =>
       userDao.update(userSession.userID, UserUpdater(currentFolderID = Some(None), currentSourceID = Some(None)))
     }.map(_ => ())
   }
 
-  def getPaymentCustomers(token: String): fs2.Stream[IO, PaymentCustomer] = timed {
-    authorizer.authorizeAsStream(token, allowNotePaid = true).flatMap { userSession =>
-      paymentCustomerDao.listByUserID(userSession.userID)
-    }
-  }
 
+  /**
+   * Start the process to delete all data for a user. This will send an Email to the user with a verification code.
+   *
+   * The client needs to call `deleteUserData` with the verification code to finish the process.
+   */
   def sendDeleteUserCode(token: String): IO[Unit] = timed {
-
     for {
       nowInstant <- Clock[IO].realTimeInstant
       now = ZonedDateTime.ofInstant(nowInstant, ZoneId.systemDefault())
@@ -320,6 +372,11 @@ class UserService(
     } yield ()
   }
 
+  /**
+   * Delete all the data for a user. The data cannot be recovered after deletion.
+   *
+   * @param verificationCode The code is sent to the user's Email by calling `sendDeleteUserCode`.
+   */
   def deleteUserData(email: String, password: String, verificationCode: String): IO[Unit] = timed {
     (for {
       userSession <- login(email, password)

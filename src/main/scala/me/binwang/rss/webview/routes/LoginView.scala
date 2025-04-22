@@ -18,6 +18,7 @@ class LoginView(userService: UserService) extends Http4sView with ScalatagsInsta
   val routes: HttpRoutes[IO] = HttpRoutes.of[IO] {
 
     case req @ GET -> Root / "login" =>
+      val redirectParam = req.params.get("redirect_url").map(url => s"?redirect_url=$url").getOrElse("")
       val body =
         form(
           cls := "login-page",
@@ -29,7 +30,7 @@ class LoginView(userService: UserService) extends Http4sView with ScalatagsInsta
             input(`type` := "text", name := "email", id := "email", placeholder := "Email", required),
             input(`type` := "password", name := "password", id := "password", placeholder := "Password", required),
           ),
-          button(hxPost := "/hx/login", hxDisableThis, "Login"),
+          button(hxPost := s"/hx/login$redirectParam", hxDisableThis, "Login"),
           div(
             cls := "login-hint",
             small("Don't have an account yet? Click ", a(href := "/signup")("here"), " to create a new account."),
@@ -41,12 +42,13 @@ class LoginView(userService: UserService) extends Http4sView with ScalatagsInsta
       Ok(Html(body), `Content-Type`(MediaType.text.html))
 
     case req @ POST -> Root / "hx" / "login" =>
+      val redirectUrl = req.params.getOrElse("redirect_url", "/")
       req.decode[UrlForm] { data =>
         userService.login(
           data.values.get("email").flatMap(_.headOption).get,
           data.values.get("password").flatMap(_.headOption).get,
         ).flatMap { session =>
-          HttpResponse.redirect("logged in", "/", req).map(_.addCookie(ResponseCookie(
+          HttpResponse.redirect("logged in", redirectUrl, req).map(_.addCookie(ResponseCookie(
             "token",
             session.token,
             path = Some("/"),
@@ -57,6 +59,11 @@ class LoginView(userService: UserService) extends Http4sView with ScalatagsInsta
           )))
         }
       }
+
+    case req @ GET -> Root / "llm_auth" =>
+      val token = req.authToken
+      val body = div(s"Use `token` param in the APIs to do authentication. Your current token is `$token`.")
+      Ok(Html(body), `Content-Type`(MediaType.text.html))
 
     case req @ POST -> Root / "hx" / "logout" =>
       userService.signOut(req.authToken) >>

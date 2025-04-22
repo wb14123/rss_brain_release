@@ -10,6 +10,24 @@ object ArticleID {
 
 case class ArticleIDs(ids: Seq[ID])
 
+/**
+ * Article structure
+ * @param id Article ID. It's a hash of source url + guid
+ * @param title Article title parsed from feed.
+ * @param guid GUID parsed from feed.
+ * @param link The link to the original article. Parsed from feed.
+ * @param createdAt When this article is created in RSS Brain.
+ * @param postedAt When the article is posted. Parsed from feed. If feed doesn't have a post time, fill it with current time when the article is updated.
+ * @param description If feed has a description field, use that. Otherwise, copy from content. Has a max length.
+ * @param author The author of the article. Parsed from feed.
+ * @param comments How many comments for the article.
+ * @param upVotes How many up votes for the article.
+ * @param downVotes How many down votes for the article.
+ * @param score RSS Brain algorithm calculate a score based on up votes and article freshness.
+ * @param mediaGroups Medias in the article. Parsed from feed.
+ * @param nsfw If the article is not suite for work.
+ * @param postedAtIsMissing If `postedAt` is missing in feed and filled by current time.
+ */
 case class Article(
   id: ID,
   title: String,

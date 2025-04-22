@@ -2,7 +2,7 @@ package me.binwang.rss.webview.routes
 
 import cats.effect.IO
 import io.circe.generic.auto._
-import me.binwang.rss.model.{ArticleListLayout, ArticleOrder, Folder, FolderCreator, FolderSource, FolderUpdater}
+import me.binwang.rss.model._
 import me.binwang.rss.model.CirceEncoders._
 import me.binwang.rss.service.{FolderService, SourceService, UserService}
 import me.binwang.rss.webview.auth.CookieGetter.reqToCookieGetter
@@ -11,13 +11,13 @@ import me.binwang.rss.webview.basic.HtmlCleaner.str2cleaner
 import me.binwang.rss.webview.basic.{ContentRender, HttpResponse, ProxyUrl, ScalatagsSeqInstances}
 import me.binwang.rss.webview.basic.ScalaTagAttributes.{hxTarget, _}
 import me.binwang.rss.webview.routes.FolderListView.{folderSourcesDom, getFolderAndSources, reloadFolderDom}
-import me.binwang.rss.webview.widgets.{PageHeader, SourceIcon}
+import me.binwang.rss.webview.widgets._
 import org.http4s.dsl.io._
 import org.http4s.circe._
 import org.http4s.headers._
 import org.http4s.scalatags.ScalatagsInstances
 import org.http4s.{EntityDecoder, HttpRoutes, MediaType}
-import scalatags.Text.all.{button, _}
+import scalatags.Text.all._
 
 import java.net.URI
 import scala.util.Try
@@ -38,7 +38,12 @@ object FolderListView {
     val sourceName = fs.source.title.getOrElse("").escapeHtml
     // only show error messages when there are 3 errors in a row
     val errorHint: Frag = if (fs.source.fetchFailedMsg.isEmpty || fs.source.fetchErrorCount <= 3) "" else
-      span(cls := "material-icons-outlined warning", title := fs.source.fetchFailedMsg.get)("error_outline")
+      a(
+        cls := "cursor-enabled",
+        ContentRender.hxSwapContentAttrs,
+        hxPushUrl := "true",
+        hxGet := s"/sources/$sourceID/error",
+        span(cls := "material-icons-outlined warning", title := fs.source.fetchFailedMsg.get)("error_outline"))
 
     val sortBy = ArticleList.sortBy(fs.folderMapping.articleOrder)
     val layout = fs.folderMapping.articleListLayout.toString
@@ -314,6 +319,37 @@ class FolderListView(folderService: FolderService, sourceService: SourceService,
       folderService.exportOPML(token).flatMap { opml =>
         Ok(opml, `Content-Type`(MediaType.text.xml))
       }
+
+
+    case req @ GET -> Root / "sources" / sourceID / "error" => wrapContentRaw(req) {
+      val token = req.authToken
+      for {
+        source <- sourceService.getSource(token, sourceID)
+        msg: Frag = source.fetchFailedMsg.map{ errMsg =>
+          div(
+            div(
+              h3("Feed Fetch Info:"),
+              SourceFetchInfo(source),
+            ),
+            hr,
+            div(
+              h3("Error Message"),
+              pre(code(errMsg)),
+            ),
+            hr,
+            a(href := source.xmlUrl, target := "_blank", "Open Feed Link"),
+          )
+        }.getOrElse("No error.")
+        dom = Seq(
+          PageHeader(Some(source.title.getOrElse("Unknown Feed"))),
+          div(
+            cls := "form-body form-start",
+            msg,
+          )
+        )
+        resp <- Ok(dom, `Content-Type`(MediaType.text.html))
+      } yield resp
+    }
 
   }
 }

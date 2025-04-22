@@ -7,128 +7,180 @@ option java_package = "me.binwang.rss.grpc";
 package rss;
 
 
-// Define TestInner
-
-message TestInner {
-    string str = 1;
-}
-
-// Define Test
-
-message Test {
-    message ListFieldList {
-        message ListFieldListList {
-            repeated TestInner listFieldListList = 1;
-        }
-        repeated ListFieldListList listFieldList = 1;
-    }
-    repeated ListFieldList listField = 1;
-
-    message OptionFieldOption {
-        message OptionFieldOptionOption {
-            optional TestInner optionFieldOptionOption = 1;
-        }
-        optional OptionFieldOptionOption optionFieldOption = 1;
-    }
-    optional OptionFieldOption optionField = 2;
-
-    message MixField1List {
-        message MixField1ListOption {
-            optional TestInner mixField1ListOption = 1;
-        }
-        repeated MixField1ListOption mixField1List = 1;
-    }
-    optional MixField1List mixField1 = 3;
-
-    message MixField2Option {
-        message MixField2OptionList {
-            repeated TestInner mixField2OptionList = 1;
-        }
-        optional MixField2OptionList mixField2Option = 1;
-    }
-    repeated MixField2Option mixField2 = 4;
-}
-
-// Define Article
-
+// Article structure
 message Article {
+    // Article ID. It's a hash of source url + guid
     string id = 1;
+
+    // Article title parsed from feed.
     string title = 2;
+
     string sourceID = 3;
+
     optional string sourceTitle = 4;
+
+    // GUID parsed from feed.
     string guid = 5;
+
+    // The link to the original article. Parsed from feed.
     string link = 6;
+
+    // When this article is created in RSS Brain.
     int64 createdAt = 7;
+
+    /*
+    When the article is posted. Parsed from feed. If feed doesn't have a post
+    time, fill it with current time when the article is updated.
+    */
     int64 postedAt = 8;
+
+    /*
+    If feed has a description field, use that. Otherwise, copy from content.
+    Has a max length.
+    */
     string description = 9;
+
+    // The author of the article. Parsed from feed.
     optional string author = 10;
+
+    // How many comments for the article.
     optional int32 comments = 11;
+
+    // How many up votes for the article.
     optional int32 upVotes = 12;
+
+    // How many down votes for the article.
     optional int32 downVotes = 13;
+
+    /*
+    RSS Brain algorithm calculate a score based on up votes and article
+    freshness.
+    */
     double score = 14;
+
+    // Medias in the article. Parsed from feed.
     optional MediaGroups mediaGroups = 15;
+
+    // If the article is not suite for work.
     bool nsfw = 16;
+
+    // If postedAt is missing in feed and filled by current time.
     bool postedAtIsMissing = 17;
 }
-
-// Define ArticleIDs
 
 message ArticleIDs {
     repeated string ids = 1;
 }
 
-// Define ArticleContent
-
+// The structure for the content of article.
 message ArticleContent {
+    // Article ID.
     string id = 1;
+
+    // The content of the article.
     string content = 2;
 }
 
-// Define ArticleOrder
-
+/*
+The order of showing article in list. The server only stores this property.
+Clients need to request different API based on the value.
+*/
 enum ArticleOrder {
+    // Sort articles by postedAt time.
     TIME = 0;
+
+    // Sort articles by score of article.
     SCORE = 1;
 }
 
-// Define ArticleListLayout
-
+/*
+Layout for displaying article list. Server only stores this property. It
+depends on client how to display them based on the value.
+*/
 enum ArticleListLayout {
+    // Show articles in a water flow list.
     LIST = 0;
+
+    /*
+    Show articles in a grid layout. Show articles in a grid layout. If there
+    is an image or video, show that as well. Mostly used in video or image
+    feeds like Youtube.
+    */
     GRID = 1;
+
+    /*
+    Hide title and show author avatar and name first. Hide title and show
+    author avatar and name first. Much like Twitter.
+    */
     SOCIAL_MEDIA = 2;
+
+    // Show metadata like title, date without showing description in the list.
     COMPACT = 3;
 }
 
-// Define Folder
-
+// User can create folders that contain multiple sources.
 message Folder {
+    // Folder ID.
     string id = 1;
+
+    // Which user has the ownership of the folder.
     string userID = 2;
+
+    // Folder name.
     string name = 3;
+
+    // Folder description.
     optional string description = 4;
+
+    // The position of the folder when displaying.
     int64 position = 5;
+
+    // How many sources are in folder (not in use, always 0 for now).
     int32 count = 6;
+
+    /*
+    RSS Brain will create a folder for user by default when creating a user.
+    This is like the root folder where sources without an explict folder
+    belongs to. If this field is true, it means this is the root folder for
+    this user.
+    */
     bool isUserDefault = 7;
+
+    // If articles filer is enabled based on search term.
     bool searchEnabled = 8;
+
+    // The search term to filter articles when get article list.
     optional string searchTerm = 9;
+
+    // If show this folder as expanded in clients.
     bool expanded = 10;
+
     ArticleOrder articleOrder = 11;
+
+    // If true, this folder will be shown in "Explore" page.
     bool recommend = 12;
+
     optional string language = 13;
+
     ArticleListLayout articleListLayout = 14;
 }
 
-// Define FolderCreator
-
+// The structure to create a folder. Only contains fields that user can set.
 message FolderCreator {
     string name = 1;
+
     optional string description = 2;
+
+    /*
+    The position of the folder. If insert at the last place, it should be the
+    last position + 1000. Otherwise, it should be the avg value of the
+    position before and after it. If there is no number available, call
+    FolderService.cleanupPosition to make the gap larger between folders.
+    */
     int64 position = 3;
 }
 
-// Define FolderUpdater
-
+// Structure to update the folder. None means don't update that field.
 message FolderUpdater {
     optional string name = 1;
 
@@ -136,102 +188,193 @@ message FolderUpdater {
         optional string descriptionOption = 1;
     }
     optional DescriptionOption description = 2;
+
     optional int64 position = 3;
+
     optional bool searchEnabled = 4;
 
     message SearchTermOption {
         optional string searchTermOption = 1;
     }
     optional SearchTermOption searchTerm = 5;
+
     optional bool expanded = 6;
+
     optional ArticleOrder articleOrder = 7;
+
     optional bool recommend = 8;
 
     message LanguageOption {
         optional string languageOption = 1;
     }
     optional LanguageOption language = 9;
+
     optional ArticleListLayout articleListLayout = 10;
 }
 
-// Define FolderSource
-
+/*
+A structure to have both folderSourceMapping (the source metadata in a
+folder) and the actual source.
+*/
 message FolderSource {
     FolderSourceMapping folderMapping = 1;
+
     Source source = 2;
 }
 
-// Define FolderSourceMapping
-
+/*
+Source data associated to a folder. Currently, this is kind of used as user's
+config for a source.
+*/
 message FolderSourceMapping {
     string folderID = 1;
+
     string sourceID = 2;
+
     string userID = 3;
+
+    // The position of a source in folder.
     int64 position = 4;
+
+    // The name to display in folder instead of the title parsed from the feed.
     optional string customSourceName = 5;
+
+    // Deprecated. Use articleListLayout.
     bool showTitle = 6;
+
+    // Deprecated. Use articleListLayout.
     bool showFullArticle = 7;
+
+    // Deprecated. Use articleListLayout.
     bool showMedia = 8;
+
     ArticleOrder articleOrder = 9;
+
     ArticleListLayout articleListLayout = 10;
 }
 
-// Define FolderSourceMappingUpdater
-
+// Structure to update FolderSourceMapping. None means don't update that field.
 message FolderSourceMappingUpdater {
     message CustomSourceNameOption {
         optional string customSourceNameOption = 1;
     }
     optional CustomSourceNameOption customSourceName = 1;
+
     optional bool showTitle = 2;
+
     optional bool showFullArticle = 3;
+
     optional bool showMedia = 4;
+
     optional ArticleOrder articleOrder = 5;
+
     optional ArticleListLayout articleListLayout = 6;
 }
 
-// Define FullArticle
-
+// A structure that contents both article metadata and content.
 message FullArticle {
+    // Article metadata.
     Article article = 1;
+
+    // The content of article.
     string content = 2;
 }
 
-// Define FetchStatus
-
+// Source fetching status.
 enum FetchStatus {
+    // Scheduled but haven't started
     SCHEDULED = 0;
+
+    /*
+    The system has pulled the record into the work queue, but the work hasn't
+    been started yet
+    */
     PENDING = 1;
+
+    /*
+    The fetch has started and is in progress. The fetch has started and is in
+    progress. It will go to SCHEDULED state after finished.
+    */
     FETCHING = 2;
+
+    // Source is paused for fetching because no paid user is subscribing it.
     PAUSED = 3;
 }
 
-// Define Source
-
+// Source means something a user subscribed for, like a RSS or ATOM feed.
 message Source {
+    // Source ID. Hashed from xmlUrl so it is unique.
     string id = 1;
+
+    // The URL to get the source.
     string xmlUrl = 2;
+
+    // When this is imported to RSS Brain.
     int64 importedAt = 3;
+
+    // When this is last updated.
     int64 updatedAt = 4;
+
+    // The title of the source. Parsed from feed.
     optional string title = 5;
+
+    // The original site URL. Parsed from feed.
     optional string htmlUrl = 6;
+
+    // The URL of the site icon. Parsed from feed.
     optional string iconUrl = 7;
+
+    /*
+    Whether to show title in article list by default. (Need to migrated to
+    ArticleListLayout). User can override this in their FolderSourceMapping.
+    */
     bool showTitle = 8;
+
+    /*
+    Whether to show full article in article list by default. (Need to migrate
+    to ArticleListLayout). User can override this in their
+    FolderSourceMapping.
+    */
     bool showFullArticle = 9;
+
+    /*
+    Whether to show medias in article list by default. (Need to migrate to
+    ArticleListLayout). User can override this in their FolderSourceMapping.
+    */
     bool showMedia = 10;
+
     optional string description = 11;
+
     ArticleOrder articleOrder = 12;
+
+    // When is the next fetch scheduled.
     int64 fetchScheduledAt = 13;
+
+    // When is the current fetch started.
     optional int64 fetchStartedAt = 14;
+
+    // When is the last fetch completed.
     optional int64 fetchCompletedAt = 15;
+
     FetchStatus fetchStatus = 16;
+
+    // The error message if last fetch failed.
     optional string fetchFailedMsg = 17;
+
+    /*
+    The average time to wait for the next fetch. Can increase if there are
+    multiple errors.
+    */
     int64 fetchDelayMillis = 18;
+
+    /*
+    How many continues failed fetch occurred. Will be set to 0 once a
+    successful fetch is finished.
+    */
     int32 fetchErrorCount = 19;
 }
 
-// Define SourceUpdater
-
+// Structure to update source. None means the field will not be updated.
 message SourceUpdater {
     message TitleOption {
         optional string titleOption = 1;
@@ -247,6 +390,7 @@ message SourceUpdater {
         optional string descriptionOption = 1;
     }
     optional DescriptionOption description = 3;
+
     optional int64 fetchScheduledAt = 4;
 
     message FetchStartedAtOption {
@@ -258,17 +402,24 @@ message SourceUpdater {
         optional int64 fetchCompletedAtOption = 1;
     }
     optional FetchCompletedAtOption fetchCompletedAt = 6;
+
     optional FetchStatus fetchStatus = 7;
 
     message FetchFailedMsgOption {
         optional string fetchFailedMsgOption = 1;
     }
     optional FetchFailedMsgOption fetchFailedMsg = 8;
+
     optional int64 fetchDelayMillis = 9;
+
     optional int32 fetchErrorCount = 10;
+
     optional bool showTitle = 11;
+
     optional bool showFullArticle = 12;
+
     optional bool showMedia = 13;
+
     optional ArticleOrder articleOrder = 14;
 
     message IconUrlOption {
@@ -277,69 +428,126 @@ message SourceUpdater {
     optional IconUrlOption iconUrl = 15;
 }
 
-// Define NSFWSetting
-
+/*
+How to show NSFW content. This is only used for client to display the
+content. Server does nothing other than storing the value for the clients.
+Clients can decide what to do based on the values but here is the guide:
+*/
 enum NSFWSetting {
+    /*
+    Hide the NSFW content in article list. Hide the NSFW content in article
+    list. But can be shown when click into article.
+    */
     HIDE = 0;
+
+    /*
+    Blur the NSFW images and video cover. Blur the NSFW images and video
+    cover. Hide the text in article list. But all the content will be shown
+    when click into the article.
+    */
     BLUR = 1;
+
+    // Show all the NSFW content in the article list.
     SHOW = 2;
 }
 
-// Define SearchEngine
-
 message SearchEngine {
     optional string name = 1;
+
     string urlPrefix = 2;
 }
 
-// Define User
-
 message User {
     string id = 1;
+
     string username = 2;
+
     string password = 3;
+
     string salt = 4;
+
     string email = 5;
+
     string defaultFolderID = 6;
+
     optional int64 lastLoginTime = 7;
+
     optional string lastLoginIP = 8;
+
     bool isActive = 9;
+
     bool isAdmin = 10;
+
     int64 createdAt = 11;
+
     optional string currentFolderID = 12;
+
     optional string currentSourceID = 13;
+
     optional string activeCode = 14;
+
     int64 subscribeEndAt = 15;
+
     bool subscribed = 16;
+
     NSFWSetting nsfwSetting = 17;
+
     SearchEngine searchEngine = 18;
+
     optional LLMEngine llmEngine = 19;
+
     optional string llmApiKey = 20;
 }
 
-// Define UserInfo
-
+/*
+The user information returned to client. Removed sensitive information like
+password and activeCode.
+*/
 message UserInfo {
     string id = 1;
+
     string username = 2;
+
     string email = 3;
+
     int64 createdAt = 4;
+
     string defaultFolderID = 5;
+
     bool isAdmin = 6;
+
     int64 subscribeEndAt = 7;
+
+    /*
+    The last folder that the user visited. None if user last visited a source
+    instead of folder.
+    */
     optional string currentFolderID = 8;
+
+    /*
+    The last source that the user visited. None if user last visited a folder
+    instead of source.
+    */
     optional string currentSourceID = 9;
+
     bool subscribed = 10;
+
     NSFWSetting nsfwSetting = 11;
+
     SearchEngine searchEngine = 12;
+
     optional LLMEngine llmEngine = 13;
 }
 
-// Define UserUpdater
-
+/*
+Structure to update user information. Every param is default to None which
+means no update for that field.
+*/
 message UserUpdater {
     optional string password = 1;
+
     optional string salt = 2;
+
     optional string email = 3;
 
     message LastLoginTimeOption {
@@ -351,7 +559,9 @@ message UserUpdater {
         optional string lastLoginIPOption = 1;
     }
     optional LastLoginIPOption lastLoginIP = 5;
+
     optional bool isActive = 6;
+
     optional bool isAdmin = 7;
 
     message CurrentFolderIDOption {
@@ -368,10 +578,15 @@ message UserUpdater {
         optional string activeCodeOption = 1;
     }
     optional ActiveCodeOption activeCode = 10;
+
     optional int64 subscribeEndAt = 11;
+
     optional bool subscribed = 12;
+
     optional string username = 13;
+
     optional NSFWSetting nsfwSetting = 14;
+
     optional SearchEngine searchEngine = 15;
 
     message LlmEngineOption {
@@ -385,404 +600,661 @@ message UserUpdater {
     optional LlmApiKeyOption llmApiKey = 17;
 }
 
-// Define UserSession
-
+// User session.
 message UserSession {
+    // The token used for most of the API requests that needs a token parameter.
     string token = 1;
+
     string userID = 2;
+
+    // When the token will be expired.
     int64 expireTime = 3;
+
+    /*
+    Whether the logged-in user is an admin. May need to login again to
+    refresh this info in session.
+    */
     bool isAdmin = 4;
+
+    /*
+    When the user's subscription will end. May need to login again to refresh
+    this info in session.
+    */
     int64 subscribeEndTime = 5;
+
+    /*
+    If the user is subscribed to the product. May need to login again to
+    refresh this info in session.
+    */
     bool subscribed = 6;
 }
 
-// Define ArticleUserMarking
-
+/*
+User data associated to an article. The server is mostly just store the data.
+The clients need to display articles based on the value and call APIs with
+different parameters.
+*/
 message ArticleUserMarking {
+    // The ID of article.
     string articleID = 1;
+
+    // The user ID.
     string userID = 2;
+
+    // If the user is bookmarked (or liked) by a user.
     bool bookmarked = 3;
+
+    // If the article is read by the user.
     bool read = 4;
+
+    // If the article is deleted by the user.
     bool deleted = 5;
+
+    /*
+    Different kind of article can have different meaning for this. But in
+    general for the media based articles like video or audio, this means the
+    milliseconds of the audio/video.
+    */
     int32 readProgress = 6;
 }
 
-// Define ArticleWithUserMarking
-
 message ArticleWithUserMarking {
     Article article = 1;
+
     ArticleUserMarking userMarking = 2;
 }
-
-// Define FullArticleWithUserMarking
 
 message FullArticleWithUserMarking {
     FullArticle article = 1;
+
     ArticleUserMarking userMarking = 2;
 }
 
-// Define RedditSession
-
 message RedditSession {
     string userID = 1;
+
     string redditUserID = 2;
+
     optional string redditUserName = 3;
+
     string state = 4;
+
     int64 createdAt = 5;
+
     optional int64 accessAcceptedAt = 6;
+
     optional string token = 7;
+
     optional string refreshToken = 8;
+
     optional string scope = 9;
+
     optional int32 expiresInSeconds = 10;
 }
 
-// Define SourceResult
-
+// The result of finding sources by any URL.
 message SourceResult {
+    // The feed URL that has been found.
     string url = 1;
+
+    /*
+    Prefer the found URL over original URL even if the original URL is a
+    valid one.
+    */
     bool recommend = 2;
+
+    // The reason for prefer this over the original URL.
     optional string recommendReason = 3;
 }
 
-// Define SearchOptions
-
+// Parameters for searching.
 message SearchOptions {
+    // The search term. Support Elasticsearch query syntax.
     string query = 1;
+
+    // How many entries to skip.
     int32 start = 2;
+
+    // How many entries to return at most.
     int32 limit = 3;
+
+    /*
+    Whether sort by time. If false, the returned articles will be sorted by
+    matching.
+    */
     bool sortByTime = 4;
+
+    // Whether highlight the match parts for the returned article description.
     bool highlight = 5;
+
+    // Filter articles that posted after this.
     optional int64 postedAfter = 6;
+
+    // Filter articles that posted before this.
     optional int64 postedBefore = 7;
 }
-
-// Define MediaGroups
 
 message MediaGroups {
     repeated MediaGroup groups = 1;
 }
 
-// Define MediaGroup
-
 message MediaGroup {
     MediaContent content = 1;
+
     optional string title = 2;
+
     optional string keyword = 3;
+
     optional string description = 4;
+
     optional string hash = 5;
+
     optional MediaRating rating = 6;
+
     repeated MediaThumbnail thumbnails = 7;
+
     repeated MediaText text = 8;
+
     repeated string comments = 9;
 }
 
-// Define MediaContent
-
 message MediaContent {
     string url = 1;
+
     optional int64 fileSize = 2;
+
     optional string typ = 3;
+
     optional string medium = 4;
+
     bool isDefault = 5;
+
     string expression = 6;
+
     optional int32 height = 7;
+
     optional int32 width = 8;
+
     optional string lang = 9;
+
     optional bool fromArticle = 10;
 }
 
-// Define MediaRating
-
 message MediaRating {
     string value = 1;
+
     optional string scheme = 2;
 }
 
-// Define MediaThumbnail
-
 message MediaThumbnail {
     string url = 1;
+
     optional int32 width = 2;
+
     optional int32 height = 3;
+
     optional string time = 4;
 }
 
-// Define MediaPlayer
-
 message MediaPlayer {
     string url = 1;
+
     optional int32 height = 2;
+
     optional int32 width = 3;
 }
 
-// Define MediaText
-
 message MediaText {
     optional string lang = 1;
+
     optional string start = 2;
+
     optional string end = 3;
 }
 
-// Define PaymentCustomer
-
 message PaymentCustomer {
     string userID = 1;
+
     string thirdParty = 2;
+
     string customerID = 3;
+
     int64 createdAt = 4;
 }
 
-// Define MoreLikeThisMapping
-
+/*
+Settings for more like this articles. Server is mostly just store the
+configs. Clients need to request different APIs to get more like this
+articles. An article can have multiple sections for more like this articles.
+The sorting depends on position.
+*/
 message MoreLikeThisMapping {
+    /*
+    Can be source ID or folder ID depends on fromType. It means the config is
+    for this source or foder.
+    */
     string fromID = 1;
+
+    // Can be folder or source.
     MoreLikeThisType fromType = 2;
+
+    /*
+    Where to find more like this articles. Can be a source ID, folder ID or
+    empty if search articles from all sources. The meaning of this ID
+    depends on moreLikeThisType.
+    */
     string moreLikeThisID = 3;
+
+    // Can be folder, source or all articles.
     MoreLikeThisType moreLikeThisType = 4;
+
+    // Which user this setting is associated to.
     string userID = 5;
+
+    // The position to show the more like this section.
     int64 position = 6;
 }
 
-// Define MoreLikeThisType
-
 enum MoreLikeThisType {
     FOLDER = 0;
+
     SOURCE = 1;
+
     ALL = 2;
 }
 
-// Define TermWeight
-
 message TermWeight {
     string term = 1;
+
     double weight = 2;
 }
-
-// Define TermWeights
 
 message TermWeights {
     repeated TermWeight terms = 1;
 }
 
-// Define SearchTerms
-
+// Suggested search terms.
 message SearchTerms {
+    // each element is a search term that can be used in search engines.
     repeated string terms = 1;
 }
 
-// Define ImportSourcesTask
-
+// The progress of source imports from OPML.
 message ImportSourcesTask {
+    // The ID of the task.
     string id = 1;
+
+    // Which user this task belongs to.
     string userID = 2;
+
+    // When the task is created.
     int64 createdAt = 3;
+
+    // How many sources are in the import task.
     int32 totalSources = 4;
+
+    // How many sources are failed.
     int32 failedSources = 5;
+
+    // How many sources are successful.
     int32 successfulSources = 6;
 }
 
-// Define ImportFailedSource
-
+// The details of failed to import sources.
 message ImportFailedSource {
+    // The feed url.
     string xmlUrl = 1;
+
+    // The error message.
     string error = 2;
 }
-
-// Define LLMEngine
 
 enum LLMEngine {
     OpenAI = 0;
 }
 
-// Define me.binwang.rss.service.ArticleService
-
 message GetArticlesBySourceRequest {
     string token = 1;
+
     string sourceID = 2;
+
+    // How many articles to get at most.
     int32 size = 3;
-    int64 postedAt = 4;
+
+    /*
+    Filter articles that is posted before this time. Default is 0 which means
+    no article will be returned if this is not specified. For the first
+    request of the pagination, it's better to use the current timestamp (in
+    milliseconds) or a very large number that is larger than the current
+    timestamp.
+    */
+    int64 postedBefore = 4;
+
+    /*
+    Filter articles that is larger than this if the article's postedAt equals
+    postedBefore in param.
+    */
     string articleID = 5;
 }
 
 message SearchArticlesBySourceWithUserMarkingRequest {
     string token = 1;
+
     string sourceID = 2;
+
     SearchOptions searchOptions = 3;
 }
 
 message MoreLikeThisInSourceWithUserMarkingRequest {
     string token = 1;
+
+    // The article's ID to search for more like this articles.
     string articleID = 2;
+
+    // Which source to search for more like this articles.
     string sourceID = 3;
+
+    // The number of articles to skip.
     int32 start = 4;
+
+    // How many articles to return at most.
     int32 limit = 5;
+
+    // Filter on the articles that is posted before this time.
     optional int64 postedBefore = 6;
+
+    // Filter on the articles that is posted after this time.
     optional int64 postedAfter = 7;
 }
 
 message SearchArticlesByFolderWithUserMarkingRequest {
     string token = 1;
+
     string folderID = 2;
+
     SearchOptions searchOptions = 3;
 }
 
 message MoreLikeThisInFolderWithUserMarkingRequest {
     string token = 1;
+
+    // The article's ID to search for more like this articles.
     string articleID = 2;
+
+    // Which folder to search for articles like this.
     string folderID = 3;
+
+    // How many articles to skip.
     int32 start = 4;
+
+    // How many articles to return at most.
     int32 limit = 5;
+
+    // Filter articles that is posted before this time.
     optional int64 postedBefore = 6;
+
+    // Filter articles that is posted after this time.
     optional int64 postedAfter = 7;
 }
 
 message SearchAllArticlesWithUserMarkingRequest {
     string token = 1;
+
     SearchOptions searchOptions = 2;
 }
 
 message MoreLikeThisForUserWithUserMarkingRequest {
     string token = 1;
+
+    // The article's ID to search for more like this articles.
     string articleID = 2;
+
+    // How many articles to skip.
     int32 start = 3;
+
+    // How many articles to return at most.
     int32 limit = 4;
+
+    // Filter articles that is posted before this time.
     optional int64 postedBefore = 5;
+
+    // Filter articles that is posted after this time.
     optional int64 postedAfter = 6;
 }
 
 message GetArticlesBySourceWithUserMarkingRequest {
     string token = 1;
+
     string sourceID = 2;
+
+    // How many articles to return at most.
     int32 size = 3;
-    int64 postedAt = 4;
+
+    /*
+    Filter articles that is posted before or equal to this time. Default is 0
+    which means no article will be returned if this is not specified. For
+    the first request of the pagination, it's better to use the current
+    timestamp (in milliseconds) or a very large number that is larger than
+    the current timestamp.
+    */
+    int64 postedBefore = 4;
+
+    /*
+    If there are articles posted at the same time as postedBefore, return the
+    articles that ID is larger than this.
+    */
     string articleID = 5;
+
+    /*
+    Filter on ArticleWithUserMarking.userMarking.read. None means don't
+    filter on this field.
+    */
     optional bool read = 6;
+
+    /*
+    Filter on ArticleWithUserMarking.userMarking.bookmarked. None means don't
+    filter on this field.
+    */
     optional bool bookmarked = 7;
+
+    /*
+    Filter on ArticleWithUserMarking.userMarking.deleted. False by default.
+    None means don't filter on this field.
+    */
     optional bool deleted = 8;
 }
 
 message GetArticlesBySourceOrderByScoreWithUserMarkingRequest {
     string token = 1;
+
     string sourceID = 2;
+
     int32 size = 3;
+
+    // Filter articles that has a score less or equal to this.
     optional double maxScore = 4;
+
+    /*
+    If there are articles have a score equal to maxScore, only return
+    articles with ID lager than this.
+    */
     string articleID = 5;
+
     optional bool read = 6;
+
     optional bool bookmarked = 7;
+
     optional bool deleted = 8;
 }
 
 message GetArticlesByFolderRequest {
     string token = 1;
+
     string folderID = 2;
+
     int32 size = 3;
+
     int64 postedBefore = 4;
+
     string articleID = 5;
 }
 
 message GetArticlesByFolderWithUserMarkingRequest {
     string token = 1;
+
     string folderID = 2;
+
     int32 size = 3;
+
     int64 postedBefore = 4;
+
     string articleID = 5;
+
     optional bool read = 6;
+
     optional bool bookmarked = 7;
+
     optional bool deleted = 8;
 }
 
 message GetArticlesByFolderOrderByScoreWithUserMarkingRequest {
     string token = 1;
+
     string folderID = 2;
+
     int32 size = 3;
+
     optional double maxScore = 4;
+
     string articleID = 5;
+
     optional bool read = 6;
+
     optional bool bookmarked = 7;
+
     optional bool deleted = 8;
 }
 
 message GetMyArticlesRequest {
     string token = 1;
+
     int32 size = 2;
-    int64 postedAt = 3;
+
+    int64 postedBefore = 3;
+
     string articleID = 4;
 }
 
 message GetMyArticlesWithUserMarkingRequest {
     string token = 1;
+
     int32 size = 2;
-    int64 postedAt = 3;
+
+    int64 postedBefore = 3;
+
     string articleID = 4;
+
     optional bool read = 5;
+
     optional bool bookmarked = 6;
+
     optional bool deleted = 7;
 }
 
 message GetFullArticleRequest {
     string token = 1;
+
     string articleID = 2;
 }
 
 message BatchGetArticleContentRequest {
     string token = 1;
+
     ArticleIDs articleIDs = 2;
 }
 
 message GetFullArticleWithUserMarkingRequest {
     string token = 1;
+
     string articleID = 2;
 }
 
 message GetFolderRecommendSearchTermsRequest {
     string token = 1;
+
+    // Which folder the recommendation is based on.
     string folderID = 2;
+
+    /*
+    How many articles to look into for recommendation. It will get liked
+    articles first, and if the liked articles is fewer than articleSize, it
+    will find from most recent articles.
+    */
     int32 articleSize = 3;
+
+    /*
+    Only use liked articles posted after this time so it doesn't go too back
+    into user's interest.
+    */
     int64 likedArticlesPostedAfter = 4;
+
+    // How many search terms to return.
     int32 resultSize = 5;
 }
 
 message ReadArticleRequest {
     string token = 1;
+
     string articleID = 2;
 }
 
 message UnreadArticleRequest {
     string token = 1;
+
     string articleID = 2;
 }
 
 message BookmarkArticleRequest {
     string token = 1;
+
     string articleID = 2;
 }
 
 message UnBookmarkArticleRequest {
     string token = 1;
+
     string articleID = 2;
 }
 
 message MarkArticleAsDeletedRequest {
     string token = 1;
+
     string articleID = 2;
 }
 
 message MarkArticleAsNotDeletedRequest {
     string token = 1;
+
     string articleID = 2;
 }
 
 message MarkArticleReadProgressRequest {
     string token = 1;
+
     string articleID = 2;
+
     int32 progress = 3;
 }
 
 message GetArticleTermVectorRequest {
     string token = 1;
+
     string articleID = 2;
+
+    // The max size of the term vector.
     int32 size = 3;
 }
+
 message GetArticlesBySourceResponse {
     Article result = 1;
 }
@@ -887,39 +1359,100 @@ message GetArticleTermVectorResponse {
     TermWeights result = 1;
 }
 
+// APIs related to articles.
 service ArticleAPI {
+    // Get articles by source.
     rpc GetArticlesBySource (GetArticlesBySourceRequest) returns (stream GetArticlesBySourceResponse);
+
     rpc SearchArticlesBySourceWithUserMarking (SearchArticlesBySourceWithUserMarkingRequest) returns (stream SearchArticlesBySourceWithUserMarkingResponse);
+
+    /*
+    Get more articles like this one in a specific source. Return articles
+    with user marking.
+    */
     rpc MoreLikeThisInSourceWithUserMarking (MoreLikeThisInSourceWithUserMarkingRequest) returns (stream MoreLikeThisInSourceWithUserMarkingResponse);
+
     rpc SearchArticlesByFolderWithUserMarking (SearchArticlesByFolderWithUserMarkingRequest) returns (stream SearchArticlesByFolderWithUserMarkingResponse);
+
+    /*
+    Get more articles like this one in a specific folder. Return articles
+    with user marking.
+    */
     rpc MoreLikeThisInFolderWithUserMarking (MoreLikeThisInFolderWithUserMarkingRequest) returns (stream MoreLikeThisInFolderWithUserMarkingResponse);
+
     rpc SearchAllArticlesWithUserMarking (SearchAllArticlesWithUserMarkingRequest) returns (stream SearchAllArticlesWithUserMarkingResponse);
+
+    /*
+    Get more articles like this one. Search in all the articles that the user
+    has subscribed. Return articles with user marking.
+    */
     rpc MoreLikeThisForUserWithUserMarking (MoreLikeThisForUserWithUserMarkingRequest) returns (stream MoreLikeThisForUserWithUserMarkingResponse);
+
+    // Get articles in a source. Return articles with user marking.
     rpc GetArticlesBySourceWithUserMarking (GetArticlesBySourceWithUserMarkingRequest) returns (stream GetArticlesBySourceWithUserMarkingResponse);
+
+    /*
+    Like ArticleService.getArticlesBySourceWithUserMarking but order by score
+    instead of time.
+    */
     rpc GetArticlesBySourceOrderByScoreWithUserMarking (GetArticlesBySourceOrderByScoreWithUserMarkingRequest) returns (stream GetArticlesBySourceOrderByScoreWithUserMarkingResponse);
+
     rpc GetArticlesByFolder (GetArticlesByFolderRequest) returns (stream GetArticlesByFolderResponse);
+
     rpc GetArticlesByFolderWithUserMarking (GetArticlesByFolderWithUserMarkingRequest) returns (stream GetArticlesByFolderWithUserMarkingResponse);
+
     rpc GetArticlesByFolderOrderByScoreWithUserMarking (GetArticlesByFolderOrderByScoreWithUserMarkingRequest) returns (stream GetArticlesByFolderOrderByScoreWithUserMarkingResponse);
+
     rpc GetMyArticles (GetMyArticlesRequest) returns (stream GetMyArticlesResponse);
+
     rpc GetMyArticlesWithUserMarking (GetMyArticlesWithUserMarkingRequest) returns (stream GetMyArticlesWithUserMarkingResponse);
+
     rpc GetFullArticle (GetFullArticleRequest) returns (GetFullArticleResponse);
+
+    /*
+    Get content for multiple articles. Useful when rendering an article list
+    that needs to show full content.
+    */
     rpc BatchGetArticleContent (BatchGetArticleContentRequest) returns (stream BatchGetArticleContentResponse);
+
     rpc GetFullArticleWithUserMarking (GetFullArticleWithUserMarkingRequest) returns (GetFullArticleWithUserMarkingResponse);
+
+    /*
+    Let the system come up with some search terms that can be used in search
+    engines, so that they can search for more content that is similar to the
+    articles in this folder.
+    */
     rpc GetFolderRecommendSearchTerms (GetFolderRecommendSearchTermsRequest) returns (GetFolderRecommendSearchTermsResponse);
+
     rpc ReadArticle (ReadArticleRequest) returns (ReadArticleResponse);
+
     rpc UnreadArticle (UnreadArticleRequest) returns (UnreadArticleResponse);
+
     rpc BookmarkArticle (BookmarkArticleRequest) returns (BookmarkArticleResponse);
+
     rpc UnBookmarkArticle (UnBookmarkArticleRequest) returns (UnBookmarkArticleResponse);
+
     rpc MarkArticleAsDeleted (MarkArticleAsDeletedRequest) returns (MarkArticleAsDeletedResponse);
+
     rpc MarkArticleAsNotDeleted (MarkArticleAsNotDeletedRequest) returns (MarkArticleAsNotDeletedResponse);
+
     rpc MarkArticleReadProgress (MarkArticleReadProgressRequest) returns (MarkArticleReadProgressResponse);
+
+    /*
+    Get a term vector for an article.
+    Returns a term vector that has all the terms in the article and
+    associated weight. It is calculated by Elasticsearch. See
+    https://en.wikipedia.org/wiki/Tf%E2%80%93idf for more details about how
+    it is calculated.
+    */
     rpc GetArticleTermVector (GetArticleTermVectorRequest) returns (GetArticleTermVectorResponse);
 }
 
-// Define me.binwang.rss.service.FolderService
-
 message ImportFromOPMLRequest {
+    // User token.
     string token = 1;
+
+    // The OPML file.
     string inputStream = 2;
 }
 
@@ -941,12 +1474,20 @@ message ExportOPMLRequest {
 
 message GetMyFoldersRequest {
     string token = 1;
+
+    /*
+    How many folders to return at most. Default is 0. Must specify otherwise
+    it will just return an empty response.
+    */
     int32 size = 2;
+
+    // Only return folders that with a position lager than this.
     int64 startPosition = 3;
 }
 
 message GetFolderByIDRequest {
     string token = 1;
+
     string folderID = 2;
 }
 
@@ -956,26 +1497,34 @@ message CleanupPositionRequest {
 
 message AddFolderRequest {
     string token = 1;
+
     FolderCreator folder = 2;
 }
 
 message UpdateFolderRequest {
     string token = 1;
+
     string folderID = 2;
+
     FolderUpdater folderUpdater = 3;
 }
 
 message GetRecommendFoldersRequest {
     string token = 1;
+
     string lang = 2;
+
     int32 size = 3;
+
     int32 startPosition = 4;
 }
 
 message DeleteFolderRequest {
     string token = 1;
+
     string folderID = 2;
 }
+
 message ImportFromOPMLResponse {
     ImportSourcesTask result = 1;
 }
@@ -1020,129 +1569,193 @@ message GetRecommendFoldersResponse {
 
 message DeleteFolderResponse {}
 
+// Folder related APIs.
 service FolderAPI {
+    /*
+    Import folder and sources from OPML file. After this request is sent, the
+    client can use FolderService.getImportOPMLTask to poll the importing
+    status.
+    Returns the status of importing task.
+    */
     rpc ImportFromOPML (ImportFromOPMLRequest) returns (ImportFromOPMLResponse);
+
     rpc GetImportOPMLTask (GetImportOPMLTaskRequest) returns (GetImportOPMLTaskResponse);
+
     rpc GetImportOPMLFailedSources (GetImportOPMLFailedSourcesRequest) returns (stream GetImportOPMLFailedSourcesResponse);
+
+    // Delete the OPML import task. It will stop the importing progress.
     rpc DeleteOPMLImportTasks (DeleteOPMLImportTasksRequest) returns (DeleteOPMLImportTasksResponse);
+
     rpc ExportOPML (ExportOPMLRequest) returns (ExportOPMLResponse);
+
+    // Get all the folders for a user.
     rpc GetMyFolders (GetMyFoldersRequest) returns (stream GetMyFoldersResponse);
+
     rpc GetFolderByID (GetFolderByIDRequest) returns (GetFolderByIDResponse);
+
+    /*
+    Cleanup folder positions for a user. It will keep the folders with the
+    same order, but make the positions start from 1000 and the gap to be
+    1000.
+    */
     rpc CleanupPosition (CleanupPositionRequest) returns (CleanupPositionResponse);
+
     rpc AddFolder (AddFolderRequest) returns (AddFolderResponse);
+
+    // Update folder details. It will ignore recommend and language field.
     rpc UpdateFolder (UpdateFolderRequest) returns (UpdateFolderResponse);
+
+    /*
+    Get all the recommended folders. The client can display them as example
+    feeds.
+    */
     rpc GetRecommendFolders (GetRecommendFoldersRequest) returns (stream GetRecommendFoldersResponse);
+
+    // Delete a folder. The data cannot be recovered.
     rpc DeleteFolder (DeleteFolderRequest) returns (DeleteFolderResponse);
 }
 
-// Define me.binwang.rss.service.SourceService
-
 message GetMySourcesWithFoldersRequest {
     string token = 1;
+
     int32 size = 2;
+
     int64 startPosition = 3;
 }
 
 message GetSourceInFolderRequest {
     string token = 1;
+
     string folderID = 2;
+
     string sourceID = 3;
 }
 
 message GetSourceInUserRequest {
     string token = 1;
+
     string sourceID = 2;
 }
 
 message GetSourcesInFolderRequest {
     string token = 1;
+
     string folderID = 2;
+
     int32 size = 3;
+
+    // Only get the sources that has a mapping position larger than this one.
     int64 startPosition = 4;
 }
 
 message GetSourcesInFoldersRequest {
     string token = 1;
+
     repeated string folderIDs = 2;
+
     int32 sizeInEachFolder = 3;
 }
 
 message AddSourceToFolderRequest {
     string token = 1;
+
     string folderID = 2;
+
     string sourceID = 3;
+
+    /*
+    The position should be the avg of its previous and next source. If there
+    is no enough gap to make an int position, call
+    SourceService.cleanupPositionInFolder to cleanup the position gap first.
+    */
     int64 position = 4;
 }
 
 message MoveSourceAfterRequest {
     string token = 1;
+
     string folderID = 2;
+
     string sourceID = 3;
+
     string targetSourceID = 4;
 }
 
 message MoveSourceBeforeRequest {
     string token = 1;
+
     string folderID = 2;
+
     string sourceID = 3;
+
     string targetSourceID = 4;
 }
 
 message CleanupPositionInFolderRequest {
     string token = 1;
+
     string folderID = 2;
 }
 
 message DelSourceFromFolderRequest {
     string token = 1;
-    string folderID = 2;
-    string sourceID = 3;
-}
 
-message UpdateSourceOrderInFolderRequest {
-    string token = 1;
     string folderID = 2;
+
     string sourceID = 3;
-    int64 position = 4;
 }
 
 message DelSourceForUserRequest {
     string token = 1;
+
     string sourceID = 2;
 }
 
 message GetSourceRequest {
     string token = 1;
+
     string sourceID = 2;
 }
 
 message GetOrImportSourceRequest {
     string token = 1;
+
     string url = 2;
 }
 
 message ImportSourceRequest {
     string token = 1;
+
     string url = 2;
 }
 
 message UpdateSourceMappingRequest {
     string token = 1;
+
     string sourceID = 2;
+
     FolderSourceMappingUpdater folderSourceMappingUpdater = 3;
 }
 
 message FindSourceRequest {
     string token = 1;
+
     string url = 2;
 }
 
 message ReplaceSourceInstanceRequest {
     string token = 1;
+
+    // The part of the URL that needs to be replaced.
     string oldInstance = 2;
+
+    // Replace oldInstance part of the URL with this.
     string newInstance = 3;
+
+    // What's the max number of sources to iterate over.
     int32 size = 4;
 }
+
 message GetMySourcesWithFoldersResponse {
     FolderSource result = 1;
 }
@@ -1183,10 +1796,6 @@ message DelSourceFromFolderResponse {
     bool result = 1;
 }
 
-message UpdateSourceOrderInFolderResponse {
-    bool result = 1;
-}
-
 message DelSourceForUserResponse {}
 
 message GetSourceResponse {
@@ -1213,32 +1822,76 @@ message ReplaceSourceInstanceResponse {
     int32 result = 1;
 }
 
+// APIs related to sources/feeds.
 service SourceAPI {
+    /*
+    Get sources in a folder. The implementation current has bugs that cannot
+    support pagination properly. So the clients need to use a fairly large
+    size param to get all the folder sources at once.
+    */
     rpc GetMySourcesWithFolders (GetMySourcesWithFoldersRequest) returns (stream GetMySourcesWithFoldersResponse);
+
     rpc GetSourceInFolder (GetSourceInFolderRequest) returns (GetSourceInFolderResponse);
+
+    /*
+    Get a folder source mapping for the user. There might be many, this just
+    get a random one.
+    */
     rpc GetSourceInUser (GetSourceInUserRequest) returns (GetSourceInUserResponse);
+
+    // Get all the sources from a folder.
     rpc GetSourcesInFolder (GetSourcesInFolderRequest) returns (stream GetSourcesInFolderResponse);
+
     rpc GetSourcesInFolders (GetSourcesInFoldersRequest) returns (stream GetSourcesInFoldersResponse);
+
+    // Add a source to folder.
     rpc AddSourceToFolder (AddSourceToFolderRequest) returns (AddSourceToFolderResponse);
+
     rpc MoveSourceAfter (MoveSourceAfterRequest) returns (MoveSourceAfterResponse);
+
     rpc MoveSourceBefore (MoveSourceBeforeRequest) returns (MoveSourceBeforeResponse);
+
     rpc CleanupPositionInFolder (CleanupPositionInFolderRequest) returns (CleanupPositionInFolderResponse);
+
+    /*
+    Delete a source from a folder. If this is the last folder that the source
+    is in, it also means the user unsubscribed the source. The client may
+    want to move the source to the root folder if it doesn't want this.
+    */
     rpc DelSourceFromFolder (DelSourceFromFolderRequest) returns (DelSourceFromFolderResponse);
-    rpc UpdateSourceOrderInFolder (UpdateSourceOrderInFolderRequest) returns (UpdateSourceOrderInFolderResponse);
+
     rpc DelSourceForUser (DelSourceForUserRequest) returns (DelSourceForUserResponse);
+
     rpc GetSource (GetSourceRequest) returns (GetSourceResponse);
+
+    // Get a source if it exists. Import it otherwise.
     rpc GetOrImportSource (GetOrImportSourceRequest) returns (GetOrImportSourceResponse);
+
+    /*
+    Import a source and return it's ID. Most of the time you may want to use
+    SourceService.getOrImportSource instead.
+    */
     rpc ImportSource (ImportSourceRequest) returns (ImportSourceResponse);
+
     rpc UpdateSourceMapping (UpdateSourceMappingRequest) returns (UpdateSourceMappingResponse);
+
     rpc FindSource (FindSourceRequest) returns (stream FindSourceResponse);
+
+    /*
+    Iterate over all the sources the user has subscribed, and replace part of
+    the URL. If the new URL is subscriable, subscribe to the new URL and
+    unsubscribe the old one. Useful to replace some feed providers like
+    RSSHub to a new instance. Use with caution: this can be very slow.
+    Returns the number of sources that has been successfully replaced.
+    */
     rpc ReplaceSourceInstance (ReplaceSourceInstanceRequest) returns (ReplaceSourceInstanceResponse);
 }
 
-// Define me.binwang.rss.service.UserService
-
 message SignUpRequest {
     string username = 1;
+
     string password = 2;
+
     string email = 3;
 }
 
@@ -1252,6 +1905,7 @@ message ActiveAccountRequest {
 
 message LoginRequest {
     string email = 1;
+
     string password = 2;
 }
 
@@ -1260,7 +1914,9 @@ message RequestResetPasswordRequest {
 }
 
 message ResetPasswordRequest {
+    // Token sent to the user's Email by calling requestResetPassword
     string resetToken = 1;
+
     string newPassword = 2;
 }
 
@@ -1278,11 +1934,13 @@ message GetMyUserInfoRequest {
 
 message DeactivateUserRequest {
     string token = 1;
+
     string userID = 2;
 }
 
 message RemoveAdminRequest {
     string token = 1;
+
     string userID = 2;
 }
 
@@ -1290,23 +1948,23 @@ message CreateRedditSessionRequest {
     string token = 1;
 }
 
-message GetRedditSessionsRequest {
-    string token = 1;
-}
-
 message SetCurrentFolderRequest {
     string token = 1;
+
     string currentFolderID = 2;
 }
 
 message SetCurrentSourceRequest {
     string token = 1;
+
     string currentSourceID = 2;
 }
 
 message UpdateUserSettingsRequest {
     string token = 1;
+
     optional NSFWSetting nsfwSetting = 2;
+
     optional SearchEngine searchEngine = 3;
 
     message LlmEngineOption {
@@ -1324,19 +1982,19 @@ message RemoveCurrentFolderAndSourceRequest {
     string token = 1;
 }
 
-message GetPaymentCustomersRequest {
-    string token = 1;
-}
-
 message SendDeleteUserCodeRequest {
     string token = 1;
 }
 
 message DeleteUserDataRequest {
     string email = 1;
+
     string password = 2;
+
+    // The code is sent to the user's Email by calling sendDeleteUserCode.
     string verificationCode = 3;
 }
+
 message SignUpResponse {
     UserInfo result = 1;
 }
@@ -1373,10 +2031,6 @@ message CreateRedditSessionResponse {
     string result = 1;
 }
 
-message GetRedditSessionsResponse {
-    RedditSession result = 1;
-}
-
 message SetCurrentFolderResponse {}
 
 message SetCurrentSourceResponse {}
@@ -1385,56 +2039,128 @@ message UpdateUserSettingsResponse {}
 
 message RemoveCurrentFolderAndSourceResponse {}
 
-message GetPaymentCustomersResponse {
-    PaymentCustomer result = 1;
-}
-
 message SendDeleteUserCodeResponse {}
 
 message DeleteUserDataResponse {}
 
+// Service related to User APIs.
 service UserAPI {
+    /*
+    Sign up a new user. A link that contains the active code will be sent to
+    the Email. Client need to call activeAccount with the code in order to
+    activate the account so that the user can login.
+    Returns The user info if registered successfully. Will return error if
+    username already exists.
+    */
     rpc SignUp (SignUpRequest) returns (SignUpResponse);
+
     rpc ResendActiveCode (ResendActiveCodeRequest) returns (ResendActiveCodeResponse);
+
     rpc ActiveAccount (ActiveAccountRequest) returns (ActiveAccountResponse);
+
+    // Returns A user session that contains a token used for other API request.
     rpc Login (LoginRequest) returns (LoginResponse);
+
+    /*
+    Start a process to reset the password. An email that contains resetToken
+    will be sent to the user's Email. The client needs to call resetPassword
+    to finish the process.
+    */
     rpc RequestResetPassword (RequestResetPasswordRequest) returns (RequestResetPasswordResponse);
+
+    // Reset the user's password.
     rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
+
+    // Sign out the user. The current session token will be deleted.
     rpc SignOut (SignOutRequest) returns (SignOutResponse);
+
+    /*
+    Sign out the user from all devices. All the session tokens associated to
+    the user will be deleted.
+    */
     rpc SignOutAllDevices (SignOutAllDevicesRequest) returns (SignOutAllDevicesResponse);
+
     rpc GetMyUserInfo (GetMyUserInfoRequest) returns (GetMyUserInfoResponse);
+
+    // Disable login for a user. Only admin can call this API.
     rpc DeactivateUser (DeactivateUserRequest) returns (DeactivateUserResponse);
+
+    // Remove admin role for a user. Only admin can call this API.
     rpc RemoveAdmin (RemoveAdminRequest) returns (RemoveAdminResponse);
+
+    // Do not use this anymore.
     rpc CreateRedditSession (CreateRedditSessionRequest) returns (CreateRedditSessionResponse);
-    rpc GetRedditSessions (GetRedditSessionsRequest) returns (stream GetRedditSessionsResponse);
+
+    /*
+    Set the current folder that user is visiting. This will set currentSource
+    to None.
+    */
     rpc SetCurrentFolder (SetCurrentFolderRequest) returns (SetCurrentFolderResponse);
+
+    /*
+    Set the current source that user is visiting. This will set currentFolder
+    to None.
+    */
     rpc SetCurrentSource (SetCurrentSourceRequest) returns (SetCurrentSourceResponse);
+
+    // Update user settings. If param is set to None, it will not be updated.
     rpc UpdateUserSettings (UpdateUserSettingsRequest) returns (UpdateUserSettingsResponse);
+
+    /*
+    Remove the current folder or source that user is visiting. The client
+    should load all articles if neigher of current folder or source is set.
+    */
     rpc RemoveCurrentFolderAndSource (RemoveCurrentFolderAndSourceRequest) returns (RemoveCurrentFolderAndSourceResponse);
-    rpc GetPaymentCustomers (GetPaymentCustomersRequest) returns (stream GetPaymentCustomersResponse);
+
+    /*
+    Start the process to delete all data for a user. This will send an Email
+    to the user with a verification code. The client needs to call
+    deleteUserData with the verification code to finish the process.
+    */
     rpc SendDeleteUserCode (SendDeleteUserCodeRequest) returns (SendDeleteUserCodeResponse);
+
+    /*
+    Delete all the data for a user. The data cannot be recovered after
+    deletion.
+    */
     rpc DeleteUserData (DeleteUserDataRequest) returns (DeleteUserDataResponse);
 }
 
-// Define me.binwang.rss.service.StripePaymentService
-
 message PaymentCallbackRequest {
     string payload = 1;
+
     string sigHeader = 2;
 }
 
 message CreateCheckoutSessionRequest {
     string token = 1;
+
+    // The URL to redirect to once the checkout is successful.
     string successUrl = 2;
+
+    // The URL to redirect to once the checkout is canceled.
     string cancelUrl = 3;
+
+    /*
+    If need to let RSS Brain redirect to the returned URL instead of client
+    take care of the redirecting.
+    */
     bool needRedirect = 4;
 }
 
 message CreatePortalLinkRequest {
     string token = 1;
+
+    // Where to return after user closes the portal.
     string returnUrl = 2;
+
+    /*
+    If need RSS Brain to redirect the returned URL instead of client take
+    care of it directly.
+    */
     bool needRedirect = 3;
 }
+
 message PaymentCallbackResponse {}
 
 message CreateCheckoutSessionResponse {
@@ -1445,13 +2171,23 @@ message CreatePortalLinkResponse {
     string result = 1;
 }
 
+// APIs related to Stripe payment.
 service StripePaymentAPI {
+    /*
+    This is used by Stripe to send information back to RSS Brain. Clients
+    doesn't need this API.
+    */
     rpc PaymentCallback (PaymentCallbackRequest) returns (PaymentCallbackResponse);
+
+    /*
+    Create a checkout session. It will return a URL that the client needs to
+    redirect the user into.
+    */
     rpc CreateCheckoutSession (CreateCheckoutSessionRequest) returns (CreateCheckoutSessionResponse);
+
+    // Get a link to the Stripe portal for the user.
     rpc CreatePortalLink (CreatePortalLinkRequest) returns (CreatePortalLinkResponse);
 }
-
-// Define me.binwang.rss.service.ApplePaymentService
 
 message GetAppleCustomerIDRequest {
     string token = 1;
@@ -1459,20 +2195,26 @@ message GetAppleCustomerIDRequest {
 
 message InAppPurchaseCallbackRequest {
     string responseBodyV2Str = 1;
+
     bool isSandBox = 2;
 }
+
 message GetAppleCustomerIDResponse {
     string result = 1;
 }
 
 message InAppPurchaseCallbackResponse {}
 
+// APIs related to Apple payment
 service ApplePaymentAPI {
     rpc GetAppleCustomerID (GetAppleCustomerIDRequest) returns (GetAppleCustomerIDResponse);
+
+    /*
+    Callback for Apple payment. This should only be used by Apple and there
+    is no point for clients to call this API.
+    */
     rpc InAppPurchaseCallback (InAppPurchaseCallbackRequest) returns (InAppPurchaseCallbackResponse);
 }
-
-// Define me.binwang.rss.service.SystemService
 
 message GetApiVersionRequest {
 
@@ -1485,6 +2227,7 @@ message CheckPaymentEnabledRequest {
 message VersionIsCompatibleRequest {
     string version = 1;
 }
+
 message GetApiVersionResponse {
     string result = 1;
 }
@@ -1499,51 +2242,78 @@ message VersionIsCompatibleResponse {
 
 service SystemAPI {
     rpc GetApiVersion (GetApiVersionRequest) returns (GetApiVersionResponse);
+
     rpc CheckPaymentEnabled (CheckPaymentEnabledRequest) returns (CheckPaymentEnabledResponse);
+
+    /*
+    Check if the API version is compatible with another version. Not really
+    meaningful for now.
+    */
     rpc VersionIsCompatible (VersionIsCompatibleRequest) returns (VersionIsCompatibleResponse);
 }
 
-// Define me.binwang.rss.service.MoreLikeThisService
-
 message GetMoreLikeThisMappingsRequest {
     string token = 1;
+
     string fromID = 2;
+
     MoreLikeThisType fromType = 3;
+
+    // How many entries to return at most.
     int32 size = 4;
+
+    // Only return entries that has a position larger than this.
     int64 startPosition = 5;
 }
 
 message AddMoreLikeThisMappingRequest {
     string token = 1;
+
     string fromID = 2;
+
     MoreLikeThisType fromType = 3;
+
     string moreLikeThisID = 4;
+
     MoreLikeThisType moreLikeThisType = 5;
+
     int64 position = 6;
 }
 
 message DelMoreLikeThisMappingRequest {
     string token = 1;
+
     string fromID = 2;
+
     MoreLikeThisType fromType = 3;
+
     string moreLikeThisID = 4;
+
     MoreLikeThisType moreLikeThisType = 5;
 }
 
 message UpdateMoreLikeThisMappingRequest {
     string token = 1;
+
     string fromID = 2;
+
     MoreLikeThisType fromType = 3;
+
     string moreLikeThisID = 4;
+
     MoreLikeThisType moreLikeThisType = 5;
+
     int64 position = 6;
 }
 
 message CleanupMappingsPositionRequest {
     string token = 1;
+
     string fromID = 2;
+
     MoreLikeThisType fromType = 3;
 }
+
 message GetMoreLikeThisMappingsResponse {
     MoreLikeThisMapping result = 1;
 }
@@ -1562,10 +2332,16 @@ message UpdateMoreLikeThisMappingResponse {
 
 message CleanupMappingsPositionResponse {}
 
+// APIs related to more like this settings.
 service MoreLikeThisAPI {
+    // Get more like this settings.
     rpc GetMoreLikeThisMappings (GetMoreLikeThisMappingsRequest) returns (stream GetMoreLikeThisMappingsResponse);
+
     rpc AddMoreLikeThisMapping (AddMoreLikeThisMappingRequest) returns (AddMoreLikeThisMappingResponse);
+
     rpc DelMoreLikeThisMapping (DelMoreLikeThisMappingRequest) returns (DelMoreLikeThisMappingResponse);
+
     rpc UpdateMoreLikeThisMapping (UpdateMoreLikeThisMappingRequest) returns (UpdateMoreLikeThisMappingResponse);
+
     rpc CleanupMappingsPosition (CleanupMappingsPositionRequest) returns (CleanupMappingsPositionResponse);
 }

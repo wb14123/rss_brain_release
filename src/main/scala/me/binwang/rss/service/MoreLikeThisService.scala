@@ -7,12 +7,20 @@ import me.binwang.rss.metric.TimeMetrics
 import me.binwang.rss.model.MoreLikeThisType.MoreLikeThisType
 import me.binwang.rss.model.{MoreLikeThisMapping, MoreLikeThisType}
 
+/**
+ * APIs related to more like this settings.
+ */
 class MoreLikeThisService(
     private val moreLikeThisMappingDao: MoreLikeThisMappingDao,
     private val authorizer: Authorizer,
 ) extends TimeMetrics {
 
 
+  /**
+   * Get more like this settings.
+   * @param size How many entries to return at most.
+   * @param startPosition Only return entries that has a position larger than this.
+   */
   def getMoreLikeThisMappings(token: String, fromID: String, fromType: MoreLikeThisType, size: Int,
       startPosition: Long): fs2.Stream[IO, MoreLikeThisMapping] = timed {
     /*
@@ -25,6 +33,9 @@ class MoreLikeThisService(
     }
   }
 
+  /**
+   * Add a more like this setting entry.
+   */
   def addMoreLikeThisMapping(token: String, fromID: String, fromType: MoreLikeThisType, moreLikeThisID: String,
       moreLikeThisType: MoreLikeThisType, position: Long): IO[Boolean] = timed {
     val auth = if (moreLikeThisType == MoreLikeThisType.FOLDER) {
@@ -78,6 +89,9 @@ class MoreLikeThisService(
     }
   }
 
+  /**
+   * Like [[FolderService.cleanupPosition]], but for cleaning positions of more like this mappings.
+   */
   def cleanupMappingsPosition(token: String, fromID: String, fromType: MoreLikeThisType): IO[Unit] = timed {
     authorizer.authorize(token).flatMap { session =>
       moreLikeThisMappingDao.cleanupPosition(fromID, fromType, session.userID).map(_ => ())

@@ -3,6 +3,15 @@ package me.binwang.rss.model
 import me.binwang.rss.model.ArticleListLayout.ArticleListLayout
 import me.binwang.rss.model.ArticleOrder.ArticleOrder
 
+/**
+ * Source data associated to a folder. Currently, this is kind of used as user's config for a source.
+ *
+ * @param position The position of a source in folder.
+ * @param customSourceName The name to display in folder instead of the title parsed from the feed.
+ * @param showTitle Deprecated. Use `articleListLayout`.
+ * @param showFullArticle Deprecated. Use `articleListLayout`.
+ * @param showMedia Deprecated. Use `articleListLayout`.
+ */
 case class FolderSourceMapping(
   folderID: String,
   sourceID: String,
@@ -16,6 +25,9 @@ case class FolderSourceMapping(
   articleListLayout: ArticleListLayout = ArticleListLayout.LIST,
 )
 
+/**
+ * Structure to update FolderSourceMapping. None means don't update that field.
+ */
 case class FolderSourceMappingUpdater(
   customSourceName: Option[Option[String]] = None,
   showTitle: Option[Boolean] = None,

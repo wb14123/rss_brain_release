@@ -58,6 +58,10 @@ object ApplePaymentService {
   )
 }
 
+
+/**
+ * APIs related to Apple payment
+ */
 class ApplePaymentService(
     override val userDao: UserDao,
     override val userSessionDao: UserSessionDao,
@@ -75,10 +79,16 @@ class ApplePaymentService(
   X509CertUtils.setProvider(jcaProvider)
   private val appleRootCa = X509CertUtils.parse(getClass.getResourceAsStream("/certs/AppleRootCA-G3.cer").readAllBytes())
 
+  /**
+   * Get the associated customer ID from Apple for a user
+   */
   def getAppleCustomerID(token: String): IO[String] = timed {
     getCustomerID(token, Some(_ => IO.pure(UUID.randomUUID().toString))).map(_._1)
   }
 
+  /**
+   * Callback for Apple payment. This should only be used by Apple and there is no point for clients to call this API.
+   */
   def inAppPurchaseCallback(responseBodyV2Str: String, isSandBox: Boolean): IO[Unit] = timed {
     logger.info(s"Get apple in app purchase callback, sandbox: $isSandBox, responseBodyV2: $responseBodyV2Str").flatMap {_ =>
       val responseBodyV2 = parser.parse(responseBodyV2Str.replace("\n", "")).flatMap(_.as[AppleResponseBodyV2]).toTry.get

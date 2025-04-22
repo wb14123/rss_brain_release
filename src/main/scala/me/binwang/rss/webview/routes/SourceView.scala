@@ -7,9 +7,9 @@ import me.binwang.rss.webview.auth.CookieGetter.reqToCookieGetter
 import me.binwang.rss.model.CirceEncoders._
 import io.circe.generic.auto._
 import me.binwang.rss.webview.basic.ContentRender.{hxSwapContentAttrs, wrapContentRaw}
-import me.binwang.rss.webview.basic.ScalaTagAttributes.{hxExt, hxGet, hxPost, hxPushUrl, hxTrigger, is, xText}
+import me.binwang.rss.webview.basic.ScalaTagAttributes._
 import me.binwang.rss.webview.basic.{HttpResponse, ScalatagsSeqInstances}
-import me.binwang.rss.webview.widgets.PageHeader
+import me.binwang.rss.webview.widgets.{DateTimeNode, PageHeader, SourceFetchInfo}
 import org.http4s.circe._
 import org.http4s.dsl.io._
 import org.http4s.headers.`Content-Type`
@@ -108,14 +108,7 @@ class SourceView(sourceService: SourceService, userService: UserService) extends
                 div(span("Website URL: "), a(href := htmlUrl, target := "_blank")(htmlUrl))
               }.getOrElse(""),
             ),
-            small(cls := "form-block",
-              folderSource.source.fetchCompletedAt.map { fetchCompleteAt =>
-                val timestamp = fetchCompleteAt.toEpochSecond * 1000
-                div(span("Last fetched at "), span(xText := s"new Date($timestamp).toLocaleString()"))
-              }.getOrElse(""),
-              div(span("Next fetched scheduled at "),
-                span(xText := s"new Date(${folderSource.source.fetchScheduledAt.toEpochSecond * 1000}).toLocaleString()")),
-            ),
+            SourceFetchInfo(folderSource.source),
             label(cls := "form-row", input(is := "boolean-checkbox", `type` := "checkbox", name := "showTitle",
               if (folderSource.folderMapping.showTitle) checked else ""), "Show Title"),
             label(cls := "form-row", input(is := "boolean-checkbox", `type` := "checkbox", name := "showFullArticle",

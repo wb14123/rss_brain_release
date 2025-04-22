@@ -14,6 +14,9 @@ import org.typelevel.log4cats.LoggerFactory
 
 import java.time.{ZoneId, ZonedDateTime}
 
+/**
+ * APIs related to sources/feeds.
+ */
 class SourceService(
     private val sourceDao: SourceDao,
     private val folderSourceDao: FolderSourceDao,
@@ -25,13 +28,22 @@ class SourceService(
 
   private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
 
-  // TODO: BUG: also need folder param for pagination
+  /**
+   * Get sources in a folder.
+   *
+   * The implementation current has bugs that cannot support pagination properly. So the clients need to use a fairly
+   * large `size` param to get all the folder sources at once.
+   */
   def getMySourcesWithFolders(token: String, size: Int, startPosition: Long): fs2.Stream[IO, FolderSource] = timed {
+    // TODO: BUG: also need folder param for pagination
     authorizer.authorizeAsStream(token).flatMap { session =>
       folderSourceDao.getSourcesByUser(session.userID, size, startPosition)
     }
   }
 
+  /**
+   * Get a folder source mapping.
+   */
   def getSourceInFolder(token: String, folderID: String, sourceID: String): IO[FolderSource] = timed {
     authorizer.checkFolderReadPermission(token, folderID).flatMap { _ =>
       folderSourceDao.get(folderID, sourceID).map {
@@ -41,8 +53,8 @@ class SourceService(
     }
   }
 
-  /*
-  Get a folder source from user. There might be many, this just get a random one.
+  /**
+   * Get a folder source mapping for the user. There might be many, this just get a random one.
    */
   def getSourceInUser(token: String, sourceID: String): IO[FolderSource] = timed {
     authorizer.authorize(token).flatMap { session =>
@@ -53,6 +65,11 @@ class SourceService(
     }
   }
 
+  /**
+   * Get all the sources from a folder.
+   *
+   * @param startPosition Only get the sources that has a mapping position larger than this one.
+   */
   def getSourcesInFolder(token: String, folderID: String, size: Int, startPosition: Long
       ): fs2.Stream[IO, FolderSource] = timed {
     authorizer.checkFolderReadPermissionAsStream(token, folderID).flatMap { _ =>
@@ -60,6 +77,9 @@ class SourceService(
     }
   }
 
+  /**
+   * Like [[SourceService.getSourcesInFolder]] but for getting sources in multiple folders.
+   */
   def getSourcesInFolders(token: String, folderIDs: Seq[String], sizeInEachFolder: Int
       ): fs2.Stream[IO, FolderSource] = timed {
     authorizer.authorizeAsStream(token).flatMap { userSession =>
@@ -70,6 +90,12 @@ class SourceService(
     }
   }
 
+  /**
+   * Add a source to folder.
+   *
+   * @param position The position should be the avg of its previous and next source. If there is no enough gap to make
+   *                 an int position, call [[SourceService.cleanupPositionInFolder]] to cleanup the position gap first.
+   */
   def addSourceToFolder(token: String, folderID: String, sourceID: ID, position: Long): IO[FolderSource] = timed {
     authorizer.checkFolderPermission(token, folderID).flatMap { case (session, _) =>
       sourceDao.get(sourceID).flatMap {
@@ -90,6 +116,9 @@ class SourceService(
     }
   }
 
+  /**
+   * Move a source after another source in the same folder.
+   */
   def moveSourceAfter(token: String, folderID: String, sourceID: ID, targetSourceID: ID): IO[Boolean] = timed {
     for {
       _ <- authorizer.checkFolderPermission(token, folderID)
@@ -110,6 +139,9 @@ class SourceService(
     } yield result
   }
 
+  /**
+   * Move source before another source in the same folder.
+   */
   def moveSourceBefore(token: String, folderID: String, sourceID: ID, targetSourceID: ID): IO[Boolean] = timed {
     for {
       _ <- authorizer.checkFolderPermission(token, folderID)
@@ -164,30 +196,37 @@ class SourceService(
     else IO.pure(None)
   }
 
+  /**
+   * Like [[FolderService.cleanupPosition]] but for cleaning up source positions in a folder.
+   */
   def cleanupPositionInFolder(token: String, folderID: String): IO[Int] = timed {
     authorizer.checkFolderPermission(token, folderID).flatMap { _ =>
       folderSourceDao.cleanupPositionInFolder(folderID)
     }
   }
 
+  /**
+   * Delete a source from a folder. If this is the last folder that the source is in, it also means the user unsubscribed
+   * the source. The client may want to move the source to the root folder if it doesn't want this.
+   */
   def delSourceFromFolder(token: String, folderID: String, sourceID: ID): IO[Boolean] = timed {
     authorizer.checkFolderPermission(token, folderID).flatMap {_ =>
       folderSourceDao.delSourceFromFolder(folderID, sourceID)
     }
   }
 
-  def updateSourceOrderInFolder(token: String, folderID: String, sourceID: ID, position: Long): IO[Boolean] = timed {
-    authorizer.checkFolderPermission(token, folderID).flatMap { _ =>
-      folderSourceDao.updateSourceOrder(folderID, sourceID, position)
-    }
-  }
-
+  /**
+   * Unsubscribe a source for the user.
+   */
   def delSourceForUser(token: String, sourceID: ID): IO[Unit] = timed {
     authorizer.authorize(token).flatMap { session =>
       folderSourceDao.delSourceForUser(session.userID, sourceID)
     }
   }
 
+  /**
+   * Get a source details from source ID.
+   */
   def getSource(token: String, sourceID: ID): IO[Source] = timed {
     authorizer.authorize(token)
       .flatMap(_ => sourceDao.get(sourceID))
@@ -197,10 +236,16 @@ class SourceService(
       }
   }
 
+  /**
+   * Get a source if it exists. Import it otherwise.
+   */
   def getOrImportSource(token: String, url: String): IO[Source] = timed {
     authorizer.authorize(token).flatMap(_ => getOrImportSourceInner(url))
   }
 
+  /**
+   * Import a source and return it's ID. Most of the time you may want to use [[SourceService.getOrImportSource]] instead.
+   */
   def importSource(token: String, url: String): IO[ID] = timed {
     authorizer
       .authorize(token)
@@ -218,11 +263,24 @@ class SourceService(
     }
   }
 
+  /**
+   * Given any URL, try to find a subscribable feed from there.
+   */
   def findSource(token: String, url: String): fs2.Stream[IO, SourceResult] = timed {
     authorizer.authorizeAsStream(token).flatMap(_ =>
       seqToStream(sourceFinder.findSource(url)))
   }
 
+  /**
+   * Iterate over all the sources the user has subscribed, and replace part of the URL. If the new URL is subscriable,
+   * subscribe to the new URL and unsubscribe the old one. Useful to replace some feed providers like RSSHub to a new
+   * instance. Use with caution: this can be very slow.
+   *
+   * @param oldInstance The part of the URL that needs to be replaced.
+   * @param newInstance Replace `oldInstance` part of the URL with this.
+   * @param size What's the max number of sources to iterate over.
+   * @return the number of sources that has been successfully replaced.
+   */
   def replaceSourceInstance(token: String, oldInstance: String, newInstance: String, size: Int): IO[Int] = timed {
     authorizer.authorize(token).flatMap { session =>
       folderSourceDao.getSourcesByUser(session.userID, size).compile.toList.flatMap {

@@ -20,6 +20,9 @@ import org.typelevel.log4cats.LoggerFactory
 import java.net.{URI, URLEncoder}
 import java.time.{Instant, ZoneId, ZonedDateTime}
 
+/**
+ * APIs related to Stripe payment.
+ */
 class StripePaymentService(
     override val userDao: UserDao,
     override val userSessionDao: UserSessionDao,
@@ -38,6 +41,9 @@ class StripePaymentService(
   Stripe.apiKey = config.getString("payment.stripe.apiKey")
   private val endpointSecret = config.getString("payment.stripe.endpointSecret")
 
+  /**
+   * This is used by Stripe to send information back to RSS Brain. Clients doesn't need this API.
+   */
   def paymentCallback(payload: String, sigHeader: String): IO[Unit] = timed {
     logger.info(s"Stripe signature header: $sigHeader, sdk API version: ${Stripe.API_VERSION}").flatMap { _ =>
       val event = Webhook.constructEvent(payload, sigHeader, endpointSecret)
@@ -62,6 +68,13 @@ class StripePaymentService(
     }
   }
 
+  /**
+   * Create a checkout session. It will return a URL that the client needs to redirect the user into.
+   *
+   * @param successUrl The URL to redirect to once the checkout is successful.
+   * @param cancelUrl The URL to redirect to once the checkout is canceled.
+   * @param needRedirect If need to let RSS Brain redirect to the returned URL instead of client take care of the redirecting.
+   */
   def createCheckoutSession(token: String, successUrl: String, cancelUrl: String, needRedirect: Boolean): IO[String] = timed {
     val priceID = config.getString("payment.stripe.priceID")
     getCustomerID(token, Some(createCustomer)).flatMap { case (customerID, user) =>
@@ -103,6 +116,12 @@ class StripePaymentService(
     }
   }
 
+  /**
+   * Get a link to the Stripe portal for the user.
+   *
+   * @param returnUrl Where to return after user closes the portal.
+   * @param needRedirect If need RSS Brain to redirect the returned URL instead of client take care of it directly.
+   */
   def createPortalLink(token: String, returnUrl: String, needRedirect: Boolean): IO[String] = timed {
     getCustomerID(token).flatMap { case (customerID, _) =>
       val params = new com.stripe.param.billingportal.SessionCreateParams.Builder()
