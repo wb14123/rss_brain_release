@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:webfeeds="http://webfeeds.org/rss/1.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Jepsen</title>
+    <description>Public posts from @jepsen@jepsen.io</description>
+    <link>https://mastodon.jepsen.io/@jepsen</link>
+    <image>
+      <url>https://cdn.masto.host/mastodonjepsenio/accounts/avatars/000/000/001/original/729178b67437abd9.png</url>
+      <title>Jepsen</title>
+      <link>https://mastodon.jepsen.io/@jepsen</link>
+    </image>
+    <lastBuildDate>Wed, 07 May 2025 13:53:22 +0000</lastBuildDate>
+    <webfeeds:icon>https://cdn.masto.host/mastodonjepsenio/accounts/avatars/000/000/001/original/729178b67437abd9.png</webfeeds:icon>
+    <generator>Mastodon v4.3.8</generator>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/114466881686936115</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/114466881686936115</link>
+      <pubDate>Wed, 07 May 2025 13:53:22 +0000</pubDate>
+      <description>&lt;p&gt;Jepsen 0.3.9 is now available, including a module for restarting flaky databases, a few improvements to downloading logs, more capable generators, and friendlier error messages. &lt;a href="https://github.com/jepsen-io/jepsen/releases/tag/v0.3.9" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;github.com/jepsen-io/jepsen/re&lt;/span&gt;&lt;span class="invisible"&gt;leases/tag/v0.3.9&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/114458170594810834</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/114458170594810834</link>
+      <pubDate>Tue, 06 May 2025 00:58:01 +0000</pubDate>
+      <description>&lt;p&gt;Justin Jaffray has written up a lovely companion to this piece, diving into Snapshot Isolation and how to understand transaction dependency structures. &lt;a href="https://buttondown.com/jaffray/archive/how-to-understand-that-jepsen-report/" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;buttondown.com/jaffray/archive&lt;/span&gt;&lt;span class="invisible"&gt;/how-to-understand-that-jepsen-report/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/114444538742940619</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/114444538742940619</link>
+      <pubDate>Sat, 03 May 2025 15:11:16 +0000</pubDate>
+      <description>&lt;p&gt;Thanks to AWS&amp;#39;s Sergey Melnik, as well as HN commenters matashii and Ants Aasma, we now know that Long Fork in PostgreSQL clusters is caused by a disagreement between primaries and secondaries on the order in which transactions become visible.&lt;/p&gt;&lt;p&gt;&lt;a href="https://jepsen.io/analyses/amazon-rds-for-postgresql-17.4" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;jepsen.io/analyses/amazon-rds-&lt;/span&gt;&lt;span class="invisible"&gt;for-postgresql-17.4&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/114421726715199438</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/114421726715199438</link>
+      <pubDate>Tue, 29 Apr 2025 14:29:52 +0000</pubDate>
+      <description>&lt;p&gt;A small issue in Amazon RDS for PostgreSQL: at the &amp;quot;Repeatable Read” isolation level, which in PostgreSQL normally means Snapshot Isolation, Amazon RDS for PostgreSQL clusters appear to exhibit Long Fork. We observed this behavior in healthy clusters, in versions ranging from 13.15 to 17.4. &lt;a href="https://jepsen.io/analyses/amazon-rds-for-postgresql-17.4" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;jepsen.io/analyses/amazon-rds-&lt;/span&gt;&lt;span class="invisible"&gt;for-postgresql-17.4&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://mastodon.jepsen.io/tags/Jepsen" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Jepsen&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+      <category>Jepsen</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/114253268462989176</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/114253268462989176</link>
+      <pubDate>Sun, 30 Mar 2025 20:28:43 +0000</pubDate>
+      <description>&lt;p&gt;Added four new phenomena to Jepsen&amp;#39;s docs: P4 (Lost Update), A5A (Read Skew), A5B (Write Skew) and Process.&lt;/p&gt;&lt;p&gt;&lt;a href="https://jepsen.io/consistency/phenomena#sql" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;jepsen.io/consistency/phenomen&lt;/span&gt;&lt;span class="invisible"&gt;a#sql&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/114139546453524256</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/114139546453524256</link>
+      <pubDate>Mon, 10 Mar 2025 18:27:43 +0000</pubDate>
+      <description>&lt;p&gt;For the daytime crew: Jepsen&amp;#39;s distributed systems class starts next week. The accompanying workshop, where we practice writing and debugging our own distributed systems, follows the week after.&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.eventbrite.com/e/distributed-systems-fundamentals-registration-1269962525099?aff=mastodon" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://www.&lt;/span&gt;&lt;span class="ellipsis"&gt;eventbrite.com/e/distributed-s&lt;/span&gt;&lt;span class="invisible"&gt;ystems-fundamentals-registration-1269962525099?aff=mastodon&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.eventbrite.com/e/distributed-systems-workshop-registration-1269976807819?aff=mastodon" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://www.&lt;/span&gt;&lt;span class="ellipsis"&gt;eventbrite.com/e/distributed-s&lt;/span&gt;&lt;span class="invisible"&gt;ystems-workshop-registration-1269976807819?aff=mastodon&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/114118135184332495</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/114118135184332495</link>
+      <pubDate>Thu, 06 Mar 2025 23:42:32 +0000</pubDate>
+      <description>&lt;p&gt;Jepsen 0.3.8 is now available. It includes a new nemesis for file corruption, and improvements to clock-skew tests. &lt;a href="https://github.com/jepsen-io/jepsen/releases/tag/v0.3.8" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;github.com/jepsen-io/jepsen/re&lt;/span&gt;&lt;span class="invisible"&gt;leases/tag/v0.3.8&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/114107521677656327</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/114107521677656327</link>
+      <pubDate>Wed, 05 Mar 2025 02:43:23 +0000</pubDate>
+      <description>&lt;p&gt;What IS Strong Serializability, really? Ever want to try writing your own gossip service? Two open sessions of Jepsen&amp;#39;s training classes are coming up: the Distributed Systems Fundamentals class, and (for the first time!) its accompanying workshop.&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.eventbrite.com/e/distributed-systems-fundamentals-registration-1269962525099?aff=mastodon" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://www.&lt;/span&gt;&lt;span class="ellipsis"&gt;eventbrite.com/e/distributed-s&lt;/span&gt;&lt;span class="invisible"&gt;ystems-fundamentals-registration-1269962525099?aff=mastodon&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;&lt;a href="https://www.eventbrite.com/e/distributed-systems-workshop-registration-1269976807819?aff=mastodon" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://www.&lt;/span&gt;&lt;span class="ellipsis"&gt;eventbrite.com/e/distributed-s&lt;/span&gt;&lt;span class="invisible"&gt;ystems-workshop-registration-1269976807819?aff=mastodon&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/114106927893883415</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/114106927893883415</link>
+      <pubDate>Wed, 05 Mar 2025 00:12:23 +0000</pubDate>
+      <description>&lt;p&gt;I&amp;#39;ll be speaking on Jepsen at Bug Bash (DC, April 3-4), and Systems Distributed (Amsterdam, June 19-20). Come join!&lt;/p&gt;&lt;p&gt;&lt;a href="https://bugbash.antithesis.com/" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class=""&gt;bugbash.antithesis.com/&lt;/span&gt;&lt;span class="invisible"&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://systemsdistributed.com/" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class=""&gt;systemsdistributed.com/&lt;/span&gt;&lt;span class="invisible"&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/113872522853613285</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/113872522853613285</link>
+      <pubDate>Wed, 22 Jan 2025 14:40:06 +0000</pubDate>
+      <description>&lt;p&gt;Woke up to a bunch of excellent emails--y&amp;#39;all rock. Will try to write back to everyone in the next hour or so. ❤️&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/113868965563999468</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/113868965563999468</link>
+      <pubDate>Tue, 21 Jan 2025 23:35:26 +0000</pubDate>
+      <description>&lt;p&gt;So, uh, the last time I had to call malloc() was a quarter century ago, and I am struggling to do basic tasks without corrupting the heap. I would love to hire one of you stripey-socked C witches for a very small contract to help finish &lt;a href="https://github.com/jepsen-io/jepsen/blob/main/jepsen/resources/corrupt-file.c" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;github.com/jepsen-io/jepsen/bl&lt;/span&gt;&lt;span class="invisible"&gt;ob/main/jepsen/resources/corrupt-file.c&lt;/span&gt;&lt;/a&gt;. Goals:&lt;/p&gt;&lt;p&gt;1.) Fix my really obvious mistakes.&lt;/p&gt;&lt;p&gt;2.) Add appropriate calls to `free(ptr)`.&lt;/p&gt;&lt;p&gt;3.) Spend an hour or two talking me through your changes so I can Not Mess This Up So Badly next time. 😁&lt;/p&gt;&lt;p&gt;Interested? Email aphyr@jepsen.io.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/113698496292058261</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/113698496292058261</link>
+      <pubDate>Sun, 22 Dec 2024 21:02:51 +0000</pubDate>
+      <description>&lt;p&gt;Added descriptions of the SQL isolation level anomalies P0, P1, P2, and P3 to the phenomena page: &lt;a href="https://jepsen.io/consistency/phenomena#sql" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;jepsen.io/consistency/phenomen&lt;/span&gt;&lt;span class="invisible"&gt;a#sql&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/113596048403179189</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/113596048403179189</link>
+      <pubDate>Wed, 04 Dec 2024 18:49:00 +0000</pubDate>
+      <description>&lt;p&gt;Released version 0.2.4 of Maelstrom, Jepsen&amp;#39;s workbench for writing toy distributed systems: &lt;a href="https://github.com/jepsen-io/maelstrom" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class=""&gt;github.com/jepsen-io/maelstrom&lt;/span&gt;&lt;span class="invisible"&gt;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/113595971550742700</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/113595971550742700</link>
+      <pubDate>Wed, 04 Dec 2024 18:29:28 +0000</pubDate>
+      <description>&lt;p&gt;There&amp;#39;s a few tickets left for the distributed systems class coming up the week after next. If you&amp;#39;d like to join, now&amp;#39;s the time. :-)&lt;/p&gt;&lt;p&gt;&lt;a href="https://www.eventbrite.com/e/distributed-systems-fundamentals-registration-1060426286569?aff=mastodon" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://www.&lt;/span&gt;&lt;span class="ellipsis"&gt;eventbrite.com/e/distributed-s&lt;/span&gt;&lt;span class="invisible"&gt;ystems-fundamentals-registration-1060426286569?aff=mastodon&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/113591252695657710</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/113591252695657710</link>
+      <pubDate>Tue, 03 Dec 2024 22:29:24 +0000</pubDate>
+      <description>&lt;p&gt;Bin Wang put together a Jepsen test for Patroni, a PostgreSQL replication system. All sorts of good stuff in here, including that the cluster can&amp;#39;t handle a series of single-node failures: &lt;a href="https://www.binwang.me/2024-12-02-PostgreSQL-High-Availability-Solutions-Part-1.html" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://www.&lt;/span&gt;&lt;span class="ellipsis"&gt;binwang.me/2024-12-02-PostgreS&lt;/span&gt;&lt;span class="invisible"&gt;QL-High-Availability-Solutions-Part-1.html&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/113555758715691199</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/113555758715691199</link>
+      <pubDate>Wed, 27 Nov 2024 16:02:49 +0000</pubDate>
+      <description>&lt;p&gt;Antithesis, Buf, and Jepsen are running a joint webinar on December 5th. We&amp;#39;ll discuss a Kafka protocol safety issue, talk about the challenges of distributed systems testing, and show how Jepsen and Antithesis helped identify critical safety errors in Bufstream. Come watch Antithesis pause, rewind, and explore a running Bufstream cluster in an interactive debugging shell!&lt;/p&gt;&lt;p&gt;&lt;a href="https://buf-8423972.hs-sites.com/taming-kafkas-behavior-using-jepsen-antithesis?utm_source=jepsen&amp;amp;utm_medium=partner&amp;amp;utm_campaign=2024-12-05-WB%2520Taming%2520Kafka%25E2%2580%2599s%2520Behavior%2520using%2520Jepsen%2520%2526%2520Antithesis" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;buf-8423972.hs-sites.com/tamin&lt;/span&gt;&lt;span class="invisible"&gt;g-kafkas-behavior-using-jepsen-antithesis?utm_source=jepsen&amp;amp;utm_medium=partner&amp;amp;utm_campaign=2024-12-05-WB%2520Taming%2520Kafka%25E2%2580%2599s%2520Behavior%2520using%2520Jepsen%2520%2526%2520Antithesis&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/113476708899721343</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/113476708899721343</link>
+      <pubDate>Wed, 13 Nov 2024 16:59:24 +0000</pubDate>
+      <description>&lt;p&gt;Thanks to everyone who wrote in objecting to the report&amp;#39;s description of data loss due to auto-commit. Some experiments this morning suggest that we got it wrong (at least for the official Java client). We&amp;#39;ve published an update to the report: &lt;a href="https://jepsen.io/analyses/bufstream-0.1.0#updates" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;jepsen.io/analyses/bufstream-0&lt;/span&gt;&lt;span class="invisible"&gt;.1.0#updates&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/113470772814569668</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/113470772814569668</link>
+      <pubDate>Tue, 12 Nov 2024 15:49:47 +0000</pubDate>
+      <description>&lt;p&gt;&amp;quot;That&amp;#39;s never been my understanding of auto-commit, that would be a crazy default wouldn&amp;#39;t it?&amp;quot;&lt;/p&gt;&lt;p&gt;I feel like there&amp;#39;s a real need for database user research--building a quantitative and qualitative picture of how actual users understand the systems they rely on. &lt;a href="https://news.ycombinator.com/item?id=42116297" target="_blank" rel="nofollow noopener noreferrer" translate="no"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;news.ycombinator.com/item?id=4&lt;/span&gt;&lt;span class="invisible"&gt;2116297&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/113470446175213436</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/113470446175213436</link>
+      <pubDate>Tue, 12 Nov 2024 14:26:43 +0000</pubDate>
+      <description>&lt;p&gt;We reproduced lost writes, aborted reads, and torn transactions in Bufstream and Kafka. We believe every Kafka-compatible system is likely vulnerable to these issues. Some clients may be able to mitigate them, but the official Java client presently does not.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.jepsen.io/@jepsen/113470433603066408</guid>
+      <link>https://mastodon.jepsen.io/@jepsen/113470433603066408</link>
+      <pubDate>Tue, 12 Nov 2024 14:23:31 +0000</pubDate>
+      <description>&lt;p&gt;One of the surprising things we found during this collaboration was that the &lt;a href="https://mastodon.jepsen.io/tags/Kafka" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;Kafka&lt;/span&gt;&lt;/a&gt; transaction protocol assumes messages are delivered in order, but allows those messages to be delivered to different nodes over different TCP connections. This means that a client&amp;#39;s commit or abort message could be applied to a completely different transaction, or even in the *middle* of a transaction.&lt;/p&gt;</description>
+      <category>kafka</category>
+    </item>
+  </channel>
+</rss>

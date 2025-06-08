@@ -34,6 +34,7 @@ body {
   min-height: 100vh;
   background: var(--pico-background-color);
   color: var(--pico-color);
+  overflow-x: hidden;  /* disable scroll to out of view content when sidebar is open */
 }
 
 a {

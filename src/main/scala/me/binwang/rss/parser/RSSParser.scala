@@ -24,7 +24,13 @@ object RSSParser {
     }
 
     val htmlUrl = (channel \ "link").text
-    val iconUrl = ArticleParserHelper.getIcon(htmlUrl)
+    val iconUrl = (channel \\ "icon")
+      .find(_.prefix == "webfeeds")
+      .map(_.text)
+      .find(x => x != null && x.nonEmpty)
+      .orElse(Some((channel \ "image" \ "url").text))
+      .find(x => x != null && x.nonEmpty)
+      .orElse(ArticleParserHelper.getIcon(htmlUrl))
 
     val source = Source(
       id = id,

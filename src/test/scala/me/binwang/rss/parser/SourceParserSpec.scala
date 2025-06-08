@@ -44,6 +44,18 @@ class SourceParserSpec extends AnyFunSpec with BeforeAndAfterEach with Matchers 
       ArticleParserHelper.getIcon("") shouldBe None
     }
 
+    it(s"should parse rss icon if there is webfeeds:icon") {
+      val testFeedFile = "/test-feed-mastodon-jepsen.xml"
+      val (source, _) = SourceParser.parse(testFeedUrl, inputStream(testFeedFile)).unsafeRunSync()
+      source.iconUrl shouldBe Some("https://cdn.masto.host/mastodonjepsenio/accounts/avatars/000/000/001/original/729178b67437abd9.png")
+    }
+
+    it(s"should parse rss icon if there is image url") {
+      val testFeedFile = "/test-feed.xml"
+      val (source, _) = SourceParser.parse(testFeedUrl, inputStream(testFeedFile)).unsafeRunSync()
+      source.iconUrl shouldBe Some("https://www.cbc.ca/rss/image/cbc_144.gif")
+    }
+
     it(s"should parse rss feed") {
       val testFeedFile = "/test-feed.xml"
       val now = ZonedDateTime.now().withNano(0)

@@ -135,7 +135,7 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.10",
 
   // grpc
-  "me.binwang.scala2grpc" %% "generator" % "1.2.0",
+  "me.binwang.scala2grpc" %% "generator" % "1.3.0-SNAPSHOT",
 
   // http server
   "org.http4s" %% "http4s-ember-client" % http4sVersion,

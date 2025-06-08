@@ -24,6 +24,7 @@ import scala.reflect.runtime.universe.{Type, typeOf}
 object GenerateGRPC extends GRPCGenerator {
   override val protoJavaPackage: String = "me.binwang.rss.grpc"
   override val protoPackage: String = "rss"
+  override val header: Option[String] = Some("""option go_package = "binwang.me/rss/grpc";""")
 
   override val customTypeMap: Map[String, Type] = Map(
     typeOf[ZonedDateTime].toString -> typeOf[Long],
