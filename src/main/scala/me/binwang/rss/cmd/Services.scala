@@ -11,6 +11,7 @@ import me.binwang.rss.util.Throttler
 import org.typelevel.log4cats.LoggerFactory
 import org.typelevel.log4cats.slf4j.Slf4jFactory
 
+import scala.concurrent.duration._
 import scala.util.Try
 
 
@@ -23,6 +24,7 @@ case class Services (
     stripePaymentService: StripePaymentService,
     applePaymentService: ApplePaymentService,
     systemService: SystemService,
+    commentService: CommentService,
 )
 
 object Services {
@@ -33,6 +35,10 @@ object Services {
   private val paymentEnabled = config.getBoolean("payment.enabled")
   // give it 1 thousand years free trail if don't need payment
   private val freeTrailDays = if (paymentEnabled) 7 else 365 * 1000
+  private val opengardenBaseUrl: Option[String] = Try(config.getString("opengarden.base-url")).toOption
+    .map(_.trim).filter(_.nonEmpty)
+  private val fullContentTimeout: FiniteDuration =
+    Try(config.getInt("opengarden.article-fetch-timeout-seconds")).getOrElse(180).seconds
 
   def apply(baseServer: BaseServer): Resource[IO, Services] = {
 
@@ -54,9 +60,10 @@ object Services {
 
       new Services(
         new ArticleService(baseServer.articleDao, baseServer.articleContentDao, baseServer.articleUserMarkingDao,
-          baseServer.articleSearchDao, baseServer.userDao, llmModels, authorizer),
+          baseServer.articleSearchDao, baseServer.userDao, llmModels, authorizer, baseServer.sttpBackend,
+          opengardenBaseUrl, fullContentTimeout, baseServer.urlValidator),
         new FolderService(baseServer.folderDao, baseServer.folderSourceDao,
-          baseServer.sourceDao, baseServer.importSourcesTaskDao, authorizer, importLimit),
+          baseServer.sourceDao, authorizer, importLimit),
         new SourceService(baseServer.sourceDao, baseServer.folderSourceDao, baseServer.folderDao, baseServer.fetcher,
           authorizer, sourceFinder),
         new UserService(baseServer.userDao, baseServer.userSessionDao, baseServer.userDeleteCodeDao,
@@ -69,6 +76,8 @@ object Services {
         new ApplePaymentService(baseServer.userDao, baseServer.userSessionDao,
           baseServer.paymentCustomerDao, baseServer.sourceDao, authorizer, baseServer.mailSender),
         new SystemService(),
+        new CommentService(baseServer.articleDao, authorizer, baseServer.sttpBackend, opengardenBaseUrl,
+          baseServer.urlValidator),
       )
     }
 

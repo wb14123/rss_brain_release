@@ -8,7 +8,7 @@ import me.binwang.rss.service.{FolderService, SourceService, UserService}
 import me.binwang.rss.webview.auth.CookieGetter.reqToCookieGetter
 import me.binwang.rss.webview.basic.ContentRender.{hxSwapContentAttrs, wrapContentRaw}
 import me.binwang.rss.webview.basic.HtmlCleaner.str2cleaner
-import me.binwang.rss.webview.basic.{ContentRender, HttpResponse, ProxyUrl, ScalatagsSeqInstances}
+import me.binwang.rss.webview.basic.{ContentRender, FormParamDecoders, HttpResponse, ProxyUrl, ScalatagsSeqInstances}
 import me.binwang.rss.webview.basic.ScalaTagAttributes.{hxTarget, _}
 import me.binwang.rss.webview.routes.FolderListView.{folderSourcesDom, getFolderAndSources, reloadFolderDom}
 import me.binwang.rss.webview.widgets._
@@ -32,18 +32,25 @@ object FolderListView {
     }}.getOrElse("")
   }
 
+  private def fetchStatusHint(sourceID: String, tooltip: String, icon: String, iconClass: String): Frag =
+    a(
+      cls := "cursor-enabled",
+      ContentRender.hxSwapContentAttrs,
+      hxPushUrl := "true",
+      hxGet := s"/sources/$sourceID/fetch",
+      span(cls := s"material-icons-outlined $iconClass", title := tooltip)(icon))
+
   def sourceDom(fs: FolderSource, extraAttrs: Seq[AttrPair] = Seq()): Frag = {
     val sourceID = fs.source.id
     val folderID = fs.folderMapping.folderID
-    val sourceName = fs.source.title.getOrElse("").escapeHtml
-    // only show error messages when there are 3 errors in a row
-    val errorHint: Frag = if (fs.source.fetchFailedMsg.isEmpty || fs.source.fetchErrorCount <= 3) "" else
-      a(
-        cls := "cursor-enabled",
-        ContentRender.hxSwapContentAttrs,
-        hxPushUrl := "true",
-        hxGet := s"/sources/$sourceID/error",
-        span(cls := "material-icons-outlined warning", title := fs.source.fetchFailedMsg.get)("error_outline"))
+    val sourceName = fs.displayName.getOrElse("").escapeHtml
+    val statusHint: Frag =
+      if (fs.source.fetchCompletedAt.isEmpty) {
+        fetchStatusHint(sourceID, "Waiting to be fetched", "hourglass_empty", "fetch-pending-icon")
+      } else if (fs.source.fetchFailedMsg.isDefined && fs.source.fetchErrorCount > 3) {
+        // a feed is only reported as broken after 3 errors in a row
+        fetchStatusHint(sourceID, fs.source.fetchFailedMsg.get, "error_outline", "warning")
+      } else ""
 
     val sortBy = ArticleList.sortBy(fs.folderMapping.articleOrder)
     val layout = fs.folderMapping.articleListLayout.toString
@@ -77,7 +84,7 @@ object FolderListView {
       ),
       div(hxPost := s"/hx/user/currentSource/$sourceID", hxSwap := "none",
         hxTrigger := s"click from:#source-menu-$sourceID"),
-      errorHint,
+      statusHint,
     )
   }
 
@@ -111,7 +118,7 @@ object FolderListView {
 }
 
 class FolderListView(folderService: FolderService, sourceService: SourceService, userService: UserService) extends Http4sView
-    with ScalatagsInstances with ScalatagsSeqInstances {
+    with ScalatagsInstances with ScalatagsSeqInstances with FormParamDecoders {
 
   private val hideMenuScript = "if (smallScreen) showMenu = false; "
   private val hxSwapContentAttrs = Seq(
@@ -128,6 +135,12 @@ class FolderListView(folderService: FolderService, sourceService: SourceService,
     val errorMsg = if (sourceFetchErrors == 1) "1 feed has problem" else s"$sourceFetchErrors feeds have problem"
     val errorHint: Frag = if (sourceFetchErrors == 0) "" else
       span(cls := "material-icons-outlined warning", title := errorMsg)("error_outline")
+    val showPendingHint = !folder.isUserDefault && sources.exists(_.source.fetchCompletedAt.isEmpty)
+    val pendingHint: Frag = if (!showPendingHint) "" else
+      span(cls := "material-icons-outlined fetch-pending-icon", title := "Some feeds are waiting to be fetched")(
+        "hourglass_empty")
+    val fetchHints: Frag = if (sourceFetchErrors == 0 && !showPendingHint) "" else
+      div(cls := "folder-fetch-hints", pendingHint, errorHint)
     val expandButton: Frag = if (folder.isUserDefault) "" else a(
       nullHref, cls := "material-icons-outlined folder-expand-icon cursor-enabled", xOnClick := "expanded=!expanded",
       span(xShow := "expanded", hxPost := s"/hx/folders/${folder.id}/update", hxVals:= "{\"expanded\": false}",
@@ -149,7 +162,7 @@ class FolderListView(folderService: FolderService, sourceService: SourceService,
 
     val folderRow = if (folder.isUserDefault) {
       div(cls := "side-menu-item default-folder", iconSpan("dynamic_feed"),
-        a(cls := "default-folder-link", folderAttrs, "All Articles"))
+        a(cls := "default-folder-link", folderAttrs, "All Articles"), fetchHints)
     } else {
       div(
         cls := "folder-name-display",
@@ -158,7 +171,7 @@ class FolderListView(folderService: FolderService, sourceService: SourceService,
           expandButton,
           a(cls := "folder-name-link", folderAttrs)(folderName),
         ),
-        errorHint,
+        fetchHints,
       )
     }
 
@@ -281,7 +294,7 @@ class FolderListView(folderService: FolderService, sourceService: SourceService,
             label(div("Description"),
               input(`type` := "text", name := "description", value := folder.description.getOrElse(""))),
             label(cls := "form-row",
-              input(is := "boolean-checkbox", `type` := "checkbox", name := "searchEnabled",
+              input(id := "folder-search-enabled", `type` := "checkbox",
               if (folder.searchEnabled) checked else ""), "Enable Filter",
             ),
             label(div("Filter Search Term"),
@@ -306,7 +319,9 @@ class FolderListView(folderService: FolderService, sourceService: SourceService,
             div(cls := "button-row",
               button(cls := "secondary", ContentRender.hxSwapContentAttrs,
                 hxGet := ArticleList.hxLinkFromFolder(folder), hxPushUrl := s"/folders/$folderID/articles", "Cancel"),
-              button(hxPost := s"/hx/folders/$folderID/updateAndRefresh", hxExt := "json-enc", "Save"),
+              button(hxPost := s"/hx/folders/$folderID/updateAndRefresh", hxExt := "json-enc",
+                hxVals := "js:{searchEnabled: document.querySelector('#folder-search-enabled').checked}",
+                "Save"),
             ),
           )
         )
@@ -321,30 +336,34 @@ class FolderListView(folderService: FolderService, sourceService: SourceService,
       }
 
 
-    case req @ GET -> Root / "sources" / sourceID / "error" => wrapContentRaw(req) {
+    case req @ GET -> Root / "sources" / sourceID / "fetch" => wrapContentRaw(req) {
       val token = req.authToken
       for {
-        source <- sourceService.getSource(token, sourceID)
-        msg: Frag = source.fetchFailedMsg.map{ errMsg =>
+        folderSource <- sourceService.getSourceInUser(token, sourceID)
+        source = folderSource.source
+        pendingDom: Frag = if (source.fetchCompletedAt.isDefined) "" else
           div(
-            div(
-              h3("Feed Fetch Info:"),
-              SourceFetchInfo(source),
-            ),
-            hr,
-            div(
-              h3("Error Message"),
-              pre(code(errMsg)),
-            ),
-            hr,
+            h3("Waiting for Fetch"),
+            p("This feed has not been fetched yet. It will be fetched soon."),
+            p("If a fetch fails, it is retried automatically."),
+          )
+        errorDom: Frag = source.fetchFailedMsg.map { errMsg =>
+          div(
+            h3("Error Message"),
+            pre(code(errMsg)),
             a(href := source.xmlUrl, target := "_blank", "Open Feed Link"),
           )
-        }.getOrElse("No error.")
+        }.getOrElse("")
         dom = Seq(
-          PageHeader(Some(source.title.getOrElse("Unknown Feed"))),
+          PageHeader(Some(folderSource.displayName.getOrElse("Unknown Feed"))),
           div(
             cls := "form-body form-start",
-            msg,
+            SourceFetchInfo(source),
+            pendingDom,
+            errorDom,
+            div(cls := "button-row",
+              button(cls := "secondary", xOnClick := s"unsubscribeSource('$sourceID')", "Unsubscribe"),
+            ),
           )
         )
         resp <- Ok(dom, `Content-Type`(MediaType.text.html))

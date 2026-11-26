@@ -2,13 +2,13 @@ package me.binwang.rss.webview.routes
 
 import cats.effect.IO
 import io.circe.generic.auto._
-import me.binwang.rss.model.{ImportOPMLTaskNotFound, ImportSourcesTask}
+import me.binwang.rss.model.ImportOPMLResult
 import me.binwang.rss.service.{FolderService, SourceService}
-import me.binwang.rss.time.NowIO
 import me.binwang.rss.webview.auth.CookieGetter.reqToCookieGetter
 import me.binwang.rss.webview.basic.ContentRender.{hxSwapContentAttrs, wrapContent, wrapContentRaw}
 import me.binwang.rss.webview.basic.ScalaTagAttributes._
-import me.binwang.rss.webview.basic.{HttpResponse, ScalatagsSeqInstances}
+import me.binwang.rss.webview.basic.ScalatagsSeqInstances
+import me.binwang.rss.webview.basic.FormParamDecoders
 import me.binwang.rss.webview.widgets.{PageHeader, SourcesPreview}
 import org.http4s.circe._
 import org.http4s.dsl.io._
@@ -20,7 +20,7 @@ import org.typelevel.log4cats.LoggerFactory
 import scalatags.Text.all._
 
 class ImportFeedView(sourceService: SourceService, folderService: FolderService)(implicit val loggerFactory: LoggerFactory[IO])
-    extends Http4sView with ScalatagsInstances with ScalatagsSeqInstances {
+    extends Http4sView with ScalatagsInstances with ScalatagsSeqInstances with FormParamDecoders {
 
   private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
 
@@ -46,110 +46,29 @@ class ImportFeedView(sourceService: SourceService, folderService: FolderService)
     }
 
     case req @ GET -> Root / "import_opml" => wrapContentRaw(req) {
-      val token = req.authToken
-      for {
-        now <- NowIO()
-        taskOpt <- folderService.getImportOPMLTask(token).map(Some(_))
-          .handleError{case _: ImportOPMLTaskNotFound => None}
-        progressHint = taskOpt match {
-          case None => div("")
-          case Some(task) =>
-            val detailSpan = span("Click ",
-                a(nullHref, hxSwapContentAttrs, hxGet := "/import_opml_progress", hxPushUrl := "true", "here"),
-                " to see details. ",
-              )
-            val hintText = if (task.isFinished) "Last OPML import is finished. "
-              else if (task.isTimedOut(now)) "Your last OPML import is timed out. "
-              else "Your last OPML import is still in progress. "
-            div(hintText, detailSpan)
-        }
-        dom = Seq(
-          PageHeader(Some("Import OPML File")),
-          form(
-            id := "import-opml-form",
-            cls := "form-body",
-            hxEncoding := "multipart/form-data",
-            progressHint,
-            small(cls := "import-feed-hint")("Choose an OPML file to import new feeds."),
-            input(name := "opml-file", `type` := "file"),
-            button(hxPost := "/import_opml", hxTrigger := "click", hxTarget := "", hxDisableThis,
-              hxIndicator := "#content-indicator", "Import")
-          )
+      val dom = Seq(
+        PageHeader(Some("Import OPML File")),
+        form(
+          id := "import-opml-form",
+          cls := "form-body",
+          hxEncoding := "multipart/form-data",
+          small(cls := "import-feed-hint")("Choose an OPML file to import new feeds."),
+          input(name := "opml-file", `type` := "file"),
+          button(hxPost := "/import_opml", hxTrigger := "click", hxSwapContentAttrs, hxDisableThis, "Import")
         )
-        res <- Ok(dom, `Content-Type`(MediaType.text.html))
-      } yield res
+      )
+      Ok(dom, `Content-Type`(MediaType.text.html))
     }
 
-    case req @ GET -> Root / "import_opml_progress" => wrapContentRaw(req) {
-      val token = req.authToken
-      NowIO().flatMap { now =>
-        folderService.getImportOPMLTask(token).map(Some(_))
-          .handleError { case _: ImportOPMLTaskNotFound => None }
-          .map {
-            case None =>
-              div(
-                span("No ongoing import task. Click "),
-                a(nullHref, hxSwapContentAttrs, hxGet := "/import_opml", hxPushUrl := "true", "here"),
-                span(" to import OPML."),
-              )
-            case Some(task) if task.isTimedOut(now) =>
-              div("Import feeds timed out. Refresh the page to see all the imported feeds.", taskInfoDom(task))
-            case Some(task) if task.isFinished =>
-              div("Import feeds finished. Refresh the page to see all the imported feeds", taskInfoDom(task))
-            case Some(task) =>
-              div(
-                hxTrigger := "load delay:10s", // polling every 10 seconds
-                hxTarget := "#import-task-progress",
-                hxSelect := "#import-task-progress",
-                hxSwap := "outerHTML",
-                hxGet := "/import_opml_progress",
-                div("Importing feeds. It may take a few minutes."),
-                tag("progress")(cls := "opml-import-progress",
-                  value := task.successfulSources + task.failedSources, max := task.totalSources),
-                taskInfoDom(task),
-              )
-          }.flatMap { progressDom =>
-            val dom = Seq(
-              PageHeader(Some("Importing OPML File")),
-              div(id := "import-task-progress", cls := "form-body", progressDom)
-            )
-            Ok(dom, `Content-Type`(MediaType.text.html))
-          }
-      }
-    }
-
-    case req @ GET -> Root / "import_opml" / "failed" => wrapContentRaw(req) {
-      val token = req.authToken
-      folderService.getImportOPMLFailedSources(token).compile.toList.flatMap { sources =>
-        val sourcesDom = sources.map { source =>
-          tag("details")(
-            tag("summary")(source.xmlUrl),
-            small(cls := "import-err-msg", source.error),
-            hr(),
-          )
-        }
-        val dom = Seq(
-          PageHeader(Some("Import OPML Failure Details")),
-          div(
-            cls := "form-body",
-            p("The following feeds are failed to import. Click on each one to see the details."),
-            sourcesDom,
-          ),
-        )
-        Ok(dom, `Content-Type`(MediaType.text.html))
-      }
-    }
-
-
-    case req @ POST -> Root / "import_opml" =>
+    case req @ POST -> Root / "import_opml" => wrapContentRaw(req) {
       val token = req.authToken
       req.decode[Multipart[IO]] { multipart =>
         val inputStreamRes = fs2.io.toInputStreamResource(fs2.Stream.emits(multipart.parts).flatMap(_.body))
-        folderService.deleteOPMLImportTasks(token) >>
-          folderService.importFromOPML(token, inputStreamRes) >>
-          HttpResponse.redirect("imported feeds", "/import_opml_progress", req)
+        folderService.importFromOPML(token, inputStreamRes).flatMap { result =>
+          Ok(importResultDom(result), `Content-Type`(MediaType.text.html))
+        }
       }
-
+    }
 
     case req @ GET -> Root / "find_feed" => wrapContent(req) {
       val token = req.authToken
@@ -182,19 +101,33 @@ class ImportFeedView(sourceService: SourceService, folderService: FolderService)
 
   }
 
-  private def taskInfoDom(importTask: ImportSourcesTask) = {
-    div(
-      cls := "opml-import-task-info",
-
-      div(s"${importTask.totalSources} feeds found in OPML file."),
-      div(s"${importTask.successfulSources} feeds imported successfully."),
-      div(s"${importTask.failedSources} feeds failed to import."),
-
-      if (importTask.failedSources == 0) "" else
-        div("Click ",
-          a(nullHref, hxSwapContentAttrs, hxGet := "/import_opml/failed", hxPushUrl := "true")("here"),
-          " to see details of failed feeds.",
+  private def importResultDom(result: ImportOPMLResult): Seq[Frag] = {
+    val failedSourcesDom = result.failedSources.map { failedSource =>
+      tag("details")(
+        tag("summary")(failedSource.xmlUrl),
+        small(cls := "import-err-msg", failedSource.error),
+      )
+    }
+    Seq(
+      PageHeader(Some("Import OPML File")),
+      div(
+        cls := "form-body",
+        xInit := "reloadFolderList()",
+        div(
+          cls := "import-summary",
+          div(s"${result.totalSources} feeds found in the OPML file."),
+          div(s"${result.successfulSources} feeds added."),
+          if (result.failedSources.isEmpty) "" else
+            div(
+              s"${result.failedSources.size} feeds could not be added. This is usually a temporary problem. " +
+                "Import the same file again to retry. Feeds that were already added will not be duplicated.",
+              failedSourcesDom,
+            ),
+          div("It may take a few minutes for the new feeds to show their articles. If a feed cannot be fetched, " +
+            "RSS Brain will keep retrying automatically. Click the status icon next to a feed in the sidebar to see " +
+            "its fetch details, or open the feed menu to unsubscribe."),
         )
+      )
     )
   }
 }

@@ -1,12 +1,14 @@
 package me.binwang.rss.dao.sql
 
 import cats.effect.IO
+import cats.implicits.catsSyntaxApplyOps
 import doobie._
+import doobie.enumerated.TransactionIsolation
 import doobie.implicits._
 import io.getquill.Ord
 import me.binwang.rss.dao.ArticleDao
 import me.binwang.rss.model.ID.ID
-import me.binwang.rss.model.{Article, ArticleUserMarking, ArticleWithUserMarking, FolderSourceMapping, ID}
+import me.binwang.rss.model.{Article, ArticleUpdater, ArticleUserMarking, ArticleWithUserMarking, FolderSourceMapping, ID}
 
 import java.time.ZonedDateTime
 
@@ -30,12 +32,15 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
         description varchar not null,
         author varchar default null,
         comments int default null,
+        commentUrl varchar default null,
         upVotes int default null,
         downVotes int default null,
         score double precision not null default 0,
         mediaGroups jsonb default null,
         nsfw boolean default false,
-        postedAtIsMissing boolean not null default false
+        postedAtIsMissing boolean not null default false,
+        fullContentUrl varchar default null,
+        contentCompleteness varchar default null
       )""")
       .update
       .run
@@ -46,6 +51,8 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
       // .flatMap(_ => createIndex("score", desc = true))
       .flatMap(_ => createIndexWithFields(Seq(("sourceID", false), ("score", true))))
       .flatMap(_ => createIndexWithFields(Seq(("sourceID", false), ("guid", false)), unique = true))
+      .flatMap(_ => createIndexWithFields(Seq(("postedAt", true), ("id", false))))
+      .flatMap(_ => createIndexWithFields(Seq(("score", true), ("id", false))))
       .map(_ => ())
       .transact(xa)
   }
@@ -67,7 +74,7 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
           (article.postedAt == lift(postedBefore) && (article.id greaterThan lift(articleID))))
         .sortBy(article => (article.postedAt, article.id))(Ord(Ord.desc, Ord.asc))
         .take(lift(size))
-    }).transact(xa)
+    }).transact(rxa)
   }
 
   override def listBySourceWithUserMarking(sourceID: ID, size: Int, postedBefore: ZonedDateTime, articleID: ID,
@@ -84,7 +91,7 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
         .sortBy(entry => (entry._1.postedAt, entry._1.id))(Ord(Ord.desc, Ord.asc))
     }.dynamic
     val q = filterArticlesWithMarking(baseQ, read, bookmarked, deleted).take(size)
-    stream(q).transact(xa).map{case (article, markingOpt) =>
+    stream(q).transact(rxa).map{case (article, markingOpt) =>
       ArticleWithUserMarking(article, markingOpt.getOrElse(ArticleUserMarking(article.id, userID)))}
   }
 
@@ -113,6 +120,9 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
             (t, e) => t.upVotes -> e.upVotes,
             (t, e) => t.downVotes -> e.downVotes,
             (t, e) => t.comments -> e.comments,
+            (t, e) => t.commentUrl -> e.commentUrl,
+            (t, e) => t.fullContentUrl -> e.fullContentUrl,
+            (t, e) => t.contentCompleteness -> e.contentCompleteness,
             (t, e) => t.score -> e.score,
             (t, e) => t.author -> e.author,
             (t, e) => t.mediaGroups -> e.mediaGroups,
@@ -134,6 +144,9 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
             (t, e) => t.upVotes -> e.upVotes,
             (t, e) => t.downVotes -> e.downVotes,
             (t, e) => t.comments -> e.comments,
+            (t, e) => t.commentUrl -> e.commentUrl,
+            (t, e) => t.fullContentUrl -> e.fullContentUrl,
+            (t, e) => t.contentCompleteness -> e.contentCompleteness,
             (t, e) => t.score -> e.score,
             (t, e) => t.author -> e.author,
             (t, e) => t.mediaGroups -> e.mediaGroups,
@@ -143,6 +156,27 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
       }
     }
     run(q).transact(xa).map(_ > 0)
+  }
+
+  /**
+   * Update the fields that the updater sets.
+   *
+   * @param expectedPostedAt Write only if the stored `postedAt` equals this value.
+   * @return True if a row changed.
+   */
+  override def update(id: ID, updater: ArticleUpdater,
+      expectedPostedAt: Option[ZonedDateTime] = None): IO[Boolean] = {
+    if (updater.contentCompleteness.isEmpty) {
+      // The database rejects an update that sets no value.
+      IO.pure(false)
+    } else {
+      val q = expectedPostedAt match {
+        case Some(postedAt) => dynamicQuery[Article].filter(_.id == lift(id)).filter(_.postedAt == lift(postedAt))
+        case None => dynamicQuery[Article].filter(_.id == lift(id))
+      }
+      run(q.update(setOpt(_.contentCompleteness, updater.contentCompleteness)))
+        .transact(xa).map(_ > 0)
+    }
   }
 
   override def listByFolder(folderID: String, size: Int, postedBefore: ZonedDateTime, articleID: ID): fs2.Stream[IO, Article] = {
@@ -157,7 +191,7 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
         .sortBy(article => (article.postedAt, article.id))(Ord(Ord.desc, Ord.asc))
         .take(lift(size))
     }
-    stream(q).transact(xa)
+    stream(q).transact(rxa)
   }
 
   override def listByFolderWithUserMarking(folderID: String, size: Int, postedBefore: ZonedDateTime, articleID: ID,
@@ -178,7 +212,7 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
     }.dynamic
     val q = filterArticlesWithMarking(baseQ, read, bookmarked, deleted).take(size)
 
-    stream(q).transact(xa).map{case (article, markingOpt) =>
+    stream(q).transact(rxa).map{case (article, markingOpt) =>
       ArticleWithUserMarking(article, markingOpt.getOrElse(ArticleUserMarking(article.id, userID)))}
   }
 
@@ -198,29 +232,28 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
         .sortBy(article => (article.postedAt, article.id))(Ord(Ord.desc, Ord.asc))
         .take(lift(size))
     }
-    stream(q).transact(xa)
+    stream(q).transact(rxa)
   }
 
   override def listByUserWithUserMarking(userID: String, size: Int, postedBefore: ZonedDateTime, articleID: ID,
       read: Option[Boolean], bookmarked: Option[Boolean],
       deleted: Option[Boolean] = Some(false)): fs2.Stream[IO, ArticleWithUserMarking] =  {
     val baseQ = quote {
-      query[FolderSourceMapping]
-        .filter(_.userID == lift(userID))
-        .map(_.sourceID)
-        .distinct
-        .join(query[Article])
-        .on{case (sourceID, article) => sourceID == article.sourceID}
-        .map(_._2)
+      query[Article]
+        .filter(article =>
+          query[FolderSourceMapping]
+            .filter(_.userID == lift(userID))
+            .filter(_.sourceID == article.sourceID)
+            .nonEmpty
+        )
+        .filter { article => article.postedAt < lift(postedBefore) ||
+          (article.postedAt == lift(postedBefore) && (article.id greaterThan lift(articleID))) }
         .leftJoin(query[ArticleUserMarking])
         .on{case (article, marking) => article.id == marking.articleID && marking.userID == lift(userID)}
-        .filter { case (article, _) => article.postedAt < lift(postedBefore) ||
-          (article.postedAt == lift(postedBefore) && (article.id greaterThan lift(articleID)))
-        }
         .sortBy({case (article, _)=> (article.postedAt, article.id)})(Ord(Ord.desc, Ord.asc))
     }.dynamic
     val q = filterArticlesWithMarking(baseQ, read, bookmarked, deleted).take(size)
-    stream(q).transact(xa).map{case (article, markingOpt) =>
+    stream(q).transact(rxa).map{case (article, markingOpt) =>
       ArticleWithUserMarking(article, markingOpt.getOrElse(ArticleUserMarking(article.id, userID)))}
   }
 
@@ -237,7 +270,7 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
         .sortBy(entry => (entry._1.score, entry._1.id))(Ord(Ord.desc, Ord.asc))
     }.dynamic
     val q = filterArticlesWithMarking(baseQ, read, bookmarked, deleted).take(size)
-    stream(q).transact(xa).map{case (article, markingOpt) =>
+    stream(q).transact(rxa).map{case (article, markingOpt) =>
       ArticleWithUserMarking(article, markingOpt.getOrElse(ArticleUserMarking(article.id, userID)))}
   }
 
@@ -246,18 +279,20 @@ class ArticleSqlDao(implicit val connectionPool: ConnectionPool) extends Article
       deleted: Option[Boolean] = Some(false)): fs2.Stream[IO, ArticleWithUserMarking] = {
     val baseQ = quote {
       query[Article]
-        .join(query[FolderSourceMapping])
-        .on(_.sourceID == _.sourceID)
+        .filter(article =>
+          query[FolderSourceMapping]
+            .filter(_.folderID == lift(folderID))
+            .filter(_.sourceID == article.sourceID)
+            .nonEmpty
+        )
+        .filter(article => article.score <= lift(maxScore) &&
+          !(article.score == lift(maxScore) && (article.id lessEqThan lift(articleID))))
         .leftJoin(query[ArticleUserMarking])
-        .on{case ((article, _), marking) => article.id == marking.articleID && marking.userID == lift(userID)}
-        .filter(_._1._2.folderID == lift(folderID))
-        .map(x => (x._1._1, x._2))
-        .filter({case (article, _) => article.score <= lift(maxScore) &&
-          !(article.score == lift(maxScore) && (article.id lessEqThan lift(articleID)))})
+        .on{case (article, marking) => article.id == marking.articleID && marking.userID == lift(userID)}
         .sortBy({case (article, _) => (article.score, article.id)})(Ord(Ord.desc, Ord.asc))
     }.dynamic
     val q = filterArticlesWithMarking(baseQ, read, bookmarked, deleted).take(size)
-    stream(q).transact(xa).map{case (article, markingOpt) =>
+    stream(q).transact(rxa).map{case (article, markingOpt) =>
       ArticleWithUserMarking(article, markingOpt.getOrElse(ArticleUserMarking(article.id, userID)))}
   }
 

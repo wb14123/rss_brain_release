@@ -27,13 +27,16 @@ class UserSessionSqlDao(implicit val connectionPool: ConnectionPool) extends Use
             expireTime timestamp not null,
             isAdmin boolean not null default false,
             subscribeEndTime timestamp not null,
-            subscribed boolean not null default false
+            subscribed boolean not null default false,
+            isReadOnly boolean not null default false,
+            tokenName varchar(255) default null
           )
          """)
       .update
       .run
       .flatMap(_ => createIndex("token"))
       .flatMap(_ => createIndex("userID"))
+      .flatMap(_ => createIndexWithFields(Seq(("userID", false), ("tokenName", false)), unique = true))
       .transact(xa)
       .map(_ => ())
   }
@@ -75,13 +78,43 @@ class UserSessionSqlDao(implicit val connectionPool: ConnectionPool) extends Use
     run(q).transact(xa).map(_ > 0)
   }
 
-  override def deleteByUser(userID: String): IO[Long] = {
+  override def deleteByUser(userID: String, excludeApiTokens: Boolean = false): IO[Long] = {
+    if (excludeApiTokens) {
+      val q = quote {
+        query[UserSession]
+          .filter(_.userID == lift(userID))
+          .filter(_.tokenName.isEmpty)
+          .delete
+      }
+      run(q).transact(xa)
+    } else {
+      val q = quote {
+        query[UserSession]
+          .filter(_.userID == lift(userID))
+          .delete
+      }
+      run(q).transact(xa)
+    }
+  }
+
+  override def deleteByUserAndTokenName(userID: String, tokenName: String): IO[Boolean] = {
+    val name: Option[String] = Some(tokenName)
     val q = quote {
       query[UserSession]
         .filter(_.userID == lift(userID))
+        .filter(_.tokenName == lift(name))
         .delete
     }
-    run(q).transact(xa)
+    run(q).transact(xa).map(_ > 0)
+  }
+
+  override def listByUser(userID: String): fs2.Stream[IO, UserSession] = {
+    val q = quote {
+      query[UserSession]
+        .filter(_.userID == lift(userID))
+        .filter(_.tokenName.isDefined)
+    }
+    stream(q).transact(xa)
   }
 
   override def updateSubscription(userID: String, subscribeEndTime: ZonedDateTime, subscribed: Boolean): IO[Long] = {

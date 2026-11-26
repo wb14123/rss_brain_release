@@ -7,9 +7,9 @@ import doobie.implicits._
 import io.circe.generic.auto._
 import io.circe.parser
 import io.getquill.{CamelCase, NamingStrategy}
-import io.getquill.doobie.DoobieContext
 import me.binwang.rss.model.ArticleListLayout.ArticleListLayout
 import me.binwang.rss.model.ArticleOrder.ArticleOrder
+import me.binwang.rss.model.ContentCompleteness.ContentCompleteness
 import me.binwang.rss.model.EmbeddingUpdateStatus.EmbeddingUpdateStatus
 import me.binwang.rss.model.FetchStatus.FetchStatus
 import me.binwang.rss.model.ID.ID
@@ -39,6 +39,7 @@ trait BaseSqlDao {
 
   protected implicit val connectionPool: ConnectionPool
   protected val xa: HikariTransactor[IO] = connectionPool.xa
+  protected val rxa: HikariTransactor[IO] = connectionPool.readCommitedXa
   protected val UUID_LENGTH = 36
   protected val IP_MAX_LENGTH = 15
 
@@ -83,6 +84,12 @@ trait BaseSqlDao {
 
   protected implicit val encodeArticleOrder: MappedEncoding[ArticleOrder, String] =
     MappedEncoding[ArticleOrder, String](_.toString)
+
+  protected implicit val decodeContentCompleteness: MappedEncoding[String, ContentCompleteness] =
+    MappedEncoding[String, ContentCompleteness](ContentCompleteness.withName)
+
+  protected implicit val encodeContentCompleteness: MappedEncoding[ContentCompleteness, String] =
+    MappedEncoding[ContentCompleteness, String](_.toString)
 
   protected implicit val decodeArticleListLayout: MappedEncoding[String, ArticleListLayout] =
     MappedEncoding[String, ArticleListLayout](ArticleListLayout.withName)
@@ -149,13 +156,7 @@ trait BaseSqlDao {
   }
 
   def deleteAll(): IO[Unit] = {
-    val q = {
-      for {
-        _ <- Fragment.const(s"set local sql_safe_updates=false").update.run
-        _ <- Fragment.const(s"delete from $table").update.run
-      } yield ()
-    }
-    q.transact(xa)
+    Fragment.const(s"delete from $table").update.run.map(_ => ()).transact(xa)
   }
 
   def table: String

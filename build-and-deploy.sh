@@ -8,36 +8,35 @@ CODE_CLEAN=true
 
 DEPLOY=true
 
-tag=`git rev-parse --short HEAD`
-if [[ -n $(git status -s) ]] ; then
-	CODE_CLEAN=false
-	echo "You have uncommited files. Use date as image tag instead of git commit."
-	tag=`date +'%Y-%m-%d-%s'`
+tag=$(git rev-parse --short HEAD)
+if [[ -n $(git status -s) ]]; then
+  CODE_CLEAN=false
+  echo "You have uncommited files. Use date as image tag instead of git commit."
+  tag=$(date +'%Y-%m-%d-%s')
 fi
 
-if [ "$SKIP_SBT" = false ] ; then
-	echo "Build jar ..."
-	sbt clean generateGRPCCode
-	if [[ -n $(git status -s) ]] && [ "$CODE_CLEAN" = true ] ; then
-		echo "Code changed after build grpc files. Please check."
-		exit 1
-	fi
-	sbt compile assembly
+if [ "$SKIP_SBT" = false ]; then
+  echo "Build jar ..."
+  sbt clean generateGRPCCode
+  if [[ -n $(git status -s) ]] && [ "$CODE_CLEAN" = true ]; then
+    echo "Code changed after build grpc files. Please check."
+    exit 1
+  fi
+  sbt compile assembly
 else
-	echo "NOTE: Skip sbt build. Please make sure you've done \"sbt compile assembly\""
+  echo "NOTE: Skip sbt build. Please make sure you've done \"sbt compile assembly\""
 fi
 
-image="docker-hosted.binwang.me:30008/rss_brain:$tag"
+image="ghcr.io/wb14123/rss_brain:$tag"
 echo "Building image $image ..."
-docker build -t $image .
+podman build -t $image .
 echo "Pushing image ..."
-docker push $image
+podman push $image
 
-if [ "$DEPLOY" = false ] ; then
-	echo "DEPLOY is set to failse, skip deploy to Kubernetes"
-	exit 0
+if [ "$DEPLOY" = false ]; then
+  echo "DEPLOY is set to failse, skip deploy to Kubernetes"
+  exit 0
 fi
-
 
 echo "Deploying iamge $image to Kubernetes ..."
 echo "Deploying rss-brain-fetcher ..."

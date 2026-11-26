@@ -10,8 +10,12 @@ import scala.language.implicitConversions
 
 class HtmlCleaner(html: String) {
 
-  def validHtml: String = {
-    val cleanHtml = Jsoup.clean(html, Safelist.basicWithImages().addTags("figcaption"))
+  def validHtml: String = cleanHtml(Safelist.basicWithImages().addTags("figcaption"))
+
+  def relaxedHtml : String = cleanHtml(Safelist.relaxed())
+
+  private def cleanHtml(safelist: Safelist): String = {
+    val cleanHtml = Jsoup.clean(html, safelist)
     val doc = Jsoup.parse(cleanHtml)
     doc.select("a").attr("target", "_blank")
     doc.html()

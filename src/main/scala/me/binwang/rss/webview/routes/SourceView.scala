@@ -8,7 +8,7 @@ import me.binwang.rss.model.CirceEncoders._
 import io.circe.generic.auto._
 import me.binwang.rss.webview.basic.ContentRender.{hxSwapContentAttrs, wrapContentRaw}
 import me.binwang.rss.webview.basic.ScalaTagAttributes._
-import me.binwang.rss.webview.basic.{HttpResponse, ScalatagsSeqInstances}
+import me.binwang.rss.webview.basic.{FormParamDecoders, HttpResponse, ScalatagsSeqInstances}
 import me.binwang.rss.webview.widgets.{DateTimeNode, PageHeader, SourceFetchInfo}
 import org.http4s.circe._
 import org.http4s.dsl.io._
@@ -20,7 +20,7 @@ import scalatags.Text.all._
 
 
 class SourceView(sourceService: SourceService, userService: UserService) extends Http4sView with ScalatagsInstances
-    with ScalatagsSeqInstances {
+    with ScalatagsSeqInstances with FormParamDecoders {
 
   implicit val sourceUpdaterEncoder: EntityDecoder[IO, FolderSourceMappingUpdater] = jsonOf[IO, FolderSourceMappingUpdater]
 
@@ -100,7 +100,7 @@ class SourceView(sourceService: SourceService, userService: UserService) extends
           PageHeader(Some("Edit Feed")),
           form(
             cls := "form-body form-start",
-            h2(cls := "form-row", folderSource.source.title.getOrElse[String]("Unknown")),
+            h2(cls := "form-row", folderSource.displayName.getOrElse[String]("Unknown")),
             folderSource.source.description.map(desc => small(cls := "form-row", desc)).getOrElse(""),
             small(cls := "form-block",
               div(span("Feed URL: "), a(href := folderSource.source.xmlUrl, target := "_blank")(folderSource.source.xmlUrl)),
@@ -109,9 +109,9 @@ class SourceView(sourceService: SourceService, userService: UserService) extends
               }.getOrElse(""),
             ),
             SourceFetchInfo(folderSource.source),
-            label(cls := "form-row", input(is := "boolean-checkbox", `type` := "checkbox", name := "showTitle",
+            label(cls := "form-row", input(id := "source-show-title", `type` := "checkbox",
               if (folderSource.folderMapping.showTitle) checked else ""), "Show Title"),
-            label(cls := "form-row", input(is := "boolean-checkbox", `type` := "checkbox", name := "showFullArticle",
+            label(cls := "form-row", input(id := "source-show-full-article", `type` := "checkbox",
               if (folderSource.folderMapping.showFullArticle) checked else ""), "Show Full Content"),
             label(div("Order By"), select(name := "articleOrder",
               option(value := ArticleOrder.TIME.toString,
@@ -133,7 +133,10 @@ class SourceView(sourceService: SourceService, userService: UserService) extends
             )),
             div(cls := "button-row",
               button(cls := "secondary", reloadSourceAttrs(folderSource), "Cancel"),
-              button(hxPost := s"/hx/folders/$folderID/sources/$sourceID/updateAndRefresh", hxExt := "json-enc", "Save"),
+              button(hxPost := s"/hx/folders/$folderID/sources/$sourceID/updateAndRefresh", hxExt := "json-enc",
+                hxVals := "js:{showTitle: document.querySelector('#source-show-title').checked," +
+                  " showFullArticle: document.querySelector('#source-show-full-article').checked}",
+                "Save"),
             ),
           ),
         )

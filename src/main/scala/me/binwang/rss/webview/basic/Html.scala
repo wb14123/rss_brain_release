@@ -23,8 +23,7 @@ object Html {
         meta(httpEquiv := "Content-Security-Policy", content := "default-src 'self' 'unsafe-eval'; " +
           "img-src * data:; media-src *; style-src 'self' 'unsafe-inline'; font-src 'self' ; " +
 
-          // for loading reddit comments
-          "connect-src 'self' 'unsafe-eval' *.reddit.com *.rssbrain.com ; " +
+          "connect-src 'self' 'unsafe-eval' *.rssbrain.com ; " +
 
           // for youtube embedded player
           "frame-src *.youtube-nocookie.com youtube-nocookie.com *.youtube.com youtube.com ; " +
@@ -32,9 +31,9 @@ object Html {
         ),
         tags2.title("RSS Brain - A Modern RSS Reader"),
         link(rel := "manifest", href := "/static/webmanifest.json"),
-        link(rel := "stylesheet", href := "/static/dist/main.css"),
+        link(rel := "stylesheet", href := AssetResolver.url("main.css")),
         link(rel := "shortcut icon", href := "/static/assets/icons/Icon-192.png"),
-        script(src := "/static/dist/main.js", defer),
+        script(src := AssetResolver.url("main.js"), defer),
         meta(name := "htmx-config", content := htmxConfig),
       ),
       body(bodyContent)

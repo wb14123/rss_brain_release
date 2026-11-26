@@ -102,6 +102,42 @@ class AuthorizerSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAndAf
       }
     }
 
+    it("should allow read-only token to pass read authorization") {
+      val readOnlyToken = UUID.randomUUID().toString
+      userSessionDao.insert(UserSession(readOnlyToken, userID, ZonedDateTime.now.plusDays(1), isAdmin = false,
+        ZonedDateTime.now.plusDays(1), isReadOnly = true, tokenName = Some("test-token"))).unsafeRunSync()
+      authorizer.authorizeRead(readOnlyToken).unsafeRunSync().userID shouldBe userID
+    }
+
+    it("should reject read-only token on authorize") {
+      val readOnlyToken = UUID.randomUUID().toString
+      userSessionDao.insert(UserSession(readOnlyToken, userID, ZonedDateTime.now.plusDays(1), isAdmin = false,
+        ZonedDateTime.now.plusDays(1), isReadOnly = true, tokenName = Some("test-token"))).unsafeRunSync()
+      assertThrows[ReadOnlyTokenNotAllowed] {
+        authorizer.authorize(readOnlyToken).unsafeRunSync()
+      }
+    }
+
+    it("should reject read-only token on checkFolderPermission") {
+      val readOnlyToken = UUID.randomUUID().toString
+      userSessionDao.insert(UserSession(readOnlyToken, userID, ZonedDateTime.now.plusDays(1), isAdmin = false,
+        ZonedDateTime.now.plusDays(1), isReadOnly = true, tokenName = Some("test-token"))).unsafeRunSync()
+      val folder = Folders.get(userID, 0)
+      folderDao.insertIfNotExist(folder).unsafeRunSync()
+      assertThrows[ReadOnlyTokenNotAllowed] {
+        authorizer.checkFolderPermission(readOnlyToken, folder.id).unsafeRunSync()
+      }
+    }
+
+    it("should allow read-only token on checkFolderReadPermission") {
+      val readOnlyToken = UUID.randomUUID().toString
+      userSessionDao.insert(UserSession(readOnlyToken, userID, ZonedDateTime.now.plusDays(1), isAdmin = false,
+        ZonedDateTime.now.plusDays(1), isReadOnly = true, tokenName = Some("test-token"))).unsafeRunSync()
+      val folder = Folders.get(userID, 0)
+      folderDao.insertIfNotExist(folder).unsafeRunSync()
+      authorizer.checkFolderReadPermission(readOnlyToken, folder.id).unsafeRunSync()._1.userID shouldBe userID
+    }
+
     it("should throttle user requests") {
       val myAuthorizer: Authorizer = new Authorizer(
         new Throttler(2, 1000, 1, 1000, 1),

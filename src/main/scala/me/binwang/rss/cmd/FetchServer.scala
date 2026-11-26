@@ -16,7 +16,7 @@ object FetchServer extends IOApp {
   private val config = ConfigFactory.load()
 
   private val _runtime = {
-    val (compute, compDown) =
+    val (compute, poller, compDown) =
       IORuntime.createWorkStealingComputeThreadPool(
         threads = computeWorkerThreadCount,
         reportFailure = t => reportFailure(t).unsafeRunAndForget()(runtime),
@@ -24,7 +24,8 @@ object FetchServer extends IOApp {
         runtimeBlockingExpiration = 20.minutes,
       )
 
-    IORuntime.builder().setCompute(compute, compDown).build
+    // pollers are shut down together with the compute pool
+    IORuntime.builder().setCompute(compute, compDown).addPoller(poller, () => ()).build
   }
 
   override def runtime: IORuntime = _runtime

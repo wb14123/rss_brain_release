@@ -1,7 +1,9 @@
 package me.binwang.rss.parser
 
+import me.binwang.rss.model.ContentCompleteness.ContentCompleteness
 import me.binwang.rss.model.ID.ID
 import me.binwang.rss.model._
+import XmlNamespace._
 
 import java.time.ZonedDateTime
 import scala.util.Try
@@ -68,6 +70,9 @@ object AtomParser {
     val comments = Try((articleNode \ "comments").text.trim().toInt).toOption
     val upvotes = Try((articleNode \ "upvotes").text.trim().toInt).toOption
     val downvotes = Try((articleNode \ "downvotes").text.trim().toInt).toOption
+    val commentUrl = getCommentUrl(articleNode)
+    val fullContentUrl = getFullContentUrl(articleNode)
+    val contentCompleteness = getContentCompleteness(articleNode)
 
     val guidStr = (articleNode \ "id").text.trim
     val link = (articleNode \ "link")
@@ -86,6 +91,7 @@ object AtomParser {
       createdAt = now.withNano(0),
       title = (articleNode \ "title").headOption.map(_.text.trim).getOrElse(""),
       description = ArticleParserHelper.tripHtmlTags(text),
+      author = getAuthor(articleNode),
       postedAt = postedTime.getOrElse(now),
       guid = guid,
       link = link,
@@ -93,11 +99,49 @@ object AtomParser {
       upVotes = upvotes,
       downVotes = downvotes,
       comments = comments,
+      commentUrl = commentUrl,
+      fullContentUrl = fullContentUrl,
+      contentCompleteness = contentCompleteness,
       postedAtIsMissing = postedTime.isEmpty,
     )
     FullArticle(article=article.getArticleWithScore, content=ArticleParserHelper.prettyHtml(text))
   }
 
+  // The author of an atom entry is in its author element. Only the entry level author is used, because the feed
+  // level author is usually the name of the site, which is already shown as the source title.
+  private def getAuthor(articleNode: Node): Option[String] = {
+    (articleNode \ "author" \ "name").headOption
+      .map(_.text.trim)
+      .filter(_.nonEmpty)
+  }
+
+  private def getCommentUrl(articleNode: Node): Option[String] = {
+    val nodes = articleNode \ "comments-url"
+    nodes.filterNamespace(XmlNamespace.opengarden).headOption
+      .orElse(nodes.headOption)
+      .map(_.text.trim)
+      .filter(_.nonEmpty)
+  }
+
+  private def getFullContentUrl(articleNode: Node): Option[String] = {
+    val nodes = articleNode \ "article-url"
+    nodes.filterNamespace(XmlNamespace.opengarden).headOption
+      .orElse(nodes.headOption)
+      .map(_.text.trim)
+      .filter(_.nonEmpty)
+  }
+
+  private def getContentCompleteness(articleNode: Node): Option[ContentCompleteness] = {
+    val nodes = articleNode \ "is-full-content"
+    nodes.filterNamespace(XmlNamespace.opengarden).headOption
+      .orElse(nodes.headOption)
+      .map(_.text.trim.toLowerCase)
+      .flatMap {
+        case "true" => Some(ContentCompleteness.FULL)
+        case "false" => Some(ContentCompleteness.PARTIAL)
+        case _ => None
+      }
+  }
 
   private def getPostedTime(url: String, articleNode: NodeSeq): Option[ZonedDateTime] = {
     val published = (articleNode \ "published").text.trim

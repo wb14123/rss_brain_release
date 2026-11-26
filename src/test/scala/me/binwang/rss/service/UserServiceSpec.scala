@@ -589,5 +589,73 @@ class UserServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAndA
       }
     }
 
+    it("should create and list API tokens") {
+      userService.signUp(username, password, email).unsafeRunSync()
+      val session = userService.login(email, password).unsafeRunSync()
+
+      val apiToken = userService.createApiToken(session.token, "my-test-token").unsafeRunSync()
+      apiToken.isReadOnly shouldBe true
+      apiToken.tokenName shouldBe Some("my-test-token")
+      apiToken.userID shouldBe session.userID
+
+      val tokens = userService.listApiTokens(session.token).compile.toList.unsafeRunSync()
+      tokens.length shouldBe 1
+      tokens.head.tokenName shouldBe Some("my-test-token")
+      // listed tokens should be masked
+      tokens.head.token should startWith ("...")
+      tokens.head.token should endWith (apiToken.token.takeRight(8))
+    }
+
+    it("should delete an API token by name") {
+      userService.signUp(username, password, email).unsafeRunSync()
+      val session = userService.login(email, password).unsafeRunSync()
+
+      userService.createApiToken(session.token, "to-delete").unsafeRunSync()
+      userService.listApiTokens(session.token).compile.toList.unsafeRunSync().length shouldBe 1
+
+      userService.deleteApiToken(session.token, "to-delete").unsafeRunSync() shouldBe true
+      userService.listApiTokens(session.token).compile.toList.unsafeRunSync().length shouldBe 0
+    }
+
+    it("should reject duplicate API token names") {
+      userService.signUp(username, password, email).unsafeRunSync()
+      val session = userService.login(email, password).unsafeRunSync()
+      userService.createApiToken(session.token, "my-token").unsafeRunSync()
+
+      assertThrows[Exception] {
+        userService.createApiToken(session.token, "my-token").unsafeRunSync()
+      }
+    }
+
+    it("should not allow API token to create other API tokens") {
+      userService.signUp(username, password, email).unsafeRunSync()
+      val session = userService.login(email, password).unsafeRunSync()
+      val apiToken = userService.createApiToken(session.token, "read-only").unsafeRunSync()
+
+      assertThrows[ReadOnlyTokenNotAllowed] {
+        userService.createApiToken(apiToken.token, "another-token").unsafeRunSync()
+      }
+    }
+
+    it("should preserve API tokens on signOutAllDevices") {
+      userService.signUp(username, password, email).unsafeRunSync()
+      val session = userService.login(email, password).unsafeRunSync()
+
+      val apiToken = userService.createApiToken(session.token, "persistent").unsafeRunSync()
+
+      // login again to get a new session for signOutAllDevices (the old one is about to be deleted)
+      val session2 = userService.login(email, password).unsafeRunSync()
+      userService.signOutAllDevices(session2.token).unsafeRunSync()
+
+      // API token should still exist
+      val tokens = userSessionDao.listByUser(apiToken.userID).compile.toList.unsafeRunSync()
+      tokens.length shouldBe 1
+      tokens.head.token shouldBe apiToken.token
+
+      // Regular sessions should be deleted
+      userSessionDao.get(session.token).unsafeRunSync() shouldBe None
+      userSessionDao.get(session2.token).unsafeRunSync() shouldBe None
+    }
+
   }
 }

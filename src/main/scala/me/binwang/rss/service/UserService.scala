@@ -237,7 +237,7 @@ class UserService(
    */
   def signOutAllDevices(token: String): IO[Long] = timed {
     authorizer.authorize(token).flatMap { userSession =>
-      userSessionDao.deleteByUser(userSession.userID)
+      userSessionDao.deleteByUser(userSession.userID, excludeApiTokens = true)
     }
   }
 
@@ -392,6 +392,44 @@ class UserService(
           IO.raiseError(UserDeleteCodeInvalidException(verificationCode))
         }
       case (userSession, _, _) => deleteAllUserData(userSession.userID, verificationCode)
+    }
+  }
+
+  /**
+   * Create a read-only API token. Token names must be unique per user (enforced by DB unique index).
+   */
+  def createApiToken(token: String, tokenName: String): IO[UserSession] = timed {
+    authorizer.authorize(token).flatMap { session =>
+      val apiToken = UserSession(
+        token = UUID.randomUUID().toString,
+        userID = session.userID,
+        expireTime = ZonedDateTime.of(9999, 12, 31, 23, 59, 59, 0, ZoneId.systemDefault()),
+        isAdmin = false,
+        subscribeEndTime = session.subscribeEndTime,
+        subscribed = session.subscribed,
+        isReadOnly = true,
+        tokenName = Some(tokenName),
+      )
+      userSessionDao.insert(apiToken).map(_ => apiToken)
+    }
+  }
+
+  /**
+   * List all API tokens for the current user. Token values are masked.
+   */
+  def listApiTokens(token: String): fs2.Stream[IO, UserSession] = timed {
+    for {
+      session <- fs2.Stream.eval(authorizer.authorize(token, allowNotPaid = true))
+      s <- userSessionDao.listByUser(session.userID)
+    } yield s.copy(token = "..." + s.token.takeRight(8))
+  }
+
+  /**
+   * Delete an API token by its name.
+   */
+  def deleteApiToken(token: String, apiTokenName: String): IO[Boolean] = timed {
+    authorizer.authorize(token).flatMap { session =>
+      userSessionDao.deleteByUserAndTokenName(session.userID, apiTokenName)
     }
   }
 

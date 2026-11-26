@@ -8,6 +8,8 @@ import me.binwang.rss.model.ArticleOrder.ArticleOrder
  *
  * @param position The position of a source in folder.
  * @param customSourceName The name to display in folder instead of the title parsed from the feed.
+ * @param importedSourceName The name parsed from an imported OPML file. It is used only until the feed
+ *                           title is available, and never written to the shared source.
  * @param showTitle Deprecated. Use `articleListLayout`.
  * @param showFullArticle Deprecated. Use `articleListLayout`.
  * @param showMedia Deprecated. Use `articleListLayout`.
@@ -23,6 +25,7 @@ case class FolderSourceMapping(
   showMedia: Boolean = false,
   articleOrder: ArticleOrder = ArticleOrder.TIME,
   articleListLayout: ArticleListLayout = ArticleListLayout.LIST,
+  importedSourceName: Option[String] = None,
 )
 
 /**

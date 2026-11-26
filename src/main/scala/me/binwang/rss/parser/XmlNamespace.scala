@@ -7,6 +7,7 @@ object XmlNamespace {
   val itunes =  "http://www.itunes.com/dtds/podcast-1.0.dtd"
   val media = "http://search.yahoo.com/mrss/"
   val rsshub = "http://rsshub.app/xml/schemas"
+  val opengarden = "https://github.com/wb14123/opengarden-rss/atom"
 
   implicit def toNodesNamespace(nodes: Seq[Node]): NodesNamespace = new NodesNamespace(nodes)
 }

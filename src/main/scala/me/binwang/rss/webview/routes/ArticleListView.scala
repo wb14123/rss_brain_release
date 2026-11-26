@@ -55,7 +55,7 @@ object ArticleList {
 
   def hxLinkFromSource(fs: FolderSource): String = {
     val newParams = Map(
-      "title" -> fs.source.title.getOrElse("Unknown Feed"),
+      "title" -> fs.displayName.getOrElse("Unknown Feed"),
       "in_folder" -> fs.folderMapping.folderID,
     )
     s"/hx/sources/${fs.folderMapping.sourceID}/articles/${sortBy(fs.folderMapping.articleOrder)}" +

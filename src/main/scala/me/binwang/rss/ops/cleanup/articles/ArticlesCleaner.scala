@@ -24,7 +24,7 @@ class ArticlesCleaner(val connectionPool: ConnectionPool, val elasticClient: Ela
       query[ArticleUserMarking]
         .filter(a => oldArticleQuery(fetchCompletedAtBefore).contains(a.articleID))
         .delete
-    }).transact(xa)
+    }).transact(rxa)
   }
 
   private def deleteOldArticleContent(fetchCompletedAtBefore: ZonedDateTime): IO[Long] = {
@@ -32,7 +32,7 @@ class ArticlesCleaner(val connectionPool: ConnectionPool, val elasticClient: Ela
       query[ArticleContent]
         .filter(a => oldArticleQuery(fetchCompletedAtBefore).contains(a.id))
         .delete
-    }).transact(xa)
+    }).transact(rxa)
   }
 
   private def oldArticleQuery(fetchCompletedAtBefore: ZonedDateTime) = quote {
@@ -47,7 +47,7 @@ class ArticlesCleaner(val connectionPool: ConnectionPool, val elasticClient: Ela
       query[Article]
         .filter(a => sourceQuery(fetchCompletedAtBefore).contains(a.sourceID))
         .delete
-    }).transact(xa)
+    }).transact(rxa)
   }
 
   private def sourceQuery(fetchCompletedAtBefore: ZonedDateTime) = quote {
@@ -86,7 +86,7 @@ class ArticlesCleaner(val connectionPool: ConnectionPool, val elasticClient: Ela
   }
 
   private def getOldSourcesIDs(fetchCompletedAtBefore: ZonedDateTime): fs2.Stream[IO, String] = {
-    stream(sourceQuery(fetchCompletedAtBefore)).transact(xa)
+    stream(sourceQuery(fetchCompletedAtBefore)).transact(rxa)
   }
 
   def deleteBySourceIDsBatch(fetchCompletedAtBefore: ZonedDateTime, batchSize: Int): IO[Unit] = {

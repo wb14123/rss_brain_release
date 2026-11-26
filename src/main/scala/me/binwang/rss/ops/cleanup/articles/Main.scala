@@ -17,7 +17,7 @@ object Main extends IOApp {
     val deleteBefore = ZonedDateTime.now().minusMonths(6)
     val esClient = ElasticSearchClient()
 
-    ConnectionPool(IsolationLevel.READ_COMMITTED).evalMap { connPool =>
+    ConnectionPool().evalMap { connPool =>
       val cleaner = new ArticlesCleaner(connPool, esClient)
       cleaner.deleteBySourceIDsBatch(deleteBefore, 500) >> cleaner.deleteOld(deleteBefore)
     }.useForever

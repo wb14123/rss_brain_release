@@ -180,10 +180,10 @@ class ArticleSearchElasticDao(val moreLikeThisSearchBoost: Double, val moreLikeT
       if (embeddingVector.isDefined) {
         q = q.knn(Knn(
           field = ArticleElasticDao.titleEmbeddingVectorField,
-          numCandidates = searchOptions.limit,
+          numCandidates = Some(searchOptions.limit),
           queryVector = embeddingVector.get,
-          k = searchOptions.limit,
-          boost = moreLikeThisKnnBoost
+          k = Some(searchOptions.limit),
+          boost = Some(moreLikeThisKnnBoost)
         ).filter(boolQuery().filter(filters)))
       }
       if (searchOptions.sortByTime) {

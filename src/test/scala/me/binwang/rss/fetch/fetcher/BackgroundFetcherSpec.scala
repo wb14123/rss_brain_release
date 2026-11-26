@@ -37,7 +37,7 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
   private val articleEmbeddingTaskDao = new ArticleEmbeddingTaskSqlDao()
   private val crawler = HttpCrawler().allocated.unsafeRunSync()._1
   private var mockServer: ClientAndServer = _
-  private var fetcherRunTask: IO[FiberIO[Unit]] = _
+  private var fetcherFiber: FiberIO[Unit] = _
 
   private val url = "http://localhost:9998/feed.xml"
 
@@ -73,8 +73,10 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
     if (mockServer != null) {
       mockServer.stop()
     }
-    if (fetcherRunTask != null) {
-      fetcherRunTask.flatMap(f => f.cancel >> f.join).unsafeRunSync()
+    if (fetcherFiber != null) {
+      fetcherFiber.cancel.unsafeRunSync()
+      fetcherFiber.join.unsafeRunSync()
+      fetcherFiber = null
     }
     Thread.sleep(100)
   }
@@ -97,8 +99,7 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       val id = SourceID(url)
       val source = Sources.get(Some(ZonedDateTime.now().minusHours(1)), Some(url))
       sourceDao.insert(source).unsafeRunSync()
-      fetcherRunTask = fetcher.run().start
-      fetcherRunTask.unsafeRunAndForget()
+      fetcherFiber = fetcher.run().start.unsafeRunSync()
       Thread.sleep(2000)
       val insertedSource = sourceDao.get(id).unsafeRunSync().get
       insertedSource.title.get shouldBe "CBC | Top Stories News"
@@ -111,8 +112,7 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       val id = SourceID(url)
       val source = Sources.get(Some(ZonedDateTime.now().minusHours(1)), Some(url))
       sourceDao.insert(source).unsafeRunSync()
-      fetcherRunTask = fetcher.run().start
-      fetcherRunTask.unsafeRunAndForget()
+      fetcherFiber = fetcher.run().start.unsafeRunSync()
       Thread.sleep(2000)
       val insertedSource = sourceDao.get(id).unsafeRunSync().get
       insertedSource.title.get shouldBe "CBC | Top Stories News"
@@ -123,8 +123,7 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       createValidFeed()
       val updater = new FetchUpdater(sourceDao, articleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
       val fetcher = BackgroundFetcher(crawler, sourceDao, updater, 10, 1000, cleanTimeout = false, pauseSource = false).unsafeRunSync()
-      fetcherRunTask = fetcher.run().start
-      fetcherRunTask.unsafeRunAndForget()
+      fetcherFiber = fetcher.run().start.unsafeRunSync()
       Thread.sleep(500) // wait for the first fetch result
       val id = SourceID(url)
       val source = Sources.get(Some(ZonedDateTime.now().minusHours(1)), Some(url))
@@ -144,8 +143,7 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       val source2 = Sources.get(Some(ZonedDateTime.now().minusHours(1)), Some("http://localhost:9998/feed2.xml"))
       sourceDao.insert(source1).unsafeRunSync()
       sourceDao.insert(source2).unsafeRunSync()
-      fetcherRunTask = fetcher.run().start
-      fetcherRunTask.unsafeRunAndForget()
+      fetcherFiber = fetcher.run().start.unsafeRunSync()
       Thread.sleep(2000)
       sourceDao.get(source1.id).unsafeRunSync().get.title.get shouldBe "CBC | Top Stories News"
       sourceDao.get(source2.id).unsafeRunSync().get.title.get shouldBe "4G Spaces"
@@ -170,8 +168,7 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       val fetcher = BackgroundFetcher(crawler, mockSourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
 
-      fetcherRunTask = fetcher.run().start
-      fetcherRunTask.unsafeRunAndForget()
+      fetcherFiber = fetcher.run().start.unsafeRunSync()
       Thread.sleep(3000)
     }
 
@@ -193,8 +190,7 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       val fetcher = BackgroundFetcher(crawler, mockSourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
 
-      fetcherRunTask = fetcher.run().start
-      fetcherRunTask.unsafeRunAndForget()
+      fetcherFiber = fetcher.run().start.unsafeRunSync()
       Thread.sleep(3000)
     }
 
@@ -211,8 +207,7 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       val fetcher = BackgroundFetcher(mockCrawler, sourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
 
-      fetcherRunTask = fetcher.run().start
-      fetcherRunTask.unsafeRunAndForget()
+      fetcherFiber = fetcher.run().start.unsafeRunSync()
       Thread.sleep(5000)
 
       sourceDao.get(source1.id).unsafeRunSync().get.title.get shouldBe "CBC | Top Stories News"
@@ -250,8 +245,7 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       val fetcher = BackgroundFetcher(mockCrawler, mockSourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
 
-      fetcherRunTask = fetcher.run().start
-      fetcherRunTask.unsafeRunAndForget()
+      fetcherFiber = fetcher.run().start.unsafeRunSync()
       Thread.sleep(3000)
 
       sourceDao.get(source1.id).unsafeRunSync().get.title.get shouldBe "CBC | Top Stories News"
@@ -269,8 +263,7 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       val updater = new FetchUpdater(sourceDao, mockArticleDao, articleContentDao, articleHashDao, articleEmbeddingTaskDao)
       val fetcher = BackgroundFetcher(crawler, sourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
-      fetcherRunTask = fetcher.run().start
-      fetcherRunTask.unsafeRunAndForget()
+      fetcherFiber = fetcher.run().start.unsafeRunSync()
       Thread.sleep(3000)
     }
 
@@ -285,8 +278,7 @@ class BackgroundFetcherSpec extends AnyFunSpec with BeforeAndAfterEach with Befo
       val updater = new FetchUpdater(sourceDao, articleDao, mockArticleContentDao, articleHashDao, articleEmbeddingTaskDao)
       val fetcher = BackgroundFetcher(crawler, sourceDao, updater, 1, 1000,
         cleanTimeout = false, pauseSource = false).unsafeRunSync()
-      fetcherRunTask = fetcher.run().start
-      fetcherRunTask.unsafeRunAndForget()
+      fetcherFiber = fetcher.run().start.unsafeRunSync()
       Thread.sleep(3000)
     }
 

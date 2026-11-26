@@ -77,7 +77,9 @@ class ArticleSearchElasticDaoSpec extends AnyFunSpec with BeforeAndAfterEach wit
       articleContentDao.insertOrUpdate(articleContent).unsafeRunSync()
       Thread.sleep(1000) // give some time for article to be indexed
 
-      val invalidSourceIDs = Seq(source.id.toUpperCase, source.id + "a", "a" + source.id.tail)
+      val otherFirstChar = if (source.id.head == 'a') "b" else "a"
+      val invalidSourceIDs = Seq(source.id.toUpperCase, source.id + "a", otherFirstChar + source.id.tail)
+        .filterNot(_ == source.id)
       invalidSourceIDs.foreach { sourceID =>
         val results = articleSearchDao.searchInSource(sourceID, SearchOptions("apple", 0, 10))
           .compile.toList.unsafeRunSync()

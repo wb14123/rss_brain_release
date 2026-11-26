@@ -2,7 +2,6 @@ package me.binwang.rss.service
 
 import cats.effect.IO
 import cats.effect.kernel.Clock
-import com.google.common.base.Charsets
 import com.stripe.Stripe
 import com.stripe.model.checkout.Session
 import com.stripe.model.{Customer, Invoice}
@@ -18,6 +17,7 @@ import me.binwang.rss.model.{InvalidCallbackUrl, User}
 import org.typelevel.log4cats.LoggerFactory
 
 import java.net.{URI, URLEncoder}
+import java.nio.charset.StandardCharsets
 import java.time.{Instant, ZoneId, ZonedDateTime}
 
 /**
@@ -140,7 +140,7 @@ class StripePaymentService(
     if (!needRedirect) {
       url
     } else {
-      val encodedUrl = URLEncoder.encode(url, Charsets.UTF_8)
+      val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8)
       s"https://www.rssbrain.com/redirect.html?url=$encodedUrl"
     }
   }

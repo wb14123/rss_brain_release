@@ -3,7 +3,7 @@ package me.binwang.rss.webview.basic
 import cats.data.{Kleisli, OptionT}
 import cats.effect.IO
 import cats.syntax.all._
-import me.binwang.rss.model.{ServerException, UserNotAuthorized, UserSubscriptionEnded}
+import me.binwang.rss.model.{ReadOnlyTokenNotAllowed, ServerException, UserNotAuthorized, UserSubscriptionEnded}
 import org.http4s.dsl.io._
 import org.http4s.{HttpRoutes, Request}
 import org.typelevel.log4cats.LoggerFactory
@@ -24,6 +24,8 @@ object ErrorHandler {
         OptionT.liftF(HttpResponse.redirect("subscription ended", "/payment/renew", req))
       case RedirectDefaultFolderException(_) =>
         OptionT.liftF(HttpResponse.fullRedirect("redirect to default folder", "/folders/default"))
+      case ReadOnlyTokenNotAllowed(_) =>
+        OptionT.liftF(Forbidden("Read-only API tokens cannot perform write operations"))
       case x: ServerException =>
         OptionT.liftF(logger.error(x)("Server error while handle HTTP request") >> InternalServerError(x.getMessage))
       case x =>

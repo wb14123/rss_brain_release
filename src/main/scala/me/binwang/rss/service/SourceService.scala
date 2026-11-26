@@ -36,7 +36,7 @@ class SourceService(
    */
   def getMySourcesWithFolders(token: String, size: Int, startPosition: Long): fs2.Stream[IO, FolderSource] = timed {
     // TODO: BUG: also need folder param for pagination
-    authorizer.authorizeAsStream(token).flatMap { session =>
+    authorizer.authorizeReadAsStream(token).flatMap { session =>
       folderSourceDao.getSourcesByUser(session.userID, size, startPosition)
     }
   }
@@ -57,7 +57,7 @@ class SourceService(
    * Get a folder source mapping for the user. There might be many, this just get a random one.
    */
   def getSourceInUser(token: String, sourceID: String): IO[FolderSource] = timed {
-    authorizer.authorize(token).flatMap { session =>
+    authorizer.authorizeRead(token).flatMap { session =>
       folderSourceDao.getSourcesByID(session.userID, sourceID, 1).compile.toList.map{
         case x if x.isEmpty => throw SourceNotFound(sourceID)
         case x => x.head
@@ -82,7 +82,7 @@ class SourceService(
    */
   def getSourcesInFolders(token: String, folderIDs: Seq[String], sizeInEachFolder: Int
       ): fs2.Stream[IO, FolderSource] = timed {
-    authorizer.authorizeAsStream(token).flatMap { userSession =>
+    authorizer.authorizeReadAsStream(token).flatMap { userSession =>
       folderDao
         .listByIDs(folderIDs)
         .filter(f => f.userID.equals(userSession.userID) || f.recommend)
@@ -319,12 +319,12 @@ class SourceService(
       case None =>
         FolderSourceMapping(folderID, source.id, userID, position, customSourceName = None,
           showTitle = source.showTitle, showFullArticle = source.showFullArticle, showMedia = source.showMedia,
-          articleOrder = source.articleOrder)
+          articleOrder = source.articleOrder, importedSourceName = None)
       case Some(folderSource) =>
         val mapping = folderSource.folderMapping
         FolderSourceMapping(folderID, source.id, userID, position, customSourceName = mapping.customSourceName,
           showTitle = mapping.showTitle, showFullArticle = mapping.showFullArticle, showMedia = mapping.showMedia,
-          articleOrder =mapping.articleOrder)
+          articleOrder =mapping.articleOrder, importedSourceName = mapping.importedSourceName)
     }
   }
 

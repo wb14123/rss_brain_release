@@ -7,7 +7,7 @@ import me.binwang.rss.dao.redis.ArticleHashCheckDao
 import me.binwang.rss.dao.sql.ArticleSqlDao
 import me.binwang.rss.metric.MetricReporter
 import me.binwang.rss.model.ID.ID
-import me.binwang.rss.model.{Article, ArticleWithUserMarking}
+import me.binwang.rss.model.{Article, ArticleUpdater, ArticleWithUserMarking}
 import org.typelevel.log4cats.LoggerFactory
 
 import java.time.ZonedDateTime
@@ -95,6 +95,11 @@ class ArticleHybridDao(val articleSqlDao: ArticleSqlDao, val articleElasticDao: 
             } yield true
         }
     }
+  }
+
+  override def update(id: ID, updater: ArticleUpdater,
+      expectedPostedAt: Option[ZonedDateTime] = None): IO[Boolean] = {
+    articleSqlDao.update(id, updater, expectedPostedAt)
   }
 
   override def listBySourceOrderByScoreWithUserMarking(sourceID: ID, size: Int, maxScore: Double, articleID: ID,

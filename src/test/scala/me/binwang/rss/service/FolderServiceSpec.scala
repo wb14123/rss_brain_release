@@ -31,15 +31,16 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
   private val sourceDao = new SourceSqlDao()
   private val folderSourceDao = new FolderSourceSqlDao()
   private val moreLikeThisMappingDao = new MoreLikeThisMappingSqlDao()
-  private val importSourcesTaskDao = new ImportSourcesTaskSqlDao()
   private val sourceFinder = new MultiSourceFinder(Seq())
   private implicit val authorizer: Authorizer = new Authorizer(Throttler(), userSessionDao, folderDao)
 
-  private val folderService = new FolderService(folderDao, folderSourceDao, sourceDao, importSourcesTaskDao, authorizer)
+  private val folderService = new FolderService(folderDao, folderSourceDao, sourceDao, authorizer)
   private val sourceService = new SourceService(sourceDao, folderSourceDao, folderDao, null, authorizer, sourceFinder)
   private val moreLikeThisService = new MoreLikeThisService(moreLikeThisMappingDao, authorizer)
 
   private val testFile = "/opml-test.xml"
+  private val totalSourcesInTestFile = 51
+  private val folderlessXmlUrlInTestFile = "http://thenewstack.io/blog/feed/"
 
   private val token = UUID.randomUUID().toString
   private val adminToken= UUID.randomUUID().toString
@@ -54,6 +55,13 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
     }
   }
 
+  private def inputStreamOf(content: String): Resource[IO, InputStream] = {
+    Resource.make {
+      IO(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)))
+    } { i =>
+      IO(i.close())
+    }
+  }
 
   override def beforeAll(): Unit = {
     folderDao.dropTable().unsafeRunSync()
@@ -61,14 +69,12 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
     folderSourceDao.dropTable().unsafeRunSync()
     userSessionDao.dropTable().unsafeRunSync()
     moreLikeThisMappingDao.dropTable().unsafeRunSync()
-    importSourcesTaskDao.dropTable().unsafeRunSync()
 
     folderDao.createTable().unsafeRunSync()
     sourceDao.createTable().unsafeRunSync()
     folderSourceDao.createTable().unsafeRunSync()
     userSessionDao.createTable().unsafeRunSync()
     moreLikeThisMappingDao.createTable().unsafeRunSync()
-    importSourcesTaskDao.createTable().unsafeRunSync()
   }
 
   override def beforeEach(): Unit = {
@@ -77,7 +83,6 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
     folderSourceDao.deleteAll().unsafeRunSync()
     userSessionDao.deleteAll().unsafeRunSync()
     moreLikeThisMappingDao.deleteAll().unsafeRunSync()
-    importSourcesTaskDao.deleteAll().unsafeRunSync()
 
     userSessionDao.insert(UserSession(token, userID, ZonedDateTime.now.plusDays(1), isAdmin = false,
       ZonedDateTime.now.plusDays(1))).unsafeRunSync()
@@ -85,8 +90,50 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
       ZonedDateTime.now.plusDays(1))).unsafeRunSync()
   }
 
-  private def checkImported(userID: String): Unit = {
-    val folders = folderService.getMyFolders(token, 10, 0)
+  private def createUserDefaultFolder(): Folder = {
+    val folder = Folders.get(userID, 0, isUserDefault = true)
+    folderDao.insertIfNotExist(folder).unsafeRunSync()
+    folder
+  }
+
+  private def importTestFile(service: FolderService = folderService): ImportOPMLResult = {
+    service.importFromOPML(token, inputStream).unsafeRunSync()
+  }
+
+  /**
+   * The sources of the user with their folder mappings, sorted by folder and position so that the order doesn't
+   * depend on the database.
+   */
+  private def myFolderSources: Seq[FolderSource] = {
+    folderSourceDao.getSourcesByUser(userID, 1000)
+      .compile.toList.unsafeRunSync()
+      .sortBy(folderSource => (folderSource.folderMapping.folderID, folderSource.folderMapping.position))
+  }
+
+  /**
+   * The imported names of the user, keyed by folder name so that it can be compared across imports, which create
+   * folders with new IDs.
+   */
+  private def importedNamesByFolder: Set[(String, String, Option[String])] = {
+    val folderNames = folderDao.listByUser(userID).compile.toList.unsafeRunSync()
+      .map(folder => folder.id -> folder.name)
+      .toMap
+    myFolderSources.map { folderSource =>
+      val mapping = folderSource.folderMapping
+      (folderNames(mapping.folderID), mapping.sourceID, mapping.importedSourceName)
+    }.toSet
+  }
+
+  private def folderID(name: String): String = {
+    folderDao.getByUserAndName(userID, name).unsafeRunSync().get.id
+  }
+
+  private def mappingOf(inFolderID: String, xmlUrl: String): Option[FolderSource] = {
+    folderSourceDao.get(inFolderID, SourceID(xmlUrl)).unsafeRunSync()
+  }
+
+  private def checkImported(): Unit = {
+    val folders = folderService.getMyFolders(token, 100, 0)
       .compile.toList.unsafeRunSync()
       .filter(!_.isUserDefault)
     folders.length shouldBe 9
@@ -100,22 +147,164 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
   describe("Folder Service") {
 
     it("should import OPML file") {
-      val folder = Folders.get(userID, 0, isUserDefault = true)
-      folderDao.insertIfNotExist(folder).unsafeRunSync()
+      createUserDefaultFolder()
+      val result = importTestFile()
 
-      folderService.importFromOPML(token, inputStream).unsafeRunSync()
-      checkImported(userID)
+      result.totalSources shouldBe totalSourcesInTestFile
+      result.successfulSources shouldBe totalSourcesInTestFile
+      result.failedSources shouldBe empty
+      checkImported()
+      myFolderSources.map(_.source.id).distinct.length shouldBe totalSourcesInTestFile
+    }
+
+    it("should store the imported name of each feed") {
+      val defaultFolder = createUserDefaultFolder()
+      importTestFile()
+
+      val inFolder = mappingOf(folderID("tech"), "https://www.binwang.me/feed.xml").get
+      inFolder.folderMapping.importedSourceName shouldBe Some("Bin Wang - My Personal Blog")
+      inFolder.source.title shouldBe None
+      inFolder.displayName shouldBe Some("Bin Wang - My Personal Blog")
+
+      val inDefaultFolder = mappingOf(defaultFolder.id, folderlessXmlUrlInTestFile).get
+      inDefaultFolder.folderMapping.importedSourceName shouldBe Some("The New Stack » Blog")
+
+      myFolderSources.foreach { folderSource =>
+        folderSource.folderMapping.importedSourceName.exists(_.trim.nonEmpty) shouldBe true
+      }
+    }
+
+    it("should not change anything when importing the same OPML file twice") {
+      createUserDefaultFolder()
+      val firstResult = importTestFile()
+      val foldersBefore = folderDao.listByUser(userID).compile.toList.unsafeRunSync()
+      val folderSourcesBefore = myFolderSources
+
+      val secondResult = importTestFile()
+
+      secondResult shouldBe firstResult
+      folderDao.listByUser(userID).compile.toList.unsafeRunSync() shouldBe foldersBefore
+      val folderSourcesAfter = myFolderSources
+      folderSourcesAfter shouldBe folderSourcesBefore
+      folderSourcesAfter.length shouldBe folderSourcesBefore.length
+      folderSourcesAfter.map { folderSource =>
+        (folderSource.folderMapping.folderID, folderSource.folderMapping.sourceID)
+      }.distinct.length shouldBe folderSourcesAfter.length
+    }
+
+    it("should report a feed that could not be stored and add it on retry") {
+      val failedXmlUrl = "https://www.binwang.me/feed.xml"
+      val mockSourceDao = mock[SourceDao]
+      (mockSourceDao.insert _)
+        .expects(where {source: Source => source.xmlUrl.equals(failedXmlUrl)})
+        .returning(IO.raiseError(new Exception("Mock insert source exception")))
+        .anyNumberOfTimes()
+      (mockSourceDao.insert _)
+        .expects(*)
+        .onCall {source: Source => sourceDao.insert(source)}
+        .anyNumberOfTimes()
+
+      createUserDefaultFolder()
+      val mockFolderService = new FolderService(folderDao, folderSourceDao, mockSourceDao, authorizer)
+      val firstResult = importTestFile(mockFolderService)
+
+      firstResult.totalSources shouldBe totalSourcesInTestFile
+      firstResult.failedSources.map(_.xmlUrl) shouldBe Seq(failedXmlUrl)
+      firstResult.successfulSources + firstResult.failedSources.size shouldBe firstResult.totalSources
+      val error = firstResult.failedSources.head.error
+      error should include("could not be added because of a storage error")
+      error should include("Import the same file again")
+      error should not include "Mock insert source exception"
+      mappingOf(folderID("tech"), failedXmlUrl) shouldBe None
+      val sourcesAfterFailure = myFolderSources
+
+      val retryResult = importTestFile()
+
+      retryResult.failedSources shouldBe empty
+      retryResult.successfulSources shouldBe totalSourcesInTestFile
+      mappingOf(folderID("tech"), failedXmlUrl).map(_.folderMapping.importedSourceName) shouldBe
+        Some(Some("Bin Wang - My Personal Blog"))
+      val sourcesAfterRetry = myFolderSources
+      sourcesAfterRetry.length shouldBe sourcesAfterFailure.length + 1
+      sourcesAfterRetry.map(_.source.id).distinct.length shouldBe totalSourcesInTestFile
+    }
+
+    it("should report the feeds of a folder that could not be created or found") {
+      val brokenFolderName = "news"
+      // In the test file this feed is only in the "news" folder.
+      val feedOnlyInBrokenFolder = "https://rsshub.app/reuters/channel/cn/analyses"
+      val mockFolderDao = mock[FolderDao]
+      (mockFolderDao.insertIfNotExist _)
+        .expects(where {folder: Folder => folder.name.equals(brokenFolderName)})
+        .returning(IO.pure(false))
+        .atLeastOnce()
+      (mockFolderDao.insertIfNotExist _)
+        .expects(*)
+        .onCall {folder: Folder => folderDao.insertIfNotExist(folder)}
+        .anyNumberOfTimes()
+      (mockFolderDao.getByUserAndName _)
+        .expects(*, brokenFolderName)
+        .returning(IO.pure(None))
+        .atLeastOnce()
+      (mockFolderDao.getUserDefaultFolder _)
+        .expects(*)
+        .onCall {uid: String => folderDao.getUserDefaultFolder(uid)}
+        .anyNumberOfTimes()
+
+      createUserDefaultFolder()
+      val mockFolderService = new FolderService(mockFolderDao, folderSourceDao, sourceDao, authorizer)
+      val result = importTestFile(mockFolderService)
+
+      result.totalSources shouldBe totalSourcesInTestFile
+      result.failedSources.map(_.xmlUrl) shouldBe Seq(feedOnlyInBrokenFolder)
+      result.successfulSources + result.failedSources.size shouldBe result.totalSources
+      val error = result.failedSources.head.error
+      error should include(s""""$brokenFolderName" could not be created or found""")
+      error should include("Import the same file again")
+
+      folderDao.getByUserAndName(userID, brokenFolderName).unsafeRunSync() shouldBe None
+      folderDao.listByUser(userID).compile.toList.unsafeRunSync().count(!_.isUserDefault) shouldBe 8
+      folderSourceDao.getSourcesByID(userID, SourceID(feedOnlyInBrokenFolder))
+        .compile.toList.unsafeRunSync() shouldBe empty
+      // These feeds are also in the "kindle" folder, so they are still subscribed from there.
+      Seq("https://rsshub.app/scmp/4", "https://rsshub.binwang.me/cbc/topics/canada-toronto").foreach { xmlUrl =>
+        folderSourceDao.getSourcesByID(userID, SourceID(xmlUrl)).compile.toList.unsafeRunSync().length shouldBe 1
+      }
+    }
+
+    it("should not touch a source that already exists") {
+      val xmlUrl = "https://freedom-to-tinker.com/feed/rss/"
+      val existingSource = Sources.get(maybeXmlUrl = Some(xmlUrl)).copy(
+        fetchFailedMsg = Some("The feed is broken"),
+        fetchCompletedAt = Some(ZonedDateTime.now().minusDays(1).withNano(0)),
+        fetchScheduledAt = ZonedDateTime.now().plusDays(30).withNano(0),
+        fetchErrorCount = 5,
+      )
+      sourceDao.insert(existingSource).unsafeRunSync()
+      createUserDefaultFolder()
+
+      val result = importTestFile()
+
+      result.failedSources shouldBe empty
+      sourceDao.get(existingSource.id).unsafeRunSync() shouldBe Some(existingSource)
+      folderSourceDao.getSourcesByID(userID, existingSource.id).compile.toList.unsafeRunSync()
+        .map(_.folderMapping.importedSourceName) shouldBe Seq(Some("Freedom to Tinker"))
+    }
+
+    it("should fail before writing anything if the user has no default folder") {
+      val error = folderService.importFromOPML(token, inputStream).attempt.unsafeRunSync().swap.toOption.get
+
+      error.getMessage should include("default folder")
+      folderDao.listByUser(userID).compile.toList.unsafeRunSync() shouldBe empty
+      folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync() shouldBe empty
+      sourceDao.get(SourceID(folderlessXmlUrlInTestFile)).unsafeRunSync() shouldBe None
     }
 
     it("should export OPML file") {
-      val folder = Folders.get(userID, 0, isUserDefault = true)
-      folderDao.insertIfNotExist(folder).unsafeRunSync()
+      val defaultFolder = createUserDefaultFolder()
+      importTestFile()
+      val namesBeforeExport = importedNamesByFolder
 
-      folderService.importFromOPML(token, inputStream).unsafeRunSync()
-
-      val folders1 = folderService.getMyFolders(token, 10, 0)
-        .compile.toList.unsafeRunSync()
-        .filter(!_.isUserDefault)
       val opml = folderService.exportOPML(token).unsafeRunSync()
 
       folderDao.dropTable().unsafeRunSync()
@@ -124,152 +313,20 @@ class FolderServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
       folderDao.createTable().unsafeRunSync()
       sourceDao.createTable().unsafeRunSync()
       folderSourceDao.createTable().unsafeRunSync()
-      folderDao.insertIfNotExist(folder).unsafeRunSync()
+      folderDao.insertIfNotExist(defaultFolder).unsafeRunSync()
 
-      val exportedInputStream = Resource.make {
-        IO(new ByteArrayInputStream(opml.getBytes(StandardCharsets.UTF_8)))
-      } { i =>
-        IO(i.close())
+      val importResult = folderService.importFromOPML(token, inputStreamOf(opml)).unsafeRunSync()
+      importResult.failedSources shouldBe empty
+      importResult.totalSources shouldBe totalSourcesInTestFile
+      checkImported()
+
+      importedNamesByFolder shouldBe namesBeforeExport
+      // Nothing was fetched, so the exported and imported names can only come from the import label.
+      myFolderSources.foreach { folderSource =>
+        folderSource.source.title shouldBe None
+        folderSource.folderMapping.importedSourceName.exists(_.trim.nonEmpty) shouldBe true
+        folderSource.displayName shouldBe folderSource.folderMapping.importedSourceName
       }
-      folderService.deleteOPMLImportTasks(token).unsafeRunSync()
-      folderService.importFromOPML(token, exportedInputStream).unsafeRunSync()
-      val folders2 = folderService.getMyFolders(token, 10, 0)
-        .compile.toList.unsafeRunSync()
-        .filter(!_.isUserDefault)
-
-      folders2.nonEmpty shouldBe true
-
-      val folders1Names = folders1.map(_.name).toSet
-      val folders2Names = folders2.map(_.name).toSet
-
-      folders1Names shouldBe folders2Names
-      checkImported(userID)
-    }
-
-    it("should be able to import OPML file twice") {
-      val folder = Folders.get(userID, 0, isUserDefault = true)
-      folderDao.insertIfNotExist(folder).unsafeRunSync()
-
-      folderService.importFromOPML(token, inputStream).unsafeRunSync()
-      folderService.deleteOPMLImportTasks(token).unsafeRunSync()
-      folderService.importFromOPML(token, inputStream).unsafeRunSync()
-
-      checkImported(userID)
-    }
-
-    ignore("should throw error if user doesn't have default folder") {
-      val userID = UUID.randomUUID().toString
-      folderService.importFromOPML(token, inputStream).unsafeRunSync()
-      folderService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 1
-      checkImported(userID)
-    }
-
-    it("should handle source update failure and recover") {
-      val xmlUrl = "https://www.binwang.me/feed.xml"
-      val mockSourceDao = mock[SourceDao]
-      (mockSourceDao.insert _)
-        .expects(where {source: Source => source.xmlUrl.equals(xmlUrl)})
-        .returning(IO.raiseError(new Exception("Mock insert source exception")))
-        .anyNumberOfTimes()
-      (mockSourceDao.insert _)
-        .expects(*)
-        .onCall {source: Source => sourceDao.insert(source)}
-        .anyNumberOfTimes()
-
-      val folder = Folders.get(userID, 0, isUserDefault = true)
-      folderDao.insertIfNotExist(folder).unsafeRunSync()
-
-      val mockFoldService = new FolderService(folderDao, folderSourceDao, mockSourceDao, importSourcesTaskDao, authorizer)
-      mockFoldService.importFromOPML(token, inputStream).unsafeRunSync()
-      mockFoldService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 1
-      checkImported(userID)
-      val firstAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
-
-      folderService.deleteOPMLImportTasks(token).unsafeRunSync()
-      folderService.importFromOPML(token, inputStream).unsafeRunSync()
-      folderService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 0
-      checkImported(userID)
-      val secondAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
-
-      firstAttemptSources + 1 shouldBe secondAttemptSources
-    }
-
-    it("should handle folder update failure") {
-      val mockFolderDao = mock[FolderDao]
-      (mockFolderDao.insertIfNotExist _)
-        .expects(where {folder: Folder => folder.name.equals("news")})
-        .returning(IO.raiseError(new Exception("Mock insert folder error")))
-        .atLeastOnce()
-      (mockFolderDao.insertIfNotExist _)
-        .expects(*)
-        .onCall {folder: Folder => folderDao.insertIfNotExist(folder)}
-        .atLeastOnce()
-      (mockFolderDao.getUserDefaultFolder _)
-        .expects(*)
-        .onCall {userID: String => folderDao.getUserDefaultFolder(userID)}
-        .atLeastOnce()
-      (mockFolderDao.getByUserAndName _)
-        .expects(*, *)
-        .onCall {(userID: String, name: String) => folderDao.getByUserAndName(userID, name)}
-        .anyNumberOfTimes()
-
-      val folder = Folders.get(userID, 0, isUserDefault = true)
-      folderDao.insertIfNotExist(folder).unsafeRunSync()
-
-      val mockFoldService = new FolderService(mockFolderDao, folderSourceDao, sourceDao, importSourcesTaskDao, authorizer)
-      mockFoldService.importFromOPML(token, inputStream).unsafeRunSync()
-      mockFoldService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 5
-      val firstAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
-      val firstAttemptFolder = folderDao.listByUser(userID).compile.toList.unsafeRunSync().length
-
-      folderService.deleteOPMLImportTasks(token).unsafeRunSync()
-      folderService.importFromOPML(token, inputStream).unsafeRunSync()
-      mockFoldService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 0
-      checkImported(userID)
-      val secondAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
-      val secondAttemptFolder = folderDao.listByUser(userID).compile.toList.unsafeRunSync().length
-
-      firstAttemptFolder + 1 shouldBe secondAttemptFolder
-      firstAttemptSources + 5 shouldBe secondAttemptSources
-    }
-
-    it("should handle folder not found") {
-      val mockFolderDao = mock[FolderDao]
-      (mockFolderDao.insertIfNotExist _)
-        .expects(where {folder: Folder => folder.name.equals("news")})
-        .returning(IO.pure(false))
-        .atLeastOnce()
-      (mockFolderDao.insertIfNotExist _)
-        .expects(*)
-        .onCall {folder: Folder => folderDao.insertIfNotExist(folder)}
-        .atLeastOnce()
-      (mockFolderDao.getUserDefaultFolder _)
-        .expects(*)
-        .onCall {userID: String => folderDao.getUserDefaultFolder(userID)}
-        .atLeastOnce()
-      (mockFolderDao.getByUserAndName _)
-        .expects(*, *)
-        .onCall {(userID: String, name: String) => folderDao.getByUserAndName(userID, name)}
-        .atLeastOnce()
-
-      val folder = Folders.get(userID, 0, isUserDefault = true)
-      folderDao.insertIfNotExist(folder).unsafeRunSync()
-
-      val mockFoldService = new FolderService(mockFolderDao, folderSourceDao, sourceDao, importSourcesTaskDao, authorizer)
-      mockFoldService.importFromOPML(token, inputStream).unsafeRunSync()
-      mockFoldService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 5
-      val firstAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
-      val firstAttemptFolder = folderDao.listByUser(userID).compile.toList.unsafeRunSync().length
-
-      folderService.deleteOPMLImportTasks(token).unsafeRunSync()
-      folderService.importFromOPML(token, inputStream).unsafeRunSync()
-      folderService.getImportOPMLTask(token).unsafeRunSync().failedSources shouldBe 0
-      checkImported(userID)
-      val secondAttemptSources = folderSourceDao.getSourcesByUser(userID, 1000).compile.toList.unsafeRunSync().length
-      val secondAttemptFolder = folderDao.listByUser(userID).compile.toList.unsafeRunSync().length
-
-      firstAttemptFolder + 1 shouldBe secondAttemptFolder
-      firstAttemptSources + 5 shouldBe secondAttemptSources
     }
 
     it("should add folder") {

@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jre
+FROM docker.io/library/eclipse-temurin:21-jre
 
 ENV JAVA_PARAMS=""
 

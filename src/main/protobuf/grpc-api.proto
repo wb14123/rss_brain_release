@@ -67,6 +67,21 @@ message Article {
 
     // If postedAt is missing in feed and filled by current time.
     bool postedAtIsMissing = 17;
+
+    /*
+    URL of the API that serves this article's comments, parsed from feed.
+    Absent when the feed does not publish one.
+    */
+    optional string commentUrl = 18;
+
+    /*
+    URL of the Open Garden API that serves the whole body of this article. It
+    is not the article link. Empty when the feed has none.
+    */
+    optional string fullContentUrl = 19;
+
+    // How much of the article the stored body holds. Empty when unknown.
+    optional ContentCompleteness contentCompleteness = 20;
 }
 
 message ArticleIDs {
@@ -117,6 +132,12 @@ enum ArticleListLayout {
 
     // Show metadata like title, date without showing description in the list.
     COMPACT = 3;
+}
+
+enum ContentCompleteness {
+    PARTIAL = 0;
+
+    FULL = 1;
 }
 
 // User can create folders that contain multiple sources.
@@ -252,6 +273,12 @@ message FolderSourceMapping {
     ArticleOrder articleOrder = 9;
 
     ArticleListLayout articleListLayout = 10;
+
+    /*
+    The name parsed from an imported OPML file. It is used only until the
+    feed title is available, and never written to the shared source.
+    */
+    optional string importedSourceName = 11;
 }
 
 // Structure to update FolderSourceMapping. None means don't update that field.
@@ -628,6 +655,10 @@ message UserSession {
     refresh this info in session.
     */
     bool subscribed = 6;
+
+    bool isReadOnly = 7;
+
+    optional string tokenName = 8;
 }
 
 /*
@@ -880,38 +911,71 @@ message SearchTerms {
     repeated string terms = 1;
 }
 
-// The progress of source imports from OPML.
-message ImportSourcesTask {
-    // The ID of the task.
-    string id = 1;
+// The result of importing sources from an OPML file.
+message ImportOPMLResult {
+    // How many distinct feed urls the file contains.
+    int32 totalSources = 1;
 
-    // Which user this task belongs to.
-    string userID = 2;
+    // How many of them are subscribed by the user after the import.
+    int32 successfulSources = 2;
 
-    // When the task is created.
-    int64 createdAt = 3;
-
-    // How many sources are in the import task.
-    int32 totalSources = 4;
-
-    // How many sources are failed.
-    int32 failedSources = 5;
-
-    // How many sources are successful.
-    int32 successfulSources = 6;
+    // The feeds that could not be added.
+    repeated ImportFailedSource failedSources = 3;
 }
 
-// The details of failed to import sources.
+// The details of a source that couldn't be added by an OPML import.
 message ImportFailedSource {
     // The feed url.
     string xmlUrl = 1;
 
-    // The error message.
+    // The user facing error message.
     string error = 2;
 }
 
 enum LLMEngine {
     OpenAI = 0;
+}
+
+// Comments of one article, as returned by the comment source of the article.
+message ArticleComments {
+    // The URL of the article the comments belong to.
+    string articleUrl = 1;
+
+    // Top level comments.
+    repeated Comment comments = 2;
+
+    // If the source page has a control to load more top level comments.
+    bool hasMore = 3;
+}
+
+// A comment and its replies, nested to any depth.
+message Comment {
+    // The comment's ID in the source site.
+    string id = 1;
+
+    // The comment content as raw HTML from the source site. Not sanitized.
+    string body = 2;
+
+    // The author's display name.
+    optional string author = 3;
+
+    // The URL of the author's profile.
+    optional string authorUrl = 4;
+
+    // The score of the comment, if the source site publishes one.
+    optional int32 score = 5;
+
+    // When the comment is posted.
+    optional int64 createdAt = 6;
+
+    // The URL of the comment in the source site.
+    optional string permalink = 7;
+
+    // If the source page has a control to load more replies of this comment.
+    bool hasMoreReplies = 8;
+
+    // Replies of this comment.
+    repeated Comment replies = 9;
 }
 
 message GetArticlesBySourceRequest {
@@ -1168,6 +1232,12 @@ message GetFullArticleRequest {
     string articleID = 2;
 }
 
+message GetFullContentRequest {
+    string token = 1;
+
+    string articleID = 2;
+}
+
 message BatchGetArticleContentRequest {
     string token = 1;
 
@@ -1316,6 +1386,10 @@ message GetFullArticleResponse {
     FullArticle result = 1;
 }
 
+message GetFullContentResponse {
+    string result = 1;
+}
+
 message BatchGetArticleContentResponse {
     ArticleContent result = 1;
 }
@@ -1411,6 +1485,12 @@ service ArticleAPI {
     rpc GetFullArticle (GetFullArticleRequest) returns (GetFullArticleResponse);
 
     /*
+    Get the whole body of an article. A partial body is read from the Open
+    Garden API and stored.
+    */
+    rpc GetFullContent (GetFullContentRequest) returns (GetFullContentResponse);
+
+    /*
     Get content for multiple articles. Useful when rendering an article list
     that needs to show full content.
     */
@@ -1455,18 +1535,6 @@ message ImportFromOPMLRequest {
 
     // The OPML file.
     string inputStream = 2;
-}
-
-message GetImportOPMLTaskRequest {
-    string token = 1;
-}
-
-message GetImportOPMLFailedSourcesRequest {
-    string token = 1;
-}
-
-message DeleteOPMLImportTasksRequest {
-    string token = 1;
 }
 
 message ExportOPMLRequest {
@@ -1527,18 +1595,8 @@ message DeleteFolderRequest {
 }
 
 message ImportFromOPMLResponse {
-    ImportSourcesTask result = 1;
+    ImportOPMLResult result = 1;
 }
-
-message GetImportOPMLTaskResponse {
-    ImportSourcesTask result = 1;
-}
-
-message GetImportOPMLFailedSourcesResponse {
-    ImportFailedSource result = 1;
-}
-
-message DeleteOPMLImportTasksResponse {}
 
 message ExportOPMLResponse {
     string result = 1;
@@ -1573,19 +1631,11 @@ message DeleteFolderResponse {}
 // Folder related APIs.
 service FolderAPI {
     /*
-    Import folder and sources from OPML file. After this request is sent, the
-    client can use FolderService.getImportOPMLTask to poll the importing
-    status.
-    Returns the status of importing task.
+    Import sources from an OPML file. Each source is subscribed to a folder,
+    and the result tells how many of them are subscribed after the import.
+    Returns the result of the import.
     */
     rpc ImportFromOPML (ImportFromOPMLRequest) returns (ImportFromOPMLResponse);
-
-    rpc GetImportOPMLTask (GetImportOPMLTaskRequest) returns (GetImportOPMLTaskResponse);
-
-    rpc GetImportOPMLFailedSources (GetImportOPMLFailedSourcesRequest) returns (stream GetImportOPMLFailedSourcesResponse);
-
-    // Delete the OPML import task. It will stop the importing progress.
-    rpc DeleteOPMLImportTasks (DeleteOPMLImportTasksRequest) returns (DeleteOPMLImportTasksResponse);
 
     rpc ExportOPML (ExportOPMLRequest) returns (ExportOPMLResponse);
 
@@ -1996,6 +2046,22 @@ message DeleteUserDataRequest {
     string verificationCode = 3;
 }
 
+message CreateApiTokenRequest {
+    string token = 1;
+
+    string tokenName = 2;
+}
+
+message ListApiTokensRequest {
+    string token = 1;
+}
+
+message DeleteApiTokenRequest {
+    string token = 1;
+
+    string apiTokenName = 2;
+}
+
 message SignUpResponse {
     UserInfo result = 1;
 }
@@ -2043,6 +2109,18 @@ message RemoveCurrentFolderAndSourceResponse {}
 message SendDeleteUserCodeResponse {}
 
 message DeleteUserDataResponse {}
+
+message CreateApiTokenResponse {
+    UserSession result = 1;
+}
+
+message ListApiTokensResponse {
+    UserSession result = 1;
+}
+
+message DeleteApiTokenResponse {
+    bool result = 1;
+}
 
 // Service related to User APIs.
 service UserAPI {
@@ -2125,6 +2203,17 @@ service UserAPI {
     deletion.
     */
     rpc DeleteUserData (DeleteUserDataRequest) returns (DeleteUserDataResponse);
+
+    /*
+    Create a read-only API token. Token names must be unique per user
+    (enforced by DB unique index).
+    */
+    rpc CreateApiToken (CreateApiTokenRequest) returns (CreateApiTokenResponse);
+
+    // List all API tokens for the current user. Token values are masked.
+    rpc ListApiTokens (ListApiTokensRequest) returns (stream ListApiTokensResponse);
+
+    rpc DeleteApiToken (DeleteApiTokenRequest) returns (DeleteApiTokenResponse);
 }
 
 message PaymentCallbackRequest {
@@ -2345,4 +2434,19 @@ service MoreLikeThisAPI {
     rpc UpdateMoreLikeThisMapping (UpdateMoreLikeThisMappingRequest) returns (UpdateMoreLikeThisMappingResponse);
 
     rpc CleanupMappingsPosition (CleanupMappingsPositionRequest) returns (CleanupMappingsPositionResponse);
+}
+
+message GetCommentsRequest {
+    string token = 1;
+
+    string articleID = 2;
+}
+
+message GetCommentsResponse {
+    ArticleComments result = 1;
+}
+
+// APIs related to comments of articles.
+service CommentAPI {
+    rpc GetComments (GetCommentsRequest) returns (GetCommentsResponse);
 }

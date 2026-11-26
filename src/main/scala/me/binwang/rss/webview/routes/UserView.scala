@@ -1,6 +1,6 @@
 package me.binwang.rss.webview.routes
 import cats.effect.IO
-import me.binwang.rss.model.{LLMEngine, NSFWSetting, SearchEngine}
+import me.binwang.rss.model.{LLMEngine, NSFWSetting, SearchEngine, UserSession}
 import me.binwang.rss.service.{SystemService, UserService}
 import me.binwang.rss.webview.auth.CookieGetter.reqToCookieGetter
 import me.binwang.rss.webview.basic.ContentRender.wrapContentRaw
@@ -16,6 +16,19 @@ import scalatags.Text.all.{a, button, _}
 class UserView(userService: UserService, systemService: SystemService) extends Http4sView with ScalatagsInstances with ScalatagsSeqInstances {
 
   private val customerServiceEmail = "customer-service@rssbrain.com"
+
+  private def apiTokenRow(session: UserSession, showFullToken: Boolean = false): Frag = {
+    val tokenName = session.tokenName.getOrElse[String]("Unnamed")
+    val displayToken = if (showFullToken) session.token else session.token
+    val escapedName = java.net.URLEncoder.encode(tokenName, "UTF-8")
+    div(cls := "api-token-row", id := s"api-token-$escapedName",
+      strong(tokenName),
+      code(displayToken),
+      button(cls := "secondary outline",
+        hxDelete := s"/hx/settings/api-tokens/$escapedName",
+        hxTarget := s"#api-token-$escapedName", hxSwap := "outerHTML", hxDisableThis, "Revoke"),
+    )
+  }
 
   override val routes: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case req @ POST -> Root / "hx" / "user" / "currentFolder" / folderID =>
@@ -66,6 +79,38 @@ class UserView(userService: UserService, systemService: SystemService) extends H
         ).flatMap(_ => HttpResponse.redirect("", "/settings", req))
       }
 
+
+    case req @ POST -> Root / "hx" / "settings" / "api-tokens" =>
+      val token = req.authToken
+      req.decode[UrlForm] { data =>
+        val tokenName = data.values.get("token-name").flatMap(_.headOption).getOrElse("Unnamed")
+        userService.createApiToken(token, tokenName).flatMap { apiSession =>
+          Ok(Seq(
+            // appended into #api-token-list via hxSwap=beforeend
+            apiTokenRow(apiSession),
+            // swapped out-of-band into the hint area above the list
+            div(id := "api-token-created-hint", hxSwapOob := "innerHTML",
+              p(ins("Token created. Copy it now — it won't be shown again:")),
+              p(code(apiSession.token)),
+            ),
+          ), `Content-Type`(MediaType.text.html))
+        }
+      }
+
+    case req @ DELETE -> Root / "hx" / "settings" / "api-tokens" / apiTokenName =>
+      val token = req.authToken
+      val decodedName = java.net.URLDecoder.decode(apiTokenName, "UTF-8")
+      userService.deleteApiToken(token, decodedName).flatMap(_ => Ok(""))
+
+    case req @ GET -> Root / "hx" / "settings" / "api-tokens" =>
+      val token = req.authToken
+      userService.listApiTokens(token).compile.toList.flatMap { tokens =>
+        if (tokens.isEmpty) {
+          Ok(div(cls := "api-token-empty", "No tokens created yet."), `Content-Type`(MediaType.text.html))
+        } else {
+          Ok(tokens.map(t => apiTokenRow(t)), `Content-Type`(MediaType.text.html))
+        }
+      }
 
     case req @ GET -> Root / "hx" / "settings" / "nsfw" =>
       val token = req.authToken
@@ -156,14 +201,22 @@ class UserView(userService: UserService, systemService: SystemService) extends H
               a(href := "/opml-export", target := "_blank", "Export OPML"),
               div(cls := "button-row",
                 button(hxPost := "/settings", ContentRender.hxSwapContentAttrs, hxDisableThis, "Save")),
-              /*
-              label(cls := "form-row", input(is := "boolean-checkbox", `type` := "checkbox", name := "enable-search"),
-                "Auto hide left Panel"),
-              label(cls := "form-row", input(is := "boolean-checkbox", `type` := "checkbox", name := "blur-nsfw"),
-                "Blur NSFW content"),
-              label(cls := "form-row", input(is := "boolean-checkbox", `type` := "checkbox", name := "enable-debug"),
-                "Enable Debug"),
-               */
+            ),
+            hr(),
+            div(
+              cls := "form-section",
+              h2("API Tokens"),
+              p("Create read-only API tokens for third-party apps or scripts. These tokens can only read data (list articles, folders, etc.) and cannot make any changes."),
+              label("Token Name"),
+              input(name := "token-name", `type` := "text", placeholder := "Enter a name for the token"),
+              div(cls := "button-row",
+                button(hxPost := "/hx/settings/api-tokens",
+                  hxTarget := "#api-token-list", hxSwap := "beforeend",
+                  hxInclude := "[name='token-name']", hxDisableThis, "Create Token")),
+              div(id := "api-token-created-hint"),
+              label("Your Tokens"),
+              div(id := "api-token-list", hxGet := "/hx/settings/api-tokens",
+                hxTrigger := "load", hxSwap := "innerHTML"),
             ),
             hr(),
             div(

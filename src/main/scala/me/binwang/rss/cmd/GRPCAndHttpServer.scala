@@ -44,7 +44,7 @@ object GRPCAndHttpServer extends IOApp {
       new SourceView(services.sourceService, services.userService).routes <+>
       new ArticleListView(services.articleService, services.userService, services.folderService,
         services.sourceService).routes <+>
-      new ArticleView(services.articleService).routes <+>
+      new ArticleView(services.articleService, services.commentService).routes <+>
       new UserView(services.userService, services.systemService).routes <+>
       new PaymentView(services.userService, services.stripePaymentService).routes <+>
       new ImportFeedView(services.sourceService, services.folderService).routes <+>
@@ -68,6 +68,7 @@ object GRPCAndHttpServer extends IOApp {
       services.stripePaymentService,
       services.applePaymentService,
       services.systemService,
+      services.commentService,
     )).flatMap { sb =>
       fs2GrpcSyntaxServerBuilder(sb)
         .resource[IO]

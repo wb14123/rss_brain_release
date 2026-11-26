@@ -38,6 +38,8 @@ object ScalaTagAttributes {
   val hxDisableElt: Attr = attr("hx-disabled-elt")
   val hxDisableThis: generic.AttrPair[Builder, String] = hxDisableElt := "this"
   val hxEncoding: Attr = attr("hx-encoding")
+  val hxOnResponseError: Attr = attr("hx-on::response-error")
+  val hxOnSendError: Attr = attr("hx-on::send-error")
 
   // Alpine
   val xData: Attr = attr("x-data")

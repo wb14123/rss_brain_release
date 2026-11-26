@@ -6,15 +6,16 @@ import io.circe.Decoder
 import me.binwang.rss.dao.RedditSessionDao
 import me.binwang.rss.model.RedditSession
 import me.binwang.rss.reddit.RedditModels.{RedditToken, RedditUser, SubReddit, SubRedditResponse}
-import sttp.client3._
-import sttp.client3.circe.asJson
-import sttp.client3.logging.slf4j.Slf4jLoggingBackend
+import sttp.client4._
+import sttp.client4.circe.asJson
+import sttp.client4.logging.LogConfig
+import sttp.client4.logging.slf4j.Slf4jLoggingBackend
 
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.time.{ZoneId, ZonedDateTime}
 
-class RedditGateway(implicit val redditSessionDao: Option[RedditSessionDao], val backend: SttpBackend[IO, _]) {
+class RedditGateway(implicit val redditSessionDao: Option[RedditSessionDao], val backend: Backend[IO]) {
 
   private val baseUrl = "https://oauth.reddit.com"
   private val config = ConfigFactory.load()
@@ -22,11 +23,12 @@ class RedditGateway(implicit val redditSessionDao: Option[RedditSessionDao], val
   private val redditClientID = config.getString("reddit.clientID")
   private val redditClientSecret = config.getString("reddit.clientSecret")
 
-  private def send[T: Decoder: IsOption](request: RequestT[Identity, Either[String, String], Any]): IO[T] = {
+  private def send[T: Decoder: IsOption](request: Request[Either[String, String]]): IO[T] = {
     request
       .header("User-Agent", "RssBrain/0.1 by Me")
       .response(asJson[T])
-      .send(Slf4jLoggingBackend(backend, logResponseBody = true, logRequestBody = true, sensitiveHeaders = Set()))
+      .send(Slf4jLoggingBackend(backend,
+        LogConfig(logRequestBody = true, logResponseBody = true, sensitiveHeaders = Set())))
       .map(_.body)
       .flatMap {
         case Left(err) => IO.raiseError(err)

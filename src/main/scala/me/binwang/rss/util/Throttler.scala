@@ -6,7 +6,6 @@ import io.github.bucket4j.{Bandwidth, Bucket}
 import me.binwang.rss.model.RateLimitExceedError
 
 import java.time.Duration
-import java.util.concurrent.TimeUnit
 
 object Throttler {
   def apply(): Throttler = {
@@ -53,10 +52,11 @@ class Throttler(
 
   private def getBuckets(requestPerMinute: Long, maxSize: Int): LoadingCache[String, Bucket] = {
     val bucketBuilder = Bucket.builder()
-      .addLimit(Bandwidth.simple(requestPerMinute, Duration.ofMinutes(1)))
+      .addLimit(Bandwidth.builder().capacity(requestPerMinute)
+        .refillGreedy(requestPerMinute, Duration.ofMinutes(1)).build())
     CacheBuilder.newBuilder()
       .maximumSize(maxSize)
-      .expireAfterAccess(2, TimeUnit.MINUTES)
+      .expireAfterAccess(Duration.ofMinutes(2))
       .build[String, Bucket](
         new CacheLoader[String, Bucket] {
           override def load(key: String): Bucket = {

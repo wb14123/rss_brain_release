@@ -17,7 +17,7 @@ class Authorizer(
 
   private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
 
-  def authorize(token: String, allowNotPaid: Boolean = false): IO[UserSession] = {
+  def authorizeRead(token: String, allowNotPaid: Boolean = false): IO[UserSession] = {
     userSessionDao.get(token).flatMap {
       case Some(session) =>
         throttler.throttleUser(session.userID)
@@ -33,6 +33,20 @@ class Authorizer(
         logger.info(s"Access denied, token: $token") >>
           IO.raiseError(UserNotAuthorized(token))
     }
+  }
+
+  def authorize(token: String, allowNotPaid: Boolean = false): IO[UserSession] = {
+    authorizeRead(token, allowNotPaid).flatMap { session =>
+      if (session.isReadOnly) {
+        IO.raiseError(ReadOnlyTokenNotAllowed(session.userID))
+      } else {
+        IO.pure(session)
+      }
+    }
+  }
+
+  def authorizeReadAsStream(token: String, allowNotePaid: Boolean = false): fs2.Stream[IO, UserSession] = {
+    fs2.Stream.eval(authorizeRead(token, allowNotePaid)).last.map(_.get)
   }
 
   def authorizeAsStream(token: String, allowNotePaid: Boolean = false): fs2.Stream[IO, UserSession] = {
@@ -59,7 +73,7 @@ class Authorizer(
 
   def checkFoldersPermission(token: String, folderIDs: Seq[String]): IO[UserSession] = {
     authorize(token).flatMap { session =>
-      folderDao.listByIDs(folderIDs).compile.toList.map{ folderList =>
+      folderDao.listByIDs(folderIDs).compile.toList.map { folderList =>
         if (folderList.length != folderIDs.length) {
           throw NoPermissionOnFolders(session.userID, folderIDs)
         }
@@ -76,17 +90,17 @@ class Authorizer(
     fs2.Stream.eval(checkFolderPermission(token, folderID)).last.map(_.get._1)
   }
 
-  def checkFolderReadPermission(token: String, folderID: String): IO[UserSession] = {
-    authorize(token).flatMap { session =>
+  def checkFolderReadPermission(token: String, folderID: String): IO[(UserSession, Folder)] = {
+    authorizeRead(token).flatMap { session =>
       folderDao.getByID(folderID).map {
-        case Some(folder) if folder.userID.equals(session.userID) || folder.recommend => session
+        case Some(folder) if folder.userID.equals(session.userID) || folder.recommend => (session, folder)
         case _ => throw NoPermissionOnFolder(session.userID, folderID)
       }
     }
   }
 
   def checkFolderReadPermissionAsStream(token: String, folderID: String): fs2.Stream[IO, UserSession] = {
-    fs2.Stream.eval(checkFolderReadPermission(token, folderID)).last.map(_.get)
+    fs2.Stream.eval(checkFolderReadPermission(token, folderID)).last.map(_.get._1)
   }
 
 }

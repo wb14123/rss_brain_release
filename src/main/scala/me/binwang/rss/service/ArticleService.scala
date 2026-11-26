@@ -3,12 +3,16 @@ package me.binwang.rss.service
 import cats.effect.{Clock, IO}
 import me.binwang.archmage.core.CatsMacros.timed
 import me.binwang.rss.dao._
+import me.binwang.rss.fetch.crawler.UrlValidator
 import me.binwang.rss.llm.LLMModels
 import me.binwang.rss.metric.TimeMetrics
 import me.binwang.rss.model.ID.ID
 import me.binwang.rss.model._
+import me.binwang.rss.parser.ArticleParserHelper
+import sttp.client4.Backend
 
 import java.time.{ZoneId, ZonedDateTime}
+import scala.concurrent.duration.FiniteDuration
 
 
 /**
@@ -22,7 +26,14 @@ class ArticleService(
   private val userDao: UserDao,
   private val llmModels: LLMModels,
   private implicit val authorizer: Authorizer,
+  sttpBackend: Backend[IO],
+  opengardenBaseUrl: Option[String],
+  fullContentTimeout: FiniteDuration,
+  urlValidator: UrlValidator,
 ) extends TimeMetrics {
+
+  private val opengardenClient = new OpengardenClient(sttpBackend, opengardenBaseUrl, urlValidator,
+    Some(fullContentTimeout))
 
   /**
    * Get articles by source.
@@ -36,14 +47,14 @@ class ArticleService(
    */
   def getArticlesBySource(token: String, sourceID: ID, size: Int, postedBefore: ZonedDateTime, articleID: ID
       ): fs2.Stream[IO, Article] = timed {
-    authorizer.authorizeAsStream(token).flatMap { _ =>
+    authorizer.authorizeReadAsStream(token).flatMap { _ =>
       articleDao.listBySource(sourceID, size, postedBefore, articleID)
     }
   }
 
   def searchArticlesBySourceWithUserMarking(token: String, sourceID: ID,
       searchOptions: SearchOptions): fs2.Stream[IO, ArticleWithUserMarking] = timed {
-    authorizer.authorizeAsStream(token).flatMap { userSession =>
+    authorizer.authorizeReadAsStream(token).flatMap { userSession =>
       val articles = articleSearchDao.searchInSource(sourceID, searchOptions)
       articleUserMarkingDao.getByArticles(articles, userSession.userID)
     }
@@ -62,7 +73,7 @@ class ArticleService(
   def moreLikeThisInSourceWithUserMarking(token: String, articleID: ID, sourceID: ID, start: Int, limit: Int,
       postedBefore: Option[ZonedDateTime] = None, postedAfter: Option[ZonedDateTime] = None
       ): fs2.Stream[IO, ArticleWithUserMarking] = timed {
-    authorizer.authorizeAsStream(token).flatMap { userSession =>
+    authorizer.authorizeReadAsStream(token).flatMap { userSession =>
       val articles = articleSearchDao.moreLikeThisInSource(articleID, sourceID, start, limit, postedBefore, postedAfter)
       articleUserMarkingDao.getByArticles(articles, userSession.userID)
     }
@@ -100,7 +111,7 @@ class ArticleService(
    */
   def searchAllArticlesWithUserMarking(token: String,
       searchOptions: SearchOptions): fs2.Stream[IO, ArticleWithUserMarking] = timed {
-    authorizer.authorizeAsStream(token).flatMap { userSession =>
+    authorizer.authorizeReadAsStream(token).flatMap { userSession =>
       val articles = articleSearchDao.searchForUser(userSession.userID, searchOptions)
       articleUserMarkingDao.getByArticles(articles, userSession.userID)
     }
@@ -119,7 +130,7 @@ class ArticleService(
   def moreLikeThisForUserWithUserMarking(token: String, articleID: ID, start: Int, limit: Int,
       postedBefore: Option[ZonedDateTime] = None, postedAfter: Option[ZonedDateTime] = None
       ): fs2.Stream[IO, ArticleWithUserMarking] = timed {
-    authorizer.authorizeAsStream(token).flatMap { userSession =>
+    authorizer.authorizeReadAsStream(token).flatMap { userSession =>
       val articles = articleSearchDao.moreLikeThisForUser(articleID, userSession.userID, start, limit,
         postedBefore, postedAfter)
       articleUserMarkingDao.getByArticles(articles, userSession.userID)
@@ -143,7 +154,7 @@ class ArticleService(
   def getArticlesBySourceWithUserMarking(token: String, sourceID: ID, size: Int, postedBefore: ZonedDateTime,
       articleID: ID, read: Option[Boolean] = None, bookmarked: Option[Boolean] = None,
       deleted: Option[Boolean] = Some(false)): fs2.Stream[IO, ArticleWithUserMarking] = timed {
-    authorizer.authorizeAsStream(token).flatMap { userSession =>
+    authorizer.authorizeReadAsStream(token).flatMap { userSession =>
       articleDao.listBySourceWithUserMarking(
         sourceID, size, postedBefore, articleID, userSession.userID, read, bookmarked, deleted)
     }
@@ -158,7 +169,7 @@ class ArticleService(
   def getArticlesBySourceOrderByScoreWithUserMarking(token: String, sourceID: ID, size: Int, maxScore: Option[Double],
       articleID: ID, read: Option[Boolean] = None, bookmarked: Option[Boolean] = None,
       deleted: Option[Boolean] = Some(false)): fs2.Stream[IO, ArticleWithUserMarking] = timed {
-    authorizer.authorizeAsStream(token).flatMap { userSession =>
+    authorizer.authorizeReadAsStream(token).flatMap { userSession =>
       articleDao.listBySourceOrderByScoreWithUserMarking(sourceID, size, maxScore.getOrElse(Double.MaxValue),
         articleID, userSession.userID, read, bookmarked, deleted)
     }
@@ -169,7 +180,7 @@ class ArticleService(
    */
   def getArticlesByFolder(token: String, folderID: ID, size: Int, postedBefore: ZonedDateTime, articleID: ID
       ): fs2.Stream[IO, Article] = timed {
-    authorizer.checkFolderPermissionAsStream(token, folderID).flatMap(_ =>
+    authorizer.checkFolderReadPermissionAsStream(token, folderID).flatMap(_ =>
       articleDao.listByFolder(folderID, size, postedBefore, articleID)
     )
   }
@@ -180,7 +191,7 @@ class ArticleService(
   def getArticlesByFolderWithUserMarking(token: String, folderID: ID, size: Int, postedBefore: ZonedDateTime,
       articleID: ID, read: Option[Boolean] = None, bookmarked: Option[Boolean] = None,
       deleted: Option[Boolean] = Some(false)): fs2.Stream[IO, ArticleWithUserMarking] = timed {
-    authorizer.checkFolderPermissionAsStream(token, folderID).flatMap(session =>
+    authorizer.checkFolderReadPermissionAsStream(token, folderID).flatMap(session =>
       articleDao.listByFolderWithUserMarking(
         folderID, size, postedBefore, articleID, session.userID, read, bookmarked, deleted)
     )
@@ -192,7 +203,7 @@ class ArticleService(
   def getArticlesByFolderOrderByScoreWithUserMarking(token: String, folderID: ID, size: Int, maxScore: Option[Double],
       articleID: ID, read: Option[Boolean] = None, bookmarked: Option[Boolean] = None,
       deleted: Option[Boolean] = Some(false)): fs2.Stream[IO, ArticleWithUserMarking] = timed {
-    authorizer.checkFolderPermissionAsStream(token, folderID).flatMap(session =>
+    authorizer.checkFolderReadPermissionAsStream(token, folderID).flatMap(session =>
       articleDao.listByFolderOrderByScoreWithUserMarking(folderID, size, maxScore.getOrElse(Double.MaxValue),
         articleID, session.userID, read, bookmarked, deleted)
     )
@@ -202,7 +213,7 @@ class ArticleService(
    * Like [[ArticleService.getArticlesBySource]] but for getting all the articles that the user has subscribed.
    */
   def getMyArticles(token: String, size: Int, postedBefore: ZonedDateTime, articleID: ID): fs2.Stream[IO, Article] = timed {
-    authorizer.authorizeAsStream(token).flatMap { session =>
+    authorizer.authorizeReadAsStream(token).flatMap { session =>
       articleDao.listByUser(session.userID, size, postedBefore, articleID)
     }
   }
@@ -214,7 +225,7 @@ class ArticleService(
   def getMyArticlesWithUserMarking(token: String, size: Int, postedBefore: ZonedDateTime, articleID: ID,
       read: Option[Boolean] = None, bookmarked: Option[Boolean] = None,
       deleted: Option[Boolean] = Some(false)): fs2.Stream[IO, ArticleWithUserMarking] = timed {
-    authorizer.authorizeAsStream(token).flatMap { session =>
+    authorizer.authorizeReadAsStream(token).flatMap { session =>
       articleDao.listByUserWithUserMarking(session.userID, size, postedBefore, articleID, read, bookmarked, deleted)
     }
   }
@@ -224,7 +235,7 @@ class ArticleService(
    */
   def getFullArticle(token: String, articleID: ID): IO[FullArticle] = timed {
     (for {
-      _ <- authorizer.authorize(token)
+      _ <- authorizer.authorizeRead(token)
       article <- articleDao.get(articleID)
       content <- articleContentDao.get(articleID)
     } yield (article, content)) map {
@@ -234,10 +245,46 @@ class ArticleService(
   }
 
   /**
+   * Get the whole body of an article. A partial body is read from the Open Garden API and stored.
+   */
+  def getFullContent(token: String, articleID: ID): IO[String] = timed {
+    authorizer.authorizeRead(token).flatMap { _ =>
+      (for {
+        article <- articleDao.get(articleID)
+        content <- articleContentDao.get(articleID)
+      } yield (article, content)).flatMap {
+        case (Some(a), Some(c)) =>
+          if (a.contentCompleteness.contains(ContentCompleteness.FULL)) IO.pure(c.content)
+          else readFullContent(a)
+        case _ => IO.raiseError(ArticleNotFound(articleID))
+      }
+    }
+  }
+
+  // The state update requires the `postedAt` that this read saw, so a feed refresh during the read keeps its state.
+  private def readFullContent(article: Article): IO[String] = {
+    article.fullContentUrl.filter(_.trim.nonEmpty) match {
+      case None => IO.raiseError(ArticleFullContentUnavailable(article.id))
+      case Some(url) =>
+        for {
+          body <- opengardenClient.getArticleBody(url)
+          content = ArticleParserHelper.prettyHtml(body)
+          _ <- if (content.trim.isEmpty) {
+            IO.raiseError(ArticleFullContentFetchFailed("Open Garden returned an empty body"))
+          } else IO.unit
+          _ <- articleContentDao.insertOrUpdate(ArticleContent(article.id, content))
+          _ <- articleDao.update(article.id,
+            ArticleUpdater(contentCompleteness = Some(Some(ContentCompleteness.FULL))),
+            expectedPostedAt = Some(article.postedAt))
+        } yield content
+    }
+  }
+
+  /**
    * Get content for multiple articles. Useful when rendering an article list that needs to show full content.
    */
   def batchGetArticleContent(token: String, articleIDs: ArticleIDs): fs2.Stream[IO, ArticleContent] = timed {
-    authorizer.authorizeAsStream(token).flatMap(_ =>
+    authorizer.authorizeReadAsStream(token).flatMap(_ =>
       articleContentDao.batchGet(articleIDs.ids))
   }
 
@@ -246,7 +293,7 @@ class ArticleService(
    */
   def getFullArticleWithUserMarking(token: String, articleID: ID): IO[FullArticleWithUserMarking] = timed {
     (for {
-      session <- authorizer.authorize(token)
+      session <- authorizer.authorizeRead(token)
       article <- articleDao.get(articleID)
       content <- articleContentDao.get(articleID)
       userMarking <- articleUserMarkingDao.get(articleID, session.userID)

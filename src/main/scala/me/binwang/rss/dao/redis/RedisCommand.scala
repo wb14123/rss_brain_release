@@ -3,7 +3,7 @@ package me.binwang.rss.dao.redis
 import cats.effect.{IO, Resource}
 import com.typesafe.config.ConfigFactory
 import io.lettuce.core.api.async.RedisAsyncCommands
-import io.lettuce.core.{RedisClient, RedisFuture}
+import io.lettuce.core.{RedisClient, RedisFuture, SetArgs}
 import me.binwang.rss.dao.redis.RedisCommand.redisFutureToIO
 import org.typelevel.log4cats.LoggerFactory
 import org.typelevel.log4cats.slf4j.Slf4jFactory
@@ -64,7 +64,7 @@ class RedisCommand(connection: RedisAsyncCommands[String, String], client: Redis
   }
 
   def setEx(key: String, value: String, time: FiniteDuration): IO[Unit] = {
-    val result: IO[String] = connection.setex(key, time.toSeconds, value)
+    val result: IO[String] = connection.set(key, value, SetArgs.Builder.ex(time.toSeconds))
     result.map(_ => ())
   }
 

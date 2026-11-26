@@ -2,7 +2,8 @@ package me.binwang.rss.dao.sql
 
 import cats.effect.unsafe.IORuntime
 import me.binwang.rss.generator.Articles
-import me.binwang.rss.model.{FolderSourceMapping, MediaContent, MediaGroup, MediaGroups, SourceID}
+import me.binwang.rss.model.{ArticleUpdater, ContentCompleteness, FolderSourceMapping, MediaContent, MediaGroup,
+  MediaGroups, SourceID}
 import me.binwang.rss.generator.ConnectionPoolManager.connectionPool
 import org.scalacheck.Gen
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
@@ -58,6 +59,48 @@ class ArticleSqlDaoSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAn
       articleDao.insertOrUpdate(article1).unsafeRunSync()
       articleDao.insertOrUpdate(article2).unsafeRunSync()
       articleDao.get(article1.id).unsafeRunSync().get.title shouldBe article2.title
+    }
+
+    it("should insert and get full content url and content completeness") {
+      val article = Articles.get().copy(
+        fullContentUrl = Some("http://opengarden.example.com:9020/articles?article_url=abc"),
+        contentCompleteness = Some(ContentCompleteness.PARTIAL),
+      )
+      articleDao.insertOrUpdate(article).unsafeRunSync() shouldBe true
+      articleDao.get(article.id).unsafeRunSync().get shouldBe article
+    }
+
+    it("should insert and get article without full content url and content completeness") {
+      val article = Articles.get().copy(fullContentUrl = None, contentCompleteness = None)
+      articleDao.insertOrUpdate(article).unsafeRunSync() shouldBe true
+      val stored = articleDao.get(article.id).unsafeRunSync().get
+      stored.fullContentUrl shouldBe None
+      stored.contentCompleteness shouldBe None
+    }
+
+    it("should update content completeness when posted at matches") {
+      val article = Articles.get().copy(contentCompleteness = Some(ContentCompleteness.PARTIAL))
+      articleDao.insertOrUpdate(article).unsafeRunSync() shouldBe true
+      articleDao.update(article.id,
+        ArticleUpdater(contentCompleteness = Some(Some(ContentCompleteness.FULL))),
+        Some(article.postedAt)).unsafeRunSync() shouldBe true
+      articleDao.get(article.id).unsafeRunSync().get.contentCompleteness shouldBe Some(ContentCompleteness.FULL)
+    }
+
+    it("should not update content completeness when posted at does not match") {
+      val article = Articles.get().copy(contentCompleteness = Some(ContentCompleteness.PARTIAL))
+      articleDao.insertOrUpdate(article).unsafeRunSync() shouldBe true
+      articleDao.update(article.id,
+        ArticleUpdater(contentCompleteness = Some(Some(ContentCompleteness.FULL))),
+        Some(article.postedAt.minusSeconds(1))).unsafeRunSync() shouldBe false
+      articleDao.get(article.id).unsafeRunSync().get.contentCompleteness shouldBe Some(ContentCompleteness.PARTIAL)
+    }
+
+    it("should keep content completeness that the updater leaves empty") {
+      val article = Articles.get().copy(contentCompleteness = Some(ContentCompleteness.FULL))
+      articleDao.insertOrUpdate(article).unsafeRunSync() shouldBe true
+      articleDao.update(article.id, ArticleUpdater(), Some(article.postedAt)).unsafeRunSync() shouldBe false
+      articleDao.get(article.id).unsafeRunSync().get.contentCompleteness shouldBe Some(ContentCompleteness.FULL)
     }
 
     it("should get articles by source") {

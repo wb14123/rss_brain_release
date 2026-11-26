@@ -74,6 +74,7 @@ object RSSParser {
       createdAt = now.withNano(0),
       title = (articleNode \ "title").headOption.map(_.text.trim).getOrElse(""),
       description = ArticleParserHelper.tripHtmlTags(description),
+      author = getAuthor(articleNode),
       postedAt = postedTime.getOrElse(now),
       guid = guid,
       link = link,
@@ -81,6 +82,34 @@ object RSSParser {
       postedAtIsMissing = postedTime.isEmpty,
     )
     FullArticle(article=article.getArticleWithScore, content=ArticleParserHelper.prettyHtml(text))
+  }
+
+  // Get the author of an item. Follow this order: dc:creator, itunes:author, author.
+  private def getAuthor(articleNode: Node): Option[String] = {
+    val creator = (articleNode \\ "creator").headOption.map(_.text.trim).filter(_.nonEmpty)
+    val authorNodes = articleNode \ "author"
+    val itunesAuthor = authorNodes.filterNamespace(XmlNamespace.itunes)
+      .headOption.map(_.text.trim).filter(_.nonEmpty)
+    val plainAuthor = authorNodes
+      .filterNot(n => n.namespace != null && n.namespace.equals(XmlNamespace.itunes))
+      .headOption
+      .flatMap(parseRssAuthorElement)
+    creator.orElse(itunesAuthor).orElse(plainAuthor)
+  }
+
+  /*
+   * RSS 2.0 puts the email address of the author in the author element. The name of the author can follow the
+   * email address in parentheses. Some feeds put an atom author element in the item instead, which has a name
+   * child element.
+   */
+  private def parseRssAuthorElement(node: Node): Option[String] = {
+    val value = (node \ "name").headOption.map(_.text).getOrElse(node.text).trim
+    val emailWithName = """^[^@\s]+@[^@\s]+\s*\((.*)\)$""".r
+    val name = value match {
+      case emailWithName(realName) => realName.trim
+      case _ => value
+    }
+    Some(name).filter(_.nonEmpty)
   }
 
   // parse enclosure and itunes related tags

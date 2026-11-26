@@ -89,6 +89,7 @@ async function reloadFolderList(cleanupPosition) {
     htmx.trigger('#folder-list', 'reload-folders', {});
     return await result;
 }
+window.reloadFolderList = reloadFolderList;
 
 async function updateFolderPosition(folderID, position) {
     await fetch(`/hx/folders/${folderID}/update`,

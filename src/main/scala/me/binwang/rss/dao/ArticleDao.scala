@@ -1,7 +1,7 @@
 package me.binwang.rss.dao
 
 import cats.effect.IO
-import me.binwang.rss.model.{Article, ArticleWithUserMarking}
+import me.binwang.rss.model.{Article, ArticleUpdater, ArticleWithUserMarking}
 import me.binwang.rss.model.ID.ID
 
 import java.time.ZonedDateTime
@@ -32,5 +32,6 @@ trait ArticleDao {
       read: Option[Boolean], bookmarked: Option[Boolean],
       deleted: Option[Boolean] = Some(false)): fs2.Stream[IO, ArticleWithUserMarking]
   def insertOrUpdate(article: Article): IO[Boolean]
+  def update(id: ID, updater: ArticleUpdater, expectedPostedAt: Option[ZonedDateTime] = None): IO[Boolean]
   def deleteAll(): IO[Unit]
 }

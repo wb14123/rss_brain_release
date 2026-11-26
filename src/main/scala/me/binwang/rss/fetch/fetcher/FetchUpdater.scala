@@ -7,7 +7,8 @@ import me.binwang.rss.dao.{ArticleContentDao, ArticleDao, ArticleEmbeddingTaskDa
 import me.binwang.rss.metric.MetricReporter
 import me.binwang.rss.model._
 import me.binwang.rss.parser.SourceParser
-import org.typelevel.log4cats.LoggerFactory
+import me.binwang.rss.util.Retry
+import org.typelevel.log4cats.{Logger, LoggerFactory}
 
 import java.io.InputStream
 import java.time.{ZoneId, ZonedDateTime}
@@ -21,13 +22,14 @@ class FetchUpdater(
     val articleEmbeddingTaskDao: ArticleEmbeddingTaskDao,
   )(implicit val loggerFactory: LoggerFactory[IO]) {
 
-  private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
+  private implicit val logger: Logger[IO] = LoggerFactory.getLoggerFromClass[IO](this.getClass)
 
   def updateAtStart(url: String, needExist: Boolean): IO[Unit] = {
     val id = SourceID(url)
-    sourceDao.update(id, SourceUpdater(
-      fetchStatus = Some(FetchStatus.FETCHING),
-    ))
+    Retry.onSerializationFailure(
+      sourceDao.update(id, SourceUpdater(
+        fetchStatus = Some(FetchStatus.FETCHING),
+      )), s"update source $id as started")
     .flatMap { updated =>
       if (!updated && needExist) {
         IO.raiseError(new Exception(s"Failed to update source as started. id: $id, url: $url"))
@@ -43,7 +45,11 @@ class FetchUpdater(
       result <- SourceParser.parse(url, fetchResult)
       _ <- logger.debug(s"Parsed source from $url")
       _ <- handleSource(url, result._1)
-      _ <- result._2.filter(_.isSuccess).map(_.get).parTraverse(handleArticle(url, _))
+      /*
+      A feed may contain the same article multiple times, which has the same article ID. They must be saved one by
+      one otherwise the concurrent inserts will conflict with each other.
+       */
+      _ <- result._2.filter(_.isSuccess).map(_.get).distinctBy(_.article.id).parTraverse(handleArticle(url, _))
       _ <- handleArticlesFailure(url, result._2.filter(_.isFailure).map(_.failed.get))
       _ <- MetricReporter.countFetchedSourceSuccess()
       _ <- logger.debug(s"Handled source fetch from $url")
@@ -52,7 +58,7 @@ class FetchUpdater(
 
   def handleFailure(url: String, e: Throwable, isArticleError: Boolean = false): IO[Unit] = {
     val id = SourceID(url)
-    sourceDao.get(id).flatMap {
+    val update = sourceDao.get(id).flatMap {
       case None =>
         logger.warn(e)(s"Cannot find source $id to update failure")
       case Some(originalSource) => for {
@@ -79,6 +85,7 @@ class FetchUpdater(
         _ <- sourceDao.update(originalSource.id, sourceUpdater)
       } yield ()
     }
+    Retry.onSerializationFailure(update, s"save source $id failure state")
       .handleErrorWith { err =>
         logger.error(err)(s"Error to save source failed state. url: $url")
       }
@@ -93,7 +100,7 @@ class FetchUpdater(
     as None, the insert will be ignored. So the earlier transaction might update at last, but that's Okay since it's okay
     to have a slightly stale source. The source may also be deleted so the update will fail.
      */
-    sourceDao.get(ID.hash(url))
+    val save = sourceDao.get(ID.hash(url))
       .flatMap { s =>
         logger.debug(s"Fetched source ${parsedSource.xmlUrl}").map(_ => s)
       }
@@ -127,6 +134,7 @@ class FetchUpdater(
           IO.raiseError(SourceIDConflictError(originalSource, parsedSource))
       }
       .map(_ => ())
+    Retry.onSerializationFailure(save, s"save source $url")
   }
 
   private def getFetchDelayInSeconds(source: Source): Long = {
@@ -160,7 +168,8 @@ class FetchUpdater(
      Check article first to avoid hash conflict. This can still happens since it's not in the same transaction as the
      insert. But the chance of a hash conflict and a transaction conflict happens at the same time is very small.
      */
-    logger.info(s"handle article ${articleWithContent.article.id}") >> articleHashCheckDao.exists(articleWithContent.article).flatMap {
+    val save = logger.info(s"handle article ${articleWithContent.article.id}") >>
+      articleHashCheckDao.exists(articleWithContent.article).flatMap {
       case true =>
         for {
           _ <- logger.debug(s"Article doesn't change for ${articleWithContent.article.id}, skip insert into db")
@@ -179,7 +188,10 @@ class FetchUpdater(
             now,
           ))
         } yield schedule
-    }.handleErrorWith(err => handleArticlesFailure(url, Seq(err)))
+    }
+    // All the operations above are idempotent, so it's safe to retry them on transaction conflicts.
+    Retry.onSerializationFailure(save, s"save article ${articleWithContent.article.id}")
+      .handleErrorWith(err => handleArticlesFailure(url, Seq(err)))
   }
 
   private def insertArticle(articleWithContent: FullArticle): IO[Unit] = {

@@ -117,6 +117,23 @@ object ArticleRender {
   }
 
 
+  // The loaded div replaces itself with one that holds no load attributes, so the request runs once.
+  def contentDom(content: String, loadUrl: Option[String]): Frag = {
+    loadUrl match {
+      case Some(url) =>
+        div(id := "article-content", cls := "article-content",
+          hxGet := url,
+          hxTrigger := "load",
+          hxSwap := "outerHTML",
+          hxIndicator := "#article-content-progress")(
+          tag("progress")(id := "article-content-progress", cls := "htmx-indicator"),
+          raw(content.relaxedHtml),
+        )
+      case None =>
+        div(id := "article-content", cls := "article-content")(raw(content.relaxedHtml))
+    }
+  }
+
   def articleAttrs(userMarking: ArticleUserMarking, bindReadClass: Boolean): Seq[generic.AttrPair[Builder, String]] = {
     val bindClass = attr("x-bind:class") := "read?'article-read':''"
     val data = xData := s"{read: ${userMarking.read}, bookmarked: ${userMarking.bookmarked}}"
@@ -131,9 +148,10 @@ object ArticleRender {
     div(
       cls := "article-ops",
       if (showActionable) Seq(
-        a(title := "Open original article", target := "_blank", href := article.link,
-          cls := s"article-open-btn article-${article.id}-click", xOnClick := "read=true",
-          iconSpan("open_in_new")),
+        span(cls := "article-open-btn", xOnClick := "read=true",
+          hxPost := s"/hx/articles/${article.id}/state/read/true", hxSwap := "none")(
+          a(title := "Open original article", target := "_blank", href := article.link,
+            iconSpan("open_in_new"))),
         a(title := "Mark article as read", xShow := "!read", xOnClick := "read=true",
           hxPost := s"/hx/articles/${article.id}/state/read/true", hxSwap := "none", nullHref,
           iconSpan("check_circle")),

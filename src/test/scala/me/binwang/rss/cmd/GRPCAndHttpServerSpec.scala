@@ -5,7 +5,8 @@ import com.typesafe.config.ConfigFactory
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
-import sttp.client3._
+import sttp.client4._
+import sttp.client4.httpurlconnection.HttpURLConnectionBackend
 
 import java.util.concurrent.Executors
 import scala.concurrent.{ExecutionContext, Future}

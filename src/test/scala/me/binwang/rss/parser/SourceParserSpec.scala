@@ -2,15 +2,15 @@ package me.binwang.rss.parser
 
 import cats.effect.unsafe.IORuntime
 import cats.effect.{IO, Resource}
-import me.binwang.rss.fetch.crawler.HttpCrawler
-import me.binwang.rss.model.{FullArticle, MediaMedium, Source}
+import me.binwang.rss.model.{ContentCompleteness, FullArticle, MediaMedium}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 
+import java.io.ByteArrayInputStream
+import java.nio.charset.StandardCharsets
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import scala.concurrent.ExecutionContext
 import scala.util.Try
 
 class SourceParserSpec extends AnyFunSpec with BeforeAndAfterEach with Matchers {
@@ -33,7 +33,7 @@ class SourceParserSpec extends AnyFunSpec with BeforeAndAfterEach with Matchers 
     }
 
     it(s"should remove div without attributes which has only 1 child") {
-      ArticleParserHelper.prettyHtml("<div><div>abc</div><div></div></div>") shouldBe "<div>\n  abc\n</div>"
+      ArticleParserHelper.prettyHtml("<div><div>abc</div><div></div></div>") shouldBe "<div>abc</div>"
     }
 
     it(s"should parse default icon") {
@@ -129,6 +129,7 @@ class SourceParserSpec extends AnyFunSpec with BeforeAndAfterEach with Matchers 
       article.postedAt.isEqual(ZonedDateTime.parse(
         "2021-10-31T00:00:00-04:00", DateTimeFormatter.ISO_ZONED_DATE_TIME)) shouldBe true// Mon, 20 Jan 2020 17:11:33 EST
       article.link shouldBe "https://www.binwang.me/2021-10-31-Add-Index-to-My-Blog.html"
+      article.author shouldBe None
 
       articles.map(_.get).head.content.nonEmpty shouldBe true
     }
@@ -139,6 +140,62 @@ class SourceParserSpec extends AnyFunSpec with BeforeAndAfterEach with Matchers 
       val (_, articles) = SourceParser.parse(testFeedUrl, inputStream(testFeedFile)).unsafeRunSync()
       articles.exists(_.get.article.comments.exists(_ > 0)) shouldBe true
       articles.exists(_.get.article.score > 0) shouldBe true
+    }
+
+    it(s"should parse opengarden comment counts and comment url from atom feed") {
+      val testFeedFile = "/test-feed-atom-opengarden.xml"
+      val (_, articles) = SourceParser.parse(testFeedUrl, inputStream(testFeedFile)).unsafeRunSync()
+      articles.size shouldBe 5
+
+      val withCommentUrl = articles.head.get.article
+      withCommentUrl.author shouldBe Some("someone")
+      withCommentUrl.upVotes shouldBe Some(36)
+      withCommentUrl.downVotes shouldBe Some(4)
+      withCommentUrl.comments shouldBe Some(12)
+      withCommentUrl.commentUrl shouldBe Some(
+        "http://opengarden.example.com:9020/comments?profile=default&fetcher=reddit" +
+          "&article_url=https%3A%2F%2Fwww.reddit.com%2Fr%2Ftechnology%2Fcomments%2Fabc123%2Fa_post%2F")
+
+      val withoutCommentUrl = articles(1).get.article
+      withoutCommentUrl.author shouldBe Some("someone else")
+      withoutCommentUrl.upVotes shouldBe Some(7)
+      withoutCommentUrl.downVotes shouldBe None
+      withoutCommentUrl.comments shouldBe Some(3)
+      withoutCommentUrl.commentUrl shouldBe None
+    }
+
+    it(s"should parse opengarden full content url and content completeness from atom feed") {
+      val testFeedFile = "/test-feed-atom-opengarden.xml"
+      val (_, articles) = SourceParser.parse(testFeedUrl, inputStream(testFeedFile)).unsafeRunSync()
+
+      val full = articles(2).get.article
+      full.fullContentUrl shouldBe None
+      full.contentCompleteness shouldBe Some(ContentCompleteness.FULL)
+      // published wins over updated
+      full.postedAt.toInstant shouldBe ZonedDateTime.parse("2024-04-05T08:00:00.000Z").toInstant
+
+      val partial = articles(3).get.article
+      partial.fullContentUrl shouldBe Some(
+        "http://opengarden.example.com:9020/articles?profile=default&fetcher=webpage" +
+          "&article_url=https%3A%2F%2Fwww.binwang.me%2Fpartial-body-article.html")
+      partial.contentCompleteness shouldBe Some(ContentCompleteness.PARTIAL)
+
+      val unknown = articles(4).get.article
+      unknown.fullContentUrl shouldBe Some(
+        "http://opengarden.example.com:9020/articles?profile=default&fetcher=webpage" +
+          "&article_url=https%3A%2F%2Fwww.binwang.me%2Funknown-body-article.html")
+      unknown.contentCompleteness shouldBe None
+    }
+
+    it(s"should parse full content url without the opengarden namespace") {
+      val articles = parseXml(atomFeed("<article-url>https://example.com/articles?article_url=abc</article-url>"))
+      articles.head.get.article.fullContentUrl shouldBe Some("https://example.com/articles?article_url=abc")
+      articles.head.get.article.contentCompleteness shouldBe None
+    }
+
+    it(s"should ignore an article url that is empty") {
+      val articles = parseXml(atomFeed("<article-url>  </article-url>"))
+      articles.head.get.article.fullContentUrl shouldBe None
     }
 
     it(s"should parse RDF feed") {
@@ -175,25 +232,6 @@ class SourceParserSpec extends AnyFunSpec with BeforeAndAfterEach with Matchers 
       val testFeedFile = "/test-feed-peertube.xml"
       val (_, articles) = SourceParser.parse(testFeedUrl, inputStream(testFeedFile)).unsafeRunSync()
       checkMediaGroups(articles)
-    }
-
-    it(s"should parse Reddit API feed") {
-      val (source, articles) = getArticlesFromSubreddit("news")
-      source.title shouldBe Some("/r/news")
-      articles.isEmpty shouldBe false
-      articles.map(_.isSuccess shouldBe true)
-    }
-
-    it(s"should parse Reddit API with images") {
-      Seq("unixporn", "China_irl").foreach { subreddit =>
-        val (_, articles) = getArticlesFromSubreddit(subreddit)
-        articles.exists(a => a.isSuccess && a.get.article.mediaGroups.exists(_.groups.nonEmpty)) shouldBe true
-      }
-    }
-
-    it(s"should parse Reddit nsfw state") {
-      val (_, articles) = getArticlesFromSubreddit("nsfw")
-      articles.exists(a => a.isSuccess && a.get.article.nsfw) shouldBe true
     }
 
     it(s"should parse articles without posted at time") {
@@ -234,14 +272,129 @@ class SourceParserSpec extends AnyFunSpec with BeforeAndAfterEach with Matchers 
         mediaGroups.get.groups.head.content.medium.get shouldBe MediaMedium.IMAGE
       }
     }
+
+    it("should parse author from atom feed") {
+      val articles = parseXml(atomFeed("<author><name>Jane Doe</name></author>"))
+      articles.size shouldBe 1
+      articles.head.get.article.author shouldBe Some("Jane Doe")
+    }
+
+    it("should trim the author name with CDATA in atom feed") {
+      val articles = parseXml(atomFeed("<author><name><![CDATA[ Jane Doe ]]></name></author>"))
+      articles.head.get.article.author shouldBe Some("Jane Doe")
+    }
+
+    it("should not set author if atom entry has no author") {
+      parseXml(atomFeed("")).head.get.article.author shouldBe None
+      parseXml(atomFeed("<author><name/></author>")).head.get.article.author shouldBe None
+      parseXml(atomFeed("<author><name>  </name></author>")).head.get.article.author shouldBe None
+      // The feed level author and the author of the source element are not the author of the article
+      parseXml(atomFeed("", "<author><name>Example Site</name></author>")).head.get.article.author shouldBe None
+      parseXml(atomFeed(
+        """<source>
+          |      <id>https://example.com/</id>
+          |      <title>Test feed</title>
+          |      <author><name>Example Site</name></author>
+          |    </source>""".stripMargin)).head.get.article.author shouldBe None
+    }
+
+    it("should parse author from rss feed") {
+      rssAuthor("<dc:creator>Matt Kim</dc:creator>") shouldBe Some("Matt Kim")
+      rssAuthor("<itunes:author>NPR</itunes:author>") shouldBe Some("NPR")
+      rssAuthor("<author>Amina Zafar</author>") shouldBe Some("Amina Zafar")
+      // RSS 2.0 puts the author's email address in the author element, and the name can follow in parentheses
+      rssAuthor("<author>jane.doe@example.com (Jane Doe)</author>") shouldBe Some("Jane Doe")
+    }
+
+    it("should prefer dc:creator and itunes:author over author element in rss feed") {
+      rssAuthor(
+        """<author>someone@example.com (Someone Else)</author>
+          |      <dc:creator>Matt Kim</dc:creator>""".stripMargin) shouldBe Some("Matt Kim")
+      rssAuthor(
+        """<author>someone@example.com (Someone Else)</author>
+          |      <itunes:author>NPR</itunes:author>""".stripMargin) shouldBe Some("NPR")
+    }
+
+    it("should not set author if rss item has no author") {
+      rssAuthor("") shouldBe None
+      rssAuthor("<author/>") shouldBe None
+    }
+
+    it("should parse author from dc:creator in peertube feed") {
+      val (_, articles) = SourceParser.parse(testFeedUrl, inputStream("/test-feed-peertube.xml")).unsafeRunSync()
+      articles.nonEmpty shouldBe true
+      articles.foreach { article =>
+        article.isSuccess shouldBe true
+        article.get.article.author shouldBe Some("veggero")
+      }
+    }
+
+    it("should parse author from dc:creator in rdf feed") {
+      val (_, articles) = SourceParser.parse(testFeedUrl, inputStream("/test-rdf-slashdot.xml")).unsafeRunSync()
+      articles.nonEmpty shouldBe true
+      articles.exists(_.get.article.author.contains("BeauHD")) shouldBe true
+      articles.exists(_.get.article.author.contains("msmash")) shouldBe true
+    }
+
+    it("should parse author from author element in cbc feed") {
+      val (_, articlesTries) = SourceParser.parse(testFeedUrl, inputStream("/test-feed-invalid-article.xml")).unsafeRunSync()
+      val articles = articlesTries.filter(_.isSuccess)
+      articles.nonEmpty shouldBe true
+      articles.head.get.article.author shouldBe Some("Amina Zafar")
+      articles.last.get.article.author shouldBe Some("Michelle Ghoussoub")
+    }
   }
 
-  private def getArticlesFromSubreddit(subreddit: String): (Source, Seq[Try[FullArticle]]) = {
-    val url = s"https://www.reddit.com/r/$subreddit/hot.json?count=100"
-    val fetcher = HttpCrawler().allocated.unsafeRunSync()._1
-    val resp = fetcher.fetch(url).use(IO.pure).unsafeRunSync()
-    val inputStreamResource = Resource.make{IO.pure(resp)}{i => IO(i.close())}
-    SourceParser.parse(url, inputStreamResource).unsafeRunSync()
+  private def parseXml(xml: String): Seq[Try[FullArticle]] = {
+    val content = Resource.make {
+      IO(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)))
+    } { i =>
+      IO(i.close())
+    }
+    SourceParser.parse(testFeedUrl, content).unsafeRunSync()._2
+  }
+
+  private def atomFeed(entryElements: String, feedElements: String = ""): String = {
+    s"""<?xml version="1.0" encoding="UTF-8"?>
+       |<feed xmlns="http://www.w3.org/2005/Atom">
+       |  <id>https://example.com/</id>
+       |  <title>Test feed</title>
+       |  <updated>2024-01-01T00:00:00Z</updated>
+       |  <link href="https://example.com/" rel="alternate" type="text/html"/>
+       |  $feedElements
+       |  <entry>
+       |    <id>https://example.com/article</id>
+       |    <title>Test article</title>
+       |    <link href="https://example.com/article.html" rel="alternate" type="text/html"/>
+       |    <updated>2024-01-01T00:00:00Z</updated>
+       |    $entryElements
+       |    <content type="html">&lt;p&gt;article body&lt;/p&gt;</content>
+       |  </entry>
+       |</feed>""".stripMargin
+  }
+
+  private def rssAuthor(itemAuthor: String): Option[String] = {
+    val xml =
+      s"""<?xml version="1.0" encoding="UTF-8"?>
+         |<rss version="2.0"
+         |  xmlns:dc="http://purl.org/dc/elements/1.1/"
+         |  xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+         |  <channel>
+         |    <title>Test feed</title>
+         |    <link>https://example.com/</link>
+         |    <description>Test feed</description>
+         |    <item>
+         |      <title>Test article</title>
+         |      <link>https://example.com/article.html</link>
+         |      <guid>https://example.com/article.html</guid>
+         |      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+         |      $itemAuthor
+         |    </item>
+         |  </channel>
+         |</rss>""".stripMargin
+    val articles = parseXml(xml)
+    articles.size shouldBe 1
+    articles.head.get.article.author
   }
 
   private def checkMediaGroups(articles: Seq[Try[FullArticle]]) = {

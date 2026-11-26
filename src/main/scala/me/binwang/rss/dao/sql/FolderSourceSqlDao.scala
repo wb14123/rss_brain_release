@@ -24,6 +24,7 @@ class FolderSourceSqlDao(implicit val connectionPool: ConnectionPool) extends Fo
             showMedia bool not null default false,
             articleOrder varchar not null,
             articleListLayout varchar not null,
+            importedSourceName varchar default null,
             PRIMARY KEY (folderID, sourceID)
           )
          """)
@@ -167,6 +168,7 @@ class FolderSourceSqlDao(implicit val connectionPool: ConnectionPool) extends Fo
           showMedia = mapping.showMedia,
           articleOrder = mapping.articleOrder,
           articleListLayout = mapping.articleListLayout,
+          importedSourceName = mapping.importedSourceName,
         ))
     }
     val q = quote(sql"insert into #$table $select".as[Insert[FolderSourceMapping]])

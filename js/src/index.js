@@ -2,7 +2,6 @@
 // css
 
 import '../css/pico.jade.min.css';
-import 'somment/somment.css';
 import 'lite-youtube-embed/src/lite-yt-embed.css';
 import 'toastify-js/src/toastify.css';
 import 'viewerjs/dist/viewer.min.css';
@@ -11,9 +10,7 @@ import '../css/main.css';
 
 // js
 import '@ungap/custom-elements';
-import './boolean-checkbox.js';
 
-import 'htmx.org';
 import './global-htmx.js';
 import 'htmx.org/dist/ext/json-enc.js';
 
@@ -27,11 +24,7 @@ import 'lite-youtube-embed';
 import Toastify from 'toastify-js';
 window.Toastify = Toastify;
 
-import DOMPurify from 'dompurify';
-window.DOMPurify = DOMPurify;
-
 import 'imgs-html';
-import 'somment';
 
 import './viewer_component.js';
 

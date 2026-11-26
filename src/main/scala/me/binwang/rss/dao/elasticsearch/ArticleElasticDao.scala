@@ -10,7 +10,7 @@ import com.typesafe.config.ConfigFactory
 import io.circe.generic.auto._
 import me.binwang.rss.dao.ArticleDao
 import me.binwang.rss.model.ID.ID
-import me.binwang.rss.model.{Article, ArticleWithUserMarking}
+import me.binwang.rss.model.{Article, ArticleUpdater, ArticleWithUserMarking}
 
 import java.time.ZonedDateTime
 
@@ -42,6 +42,7 @@ object ArticleElasticDao {
           TextField("content", analyzer = Some("htmlStripAnalyzer")),
           KeywordField("author"),
           IntegerField("comments"),
+          KeywordField("commentUrl"),
           IntegerField("upVotes"),
           IntegerField("downVotes"),
           DoubleField("score", nullValue = Some(0.0)),
@@ -51,7 +52,8 @@ object ArticleElasticDao {
           BooleanField("postedAtIsMissing"),
 
           // using paraphrase-multilingual-mpnet-base-v2 from SentenceTransformers
-          DenseVectorField(titleEmbeddingVectorField, titleEmbeddingVectorSize, index = true, similarity = L2Norm)
+          DenseVectorField(titleEmbeddingVectorField, dims = Some(titleEmbeddingVectorSize),
+            index = Some(true), similarity = Some(L2Norm))
         )
       ).analysis(
         Analysis(CustomAnalyzer(
@@ -122,6 +124,11 @@ class ArticleElasticDao(implicit val elasticClient: ElasticClient) extends Artic
     elasticClient.execute {
       updateById(indexName, article.id).doc(article).upsert(article)
     }.map(_.result.found)
+  }
+
+  override def update(id: ID, updater: ArticleUpdater,
+      expectedPostedAt: Option[ZonedDateTime] = None): IO[Boolean] = {
+    throw new NotImplementedError()
   }
 
   override def listBySourceOrderByScoreWithUserMarking(sourceID: ID, size: Int, maxScore: Double, articleID: ID,

@@ -1,14 +1,28 @@
 package me.binwang.rss.model
 
+import io.circe.{Decoder, Encoder}
+import me.binwang.rss.model.ContentCompleteness.ContentCompleteness
 import me.binwang.rss.model.ID.ID
 
 import java.time.ZonedDateTime
+import scala.util.Try
 
 object ArticleID {
   def apply(sourceID: ID, guid: String): ID = ID.hash(sourceID + guid)
 }
 
 case class ArticleIDs(ids: Seq[ID])
+
+object ContentCompleteness extends Enumeration {
+  type ContentCompleteness = Value
+  val PARTIAL, FULL = Value
+
+  implicit val encodeContentCompleteness: Encoder[ContentCompleteness] =
+    Encoder.encodeString.contramap(_.toString)
+
+  implicit val decodeContentCompleteness: Decoder[ContentCompleteness] =
+    Decoder.decodeString.emapTry(s => Try(ContentCompleteness.withName(s)))
+}
 
 /**
  * Article structure
@@ -27,6 +41,11 @@ case class ArticleIDs(ids: Seq[ID])
  * @param mediaGroups Medias in the article. Parsed from feed.
  * @param nsfw If the article is not suite for work.
  * @param postedAtIsMissing If `postedAt` is missing in feed and filled by current time.
+ * @param commentUrl URL of the API that serves this article's comments, parsed from feed.
+ *   Absent when the feed does not publish one.
+ * @param fullContentUrl URL of the Open Garden API that serves the whole body of this article. It is not the
+ *   article link. Empty when the feed has none.
+ * @param contentCompleteness How much of the article the stored body holds. Empty when unknown.
  */
 case class Article(
   id: ID,
@@ -55,6 +74,9 @@ case class Article(
    2. articles still need postedAt to be ranked
    */
   postedAtIsMissing: Boolean = false,
+  commentUrl: Option[String] = None,
+  fullContentUrl: Option[String] = None,
+  contentCompleteness: Option[ContentCompleteness] = None,
 ) {
   // comment out during ID migration
   assert(id == ArticleID(sourceID, guid), "Article id has invalid patter")
@@ -78,3 +100,11 @@ case class Article(
     this.copy(score = newScore)
   }
 }
+
+
+/**
+ * Structure to update an article. None means the field will not be updated.
+ */
+case class ArticleUpdater(
+  contentCompleteness: Option[Option[ContentCompleteness]] = None,
+)

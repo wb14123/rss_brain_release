@@ -7,7 +7,6 @@ import me.binwang.rss.model._
 import java.io.InputStream
 import java.time.{ZoneId, ZonedDateTime}
 import scala.util.Try
-import scala.xml.XML
 
 object SourceParser {
 
@@ -20,7 +19,7 @@ object SourceParser {
         } else if (RedditJsonParser.getSubRedditFromUrl(url).isDefined) {
           RedditJsonParser.parse(url, c)
         } else {
-          val xml = XML.load(c)
+          val xml = SecureXml.load(c)
           val label = xml.label
           if (label.equals("rss") || label.equals("RDF")) {
             IO.pure(RSSParser.parse(url, xml, now))

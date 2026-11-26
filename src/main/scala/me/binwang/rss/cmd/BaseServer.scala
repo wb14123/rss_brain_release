@@ -8,13 +8,16 @@ import me.binwang.rss.dao.elasticsearch.{ArticleContentElasticDao, ArticleElasti
 import me.binwang.rss.dao.hybrid.{ArticleContentHybridDao, ArticleHybridDao}
 import me.binwang.rss.dao.redis.{ArticleContentHashCheckDao, ArticleHashCheckDao, RedisCommand}
 import me.binwang.rss.dao.sql._
-import me.binwang.rss.fetch.crawler.{Crawler, HttpCrawler}
+import me.binwang.rss.fetch.crawler.{Crawler, HttpCrawler, UrlValidator}
 import me.binwang.rss.fetch.fetcher.{BackgroundFetcher, FetchUpdater}
 import me.binwang.rss.mail.SendGridMailSender
 import org.typelevel.log4cats.LoggerFactory
 import org.typelevel.log4cats.slf4j.Slf4jFactory
-import sttp.client3.SttpBackend
-import sttp.client3.http4s.Http4sBackend
+import sttp.client4.Backend
+import sttp.client4.http4s.Http4sBackend
+
+import scala.jdk.CollectionConverters._
+import scala.util.Try
 
 class BaseServer(
     val articleDao: ArticleDao,
@@ -32,11 +35,11 @@ class BaseServer(
     val paymentCustomerDao: PaymentCustomerDao,
     val moreLikeThisMappingDao: MoreLikeThisMappingDao,
     val articleEmbeddingTaskDao: ArticleEmbeddingTaskDao,
-    val importSourcesTaskDao: ImportSourcesTaskDao,
     val mailSender: SendGridMailSender,
     val crawler: Crawler,
+    val urlValidator: UrlValidator,
     val fetcher: BackgroundFetcher,
-    val sttpBackend: SttpBackend[IO, _],
+    val sttpBackend: Backend[IO],
 )
 
 object BaseServer {
@@ -78,12 +81,21 @@ object BaseServer {
         implicit val paymentCustomerDao: PaymentCustomerSqlDao = new PaymentCustomerSqlDao()
         implicit val moreLikeThisMappingDao: MoreLikeThisMappingSqlDao = new MoreLikeThisMappingSqlDao()
         implicit val articleEmbeddingTaskDao: ArticleEmbeddingTaskSqlDao = new ArticleEmbeddingTaskSqlDao()
-        implicit val importSourcesTaskDao: ImportSourcesTaskSqlDao = new ImportSourcesTaskSqlDao()
 
         val mailSender = new SendGridMailSender()
 
         Http4sBackend.usingDefaultEmberClientBuilder[IO]().evalMap { sttpBackend =>
-          val crawler = new HttpCrawler(sttpBackend)
+          val urlValidator = if (Try(config.getBoolean("crawler.ssrf-protection.enabled")).getOrElse(true)) {
+            val allowedHosts = Try(
+              config.getStringList("crawler.ssrf-protection.allowed-internal-hosts").asScala.toSeq
+            ).getOrElse(Seq.empty)
+            new UrlValidator(allowedHosts)
+          } else {
+            UrlValidator.allowAll
+          }
+          val maxRedirects = Try(config.getInt("crawler.ssrf-protection.max-redirects")).getOrElse(10)
+          val redditCookie = Try(config.getString("reddit.cookie")).toOption.filter(_.nonEmpty)
+          val crawler = new HttpCrawler(sttpBackend, urlValidator, maxRedirects, redditCookie)
           val updater = new FetchUpdater(sourceDao, articleDaoWithoutHashCheck, articleContentDao, articleHashDao,
             articleEmbeddingTaskDao)
           articleDao.createTable() >>
@@ -100,7 +112,6 @@ object BaseServer {
             paymentCustomerDao.createTable() >>
             moreLikeThisMappingDao.createTable() >>
             articleEmbeddingTaskDao.createTable() >>
-            importSourcesTaskDao.createTable() >>
             BackgroundFetcher(crawler, sourceDao, updater, config.getInt("fetcher.batchSize")).map { fetcher =>
               new BaseServer(
                 articleDao,
@@ -118,9 +129,9 @@ object BaseServer {
                 paymentCustomerDao,
                 moreLikeThisMappingDao,
                 articleEmbeddingTaskDao,
-                importSourcesTaskDao,
                 mailSender,
                 crawler,
+                urlValidator,
                 fetcher,
                 sttpBackend,
               )

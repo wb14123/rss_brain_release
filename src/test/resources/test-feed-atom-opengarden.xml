@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:opengarden="https://github.com/wb14123/opengarden-rss/atom">
+    <generator>Opengarden</generator>
+    <id>https://www.reddit.com/r/technology/</id>
+    <title>reddit technology</title>
+    <updated>2024-04-05T12:00:00.000Z</updated>
+    <link href="https://www.reddit.com/r/technology/"/>
+    <author>
+        <name><![CDATA[opengarden]]></name>
+    </author>
+
+    <entry>
+        <id>https://www.reddit.com/r/technology/comments/abc123/a_post/</id>
+        <title><![CDATA[A post with comments]]></title>
+        <updated>2024-04-05T10:00:00.000Z</updated>
+        <author>
+            <name><![CDATA[someone]]></name>
+        </author>
+        <link href="https://www.reddit.com/r/technology/comments/abc123/a_post/"/>
+        <content type="html">&lt;p&gt;post body&lt;/p&gt;</content>
+        <opengarden:upvotes>36</opengarden:upvotes>
+        <opengarden:downvotes>4</opengarden:downvotes>
+        <opengarden:comments>12</opengarden:comments>
+        <opengarden:comments-url>http://opengarden.example.com:9020/comments?profile=default&amp;fetcher=reddit&amp;article_url=https%3A%2F%2Fwww.reddit.com%2Fr%2Ftechnology%2Fcomments%2Fabc123%2Fa_post%2F</opengarden:comments-url>
+    </entry>
+
+    <entry>
+        <id>https://www.reddit.com/r/technology/comments/def456/another_post/</id>
+        <title><![CDATA[A post without comment url]]></title>
+        <updated>2024-04-05T09:00:00.000Z</updated>
+        <author>
+            <name><![CDATA[someone else]]></name>
+        </author>
+        <link href="https://www.reddit.com/r/technology/comments/def456/another_post/"/>
+        <content type="html">&lt;p&gt;another post body&lt;/p&gt;</content>
+        <opengarden:upvotes>7</opengarden:upvotes>
+        <opengarden:comments>3</opengarden:comments>
+    </entry>
+
+    <entry>
+        <id>https://www.binwang.me/whole-body-article</id>
+        <title><![CDATA[An article with the whole body]]></title>
+        <published>2024-04-05T08:00:00.000Z</published>
+        <updated>2024-04-05T11:00:00.000Z</updated>
+        <author>
+            <name><![CDATA[someone]]></name>
+        </author>
+        <link href="https://www.binwang.me/whole-body-article.html"/>
+        <content type="html">&lt;p&gt;whole body&lt;/p&gt;</content>
+        <opengarden:is-full-content>true</opengarden:is-full-content>
+    </entry>
+
+    <entry>
+        <id>https://www.binwang.me/partial-body-article</id>
+        <title><![CDATA[An article with a part of the body]]></title>
+        <updated>2024-04-05T07:00:00.000Z</updated>
+        <author>
+            <name><![CDATA[someone]]></name>
+        </author>
+        <link href="https://www.binwang.me/partial-body-article.html"/>
+        <content type="html">&lt;p&gt;partial body&lt;/p&gt;</content>
+        <opengarden:article-url>http://opengarden.example.com:9020/articles?profile=default&amp;fetcher=webpage&amp;article_url=https%3A%2F%2Fwww.binwang.me%2Fpartial-body-article.html</opengarden:article-url>
+        <opengarden:is-full-content>false</opengarden:is-full-content>
+    </entry>
+
+    <entry>
+        <id>https://www.binwang.me/unknown-body-article</id>
+        <title><![CDATA[An article with an unknown body state]]></title>
+        <updated>2024-04-05T06:00:00.000Z</updated>
+        <author>
+            <name><![CDATA[someone]]></name>
+        </author>
+        <link href="https://www.binwang.me/unknown-body-article.html"/>
+        <content type="html">&lt;p&gt;body with unknown state&lt;/p&gt;</content>
+        <opengarden:article-url>http://opengarden.example.com:9020/articles?profile=default&amp;fetcher=webpage&amp;article_url=https%3A%2F%2Fwww.binwang.me%2Funknown-body-article.html</opengarden:article-url>
+    </entry>
+
+</feed>

@@ -8,6 +8,7 @@ import me.binwang.rss.dao.hybrid.{ArticleContentHybridDao, ArticleHybridDao}
 import me.binwang.rss.dao.redis.{ArticleContentHashCheckDao, ArticleHashCheckDao, RedisCommand}
 import me.binwang.rss.dao.sql._
 import me.binwang.rss.dao.{ArticleContentDao, ArticleDao}
+import me.binwang.rss.fetch.crawler.UrlValidator
 import me.binwang.rss.generator.ConnectionPoolManager.connectionPool
 import me.binwang.rss.generator.{ArticleContents, Articles, Folders}
 import me.binwang.rss.llm.{LLMModels, OpenAILLM}
@@ -18,10 +19,15 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.typelevel.log4cats.LoggerFactory
 import org.typelevel.log4cats.slf4j.Slf4jFactory
-import sttp.client3.http4s.Http4sBackend
+import sttp.client4.http4s.Http4sBackend
+import sttp.client4.impl.cats.implicits._
+import sttp.client4.testing.{BackendStub, ResponseStub}
+import sttp.model.StatusCode
+import sttp.monad.MonadAsyncError
 
 import java.time.ZonedDateTime
 import java.util.UUID
+import scala.concurrent.duration._
 
 class ArticleServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeAndAfterAll with Matchers{
 
@@ -50,8 +56,25 @@ class ArticleServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeA
   private val articleSearchDao = new ArticleSearchElasticDao(1.0, 0.0)
   private implicit val authorizer: Authorizer = new Authorizer(Throttler(), userSessionDao, folderDao)
   private val llm = LLMModels(openAI = new OpenAILLM(sttpBackend))
+
+  private val fullContentUrl = "http://127.0.0.1:9020/articles?profile=default&fetcher=reddit" +
+    "&article_url=https%3A%2F%2Fwww.reddit.com%2Fr%2Ftechnology%2Fcomments%2Fabc123%2F"
+  private val partialBody = "<div><p>the first part</p></div>"
+  private val fullBody = "<div><p>the first part</p><p>the second part</p></div>"
+
+  private var opengardenRequests = 0
+  private var opengardenResponseBody = ""
+  private var opengardenResponseStatus: StatusCode = StatusCode.Ok
+  private var onOpengardenRequest: () => Unit = () => ()
+
+  private val opengardenBackend = BackendStub(implicitly[MonadAsyncError[IO]]).whenRequestMatchesPartial { _ =>
+    opengardenRequests += 1
+    onOpengardenRequest()
+    ResponseStub.adjust(opengardenResponseBody, opengardenResponseStatus)
+  }
+
   private val articleService = new ArticleService(articleDao, articleContentDao, articleUserMarkingDao,
-    articleSearchDao, userDao, llm, authorizer)
+    articleSearchDao, userDao, llm, authorizer, opengardenBackend, None, 10.seconds, UrlValidator.allowAll)
 
   private val token = UUID.randomUUID().toString
   private val userID = UUID.randomUUID().toString
@@ -86,6 +109,11 @@ class ArticleServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeA
       _ <- userDao.deleteAll()
     } yield ()
     clearTables.unsafeRunSync()
+
+    opengardenRequests = 0
+    opengardenResponseBody = fullBody
+    opengardenResponseStatus = StatusCode.Ok
+    onOpengardenRequest = () => ()
 
     userSessionDao.insert(UserSession(token, userID, ZonedDateTime.now.plusDays(1), isAdmin = false,
       ZonedDateTime.now.plusDays(1))).unsafeRunSync()
@@ -579,5 +607,99 @@ class ArticleServiceSpec extends AnyFunSpec with BeforeAndAfterEach with BeforeA
       choices.terms.length shouldBe 3
     }
 
+    it("should return the stored body without a request when the body is full") {
+      val article = insertPartialArticle(Some(fullContentUrl))
+      articleDao.update(article.id, ArticleUpdater(contentCompleteness = Some(Some(ContentCompleteness.FULL))))
+        .unsafeRunSync() shouldBe true
+      articleService.getFullContent(token, article.id).unsafeRunSync() shouldBe partialBody
+      opengardenRequests shouldBe 0
+    }
+
+    it("should raise an error when the article has no full content url") {
+      val article = insertPartialArticle(None)
+      assertThrows[ArticleFullContentUnavailable] {
+        articleService.getFullContent(token, article.id).unsafeRunSync()
+      }
+      opengardenRequests shouldBe 0
+    }
+
+    it("should raise an error when the article does not exist") {
+      assertThrows[ArticleNotFound] {
+        articleService.getFullContent(token, ID.hash("test id")).unsafeRunSync()
+      }
+    }
+
+    it("should read the full body, store it and set the state") {
+      val article = insertPartialArticle(Some(fullContentUrl))
+      val content = articleService.getFullContent(token, article.id).unsafeRunSync()
+      opengardenRequests shouldBe 1
+      content should include("the second part")
+      articleContentDao.get(article.id).unsafeRunSync().get.content shouldBe content
+      articleDao.get(article.id).unsafeRunSync().get.contentCompleteness shouldBe
+        Some(ContentCompleteness.FULL)
+    }
+
+    it("should clean the body before it is stored and returned") {
+      val article = insertPartialArticle(Some(fullContentUrl))
+      opengardenResponseBody =
+        """<div class="post"><p style="color:red">the whole body</p><script>alert(1)</script></div>"""
+      val content = articleService.getFullContent(token, article.id).unsafeRunSync()
+      content should include("the whole body")
+      content should not include "script"
+      content should not include "style="
+      content should not include "class="
+      articleContentDao.get(article.id).unsafeRunSync().get.content shouldBe content
+    }
+
+    it("should return the stored body on the next call after a read") {
+      val article = insertPartialArticle(Some(fullContentUrl))
+      val content = articleService.getFullContent(token, article.id).unsafeRunSync()
+      articleService.getFullContent(token, article.id).unsafeRunSync() shouldBe content
+      opengardenRequests shouldBe 1
+    }
+
+    it("should not store an empty body") {
+      val article = insertPartialArticle(Some(fullContentUrl))
+      opengardenResponseBody = " "
+      assertThrows[ArticleFullContentFetchFailed] {
+        articleService.getFullContent(token, article.id).unsafeRunSync()
+      }
+      articleContentDao.get(article.id).unsafeRunSync().get.content shouldBe partialBody
+      articleDao.get(article.id).unsafeRunSync().get.contentCompleteness shouldBe
+        Some(ContentCompleteness.PARTIAL)
+    }
+
+    it("should keep the state that a feed refresh writes during the read") {
+      val article = insertPartialArticle(Some(fullContentUrl))
+      val refreshed = article.copy(postedAt = article.postedAt.plusHours(1))
+      onOpengardenRequest = () => articleDao.insertOrUpdate(refreshed).unsafeRunSync()
+      articleService.getFullContent(token, article.id).unsafeRunSync() should include("the second part")
+      opengardenRequests shouldBe 1
+      val stored = articleDao.get(article.id).unsafeRunSync().get
+      stored.postedAt shouldBe refreshed.postedAt
+      stored.contentCompleteness shouldBe Some(ContentCompleteness.PARTIAL)
+    }
+
+    it("should report a failed opengarden request") {
+      val article = insertPartialArticle(Some(fullContentUrl))
+      opengardenResponseStatus = StatusCode.ServiceUnavailable
+      opengardenResponseBody = """{"error": "the site is blocked"}"""
+      val error = intercept[ArticleFullContentFetchFailed] {
+        articleService.getFullContent(token, article.id).unsafeRunSync()
+      }
+      error.getMessage shouldBe "the site is blocked"
+      articleContentDao.get(article.id).unsafeRunSync().get.content shouldBe partialBody
+      articleDao.get(article.id).unsafeRunSync().get.contentCompleteness shouldBe
+        Some(ContentCompleteness.PARTIAL)
+    }
+
+  }
+
+  private def insertPartialArticle(fullContentUrlOpt: Option[String]): Article = {
+    val article = Articles.get(Some(SourceID("http://localhost")), Some(UUID.randomUUID().toString))
+      .copy(fullContentUrl = fullContentUrlOpt, contentCompleteness = Some(ContentCompleteness.PARTIAL))
+    articleDao.insertOrUpdate(article).unsafeRunSync()
+    articleContentDao.insertOrUpdate(ArticleContent(article.id, partialBody)).unsafeRunSync()
+    article
   }
 }

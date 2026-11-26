@@ -23,6 +23,9 @@ final case class NoPermissionOnFolders(userID: String, folderIDs: Seq[String])
 final case class RateLimitExceedError(key: String, typ: String, limitPerMinute: Long)
   extends ServerException(code = 10006, msg = s"Rate limit exceed for key $key with type $typ, limit per minute: $limitPerMinute")
 
+final case class ReadOnlyTokenNotAllowed(userID: String)
+  extends ServerException(code = 10007, msg = s"Read-only API token is not allowed to perform write operations, user: $userID")
+
 // User service
 
 final case class EmailAlreadyUsed(email: String)
@@ -89,9 +92,25 @@ final case class SourceIDConflictError(source1: Source, source2: Source)
   extends ServerException(code = 40004, msg = s"Source ID hash conflict. " +
     s"Source1 xml url: ${source1.xmlUrl}. Source2 xml url: ${source2.xmlUrl}")
 
+final case class SsrfBlockedError(url: String, reason: String)
+  extends ServerException(code = 40005, msg = s"URL blocked by SSRF protection: $url ($reason)")
+
+final case class TooManyRedirectsError(url: String, maxRedirects: Int)
+  extends ServerException(code = 40006, msg = s"Too many redirects for $url (max: $maxRedirects)")
+
 // Article service
 final case class ArticleNotFound(articleID: String)
   extends ServerException(code = 50001, msg = s"Article $articleID not found")
+
+final case class ArticleFullContentUnavailable(articleID: String)
+  extends ServerException(code = 50002, msg = s"Article $articleID has no full content url")
+
+final case class ArticleFullContentFetchFailed(msg: String, causeOpt: Option[Throwable] = None)
+  extends ServerException(code = 50003, msg = msg) {
+  if (causeOpt.isDefined) {
+    initCause(causeOpt.get)
+  }
+}
 
 // Folder service
 final case class FolderDuplicateError(folderID: String, folderName: String)
@@ -99,9 +118,6 @@ final case class FolderDuplicateError(folderID: String, folderName: String)
 
 final case class FolderNotFound(folderName: String)
   extends ServerException(code = 60002, msg = s"""Folder with name \"$folderName\" not found""")
-
-final case class ImportOPMLTaskNotFound(userID: String)
-  extends ServerException(code = 60003, msg = s"""Import OPML task for user $userID not found""")
 
 final case class FreeTrailSourceLimitExceed(sourceCount: Int, sourceLimit: Int)
   extends ServerException(code = 60004, msg = s"Feed count out of limit for free user. "
@@ -147,4 +163,17 @@ final case class SubscriptionExpireDateTooEarly(userID: String, customerID: Stri
 final case class InvalidCallbackUrl(url: String) extends ServerException(code = 90005,
   msg = s"Invalid callback url: $url")
 
+// Comment service
+final case class CommentUrlMissing(articleID: String) extends ServerException(code = 100001,
+  msg = s"Article $articleID has no comment url")
+
+final case class CommentSourceNotSupported(commentUrl: String)
+  extends ServerException(code = 100002, msg = s"Unsupported comment url: $commentUrl")
+
+final case class CommentFetchFailed(msg: String, causeOpt: Option[Throwable] = None)
+  extends ServerException(code = 100003, msg = msg) {
+  if (causeOpt.isDefined) {
+    initCause(causeOpt.get)
+  }
+}
 

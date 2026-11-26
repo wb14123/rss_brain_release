@@ -3,11 +3,11 @@ package me.binwang.rss.service
 import cats.effect._
 import cats.implicits._
 import me.binwang.archmage.core.CatsMacros.timed
-import me.binwang.rss.dao.{FolderDao, FolderSourceDao, ImportSourcesTaskDao, SourceDao}
+import me.binwang.rss.dao.{FolderDao, FolderSourceDao, SourceDao}
 import me.binwang.rss.metric.TimeMetrics
 import me.binwang.rss.model._
 import me.binwang.rss.parser.OPMLParser
-import me.binwang.rss.parser.OPMLParser.FolderWithSources
+import me.binwang.rss.parser.OPMLParser.{FolderWithSources, ImportSource}
 import org.typelevel.log4cats.LoggerFactory
 
 import java.io.InputStream
@@ -21,7 +21,6 @@ class FolderService (
     private val folderDao: FolderDao,
     private val folderSourceDao: FolderSourceDao,
     private val sourceDao: SourceDao,
-    private val importSourcesTaskDao: ImportSourcesTaskDao,
     implicit val authorizer: Authorizer,
     private val importLimit: ImportLimit = ImportLimit(),
 )(implicit val loggerFactory: LoggerFactory[IO]) extends TimeMetrics {
@@ -29,88 +28,27 @@ class FolderService (
   private val logger = LoggerFactory.getLoggerFromClass[IO](this.getClass)
 
   /**
-   * Import folder and sources from OPML file. After this request is sent, the client can use
-   * [[FolderService.getImportOPMLTask]] to poll the importing status.
+   * Import sources from an OPML file. Each source is subscribed to a folder, and the result tells how many of them
+   * are subscribed after the import.
    *
    * @param token User token.
    * @param inputStream The OPML file.
-   * @return the status of importing task.
+   * @return the result of the import.
    */
-  def importFromOPML(token: String, inputStream: Resource[IO, InputStream]): IO[ImportSourcesTask] = timed {
+  def importFromOPML(token: String, inputStream: Resource[IO, InputStream]): IO[ImportOPMLResult] = timed {
     authorizer.authorize(token).flatMap { session =>
       val userID = session.userID
       Clock[IO].realTimeInstant.flatMap { nowInstant =>
         val now = ZonedDateTime.ofInstant(nowInstant, ZoneId.systemDefault())
-        OPMLParser.parse(inputStream, session.userID, now).flatMap { case (foldersWithSources, sourcesWithoutFolder) =>
-          val sources = (foldersWithSources.flatMap(_.sources) ++ sourcesWithoutFolder).distinctBy(_.id)
-          val sourceSize = sources.size
-          val folderSize = foldersWithSources.size
-          if (session.subscribed && sourceSize > importLimit.paidSourceCount.getOrElse(Int.MaxValue)) {
-            IO.raiseError(PaidUserSourceLimitExceed(sourceSize, importLimit.paidSourceCount.get))
-          } else if (session.subscribed && folderSize > importLimit.paidFolderCount.getOrElse(Int.MaxValue)) {
-            IO.raiseError(PaidUserFolderLimitExceed(folderSize, importLimit.paidFolderCount.get))
-          } else if (!session.subscribed && sourceSize > importLimit.freeSourceCount.getOrElse(Int.MaxValue)) {
-            IO.raiseError(FreeTrailSourceLimitExceed(sourceSize, importLimit.freeSourceCount.get))
-          } else if (!session.subscribed && folderSize > importLimit.freeFolderCount.getOrElse(Int.MaxValue)) {
-            IO.raiseError(FreeTrailFolderLimitExceed(folderSize, importLimit.freeFolderCount.get))
-          } else {
-            val importTask = ImportSourcesTask(
-              id = UUID.randomUUID().toString,
-              userID = userID,
-              createdAt = now,
-              totalSources = sources.size,
-            )
-            val sourceMappings = sources.map(s => ImportSourcesTaskMapping(importTask.id, s.id, s.xmlUrl, None))
-            val importSources = folderDao
-              .getUserDefaultFolder(userID)
-              .flatMap {
-                case None => IO.raiseError(new Exception(s"User $userID doesn't have default folder"))
-                case Some(folder) => addSourcesToFolder(importTask.id, sourcesWithoutFolder, folder.id, userID)
-              }
-            val importFolders = foldersWithSources.map(importFolderWithSources(importTask.id, _, userID)).toList.sequence
-            (importSourcesTaskDao.insert(importTask, sourceMappings)
-              >> importSources >> importFolders).map(_ => importTask)
-          }
+        OPMLParser.parse(inputStream, userID, now).flatMap { case (foldersWithSources, sourcesWithoutFolder) =>
+          val allSources = (foldersWithSources.flatMap(_.sources) ++ sourcesWithoutFolder).distinctBy(_.source.id)
+          checkImportLimit(session, allSources.size, foldersWithSources.size) >>
+            importSources(foldersWithSources, sourcesWithoutFolder, userID)
+              .flatMap(results => importResult(allSources, results, userID))
         }
       }
     }
   }
-
-  /**
-   * Get the status of the importing OMPL task.
-   */
-  def getImportOPMLTask(token: String): IO[ImportSourcesTask] = timed {
-    for {
-      nowInstant <- Clock[IO].realTimeInstant
-      now = ZonedDateTime.ofInstant(nowInstant, ZoneId.systemDefault())
-      session <- authorizer.authorize(token)
-      result <- importSourcesTaskDao.getByUserWithUpdatedStats(session.userID, now).flatMap {
-        case Some(task) => IO.pure(task)
-        case None => IO.raiseError(ImportOPMLTaskNotFound(session.userID))
-      }
-    } yield result
-  }
-
-  /**
-   * Get failed sources for an OPML importing task.
-   */
-  def getImportOPMLFailedSources(token: String): fs2.Stream[IO, ImportFailedSource] = timed {
-    for {
-      nowInstant <- fs2.Stream.eval(Clock[IO].realTimeInstant)
-      now = ZonedDateTime.ofInstant(nowInstant, ZoneId.systemDefault())
-      session <- authorizer.authorizeAsStream(token)
-      taskOpt <- fs2.Stream.eval(importSourcesTaskDao.getByUserWithUpdatedStats(session.userID, now))
-      result <- taskOpt.map(task => importSourcesTaskDao.getFailedSources(task.id)).getOrElse(fs2.Stream.empty)
-    } yield result
-  }
-
-  /**
-   * Delete the OPML import task. It will stop the importing progress.
-   */
-  def deleteOPMLImportTasks(token: String): IO[Unit] = timed {
-    authorizer.authorize(token).flatMap(session => importSourcesTaskDao.deleteByUser(session.userID))
-  }
-
 
   /**
    * Export all the subscribed sources to an OPML file.
@@ -122,17 +60,19 @@ class FolderService (
       folders <- folderDao.listByUser(session.userID).compile.toList
     } yield {
       val defaultFolderID = folders.find(_.isUserDefault).map(_.id).getOrElse("")
-      val folderSourceMap = folderSources
-        .map{ folderSource => (folderSource.folderMapping.folderID, folderSource.source)}
+      val sourcesByFolder = folderSources
+        .map{ folderSource =>
+          (folderSource.folderMapping.folderID, ImportSource(folderSource.source, folderSource.displayName))
+        }
         .groupBy(_._1)
-        .transform((_, v) => v.map(_._2))
+        .view.mapValues(_.map(_._2)).toMap
       val foldersWithSources = folders.filter(!_.isUserDefault).map { folder =>
         FolderWithSources(
           folder = folder,
-          sources = folderSourceMap.getOrElse(folder.id, Seq())
+          sources = sourcesByFolder.getOrElse(folder.id, Seq())
         )
       }
-      OPMLParser.generateXml(foldersWithSources, folderSourceMap.getOrElse(defaultFolderID, Seq())).toString()
+      OPMLParser.generateXml(foldersWithSources, sourcesByFolder.getOrElse(defaultFolderID, Seq())).toString()
     }
   }
 
@@ -143,7 +83,7 @@ class FolderService (
    * @param startPosition Only return folders that with a position lager than this.
    */
   def getMyFolders(token: String, size: Int, startPosition: Long): fs2.Stream[IO, Folder] = timed {
-    authorizer.authorizeAsStream(token).flatMap { session =>
+    authorizer.authorizeReadAsStream(token).flatMap { session =>
       folderDao.listByUser(session.userID, size, startPosition)
     }
   }
@@ -152,7 +92,7 @@ class FolderService (
    * Get folder details by folder ID.
    */
   def getFolderByID(token: String, folderID: String):IO[Folder] = timed {
-    authorizer.checkFolderPermission(token, folderID).map(_._2)
+    authorizer.checkFolderReadPermission(token, folderID).map(_._2)
   }
 
   /**
@@ -216,39 +156,132 @@ class FolderService (
     }
   }
 
-  private def importFolderWithSources(importTaskID: String, folderWithSources: FolderWithSources,
-      userID: String): IO[Any] = {
-    val folder = folderWithSources.folder
-    folderDao
-      .insertIfNotExist(folder)
-      .flatMap {
-        case true => IO.pure(Some(folder.id))
-        case false => folderDao.getByUserAndName(userID, folder.name).map(_.map(_.id))
+  private case class SourceImportResult(
+    importSource: ImportSource,
+    error: Option[String],
+  )
+
+  private val writeImportError = "This feed could not be added because of a storage error. " +
+    "Import the same file again to retry; feeds that were already added will not be duplicated."
+
+  private def folderImportError(folderName: String): String = {
+    s"""The folder "$folderName" could not be created or found, so this feed was not added. """ +
+      "Import the same file again to retry."
+  }
+
+  private def checkImportLimit(session: UserSession, sourceSize: Int, folderSize: Int): IO[Unit] = {
+    if (session.subscribed && sourceSize > importLimit.paidSourceCount.getOrElse(Int.MaxValue)) {
+      IO.raiseError(PaidUserSourceLimitExceed(sourceSize, importLimit.paidSourceCount.get))
+    } else if (session.subscribed && folderSize > importLimit.paidFolderCount.getOrElse(Int.MaxValue)) {
+      IO.raiseError(PaidUserFolderLimitExceed(folderSize, importLimit.paidFolderCount.get))
+    } else if (!session.subscribed && sourceSize > importLimit.freeSourceCount.getOrElse(Int.MaxValue)) {
+      IO.raiseError(FreeTrailSourceLimitExceed(sourceSize, importLimit.freeSourceCount.get))
+    } else if (!session.subscribed && folderSize > importLimit.freeFolderCount.getOrElse(Int.MaxValue)) {
+      IO.raiseError(FreeTrailFolderLimitExceed(folderSize, importLimit.freeFolderCount.get))
+    } else {
+      IO.unit
+    }
+  }
+
+  private def importSources(foldersWithSources: Seq[FolderWithSources], sourcesWithoutFolder: Seq[ImportSource],
+      userID: String): IO[Seq[SourceImportResult]] = {
+    for {
+      defaultFolder <- if (sourcesWithoutFolder.isEmpty) IO.pure(Option.empty[Folder])
+        else getUserDefaultFolder(userID).map(Some(_))
+      resultsInFolders <- foldersWithSources.map(importFolder(_, userID)).sequence
+      resultsInDefaultFolder <- defaultFolder match {
+        case Some(folder) => addSourcesToFolder(sourcesWithoutFolder, folder, userID)
+        case None => IO.pure(Seq())
       }
-      .flatMap {
-        case Some(folderID) => addSourcesToFolder(importTaskID, folderWithSources.sources, folderID, userID)
+    } yield resultsInFolders.flatten ++ resultsInDefaultFolder
+  }
+
+  /**
+   * A source is reported as failed only when no mapping was written for it and the user has no mapping for it yet.
+   */
+  private def importResult(allSources: Seq[ImportSource], results: Seq[SourceImportResult],
+      userID: String): IO[ImportOPMLResult] = {
+    val resultsBySourceID = results.groupBy(_.importSource.source.id)
+    val failedCandidates = allSources.flatMap { importSource =>
+      val sourceResults = resultsBySourceID.getOrElse(importSource.source.id, Seq())
+      if (sourceResults.exists(_.error.isEmpty)) {
+        None
+      } else {
+        sourceResults.flatMap(_.error).headOption.map { error =>
+          (importSource.source.id, ImportFailedSource(importSource.source.xmlUrl, error))
+        }
+      }
+    }
+    failedCandidates
+      .filterA { case (sourceID, _) => hasMapping(userID, sourceID).map(exists => !exists) }
+      .map { failures =>
+        val failedSources = failures.map(_._2)
+        ImportOPMLResult(
+          totalSources = allSources.size,
+          successfulSources = allSources.size - failedSources.size,
+          failedSources = failedSources,
+        )
+      }
+  }
+
+  private def hasMapping(userID: String, sourceID: String): IO[Boolean] = {
+    folderSourceDao.getSourcesByID(userID, sourceID, 1).compile.toList
+      .map(_.nonEmpty)
+      .handleErrorWith { err =>
+        logger.error(err)(s"Error to check existing mapping of source $sourceID for user $userID").map(_ => false)
+      }
+  }
+
+  private def getUserDefaultFolder(userID: String): IO[Folder] = {
+    folderDao.getUserDefaultFolder(userID).flatMap {
+      case Some(folder) => IO.pure(folder)
+      case None => IO.raiseError(new Exception(s"User $userID doesn't have default folder"))
+    }
+  }
+
+  /**
+   * Import the sources of one folder group. A folder that cannot be created or found fails all of its sources, but
+   * doesn't stop the import of the other groups.
+   */
+  private def importFolder(folderWithSources: FolderWithSources, userID: String): IO[Seq[SourceImportResult]] = {
+    val folder = folderWithSources.folder
+    resolveFolder(folder, userID).attempt.flatMap {
+      case Right(resolvedFolder) => addSourcesToFolder(folderWithSources.sources, resolvedFolder, userID)
+      case Left(err) =>
+        val error = folderImportError(folder.name)
+        val xmlUrls = folderWithSources.sources.map(_.source.xmlUrl).mkString(", ")
+        logger.error(err)(s"Error to add folder ${folder.name} for user $userID, feeds: $xmlUrls") >>
+          IO.pure(folderWithSources.sources.map(SourceImportResult(_, Some(error))))
+    }
+  }
+
+  /**
+   * @return The folder to put the sources in. It might be an existing folder with the same name.
+   */
+  private def resolveFolder(folder: Folder, userID: String): IO[Folder] = {
+    folderDao.insertIfNotExist(folder).flatMap {
+      case true => IO.pure(folder)
+      case false => folderDao.getByUserAndName(userID, folder.name).flatMap {
+        case Some(existingFolder) => IO.pure(existingFolder)
         case None => IO.raiseError(FolderNotFound(folder.name))
       }
-      .handleErrorWith { err =>
-        logger.error(err)(s"Error to add folder ${folder.name} for user $userID") >>
-          importSourcesTaskDao.updateFailedMessage(importTaskID, folderWithSources.sources.map(_.id), err.getMessage)
-      }
+    }
   }
 
-  private def addSourcesToFolder(importTaskID: String, sources: Seq[Source],
-      folderID: String, userID: String): IO[Unit] = {
-    sources.zipWithIndex.map { case (source, idx) =>
-      val task = for {
-        _ <- sourceDao.insert(source)
-        _ <- folderSourceDao.addSourceToFolder(
-          FolderSourceMapping(folderID, source.id, userID, idx * 1000, source.title))
-      } yield ()
-      task.handleErrorWith{ err =>
-        logger.error(err)(s"Error to add source ${source.xmlUrl} for user $userID") >>
-          importSourcesTaskDao.updateFailedMessage(importTaskID, Seq(source.id), err.getMessage)
+  private def addSourcesToFolder(sources: Seq[ImportSource], folder: Folder, userID: String):
+      IO[Seq[SourceImportResult]] = {
+    sources.zipWithIndex.map { case (importSource, index) =>
+      val source = importSource.source
+      val add = sourceDao.insert(source) >>
+        folderSourceDao.addSourceToFolder(FolderSourceMapping(
+          folder.id, source.id, userID, index * 1000, importedSourceName = importSource.name)).void
+      add.attempt.flatMap {
+        case Right(_) => IO.pure(SourceImportResult(importSource, None))
+        case Left(err) => logger.error(err)(
+          s"Error to add source ${source.xmlUrl} to folder ${folder.name} for user $userID") >>
+          IO.pure(SourceImportResult(importSource, Some(writeImportError)))
       }
-    }.toList.sequence.map(_ => ())
+    }.sequence
   }
-
 
 }

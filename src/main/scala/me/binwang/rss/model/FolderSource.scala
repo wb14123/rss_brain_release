@@ -6,4 +6,12 @@ package me.binwang.rss.model
 case class FolderSource(
   folderMapping: FolderSourceMapping,
   source: Source,
-)
+) {
+
+  def displayName: Option[String] = {
+    def nonBlank(name: Option[String]): Option[String] = name.map(_.trim).filter(_.nonEmpty)
+    nonBlank(folderMapping.customSourceName)
+      .orElse(nonBlank(source.title))
+      .orElse(nonBlank(folderMapping.importedSourceName))
+  }
+}

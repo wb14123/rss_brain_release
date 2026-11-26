@@ -17,4 +17,6 @@ case class UserSession(
   isAdmin: Boolean = false,
   subscribeEndTime: ZonedDateTime,
   subscribed: Boolean = false,
+  isReadOnly: Boolean = false,
+  tokenName: Option[String] = None,
 )

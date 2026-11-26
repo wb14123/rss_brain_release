@@ -29,14 +29,18 @@ class FolderSourceSqlDaoSpec extends AnyFunSpec with BeforeAndAfterEach with Bef
     folderSourceSqlDao.deleteAll().unsafeRunSync()
   }
 
-  private def insertSources(sourceXmlUrl1: Option[String] = None, sourceXmlUrl2: Option[String] = None): (Source, Source, String) = {
+  private def insertSources(sourceXmlUrl1: Option[String] = None, sourceXmlUrl2: Option[String] = None,
+      importedSourceName1: Option[String] = None, importedSourceName2: Option[String] = None
+      ): (Source, Source, String) = {
     val source1 = Sources.get(maybeXmlUrl = sourceXmlUrl1)
     val source2 = Sources.get(maybeXmlUrl = sourceXmlUrl2)
     val folderId = Gen.uuid.sample.get.toString
     sourceSqlDao.insert(source1).unsafeRunSync()
     sourceSqlDao.insert(source2).unsafeRunSync()
-    folderSourceSqlDao.addSourceToFolder(FolderSourceMapping(folderId, source1.id, userId, 0)).unsafeRunSync() shouldBe true
-    folderSourceSqlDao.addSourceToFolder(FolderSourceMapping(folderId, source2.id, userId, 1)).unsafeRunSync() shouldBe true
+    folderSourceSqlDao.addSourceToFolder(FolderSourceMapping(folderId, source1.id, userId, 0,
+      importedSourceName = importedSourceName1)).unsafeRunSync() shouldBe true
+    folderSourceSqlDao.addSourceToFolder(FolderSourceMapping(folderId, source2.id, userId, 1,
+      importedSourceName = importedSourceName2)).unsafeRunSync() shouldBe true
     folderSourceSqlDao.addSourceToFolder(FolderSourceMapping(folderId, source2.id, userId, 2)).unsafeRunSync() shouldBe false
     (source1, source2, folderId)
   }
@@ -122,6 +126,20 @@ class FolderSourceSqlDaoSpec extends AnyFunSpec with BeforeAndAfterEach with Bef
 
       val third = folderSourceSqlDao.getSourcesByFolder(folderId, 1, 1).compile.toList.unsafeRunSync()
       third.length shouldBe 0
+    }
+
+    it("should persist imported source name") {
+      val (_, _, fromFolderId) = insertSources(
+        importedSourceName1 = Some("imported source 1"), importedSourceName2 = Some("imported source 2"))
+
+      val sources = folderSourceSqlDao.getSourcesByFolder(fromFolderId).compile.toList.unsafeRunSync()
+      sources.map(_.folderMapping.importedSourceName) shouldBe Seq(Some("imported source 1"), Some("imported source 2"))
+
+      val folderId = Gen.uuid.sample.get.toString
+      folderSourceSqlDao.copySources(fromFolderId, folderId).unsafeRunSync() shouldBe 2
+
+      val copied = folderSourceSqlDao.getSourcesByFolder(folderId).compile.toList.unsafeRunSync()
+      copied.map(_.folderMapping.importedSourceName) shouldBe Seq(Some("imported source 1"), Some("imported source 2"))
     }
 
     it("should insert and get sources by user") {

@@ -6,7 +6,7 @@ name := "rss_brain"
 
 version := "0.1"
 
-scalaVersion := "2.13.16"
+scalaVersion := "2.13.18"
 
 enablePlugins(Fs2Grpc)
 enablePlugins(Scala2GrpcPlugin)
@@ -35,20 +35,15 @@ initialize := {
 }
 
 
-// I fixed a bug based in doobie but it's not released yet: https://github.com/typelevel/doobie/issues/2132
-// TODO: Update to new version after it's released
-lazy val doobieVersion = "1.0.0-RC5"
+val doobieVersion = "1.0.0-RC12"
 
 Test / parallelExecution := false
-testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oF")
+Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oF")
 
-resolvers += Resolver.bintrayRepo("streamz", "maven") // for streamz
-val streamzVersion = "0.13-RC4"
-val akkaVersion = "2.8.0"
-val esVersion = "8.9.2"
-val prometheusVersion = "0.16.0"
-val sttpVersion = "3.9.5"
-val http4sVersion = "0.23.23"
+val elastic4sVersion = "8.19.3"
+val prometheusVersion = "1.10.0"
+val sttpVersion = "4.1.2"
+val http4sVersion = "0.23.38"
 
 // do not run generate and validate in the same sbt run since validate will load old resource
 
@@ -76,102 +71,102 @@ webpack :=  {
 
 Compile / resourceGenerators += Def.task {
   webpack.value
-  val file = (Compile / resourceManaged).value / "webview" / "static" / "dist"
-  IO.copyDirectory(new File("./js/dist"), file, overwrite = true)
-  IO.listFiles(file).toSeq
+  val distDir = (Compile / resourceManaged).value / "webview" / "static" / "dist"
+  // Clean stale files from previous builds (old hashed files) before copying new ones
+  IO.delete(distDir)
+  IO.copyDirectory(new File("./js/dist"), distDir, overwrite = true)
+  IO.listFiles(distDir).toSeq
 }.taskValue
 
-assemblyMergeStrategy in assembly := {
+assembly / assemblyMergeStrategy := {
   case x if x.endsWith("META-INF/services/io.grpc.LoadBalancerProvider") => MergeStrategy.first
   case x if x.endsWith("META-INF/services/io.grpc.NameResolverProvider") => MergeStrategy.first
+  case x if x.endsWith("META-INF/services/org.slf4j.spi.SLF4JServiceProvider") => MergeStrategy.first
   case PathList("META-INF", xs @ _*) => MergeStrategy.discard
   case PathList("module-info.class") => MergeStrategy.discard
   case x if x.endsWith("/module-info.class") => MergeStrategy.discard
   case x if x.matches("(.+)/protobuf/(\\w+).proto$") => MergeStrategy.discard
   case x if x.matches("(.+)/protobuf/(\\w+)/(\\w+).proto$") => MergeStrategy.discard
   case x =>
-    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    val oldStrategy = (assembly / assemblyMergeStrategy).value
     oldStrategy(x)
 }
 
 libraryDependencies ++= Seq(
 
   // http client
-  "com.softwaremill.sttp.client3" %% "circe" % sttpVersion,
-  "com.softwaremill.sttp.client3" %% "slf4j-backend" % sttpVersion,
-  "com.softwaremill.sttp.client3" %% "http4s-backend" % sttpVersion,
-  "io.circe" %% "circe-core" % "0.14.7",
-  "io.circe" %% "circe-generic" % "0.14.7",
-  "io.circe" %% "circe-parser" % "0.14.7",
-  "io.circe" %% "circe-generic-extras" % "0.14.3",
-  "io.circe" %% "circe-optics" % "0.15.0",
+  "com.softwaremill.sttp.client4" %% "circe" % sttpVersion,
+  "com.softwaremill.sttp.client4" %% "slf4j-backend" % sttpVersion,
+  "com.softwaremill.sttp.client4" %% "http4s-backend" % sttpVersion,
+  "io.circe" %% "circe-core" % "0.14.17",
+  "io.circe" %% "circe-generic" % "0.14.17",
+  "io.circe" %% "circe-parser" % "0.14.17",
+  "io.circe" %% "circe-generic-extras" % "0.14.4",
+  "io.circe" %% "circe-optics" % "0.15.1",
 
-  "org.scala-lang.modules" %% "scala-xml" % "2.2.0", // xml parsing
-  "com.typesafe" % "config" % "1.4.3", // config
-  "org.jsoup" % "jsoup" % "1.17.2",
-  "com.sendgrid" % "sendgrid-java" % "4.10.1",
-  "com.stripe" % "stripe-java" % "26.0.0",
-  "org.apache.commons" % "commons-text" % "1.11.0",
+  "org.scala-lang.modules" %% "scala-xml" % "2.5.0", // xml parsing
+  "com.typesafe" % "config" % "1.4.10", // config
+  "org.jsoup" % "jsoup" % "1.24.1",
+  "com.sendgrid" % "sendgrid-java" % "4.10.3",
+  "com.stripe" % "stripe-java" % "34.1.0",
+  "org.apache.commons" % "commons-text" % "1.15.0",
 
   // redis
-  "io.lettuce" % "lettuce-core" % "6.2.3.RELEASE",
+  "io.lettuce" % "lettuce-core" % "7.9.0.RELEASE",
 
   // database
   "org.tpolecat" %% "doobie-core"     % doobieVersion,
   "org.tpolecat" %% "doobie-postgres" % doobieVersion,
   "org.tpolecat" %% "doobie-specs2"   % doobieVersion,
   "org.tpolecat" %% "doobie-hikari"   % doobieVersion,
-  "io.getquill"  %% "quill-doobie"    % "4.8.4",
-  "org.postgresql" % "postgresql"     % "42.7.4",
+  "io.getquill"  %% "quill-jdbc"      % "4.8.5", // dialects used by dao/sql/DoobieContext.scala
+  "org.postgresql" % "postgresql"     % "42.7.14",
 
   // search
-  "co.elastic.clients" % "elasticsearch-java" % esVersion,
-  "com.sksamuel.elastic4s" %% "elastic4s-core" % esVersion,
-  "com.sksamuel.elastic4s" %% "elastic4s-client-esjava" % esVersion,
-  "com.sksamuel.elastic4s" %% "elastic4s-json-circe" % esVersion,
-  "com.sksamuel.elastic4s" %% "elastic4s-effect-cats" % esVersion,
+  "nl.gn0s1s" %% "elastic4s-core" % elastic4sVersion,
+  "nl.gn0s1s" %% "elastic4s-client-esjava" % elastic4sVersion,
+  "nl.gn0s1s" %% "elastic4s-json-circe" % elastic4sVersion,
+  "nl.gn0s1s" %% "elastic4s-effect-cats" % elastic4sVersion,
 
   // log
-  "ch.qos.logback" % "logback-classic" % "1.2.10",
+  "ch.qos.logback" % "logback-classic" % "1.6.6",
 
   // grpc
-  "me.binwang.scala2grpc" %% "generator" % "1.3.0-SNAPSHOT",
+  "me.binwang.scala2grpc" %% "generator" % "1.3.0",
 
   // http server
   "org.http4s" %% "http4s-ember-client" % http4sVersion,
   "org.http4s" %% "http4s-ember-server" % http4sVersion,
   "org.http4s" %% "http4s-dsl" % http4sVersion,
   "org.http4s" %% "http4s-circe" % http4sVersion,
-  "org.http4s" %% "http4s-prometheus-metrics" % "0.24.6",
-  "org.http4s" %% "http4s-scalatags" % "0.25.2",
+  "org.http4s" %% "http4s-scalatags" % "0.25.4",
 
   // metrics
-  "io.prometheus" % "simpleclient" % prometheusVersion,
-  "io.prometheus" % "simpleclient_hotspot" % prometheusVersion,
-  "io.prometheus" % "simpleclient_httpserver" % prometheusVersion,
+  "io.prometheus" % "prometheus-metrics-core" % prometheusVersion,
+  "io.prometheus" % "prometheus-metrics-instrumentation-jvm" % prometheusVersion,
+  "io.prometheus" % "prometheus-metrics-exposition-textformats" % prometheusVersion,
   "me.binwang.archmage" %% "core" % "0.1.0",
 
   // throttling
-  "com.google.guava" % "guava" % "31.1-jre",
-  "com.bucket4j" % "bucket4j-core" % "8.10.1",
+  "com.google.guava" % "guava" % "33.8.0-jre",
+  "com.bucket4j" % "bucket4j_jdk17-core" % "8.22.0",
 
   // jwt, jws
-  "com.nimbusds" % "nimbus-jose-jwt" % "9.39",
-  "org.bouncycastle" % "bcprov-jdk18on" % "1.78.1",
-  "org.bouncycastle" % "bcpkix-jdk18on" % "1.78.1",
+  "com.nimbusds" % "nimbus-jose-jwt" % "10.10",
+  "org.bouncycastle" % "bcprov-jdk18on" % "1.87",
+  "org.bouncycastle" % "bcpkix-jdk18on" % "1.87",
 
   // testing
-  "org.scalatest" % "scalatest_2.13" % "3.2.18" % Test,
-  "org.mock-server" % "mockserver-netty" % "5.15.0" % Test,
-  "org.scalacheck" %% "scalacheck" % "1.18.0" % Test,
-  "org.scalamock" %% "scalamock" % "6.0.0" % Test,
+  "org.scalatest" %% "scalatest" % "3.2.20" % Test,
+  "org.mock-server" % "mockserver-netty" % "9.2.0" % Test,
+  "org.scalacheck" %% "scalacheck" % "1.20.0" % Test,
+  "org.scalamock" %% "scalamock" % "7.6.3" % Test,
+  "org.scalamock" %% "scalamock-scalatest" % "7.6.3" % Test,
 )
 
 dependencyOverrides ++= Seq(
-  "org.slf4j" % "slf4j-api" % "1.7.30", // force use 1.7.X to be compatible
+  "org.slf4j" % "slf4j-api" % "2.0.20", // keep transitive dependencies on the same slf4j line as logback
 )
 
-excludeDependencies ++= Seq(
-  ExclusionRule("org.bouncycastle", "bcprov-jdk15on"),
-  ExclusionRule("org.bouncycastle", "bcpkix-jdk15on"),
-)
+// scala2grpc 1.3.0 pins an older fs2-grpc-runtime than sbt-fs2-grpc provides
+libraryDependencySchemes += "org.typelevel" %% "fs2-grpc-runtime" % VersionScheme.Always

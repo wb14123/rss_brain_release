@@ -5,6 +5,7 @@ import io.grpc.{Metadata, Status, StatusRuntimeException}
 import me.binwang.rss.grpc.ModelTranslator
 import me.binwang.rss.model.ArticleListLayout.ArticleListLayout
 import me.binwang.rss.model.ArticleOrder.ArticleOrder
+import me.binwang.rss.model.ContentCompleteness.ContentCompleteness
 import me.binwang.rss.model.FetchStatus.FetchStatus
 import me.binwang.rss.model.ID.ID
 import me.binwang.rss.model.LLMEngine.LLMEngine
@@ -40,6 +41,7 @@ object GenerateGRPC extends GRPCGenerator {
     typeOf[ArticleContent],
     typeOf[ArticleOrder],
     typeOf[ArticleListLayout],
+    typeOf[ContentCompleteness],
     typeOf[Folder],
     typeOf[FolderCreator],
     typeOf[FolderUpdater],
@@ -75,9 +77,11 @@ object GenerateGRPC extends GRPCGenerator {
     typeOf[TermWeight],
     typeOf[TermWeights],
     typeOf[SearchTerms],
-    typeOf[ImportSourcesTask],
+    typeOf[ImportOPMLResult],
     typeOf[ImportFailedSource],
     typeOf[LLMEngine],
+    typeOf[ArticleComments],
+    typeOf[Comment],
   )
 
   override val serviceClasses: Seq[Type] = Seq(
@@ -89,6 +93,7 @@ object GenerateGRPC extends GRPCGenerator {
     typeOf[ApplePaymentService],
     typeOf[SystemService],
     typeOf[MoreLikeThisService],
+    typeOf[CommentService],
   )
 
   override implicit def loggerFactory: LoggerFactory[IO] = Slf4jFactory.create[IO]
@@ -105,6 +110,9 @@ object GenerateGRPC extends GRPCGenerator {
             case _: UserSubscriptionEnded =>
               logger.info(s"User subscription ended: ${error.getMessage}") >>
                 IO.pure(Status.UNAUTHENTICATED.withCause(error).withDescription(error.toString))
+            case _: ReadOnlyTokenNotAllowed =>
+              logger.info(s"Read-only token write attempt: ${error.getMessage}") >>
+                IO.pure(Status.PERMISSION_DENIED.withCause(error).withDescription(error.toString))
             case _ =>
               logger.error(error)("Error while handling request") >>
                 IO.pure(Status.UNKNOWN.withCause(error).withDescription(error.toString))
